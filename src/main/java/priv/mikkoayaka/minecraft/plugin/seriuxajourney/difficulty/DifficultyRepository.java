@@ -9,50 +9,54 @@ import org.wolflink.minecraft.wolfird.framework.database.repository.MapRepositor
 @Singleton
 public class DifficultyRepository extends MapRepository<Integer,TaskDifficulty> {
     public DifficultyRepository() {
-        insert(new TaskDifficulty(
-                1,
-                "轻松",
-                50,
-                0.04,
-                2.0,
-                1.0,
-                6,
-                0.1,
-                0.5
-        ));
-        insert(new TaskDifficulty(
-                2,
-                "常规",
-                80,
-                0.06,
-                3.0,
-                1.25,
-                9,
-                0.16,
-                0.65
-        ));
-        insert(new TaskDifficulty(
-                3,
-                "困难",
-                120,
-                0.08,
-                3.0,
-                1.5,
-                12,
-                0.24,
-                0.8
-        ));
-        insert(new TaskDifficulty(
-                4,
-                "专家",
-                160,
-                0.10,
-                4.0,
-                1.75,
-                15,
-                0.35,
-                1.0
-        ));
+        insert(TaskDifficulty.builder()
+                .level(1)
+                .name("轻松")
+                .wheatCost(50)
+                .wheatSupply(200)
+                .wheatLostAcceleratedSpeed(0.04)
+                .hurtWheatCost(2.0)
+                .hurtDamageMultiple(1.0)
+                .bringSlotAmount(6)
+                .wheatGainPercent(0.1)
+                .expGainPercent(0.5)
+                .build());
+        insert(TaskDifficulty.builder()
+                .level(2)
+                .name("常规")
+                .wheatCost(80)
+                .wheatSupply(200)
+                .wheatLostAcceleratedSpeed(0.06)
+                .hurtWheatCost(3.0)
+                .hurtDamageMultiple(1.25)
+                .bringSlotAmount(9)
+                .wheatGainPercent(0.16)
+                .expGainPercent(0.65)
+                .build());
+        insert(TaskDifficulty.builder()
+                .level(3)
+                .name("困难")
+                .wheatCost(120)
+                .wheatSupply(200)
+                .wheatLostAcceleratedSpeed(0.08)
+                .hurtWheatCost(3.0)
+                .hurtDamageMultiple(1.5)
+                .bringSlotAmount(12)
+                .wheatGainPercent(0.24)
+                .expGainPercent(0.8)
+                .build());
+        insert(TaskDifficulty.builder()
+                .level(4)
+                .name("专家")
+                .wheatCost(160)
+                .wheatSupply(200)
+                .wheatLostAcceleratedSpeed(0.10)
+                .hurtWheatCost(4.0)
+                .hurtDamageMultiple(1.75)
+                .bringSlotAmount(15)
+                .wheatGainPercent(0.35)
+                .expGainPercent(1.0)
+                .build());
     }
     @Override
     public Integer getPrimaryKey(TaskDifficulty taskDifficulty) {
