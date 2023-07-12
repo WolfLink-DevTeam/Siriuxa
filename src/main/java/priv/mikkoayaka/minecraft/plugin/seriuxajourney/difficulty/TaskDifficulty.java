@@ -21,7 +21,6 @@ import org.bukkit.Material;
  * @param expGainPercent            经验转化率
  */
 @Builder
-@AllArgsConstructor
 public record TaskDifficulty(
         Material icon,
         String color,
