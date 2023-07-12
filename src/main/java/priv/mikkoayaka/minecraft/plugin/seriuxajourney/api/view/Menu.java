@@ -72,9 +72,11 @@ public abstract class Menu {
     protected abstract void overrideIcons();
 
     public void setIcon(int index,ItemIcon icon) {
+        if(index >= icons.length || index < 0)return;
         icons[index] = icon;
     }
     public ItemIcon getIcon(int index) {
+        if(index >= icons.length || index < 0) return null;
         return icons[index];
     }
     /**

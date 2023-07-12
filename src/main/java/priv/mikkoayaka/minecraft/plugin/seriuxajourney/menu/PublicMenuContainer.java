@@ -1,5 +1,6 @@
 package priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu;
 
+import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Singleton;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.Menu;
@@ -24,5 +25,13 @@ public class PublicMenuContainer {
             publicMenuMap.put(menuClass, IOC.getBean(menuClass));
         }
         return publicMenuMap.get(menuClass);
+    }
+    @Nullable
+    public Object getMenu(String title) {
+        for(Menu menu : publicMenuMap.values()) {
+            if(menu == null)continue;
+            if(menu.getTitle().equals(title))return menu;
+        }
+        return null;
     }
 }

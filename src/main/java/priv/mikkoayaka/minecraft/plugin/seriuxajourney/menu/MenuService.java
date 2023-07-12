@@ -21,6 +21,11 @@ public class MenuService {
         if(result == null)throw new IllegalStateException("不存在的菜单类："+menuClass.getName());
         return (T) result;
     }
+    public Menu findMenu(Player player,String title) {
+        Menu menu = (Menu) publicMenuContainer.getMenu(title);
+        if(menu != null) return menu;
+        return PlayerMenuContainer.findMenu(player,title);
+    }
 
     public void display(Class<? extends Menu> menuClass,Player player) {
         Menu menu = findMenu(player,menuClass);
