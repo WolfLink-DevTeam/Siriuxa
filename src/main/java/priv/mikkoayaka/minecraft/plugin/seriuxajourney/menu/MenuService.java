@@ -2,27 +2,21 @@ package priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu;
 
 import lombok.NonNull;
 import org.bukkit.entity.Player;
+import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.Menu;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.difficulty.DifficultyMenu;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.TaskMenu;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Singleton
 public class MenuService {
 
-    // 公共菜单Map
-    private static final Map<Class<? extends Menu>,Menu> publicMenuMap = new HashMap<>();
-    static {
-        publicMenuMap.put(DifficultyMenu.class,new DifficultyMenu());
-    }
+    @Inject
+    private PublicMenuContainer publicMenuContainer;
 
     @NonNull
-    public <T> T findMenu(Player player,Class<? extends Menu> menuClass) {
-        if(publicMenuMap.containsKey(menuClass)) return (T) publicMenuMap.get(menuClass);
+    public <T extends Menu> T findMenu(Player player,Class<? extends Menu> menuClass) {
+        if(publicMenuContainer.containMenu(menuClass)) return (T) publicMenuContainer.getMenu(menuClass);
         Menu result = PlayerMenuContainer.findMenu(player,menuClass);
         if(result == null)throw new IllegalStateException("不存在的菜单类："+menuClass.getName());
         return (T) result;
