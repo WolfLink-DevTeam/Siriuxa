@@ -16,7 +16,7 @@ public class TaskMenu extends Menu {
     @Setter
     private TaskDifficulty taskDifficulty = null;
     public TaskMenu(UUID uuid) {
-        super(-1, "§0任务菜单", 27);
+        super(-1, "§0§l任务菜单", 27);
         this.uuid = uuid;
     }
 

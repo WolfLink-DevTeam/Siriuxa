@@ -8,7 +8,7 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty
 public class DifficultyMenu extends Menu {
 
     public DifficultyMenu() {
-        super(-1, "§0难度选择", 27);
+        super(-1, "§0§l难度选择", 27);
     }
 
     @Override

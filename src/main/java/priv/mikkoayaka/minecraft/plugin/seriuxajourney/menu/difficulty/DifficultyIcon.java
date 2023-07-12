@@ -44,14 +44,14 @@ public class DifficultyIcon extends ItemIcon {
     protected @NonNull ItemStack createIcon() {
         String levelStr = "✦".repeat(taskDifficulty.level()) +
                 "✧".repeat(difficultyRepository.findAll().size() - taskDifficulty.level());
-        return fastCreateItemStack(taskDifficulty.icon(),1,"§f难度 "+taskDifficulty.name(),
+        return fastCreateItemStack(taskDifficulty.icon(),1,"§f难度 "+taskDifficulty.color()+taskDifficulty.name(),
                 " ",
                 "§7风险指标 "+taskDifficulty.color()+levelStr,
                 "§7任务成本 §f"+taskDifficulty.wheatCost()+" §6麦穗",
                 "§7麦穗补助 §f"+taskDifficulty.wheatSupply()+" §6麦穗",
                 "§7流速加快 §f+"+String.format("%.2f",taskDifficulty.wheatLostAcceleratedSpeed()*100)+"% §8/ §7每5分钟",
                 "§7受伤惩罚 §f-"+String.format("%.2f",taskDifficulty.hurtWheatCost())+" §6麦穗 §8/ §71点伤害",
-                "§7受伤倍率 §f+"+String.format("%.2f",taskDifficulty.hurtDamageMultiple()*100)+"§7%",
+                "§7受伤倍率 §fx"+String.format("%.2f",taskDifficulty.hurtDamageMultiple()*100)+"§7%",
                 "§7带回物资 §f"+taskDifficulty.bringSlotAmount()+"§7格",
                 "§7麦穗转化 §f"+String.format("%.2f",taskDifficulty.wheatGainPercent()*100)+"§7%",
                 "§7经验转化 §f"+String.format("%.2f",taskDifficulty.expGainPercent()*100)+"§7%",

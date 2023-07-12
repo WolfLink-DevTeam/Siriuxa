@@ -24,6 +24,7 @@ public class MenuEventListener extends WolfirdListener {
         Menu menu = menuService.findMenu(p,title);
         if(menu == null)return;
         ItemIcon itemIcon = menu.getIcon(e.getSlot());
+        if(itemIcon == null)return;
         invokeViewClick(p,itemIcon,e.getClick());
     }
     @EventHandler(priority = EventPriority.LOWEST)
