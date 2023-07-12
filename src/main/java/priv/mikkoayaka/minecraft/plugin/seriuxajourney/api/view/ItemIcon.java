@@ -1,7 +1,9 @@
 package priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view;
 
+import lombok.Getter;
 import lombok.NonNull;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -9,7 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class ItemIcon implements Clickable {
+public abstract class ItemIcon {
+    @Getter
     private final boolean needRefresh;
     public ItemIcon(boolean needRefresh) {
         this.needRefresh = needRefresh;
@@ -35,4 +38,6 @@ public abstract class ItemIcon implements Clickable {
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
+    public abstract void leftClick(Player player);
+    public abstract void rightClick(Player player);
 }

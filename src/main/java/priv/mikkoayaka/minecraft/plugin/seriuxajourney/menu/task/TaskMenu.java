@@ -2,13 +2,13 @@ package priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task;
 
 import lombok.Getter;
 import lombok.Setter;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.InventoryMenu;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.Menu;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.icon.SelectDifficulty;
 
 import java.util.UUID;
 
-public class TaskMenu extends InventoryMenu {
+public class TaskMenu extends Menu {
 
     private final UUID uuid;
 
@@ -21,7 +21,7 @@ public class TaskMenu extends InventoryMenu {
     }
 
     @Override
-    public void updateContent() {
-        getContent()[10] = new SelectDifficulty(this);
+    public void overrideIcons() {
+        setIcon(10,new SelectDifficulty(this));
     }
 }
