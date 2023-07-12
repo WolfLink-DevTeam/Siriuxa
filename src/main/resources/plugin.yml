@@ -1,0 +1,4 @@
+name: SeriuxaJourney
+version: '${project.version}'
+main: priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney
+api-version: '1.20'
