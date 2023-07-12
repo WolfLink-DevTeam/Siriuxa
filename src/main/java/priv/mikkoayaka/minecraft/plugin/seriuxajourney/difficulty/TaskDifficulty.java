@@ -2,6 +2,7 @@ package priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import org.bukkit.Material;
 
 /**
  * @param level                     难度等级
@@ -22,6 +23,8 @@ import lombok.Builder;
 @Builder
 @AllArgsConstructor
 public record TaskDifficulty(
+        Material icon,
+        String color,
         int level,
         String name,
 

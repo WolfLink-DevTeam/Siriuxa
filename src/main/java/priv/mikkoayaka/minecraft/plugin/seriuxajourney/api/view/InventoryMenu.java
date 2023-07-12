@@ -54,7 +54,7 @@ public abstract class InventoryMenu extends Menu {
     }
     /**
      * 如果是动态菜单则会反复调用该方法
-     * 静态菜单则只会调用一次
+     * 静态菜单则只会在玩家打开菜单时调用刷新
      */
     public abstract void updateContent();
     @Override
