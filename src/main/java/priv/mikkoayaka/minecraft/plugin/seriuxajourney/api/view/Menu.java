@@ -67,7 +67,7 @@ public abstract class Menu {
     }
 
     /**
-     * 子类实现 ItemIcon
+     * 子类实现 ItemIcon(该方法中不能调用子类自身的成员变量)
      */
     protected abstract void overrideIcons();
 

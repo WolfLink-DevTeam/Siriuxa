@@ -32,7 +32,7 @@ public class Config extends YamlConfig {
         try {
             location = new Location(lobbyWorld,Integer.parseInt(xyz[0]),Integer.parseInt(xyz[1]),Integer.parseInt(xyz[2]));
         } catch (Exception e) {
-            Notifier.warn("配置文件 LobbyLocation 相关配置出现异常。");
+            System.out.println("配置文件 LobbyLocation 相关配置出现异常。");
             return null;
         }
         return location;

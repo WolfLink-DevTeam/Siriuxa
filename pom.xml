@@ -82,6 +82,7 @@
             <groupId>org.wolflink.minecraft.wolfird</groupId>
             <artifactId>wolfird-framework</artifactId>
             <version>1.2.6</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
@@ -99,7 +100,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.26</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
