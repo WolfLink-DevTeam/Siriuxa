@@ -1,17 +1,15 @@
 package priv.mikkoayaka.minecraft.plugin.seriuxajourney;
 
-import org.bukkit.plugin.java.JavaPlugin;
+import org.wolflink.minecraft.wolfird.framework.WolfirdPlugin;
 
-public final class SeriuxaJourney extends JavaPlugin {
-
+public final class SeriuxaJourney extends WolfirdPlugin {
     @Override
-    public void onEnable() {
-        // Plugin startup logic
+    public void afterEnabled() {
 
     }
 
     @Override
-    public void onDisable() {
-        // Plugin shutdown logic
+    public void beforeDisabled() {
+
     }
 }
