@@ -1,19 +1,16 @@
 package priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.difficulty;
 
 import lombok.NonNull;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.wolflink.common.ioc.IOC;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.Result;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.ItemIcon;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.DifficultyRepository;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.MenuService;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.TaskMenu;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
 public class DifficultyIcon extends ItemIcon {
 
