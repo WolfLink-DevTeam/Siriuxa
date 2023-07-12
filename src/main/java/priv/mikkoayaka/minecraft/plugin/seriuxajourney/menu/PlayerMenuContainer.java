@@ -3,6 +3,7 @@ package priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.Menu;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.difficulty.DifficultyMenu;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.TaskMenu;
 
 import java.util.HashMap;

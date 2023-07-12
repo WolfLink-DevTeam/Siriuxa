@@ -4,19 +4,24 @@ import lombok.NonNull;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.wolflink.common.ioc.IOC;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.ItemIcon;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.MenuService;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.difficulty.DifficultyMenu;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.TaskMenu;
 
 public class SelectDifficulty extends ItemIcon {
     private final TaskMenu taskMenu;
+    private final MenuService menuService;
     public SelectDifficulty(TaskMenu taskMenu) {
         super(false);
+        this.menuService = IOC.getBean(MenuService.class);
         this.taskMenu = taskMenu;
     }
 
     @Override
     public void leftClick(Player player) {
-
+        menuService.display(DifficultyMenu.class,player);
     }
 
     @Override

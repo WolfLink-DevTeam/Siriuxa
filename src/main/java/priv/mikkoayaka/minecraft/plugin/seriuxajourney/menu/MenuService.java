@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Singleton;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.Menu;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.difficulty.DifficultyMenu;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.TaskMenu;
 
 import java.util.HashMap;
@@ -15,6 +16,9 @@ public class MenuService {
 
     // 公共菜单Map
     private static final Map<Class<? extends Menu>,Menu> publicMenuMap = new HashMap<>();
+    static {
+        publicMenuMap.put(DifficultyMenu.class,new DifficultyMenu());
+    }
 
     @NonNull
     public <T> T findMenu(Player player,Class<? extends Menu> menuClass) {
