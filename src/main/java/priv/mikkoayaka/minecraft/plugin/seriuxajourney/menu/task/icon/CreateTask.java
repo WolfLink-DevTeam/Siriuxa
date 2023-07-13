@@ -2,9 +2,11 @@ package priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.icon;
 
 import lombok.NonNull;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.wolflink.common.ioc.IOC;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.Result;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.ItemIcon;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.TaskMenu;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.ExplorationService;
@@ -50,7 +52,14 @@ public class CreateTask extends ItemIcon {
     @Override
     public void leftClick(Player player) {
         if(!canCreate())return;
-        explorationService.createTask(player,taskMenu.getTaskDifficulty()).show(player);
+        Result result = explorationService.createTask(player,taskMenu.getTaskDifficulty());
+        result.show(player);
+        player.closeInventory();
+        if(result.result()) {
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP,1f,1.2f);
+        } else {
+            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO,1f,0.8f);
+        }
     }
 
     @Override
