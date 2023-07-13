@@ -3,6 +3,7 @@ package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
@@ -12,6 +13,8 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.Result;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.VaultAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.ConfigProjection;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.region.SquareRegion;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.taskstage.ReadyStage;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.taskstage.WaitStage;
 
@@ -32,6 +35,22 @@ public class ExplorationService {
         if(!joinResult.result())return joinResult;
         explorationTaskRepository.insert(task);
         return new Result(true,"任务登记完成。");
+    }
+    public Result startTask(ExplorationTask explorationTask) {
+        //TODO X Z 动态分配
+        //TODO 玩家背包隔离
+        if(explorationTask.getPlayers().size() == 0) {
+            explorationTaskRepository.deleteByKey(explorationTask.getTaskId());
+            return new Result(false,"该任务没有任何在线玩家。");
+        }
+        explorationTask.start(new SquareRegion(
+                explorationTask,
+                config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME),
+                0,
+                0,
+                500
+        ));
+        return new Result(true,"任务开始。");
     }
 
     /**
