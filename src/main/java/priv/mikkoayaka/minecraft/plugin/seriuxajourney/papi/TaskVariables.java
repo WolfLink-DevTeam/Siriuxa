@@ -14,7 +14,7 @@ public class TaskVariables extends PlaceholderExpansion {
     private ExplorationTaskRepository explorationTaskRepository;
     @Override
     public @NotNull String getIdentifier() {
-        return "SeriuxaJourney_Task";
+        return "SeriuxaJourney";
     }
 
     @Override
@@ -30,7 +30,7 @@ public class TaskVariables extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer offlinePlayer, @NotNull String params){
         if(offlinePlayer == null)return "不存在的玩家";
-        if(params.equalsIgnoreCase("taskwheat")) {
+        if(params.equalsIgnoreCase("task_wheat")) {
             ExplorationTask explorationTask = explorationTaskRepository.findByUuid(offlinePlayer.getUniqueId());
             if(explorationTask == null) return "玩家未处于任务中";
             return String.format("%.2f",explorationTask.getTaskWheat());
