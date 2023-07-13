@@ -50,7 +50,7 @@ public class ExplorationTask extends Task {
         }
         for (Player player : getPlayers()) {
             player.teleport(lobbyLocation);
-            player.sendTitle("§a任务完成","§7前往领取本次任务的报酬吧",5,30,5);
+            player.sendTitle("§a任务完成","§7前往领取本次任务的报酬吧",10,80,10);
             player.playSound(player.getLocation(),Sound.ENTITY_PLAYER_LEVELUP,1f,1.2f);
             player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST,1f,1f);
         }
@@ -67,7 +67,7 @@ public class ExplorationTask extends Task {
         }
         for (Player player : getPlayers()) {
             player.teleport(lobbyLocation);
-            player.sendTitle("§c任务失败","§7真可惜...下次再尝试吧",5,30,5);
+            player.sendTitle("§c任务失败","§7真可惜...下次再尝试吧",10,80,10);
             player.playSound(player.getLocation(),Sound.ENTITY_VILLAGER_NO,1f,0.8f);
         }
         clearTask();

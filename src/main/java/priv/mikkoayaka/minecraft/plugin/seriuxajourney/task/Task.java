@@ -146,11 +146,11 @@ public abstract class Task {
                 return;
             }
             if(availableEvacuationZone != null) {
+                Notifier.broadcastChat(getPlayers(),"坐标 X："+availableEvacuationZone.getCenter().getBlockX()+"Z："+availableEvacuationZone.getCenter().getBlockZ()+" 附近的飞艇已撤离，请等待下一艘飞艇接应。");
                 availableEvacuationZone = null;
-                Notifier.broadcastChat(getPlayers(),"坐标 X："+evacuateLocation.getBlockX()+"Z："+evacuateLocation.getBlockZ()+" 附近的飞艇已撤离，请等待下一艘飞艇接应。");
             } else {
                 availableEvacuationZone = new EvacuationZone(evacuateLocation,5);
-                Notifier.broadcastChat(getPlayers(),"飞艇已降落至坐标 X："+evacuateLocation.getBlockX()+"Z："+evacuateLocation.getBlockZ()+" 如有需要请尽快前往撤离。");
+                Notifier.broadcastChat(getPlayers(),"飞艇已降落至坐标 X："+evacuateLocation.getBlockX()+" Z："+evacuateLocation.getBlockZ()+" 如有需要请尽快前往撤离。");
             }
             //TODO 30|15
         },20 * 60 * 1,20 * 60 * 1).getTaskId();
