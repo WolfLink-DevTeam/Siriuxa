@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 /**
  * 抽象任务类
+ * 麦穗会流失
  */
 @Data
 public abstract class Task {
@@ -35,6 +36,10 @@ public abstract class Task {
      */
     private double wheatLossMultiple = 1.0;
     /**
+     * 麦穗流失加速度
+     */
+    private double wheatLostAcceleratedSpeed;
+    /**
      * 本次任务的麦穗余量
      */
     private double taskWheat = 0;
@@ -50,11 +55,12 @@ public abstract class Task {
      */
     private EvacuationZone availableEvacuationZone = null;
 
-    public Task(double baseWheatLoss) {
+    public Task(double baseWheatLoss,double wheatLostAcceleratedSpeed) {
         synchronized (this) {
             taskId = maxTaskId;
             maxTaskId++;
         }
+        this.wheatLostAcceleratedSpeed = wheatLostAcceleratedSpeed;
         this.baseWheatLoss = baseWheatLoss;
     }
     public void takeWheat(double wheat) {
@@ -126,6 +132,7 @@ public abstract class Task {
         taskRegion.startCheck();
         getPlayers().forEach(p -> p.teleport(taskRegion.getCenter()));
         startGameOverCheck();
+        startTiming();
         evacuateTaskId = Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(),()->{
             Location evacuateLocation = taskRegion.getEvacuateLocation((int) taskRegion.getRadius());
             if(evacuateLocation == null) {
@@ -136,8 +143,25 @@ public abstract class Task {
             availableEvacuationZone = new EvacuationZone(evacuateLocation,5);
         },20 * 60 * 30,20 * 60 * 15).getTaskId();
     }
+    int timingTask1Id = -1;
+    int timingTask2Id = -1;
+    private void startTiming() {
+        timingTask1Id =
+                Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(),
+                        ()-> takeWheat(getBaseWheatLoss() * getWheatLossMultiple())
+                        ,20,20).getTaskId();
+        timingTask2Id =
+                Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(),
+                        ()-> addWheatLossMultiple(wheatLostAcceleratedSpeed)
+                        ,20 * 60 * 5,20 * 60 * 5).getTaskId();
+    }
+    private void stopTiming() {
+        if(timingTask1Id != -1) Bukkit.getScheduler().cancelTask(timingTask1Id);
+        if(timingTask2Id != -1) Bukkit.getScheduler().cancelTask(timingTask2Id);
+    }
 
     private void stopCheck() {
+        stopTiming();
         if(taskRegion != null) taskRegion.stopCheck();
         stopEvacuateTask();
         stopFinishCheck();

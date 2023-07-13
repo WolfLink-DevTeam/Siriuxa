@@ -15,7 +15,6 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.taskstage.WaitStage;
 
 /**
  * 自由探索任务
- * 麦穗会流失
  * 活动区域大
  */
 public class ExplorationTask extends Task {
@@ -25,7 +24,7 @@ public class ExplorationTask extends Task {
     private final LinearStageHolder linearStageHolder;
 
     public ExplorationTask(TaskDifficulty difficulty) {
-        super(IOC.getBean(Config.class).getBaseWheatLoss());
+        super(IOC.getBean(Config.class).getBaseWheatLoss(),difficulty.wheatLostAcceleratedSpeed());
         this.difficulty = difficulty;
         // 绑定阶段持有者和阶段实例
         linearStageHolder = new LinearStageHolder(false);
@@ -38,25 +37,6 @@ public class ExplorationTask extends Task {
         // 进入等待阶段
         linearStageHolder.next();
     }
-
-
-    int timingTask1Id = -1;
-    int timingTask2Id = -1;
-    private void startTiming() {
-        timingTask1Id =
-        Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(),
-                ()-> takeWheat(getBaseWheatLoss() * getWheatLossMultiple())
-                ,20,20).getTaskId();
-        timingTask2Id =
-        Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(),
-                ()-> addWheatLossMultiple(difficulty.wheatLostAcceleratedSpeed())
-                ,20 * 60 * 5,20 * 60 * 5).getTaskId();
-    }
-    private void stopTiming() {
-        if(timingTask1Id != -1) Bukkit.getScheduler().cancelTask(timingTask1Id);
-        if(timingTask2Id != -1) Bukkit.getScheduler().cancelTask(timingTask2Id);
-    }
-
     @Override
     public void finish() {
 
