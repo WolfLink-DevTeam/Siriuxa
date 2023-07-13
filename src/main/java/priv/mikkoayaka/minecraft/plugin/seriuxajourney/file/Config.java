@@ -7,7 +7,6 @@ import org.bukkit.World;
 import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.config.YamlConfig;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
 @Singleton
 public class Config extends YamlConfig {
@@ -36,5 +35,8 @@ public class Config extends YamlConfig {
             return null;
         }
         return location;
+    }
+    public double getBaseWheatLoss() {
+        return get(ConfigProjection.WHEAT_LOSS_BASE);
     }
 }
