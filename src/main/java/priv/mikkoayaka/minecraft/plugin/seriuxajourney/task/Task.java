@@ -133,15 +133,26 @@ public abstract class Task {
         getPlayers().forEach(p -> p.teleport(taskRegion.getCenter()));
         startGameOverCheck();
         startTiming();
+        startEvacuateTask();
+    }
+    public void startEvacuateTask() {
         evacuateTaskId = Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(),()->{
+            if(taskRegion == null) return;
             Location evacuateLocation = taskRegion.getEvacuateLocation((int) taskRegion.getRadius());
             if(evacuateLocation == null) {
                 stopCheck();
                 failed();
                 return;
             }
-            availableEvacuationZone = new EvacuationZone(evacuateLocation,5);
-        },20 * 60 * 30,20 * 60 * 15).getTaskId();
+            if(availableEvacuationZone != null) {
+                availableEvacuationZone = null;
+                Notifier.broadcastChat(getPlayers(),"坐标 X："+evacuateLocation.getBlockX()+"Z："+evacuateLocation.getBlockZ()+" 附近的飞艇已撤离，请等待下一艘飞艇接应。");
+            } else {
+                availableEvacuationZone = new EvacuationZone(evacuateLocation,5);
+                Notifier.broadcastChat(getPlayers(),"飞艇已降落至坐标 X："+evacuateLocation.getBlockX()+"Z："+evacuateLocation.getBlockZ()+" 如有需要请尽快前往撤离。");
+            }
+            //TODO 30|15
+        },20 * 60 * 1,20 * 60 * 1).getTaskId();
     }
 
     /**
@@ -182,4 +193,9 @@ public abstract class Task {
      * 麦穗为0，或玩家全部逃跑时，任务失败
      */
     public abstract void failed();
+
+    /**
+     * 是否允许其他玩家加入
+     */
+    public abstract boolean canJoin();
 }

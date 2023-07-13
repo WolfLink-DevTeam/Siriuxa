@@ -1,11 +1,9 @@
 package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration;
 
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.LinearStageHolder;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.Task;
@@ -46,5 +44,10 @@ public class ExplorationTask extends Task {
     @Override
     public void failed() {
 
+    }
+
+    @Override
+    public boolean canJoin() {
+        return linearStageHolder.getThisStage() instanceof WaitStage;
     }
 }

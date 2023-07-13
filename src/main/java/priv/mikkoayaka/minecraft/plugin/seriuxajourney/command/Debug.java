@@ -8,14 +8,14 @@ import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.MenuService;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationService;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationTask;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationTaskRepository;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.TaskRepository;
 
 @Singleton
 public class Debug extends WolfirdCommand {
     @Inject
     private MenuService menuService;
     @Inject
-    private ExplorationTaskRepository explorationTaskRepository;
+    private TaskRepository taskRepository;
     @Inject
     private ExplorationService explorationService;
     public Debug() {
@@ -25,7 +25,7 @@ public class Debug extends WolfirdCommand {
     @Override
     protected void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
-        ExplorationTask explorationTask = explorationTaskRepository.findByPlayer(player);
+        ExplorationTask explorationTask = taskRepository.findByPlayer(ExplorationTask.class,player);
         explorationService.startTask(explorationTask).show(player);
     }
 }

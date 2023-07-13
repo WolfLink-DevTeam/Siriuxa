@@ -24,6 +24,7 @@ public class EvacuationZone {
     public EvacuationZone(Location center, int safeRadius) {
         this.center = center;
         this.safeRadius = safeRadius;
+        generateSchematic();
     }
 
     /**

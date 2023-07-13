@@ -15,6 +15,7 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.VaultAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.ConfigProjection;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.TaskRepository;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.region.SquareRegion;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.taskstage.ReadyStage;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.taskstage.WaitStage;
@@ -23,7 +24,7 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.taskstage.WaitStage;
 public class ExplorationService {
 
     @Inject
-    private ExplorationTaskRepository explorationTaskRepository;
+    private TaskRepository taskRepository;
     @Inject
     private VaultAPI vaultAPI;
     @Inject
@@ -34,7 +35,7 @@ public class ExplorationService {
         ExplorationTask task = new ExplorationTask(taskDifficulty);
         Result joinResult = joinTask(player,task);
         if(!joinResult.result())return joinResult;
-        explorationTaskRepository.insert(task);
+        taskRepository.insert(task);
         return new Result(true,"任务登记完成。");
     }
     public Result startTask(ExplorationTask explorationTask) {
@@ -42,7 +43,7 @@ public class ExplorationService {
         //TODO X Z 动态分配
         //TODO 玩家背包隔离
         if(explorationTask.getPlayers().size() == 0) {
-            explorationTaskRepository.deleteByKey(explorationTask.getTaskId());
+            taskRepository.deleteByKey(explorationTask.getTaskId());
             return new Result(false,"该任务没有任何在线玩家。");
         }
         String worldName = config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME);
@@ -69,18 +70,21 @@ public class ExplorationService {
         if(!(stage instanceof WaitStage)) {
             return new Result(false,"当前任务状态为："+stage.getDisplayName()+"，不允许加入。");
         }
-        if(explorationTaskRepository.findByPlayer(player) != null) {
+        if(taskRepository.findByPlayer(player) != null) {
             return new Result(false,"玩家当前已处在其他任务中，不允许加入。");
         }
         int wheatCost = explorationTask.getDifficulty().wheatCost();
         int wheatSupply = explorationTask.getDifficulty().wheatSupply();
+        if(vaultAPI.getEconomy().getBalance(player) < wheatCost) {
+            return new Result(false,"你需要支付 "+wheatCost+" 才能加入这次任务，显然你还没有足够的麦穗。");
+        }
         EconomyResponse r = vaultAPI.getEconomy().withdrawPlayer(player,wheatCost);
         if(r.transactionSuccess()) {
             explorationTask.getPlayerUuids().add(player.getUniqueId());
             explorationTask.setTaskWheat(explorationTask.getTaskWheat() + wheatCost + wheatSupply);
             return new Result(true,"加入成功");
         }
-        return new Result(false,"你需要支付 "+wheatCost+" 才能加入这次任务，显然你还没有足够的麦穗。");
+        return new Result(false,"在尝试扣除麦穗余额时发生了错误。");
     }
 
     /**
@@ -90,11 +94,11 @@ public class ExplorationService {
      * 否则不会退回
      */
     public Result leaveTask(Player player) {
-        ExplorationTask task = explorationTaskRepository.findByPlayer(player);
-        if(task == null) return new Result(false,"你没有处在任何任务当中。");
+        ExplorationTask task = taskRepository.findByPlayer(ExplorationTask.class,player);
+        if(task == null) return new Result(false,"你没有处在探索类型的任务当中。");
         task.getPlayerUuids().remove(player.getUniqueId());
         // 清理掉没有玩家的任务
-        if(task.getPlayerUuids().size() == 0)explorationTaskRepository.deleteByValue(task);
+        if(task.getPlayerUuids().size() == 0) taskRepository.deleteByValue(task);
         Stage stage = task.getLinearStageHolder().getThisStage();
         int wheatCost = task.getDifficulty().wheatCost();
         int wheatSupply = task.getDifficulty().wheatSupply();
