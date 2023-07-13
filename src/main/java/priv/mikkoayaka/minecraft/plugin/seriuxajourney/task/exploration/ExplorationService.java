@@ -1,11 +1,10 @@
-package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task;
+package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration;
 
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;

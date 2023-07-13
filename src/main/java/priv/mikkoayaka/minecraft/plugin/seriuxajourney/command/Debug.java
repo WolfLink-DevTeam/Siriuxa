@@ -6,9 +6,9 @@ import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.MenuService;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.ExplorationService;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.ExplorationTask;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.ExplorationTaskRepository;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationService;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationTask;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationTaskRepository;
 
 @Singleton
 public class Debug extends WolfirdCommand {

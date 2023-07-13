@@ -1,4 +1,4 @@
-package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task;
+package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -8,6 +8,7 @@ import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.LinearStag
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.Task;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.taskstage.EndStage;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.taskstage.GameStage;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.taskstage.ReadyStage;

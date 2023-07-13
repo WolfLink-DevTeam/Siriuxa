@@ -1,4 +1,4 @@
-package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task;
+package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration;
 
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Singleton;

@@ -9,7 +9,7 @@ import org.wolflink.common.ioc.IOC;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.Result;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.ItemIcon;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.TaskMenu;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.ExplorationService;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationService;
 
 public class CreateTask extends ItemIcon {
 
