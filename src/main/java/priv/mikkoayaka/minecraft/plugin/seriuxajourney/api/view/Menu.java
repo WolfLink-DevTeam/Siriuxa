@@ -20,6 +20,7 @@ public abstract class Menu {
     private final int size;
     /**
      * 刷新周期设置小于0则为静态菜单
+     * 静态菜单只会在打开时刷新一次
      * @param refreshTicks  刷新周期(刻)
      */
     public Menu(long refreshTicks,String title,int size) {
@@ -27,13 +28,9 @@ public abstract class Menu {
         this.title = title;
         this.size = size;
         inventory = Bukkit.createInventory(null,size,title);
-        initIcons();
-        overrideIcons();
-        for (int i = 0; i < size; i++) {
-            ItemIcon itemIcon = getIcon(i);
-            inventory.setItem(i,itemIcon.getIcon());
-        }
         refresh();
+        if(refreshTicks <= 0)return;
+        SeriuxaJourney.getInstance().getSubScheduler().runTaskTimer(this::refresh,refreshTicks,refreshTicks);
     }
 
     /**
@@ -55,15 +52,17 @@ public abstract class Menu {
                     .forEach(index -> setIcon(index, border));
         }
     }
+
+    /**
+     * 刷新整个菜单
+     */
     private void refresh() {
-        if(refreshTicks <= 0)return;
-        SeriuxaJourney.getInstance().getSubScheduler()
-                .runTaskTimer(()->{
-                    for (int i = 0; i < size; i++) {
-                        ItemIcon itemIcon = getIcon(i);
-                        if(itemIcon.isNeedRefresh()) inventory.setItem(i,itemIcon.getIcon());
-                    }
-                },refreshTicks,refreshTicks);
+        initIcons();
+        overrideIcons();
+        for (int i = 0; i < size; i++) {
+            ItemIcon itemIcon = getIcon(i);
+            inventory.setItem(i,itemIcon.getIcon());
+        }
     }
 
     /**
@@ -83,6 +82,7 @@ public abstract class Menu {
      * 将菜单展示给玩家
      */
     public void display(Player player) {
+        refresh();
         player.closeInventory();
         player.openInventory(inventory);
     }
