@@ -102,6 +102,7 @@ public abstract class TaskRegion {
      * 尽量离所有玩家都远
      */
     public Location getEvacuateLocation(int distance) {
+        if(task.getPlayers().size() == 0)return null;
         Location averangeLocation = getPlayerAverangeLocation();
         List<Location> availableLocations = new ArrayList<>();
         for (int angle = 0; angle < 360; angle+=30) {

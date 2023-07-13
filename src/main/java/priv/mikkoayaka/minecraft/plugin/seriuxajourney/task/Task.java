@@ -92,16 +92,12 @@ public abstract class Task {
     public void startGameOverCheck() {
         finishCheckTaskId = Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(),()->{
             if(playerUuids.size() == 0) {
-                if(taskRegion != null) taskRegion.stopCheck();
-                stopEvacuateTask();
-                stopFinishCheck();
+                stopCheck();
                 failed();
                 return;
             }
             if(waitForEvacuatePlayers().size() == playerUuids.size()) {
-                if(taskRegion != null) taskRegion.stopCheck();
-                stopEvacuateTask();
-                stopFinishCheck();
+                stopCheck();
                 finish();
                 return;
             }
@@ -131,10 +127,21 @@ public abstract class Task {
         getPlayers().forEach(p -> p.teleport(taskRegion.getCenter()));
         startGameOverCheck();
         evacuateTaskId = Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(),()->{
-            availableEvacuationZone = new EvacuationZone(taskRegion.getEvacuateLocation((int) taskRegion.getRadius()),5);
+            Location evacuateLocation = taskRegion.getEvacuateLocation((int) taskRegion.getRadius());
+            if(evacuateLocation == null) {
+                stopCheck();
+                failed();
+                return;
+            }
+            availableEvacuationZone = new EvacuationZone(evacuateLocation,5);
         },20 * 60 * 30,20 * 60 * 15).getTaskId();
     }
 
+    private void stopCheck() {
+        if(taskRegion != null) taskRegion.stopCheck();
+        stopEvacuateTask();
+        stopFinishCheck();
+    }
     /**
      * 任务玩家全部撤离时任务完成
      */
