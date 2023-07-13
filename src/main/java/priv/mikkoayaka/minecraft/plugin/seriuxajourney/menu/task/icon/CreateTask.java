@@ -39,7 +39,7 @@ public class CreateTask extends ItemIcon {
                     "  §7祝你好运！",
                     " ",
                     "  §c任务不可登记",
-                    "    §7- §e未选择任务难度"
+                    "  §8|| §e未选择任务难度"
             );
         }
     }
@@ -50,7 +50,7 @@ public class CreateTask extends ItemIcon {
     @Override
     public void leftClick(Player player) {
         if(!canCreate())return;
-        explorationService.createTask(player,taskMenu.getTaskDifficulty());
+        explorationService.createTask(player,taskMenu.getTaskDifficulty()).show(player);
     }
 
     @Override

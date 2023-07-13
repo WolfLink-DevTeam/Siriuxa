@@ -5,6 +5,6 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
 public record Result(boolean result, String msg){
     public void show(Player player) {
-        Notifier.info(msg);
+        Notifier.chat(msg,player);
     }
 }
