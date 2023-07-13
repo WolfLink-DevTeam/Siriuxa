@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
+import org.wolflink.common.ioc.IOC;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.region.TaskRegion;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
@@ -198,4 +199,13 @@ public abstract class Task {
      * 是否允许其他玩家加入
      */
     public abstract boolean canJoin();
+
+    /**
+     * 清理本次任务
+     * 在任务完成/失败后调用
+     */
+    public void clearTask() {
+        playerUuids.clear();
+        IOC.getBean(TaskRepository.class).deleteByKey(taskId);
+    }
 }
