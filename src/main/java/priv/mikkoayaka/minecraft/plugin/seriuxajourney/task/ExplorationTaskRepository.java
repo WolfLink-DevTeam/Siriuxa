@@ -5,6 +5,7 @@ import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.database.repository.MapRepository;
 
 import javax.annotation.Nullable;
+import java.util.UUID;
 
 @Singleton
 public class ExplorationTaskRepository extends MapRepository<Integer,ExplorationTask> {
@@ -14,8 +15,11 @@ public class ExplorationTaskRepository extends MapRepository<Integer,Exploration
     }
     @Nullable
     public ExplorationTask findByPlayer(Player player) {
+        return findByUuid(player.getUniqueId());
+    }
+    public ExplorationTask findByUuid(UUID uuid) {
         for (ExplorationTask task : findAll()) {
-            if(task.getPlayerUuids().contains(player.getUniqueId())) {
+            if(task.getPlayerUuids().contains(uuid)) {
                 return task;
             }
         }
