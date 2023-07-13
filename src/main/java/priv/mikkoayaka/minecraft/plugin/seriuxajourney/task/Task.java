@@ -143,6 +143,13 @@ public abstract class Task {
             availableEvacuationZone = new EvacuationZone(evacuateLocation,5);
         },20 * 60 * 30,20 * 60 * 15).getTaskId();
     }
+
+    /**
+     * 获取当前麦穗每秒流失量
+     */
+    public double getWheatLossPerSecNow() {
+        return baseWheatLoss * wheatLossMultiple;
+    }
     int timingTask1Id = -1;
     int timingTask2Id = -1;
     private void startTiming() {
