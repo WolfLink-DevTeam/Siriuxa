@@ -75,7 +75,7 @@ public abstract class TaskRegion {
      * 当前坐标距离最短边界距离 / 边界半径
      */
     public double distanceToBorderPercent(Player player) {
-        return distanceToNearestBorder(player.getLocation());
+        return distanceToBorderPercent(player.getLocation());
     }
     public double distanceToBorderPercent(Location location) {
         double distance = distanceToNearestBorder(location);

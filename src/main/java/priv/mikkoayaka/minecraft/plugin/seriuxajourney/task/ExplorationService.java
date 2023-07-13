@@ -1,7 +1,9 @@
 package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task;
 
 import net.milkbowl.vault.economy.EconomyResponse;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Inject;
@@ -37,15 +39,18 @@ public class ExplorationService {
         return new Result(true,"任务登记完成。");
     }
     public Result startTask(ExplorationTask explorationTask) {
+        if(explorationTask == null)return new Result(false,"不存在的任务。");
         //TODO X Z 动态分配
         //TODO 玩家背包隔离
         if(explorationTask.getPlayers().size() == 0) {
             explorationTaskRepository.deleteByKey(explorationTask.getTaskId());
             return new Result(false,"该任务没有任何在线玩家。");
         }
+        String worldName = config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME);
+        World world = Bukkit.getWorld(worldName);
         explorationTask.start(new SquareRegion(
                 explorationTask,
-                config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME),
+                world,
                 0,
                 0,
                 500

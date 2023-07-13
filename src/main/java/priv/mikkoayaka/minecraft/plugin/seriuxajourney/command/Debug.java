@@ -6,12 +6,18 @@ import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.MenuService;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.TaskMenu;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.ExplorationService;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.ExplorationTask;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.ExplorationTaskRepository;
 
 @Singleton
 public class Debug extends WolfirdCommand {
     @Inject
     private MenuService menuService;
+    @Inject
+    private ExplorationTaskRepository explorationTaskRepository;
+    @Inject
+    private ExplorationService explorationService;
     public Debug() {
         super(true, false, true, "sj debug", "开发者调试指令");
     }
@@ -19,6 +25,7 @@ public class Debug extends WolfirdCommand {
     @Override
     protected void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
-        menuService.display(TaskMenu.class,player);
+        ExplorationTask explorationTask = explorationTaskRepository.findByPlayer(player);
+        explorationService.startTask(explorationTask).show(player);
     }
 }

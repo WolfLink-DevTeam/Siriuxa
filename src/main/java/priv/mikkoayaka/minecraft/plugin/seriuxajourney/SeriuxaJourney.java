@@ -8,6 +8,7 @@ import org.wolflink.minecraft.wolfird.framework.command.WolfirdCommandAnalyser;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.VaultAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.MenuEventListener;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.command.Debug;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.command.OpenTaskMenu;
 
 public final class SeriuxaJourney extends WolfirdPlugin {
 
@@ -25,6 +26,7 @@ public final class SeriuxaJourney extends WolfirdPlugin {
         // 注册指令
         IOC.getBean(WolfirdCommandAnalyser.class).register("sj");
         bindCommand(IOC.getBean(CmdHelp.class,"sj"));
+        bindCommand(IOC.getBean(OpenTaskMenu.class));
         bindCommand(IOC.getBean(Debug.class));
     }
 
