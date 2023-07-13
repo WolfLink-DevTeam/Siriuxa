@@ -58,13 +58,13 @@ public abstract class TaskRegion {
             }
             double percent = distanceToBorderPercent(player);
             if(percent <= 0.03) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,20 * 3,0));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,20 * 5,0));
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent("§8[ §e! §8] §c被严重感染的空气使你感到不适..."));
             } else {
                 int temp = (int)(percent*50);
                 String lineColor = "§a";
-                if(temp <= 5)lineColor = "§e";
-                if(temp <= 2)lineColor = "§c";
+                if(temp <= 15)lineColor = "§e";
+                if(temp <= 5)lineColor = "§c";
                 String progressBar = "§f边界 §8| "+lineColor+"§m"+" ".repeat(temp)+"§r§f你§7§m"+" ".repeat(50 - temp)+"§r §8| §f中心";
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent(progressBar));
             }
