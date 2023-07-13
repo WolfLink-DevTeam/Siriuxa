@@ -31,15 +31,15 @@ public class SelectDifficulty extends ItemIcon {
 
     @Override
     protected @NonNull ItemStack createIcon() {
-        String difficultyName = "未指定";
+        String difficultyName = "§7未指定";
+        Material material = Material.ITEM_FRAME;
         if(taskMenu.getTaskDifficulty() != null) {
-            difficultyName = taskMenu.getTaskDifficulty().name();
+            difficultyName = taskMenu.getTaskDifficulty().color()+taskMenu.getTaskDifficulty().name();
+            material = taskMenu.getTaskDifficulty().icon();
         }
-        return fastCreateItemStack(Material.ITEM_FRAME,1,"§8[ §f当前难度 §8] §r"+difficultyName,
+        return fastCreateItemStack(material,1,"§8[ §f当前难度 §8] §r"+difficultyName,
                 " ",
                 "  §7想要轻松完成任务，还是尝试挑战困难？",
-                " ",
-                "  §a点击选择",
                 " "
                 );
     }

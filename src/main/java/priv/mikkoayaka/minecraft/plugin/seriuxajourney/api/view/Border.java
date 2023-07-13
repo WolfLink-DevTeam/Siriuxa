@@ -4,7 +4,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.wolflink.common.ioc.Singleton;
 
+@Singleton
 public class Border extends ItemIcon {
 
     public Border() {

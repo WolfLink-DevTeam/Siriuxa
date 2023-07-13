@@ -10,6 +10,7 @@ import org.wolflink.minecraft.wolfird.framework.notifier.BaseNotifier;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.Result;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.VaultAPI;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.taskstage.ReadyStage;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.taskstage.WaitStage;
@@ -24,6 +25,15 @@ public class ExplorationService {
     @Inject
     private Config config;
     private final BaseNotifier notifier = SeriuxaJourney.getInstance().getNotifier();
+
+    public Result createTask(Player player,TaskDifficulty taskDifficulty) {
+        ExplorationTask task = new ExplorationTask(taskDifficulty);
+        Result joinResult = joinTask(player,task);
+        if(!joinResult.result())return joinResult;
+        explorationTaskRepository.insert(task);
+        return new Result(true,"任务登记完成。");
+    }
+
     /**
      * 尝试加入任务
      *

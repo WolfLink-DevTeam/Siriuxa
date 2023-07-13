@@ -42,7 +42,7 @@ public abstract class Menu {
         for (int i = 0; i < size; i++) {
             setIcon(i,emptyItemIcon);
         }
-        Border border = new Border();
+        Border border = IOC.getBean(Border.class);
         if(size == 27) {
             Stream.of(0,1,2,3,4,5,6,7,8,18,19,20,21,22,23,24,25,26)
                     .forEach(index -> setIcon(index,border));
