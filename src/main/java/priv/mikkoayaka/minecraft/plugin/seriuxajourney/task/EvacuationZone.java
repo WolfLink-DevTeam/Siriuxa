@@ -1,5 +1,6 @@
 package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task;
 
+import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -16,6 +17,7 @@ public class EvacuationZone {
     /**
      * 撤离的安全区域中心
      */
+    @Getter
     private final Location center;
     /**
      * 撤离的安全区域半径
@@ -23,6 +25,9 @@ public class EvacuationZone {
     private final int safeRadius;
     public EvacuationZone(Location center, int safeRadius) {
         this.center = center;
+        World world = center.getWorld();
+        if(world == null) throw new IllegalArgumentException("安全区坐标的世界为空");
+        center.setY(world.getHighestBlockYAt(center.getBlockX(),center.getBlockZ()));
         this.safeRadius = safeRadius;
         generateSchematic();
     }
