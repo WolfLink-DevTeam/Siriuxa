@@ -11,7 +11,7 @@ import org.wolflink.minecraft.wolfird.framework.config.YamlConfig;
 @Singleton
 public class Config extends YamlConfig {
     public Config() {
-        super("SeriuxaJourney-Config", ConfigProjection.asMap());
+        super("SeriuxaJourneyConfig", ConfigProjection.asMap());
     }
 
     @NonNull

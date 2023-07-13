@@ -7,7 +7,7 @@ import org.wolflink.minecraft.wolfird.framework.config.YamlConfig;
 @Singleton
 public class Lang extends YamlConfig {
     public Lang() {
-        super("SeriuxaJourney-Lang", LangProjection.asMap());
+        super("SeriuxaJourneyLang", LangProjection.asMap());
     }
     @NonNull
     public <T> T get(LangProjection langProjection) {

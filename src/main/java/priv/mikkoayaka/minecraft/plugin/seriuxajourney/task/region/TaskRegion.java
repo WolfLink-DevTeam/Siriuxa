@@ -61,11 +61,11 @@ public abstract class TaskRegion {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,20 * 3,0));
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent("§8[ §e! §8] §c被严重感染的空气使你感到不适..."));
             } else {
-                int temp = (int)(percent*20);
+                int temp = (int)(percent*50);
                 String lineColor = "§a";
                 if(temp <= 5)lineColor = "§e";
                 if(temp <= 2)lineColor = "§c";
-                String progressBar = "§f边界§8|"+lineColor+"§m"+" ".repeat(temp)+"§r§f你§7§m"+" ".repeat(20 - temp)+"§r§8|§f中心";
+                String progressBar = "§f边界 §8| "+lineColor+"§m"+" ".repeat(temp)+"§r§f你§7§m"+" ".repeat(50 - temp)+"§r §8| §f中心";
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent(progressBar));
             }
         }
