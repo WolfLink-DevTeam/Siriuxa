@@ -15,7 +15,7 @@ public class PublicMenuContainer {
 
     public PublicMenuContainer() {
         // 延迟初始化
-        publicMenuMap.put(DifficultyMenu.class,null);
+//        publicMenuMap.put(DifficultyMenu.class,null);
     }
     public boolean containMenu(Class<? extends Menu> menuClass) {
         return publicMenuMap.containsKey(menuClass);

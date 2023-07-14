@@ -3,6 +3,9 @@ package priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.Menu;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.ExplorationDifficulty;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.difficulty.DifficultyMenu;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.difficulty.ExplorationDifficultyMenu;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.TaskMenu;
 
 import java.util.HashMap;
@@ -16,6 +19,7 @@ public class PlayerMenuContainer {
 
     public PlayerMenuContainer(UUID uuid) {
         menuMap.put(TaskMenu.class,new TaskMenu(uuid));
+        menuMap.put(ExplorationDifficultyMenu.class, new ExplorationDifficultyMenu());
     }
     @Nullable
     public static Menu findMenu(Player player,Class<? extends Menu> menuClass) {

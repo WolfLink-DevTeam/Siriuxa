@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.wolflink.common.ioc.IOC;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.ItemIcon;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.MenuService;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.difficulty.DifficultyMenu;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.difficulty.ExplorationDifficultyMenu;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.TaskMenu;
 
 public class SelectDifficulty extends ItemIcon {
@@ -21,7 +21,7 @@ public class SelectDifficulty extends ItemIcon {
 
     @Override
     public void leftClick(Player player) {
-        menuService.display(DifficultyMenu.class,player);
+        menuService.display(ExplorationDifficultyMenu.class,player);
     }
 
     @Override

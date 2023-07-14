@@ -9,30 +9,31 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.ItemIcon;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.DifficultyRepository;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.ExplorationDifficulty;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.MenuService;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.TaskMenu;
 
-public class DifficultyIcon extends ItemIcon {
+public class DifficultyIcon<T extends TaskDifficulty> extends ItemIcon {
 
-    private final ExplorationDifficulty explorationDifficulty;
+    private final T taskDifficulty;
     private final DifficultyRepository difficultyRepository;
     private final MenuService menuService;
-    public DifficultyIcon(ExplorationDifficulty explorationDifficulty) {
+    private final DifficultyMenu<T> difficultyMenu;
+    public DifficultyIcon(DifficultyMenu<T> difficultyMenu, T taskDifficulty) {
         super(false);
-        this.explorationDifficulty = explorationDifficulty;
+        this.taskDifficulty = taskDifficulty;
         this.menuService = IOC.getBean(MenuService.class);
         this.difficultyRepository = IOC.getBean(DifficultyRepository.class);
+        this.difficultyMenu = difficultyMenu;
     }
 
     @Override
     public void leftClick(Player player) {
-        menuService.selectDifficulty(player, explorationDifficulty);
+        difficultyMenu.setSelectedDifficulty(taskDifficulty);
         player.closeInventory();
-        player.sendTitle(explorationDifficulty.getColor()+ explorationDifficulty.getName(), "难度已选择",4,12,4);
+        player.sendTitle(taskDifficulty.getColor()+ taskDifficulty.getName(), "难度已选择",4,12,4);
         player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE,1f,2f);
-        SeriuxaJourney.getInstance().getSubScheduler().runTaskLater(()->{
-            menuService.display(TaskMenu.class,player);
-        },20);
+        SeriuxaJourney.getInstance().getSubScheduler().runTaskLater(()-> menuService.display(TaskMenu.class,player),20);
     }
 
     @Override
@@ -42,19 +43,26 @@ public class DifficultyIcon extends ItemIcon {
 
     @Override
     protected @NonNull ItemStack createIcon() {
-        String levelStr = "✦".repeat(explorationDifficulty.getLevel()) +
-                "✧".repeat(difficultyRepository.findByType(ExplorationDifficulty.class).size() - explorationDifficulty.getLevel());
-        return fastCreateItemStack(explorationDifficulty.getIcon(),1,"§f难度 "+ explorationDifficulty.getColor()+ explorationDifficulty.getName(),
+        String levelStr = "✦".repeat(taskDifficulty.getLevel()) +
+                "✧".repeat(difficultyRepository.findByType(ExplorationDifficulty.class).size() - taskDifficulty.getLevel());
+        if(taskDifficulty instanceof ExplorationDifficulty explorationDifficulty) {
+            return fastCreateItemStack(taskDifficulty.getIcon(),1,"§f难度 "+ taskDifficulty.getColor()+ taskDifficulty.getName(),
+                    " ",
+                    "§7风险指标 "+ taskDifficulty.getColor()+levelStr,
+                    "§7任务成本 §f"+ explorationDifficulty.getWheatCost()+" §6麦穗",
+                    "§7麦穗补助 §f"+ explorationDifficulty.getWheatSupply()+" §6麦穗",
+                    "§7流速加快 §f+"+String.format("%.2f", explorationDifficulty.getWheatLostAcceleratedSpeed()*100)+"% §8/ §7每5分钟",
+                    "§7受伤惩罚 §f-"+String.format("%.2f", explorationDifficulty.getHurtWheatCost())+" §6麦穗 §8/ §71点伤害",
+                    "§7受伤倍率 §fx"+String.format("%.2f", explorationDifficulty.getHurtDamageMultiple()*100)+"§7%",
+                    "§7带回物资 §f"+ explorationDifficulty.getBringSlotAmount()+"§7格",
+                    "§7麦穗转化 §f"+String.format("%.2f", explorationDifficulty.getWheatGainPercent()*100)+"§7%",
+                    "§7经验转化 §f"+String.format("%.2f", explorationDifficulty.getExpGainPercent()*100)+"§7%",
+                    " "
+            );
+        }
+        return fastCreateItemStack(taskDifficulty.getIcon(),1,"§f难度 "+ taskDifficulty.getColor()+ taskDifficulty.getName(),
                 " ",
-                "§7风险指标 "+ explorationDifficulty.getColor()+levelStr,
-                "§7任务成本 §f"+ explorationDifficulty.getWheatCost()+" §6麦穗",
-                "§7麦穗补助 §f"+ explorationDifficulty.getWheatSupply()+" §6麦穗",
-                "§7流速加快 §f+"+String.format("%.2f", explorationDifficulty.getWheatLostAcceleratedSpeed()*100)+"% §8/ §7每5分钟",
-                "§7受伤惩罚 §f-"+String.format("%.2f", explorationDifficulty.getHurtWheatCost())+" §6麦穗 §8/ §71点伤害",
-                "§7受伤倍率 §fx"+String.format("%.2f", explorationDifficulty.getHurtDamageMultiple()*100)+"§7%",
-                "§7带回物资 §f"+ explorationDifficulty.getBringSlotAmount()+"§7格",
-                "§7麦穗转化 §f"+String.format("%.2f", explorationDifficulty.getWheatGainPercent()*100)+"§7%",
-                "§7经验转化 §f"+String.format("%.2f", explorationDifficulty.getExpGainPercent()*100)+"§7%",
+                "§7风险指标 "+ taskDifficulty.getColor()+levelStr,
                 " "
                 );
     }

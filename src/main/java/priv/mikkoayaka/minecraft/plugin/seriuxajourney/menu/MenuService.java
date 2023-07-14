@@ -34,8 +34,4 @@ public class MenuService {
     public void display(Menu menu, Player player) {
         menu.display(player);
     }
-    public void selectDifficulty(Player player, ExplorationDifficulty explorationDifficulty) {
-        TaskMenu taskMenu = findMenu(player, TaskMenu.class);
-        taskMenu.setExplorationDifficulty(explorationDifficulty);
-    }
 }
