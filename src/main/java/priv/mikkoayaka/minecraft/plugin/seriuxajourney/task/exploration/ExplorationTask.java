@@ -11,10 +11,10 @@ import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolde
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.Task;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.taskstage.EndStage;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.taskstage.GameStage;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.taskstage.ReadyStage;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.taskstage.WaitStage;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.EndStage;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.GameStage;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.ReadyStage;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.WaitStage;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
 /**
