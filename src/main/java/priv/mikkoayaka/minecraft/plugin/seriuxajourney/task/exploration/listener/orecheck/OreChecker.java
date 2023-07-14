@@ -19,7 +19,6 @@ import java.util.*;
 
 @Singleton
 public class OreChecker extends WolfirdListener {
-
     /**
      * 启用该监听器的任务类
      */

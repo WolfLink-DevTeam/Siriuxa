@@ -14,6 +14,7 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Lang;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.OreCache;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.papi.TaskVariables;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener.orecheck.OreChecker;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener.orecheck.OreValues;
 
 public final class SeriuxaJourney extends WolfirdPlugin {
 
@@ -48,6 +49,10 @@ public final class SeriuxaJourney extends WolfirdPlugin {
 
     @Override
     public void beforeDisabled() {
+        IOC.getBean(OreValues.class).save();
+        IOC.getBean(OreCache.class).save();
+        IOC.getBean(Config.class).save();
+        IOC.getBean(Lang.class).save();
         IOC.getBean(OreChecker.class).setEnabled(false);
     }
 }

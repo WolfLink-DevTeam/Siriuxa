@@ -1,8 +1,10 @@
 package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener.orecheck;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.OreCache;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
@@ -37,7 +39,7 @@ public class OreValues {
      * 矿物数量历史记录
      */
     private final Map<Material,Integer> cacheMap = new HashMap<>();
-    private final int totalCache;
+    private int totalCache = 0;
     /**
      * 今日矿物数量记录
      */
@@ -55,19 +57,19 @@ public class OreValues {
      */
     private final int maxRecordDate = 30;
     public OreValues() {
-        int totalCache = 0;
-        Calendar calendar = Calendar.getInstance();
-        for (Material material : getOreMaterials()) {
-            int count = 0;
-            for (int i = 0; i < maxRecordDate; i++) {
-                count += oreCache.getOreCache(calendar,material);
-                calendar.add(Calendar.DATE,-1);
+        Bukkit.getScheduler().runTaskAsynchronously(SeriuxaJourney.getInstance(),()->{
+            Calendar calendar = Calendar.getInstance();
+            for (Material material : getOreMaterials()) {
+                int count = 0;
+                for (int i = 0; i < maxRecordDate; i++) {
+                    count += oreCache.getOreCache(calendar,material);
+                    calendar.add(Calendar.DATE,-1);
+                }
+                Notifier.debug("获取到矿物记录数据："+material.name().toLowerCase()+"，数量总计："+count);
+                cacheMap.put(material,count);
+                totalCache += count;
             }
-            Notifier.debug("获取到矿物记录数据："+material.name().toLowerCase()+"，数量总计："+count);
-            cacheMap.put(material,count);
-            totalCache += count;
-        }
-        this.totalCache = totalCache;
+        });
     }
     public void record(Material material) {
         todayMap.put(material,todayMap.get(material)+1);
