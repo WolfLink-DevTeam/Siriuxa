@@ -38,7 +38,7 @@ public class ExplorationService {
         taskRepository.insert(task);
         return new Result(true,"任务登记完成。");
     }
-    public Result startTask(ExplorationTask explorationTask) {
+    public Result readyTask(ExplorationTask explorationTask) {
         if(explorationTask == null)return new Result(false,"不存在的任务。");
         //TODO X Z 动态分配
         //TODO 玩家背包隔离
@@ -46,16 +46,11 @@ public class ExplorationService {
             taskRepository.deleteByKey(explorationTask.getTaskId());
             return new Result(false,"该任务没有任何在线玩家。");
         }
-        String worldName = config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME);
-        World world = Bukkit.getWorld(worldName);
-        explorationTask.start(new SquareRegion(
-                explorationTask,
-                world,
-                0,
-                0,
-                500
-        ));
-        return new Result(true,"任务开始。");
+        if(explorationTask.getStageHolder().getThisStage() instanceof WaitStage) {
+            explorationTask.getStageHolder().next();
+            return new Result(true,"任务即将开始。");
+        }
+        return new Result(false,"任务当前不处于等待阶段，无法准备。");
     }
 
     /**

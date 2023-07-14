@@ -11,6 +11,7 @@ import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolde
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.ExplorationDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.stage.TaskLinearStageHolder;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.EndStage;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.GameStage;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.ReadyStage;
@@ -24,6 +25,8 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 public class ExplorationTask extends Task {
     @Getter
     private final ExplorationDifficulty difficulty;
+    @Getter
+    private final LinearStageHolder stageHolder = (LinearStageHolder) super.getStageHolder();
 
     public ExplorationTask(ExplorationDifficulty difficulty) {
         super(IOC.getBean(Config.class).getBaseWheatLoss(),difficulty.getWheatLostAcceleratedSpeed());
@@ -32,7 +35,7 @@ public class ExplorationTask extends Task {
 
     @Override
     protected StageHolder initStageHolder() {
-        LinearStageHolder linearStageHolder = new LinearStageHolder(false);
+        TaskLinearStageHolder linearStageHolder = new TaskLinearStageHolder(this,false);
         linearStageHolder.bindStages(new Stage[]{
                 new WaitStage(linearStageHolder),
                 new ReadyStage(linearStageHolder),

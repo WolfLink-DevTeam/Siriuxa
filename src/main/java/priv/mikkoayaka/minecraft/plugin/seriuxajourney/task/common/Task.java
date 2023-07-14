@@ -107,11 +107,13 @@ public abstract class Task {
             if(playerUuids.size() == 0) {
                 stopCheck();
                 failed();
+                stageHolder.next();
                 return;
             }
             if(waitForEvacuatePlayers().size() == playerUuids.size()) {
                 stopCheck();
                 finish();
+                stageHolder.next();
                 return;
             }
         },20,20).getTaskId();
@@ -142,7 +144,7 @@ public abstract class Task {
         startTiming();
         startEvacuateTask();
     }
-    public void startEvacuateTask() {
+    private void startEvacuateTask() {
         evacuateTaskId = Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(),()->{
             if(taskRegion == null) return;
             Location evacuateLocation = taskRegion.getEvacuateLocation((int) taskRegion.getRadius());
@@ -194,12 +196,12 @@ public abstract class Task {
     /**
      * 任务玩家全部撤离时任务完成
      */
-    public abstract void finish();
+    protected abstract void finish();
 
     /**
      * 麦穗为0，或玩家全部逃跑时，任务失败
      */
-    public abstract void failed();
+    protected abstract void failed();
 
     /**
      * 是否允许其他玩家加入
@@ -210,7 +212,7 @@ public abstract class Task {
      * 清理本次任务
      * 在任务完成/失败后调用
      */
-    public void clearTask() {
+    protected void clearTask() {
         playerUuids.clear();
         IOC.getBean(TaskRepository.class).deleteByKey(taskId);
     }

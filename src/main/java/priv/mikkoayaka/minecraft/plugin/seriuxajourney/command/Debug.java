@@ -26,6 +26,6 @@ public class Debug extends WolfirdCommand {
     protected void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
         ExplorationTask explorationTask = taskRepository.findByPlayer(ExplorationTask.class,player);
-        explorationService.startTask(explorationTask).show(player);
+        explorationService.readyTask(explorationTask).show(player);
     }
 }
