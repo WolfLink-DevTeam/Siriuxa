@@ -4,13 +4,16 @@ import org.bukkit.Material;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.database.repository.MapRepository;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 /**
  * 任务难度等级 -> 任务难度记录类
  */
 @Singleton
-public class DifficultyRepository extends MapRepository<Integer,TaskDifficulty> {
+public class DifficultyRepository extends MapRepository<DifficultyKey, TaskDifficulty> {
     public DifficultyRepository() {
-        insert(TaskDifficulty.builder()
+        insert(ExplorationDifficulty.builder()
                 .icon(Material.WOODEN_PICKAXE)
                 .level(1)
                 .name("轻松")
@@ -24,7 +27,7 @@ public class DifficultyRepository extends MapRepository<Integer,TaskDifficulty> 
                 .wheatGainPercent(0.1)
                 .expGainPercent(0.5)
                 .build());
-        insert(TaskDifficulty.builder()
+        insert(ExplorationDifficulty.builder()
                 .icon(Material.STONE_PICKAXE)
                 .level(2)
                 .name("常规")
@@ -38,7 +41,7 @@ public class DifficultyRepository extends MapRepository<Integer,TaskDifficulty> 
                 .wheatGainPercent(0.16)
                 .expGainPercent(0.65)
                 .build());
-        insert(TaskDifficulty.builder()
+        insert(ExplorationDifficulty.builder()
                 .icon(Material.IRON_PICKAXE)
                 .level(3)
                 .name("困难")
@@ -52,7 +55,7 @@ public class DifficultyRepository extends MapRepository<Integer,TaskDifficulty> 
                 .wheatGainPercent(0.24)
                 .expGainPercent(0.8)
                 .build());
-        insert(TaskDifficulty.builder()
+        insert(ExplorationDifficulty.builder()
                 .icon(Material.DIAMOND_PICKAXE)
                 .level(4)
                 .name("专家")
@@ -68,7 +71,14 @@ public class DifficultyRepository extends MapRepository<Integer,TaskDifficulty> 
                 .build());
     }
     @Override
-    public Integer getPrimaryKey(TaskDifficulty taskDifficulty) {
-        return taskDifficulty.level();
+    public DifficultyKey getPrimaryKey(TaskDifficulty taskDifficulty) {
+        return new DifficultyKey(taskDifficulty.getClass(),taskDifficulty.getLevel());
+    }
+    public <T extends TaskDifficulty> Collection<T> findByType(Class<T> clazz) {
+        return findAll()
+                .stream()
+                .filter(taskDifficulty -> taskDifficulty.getClass().equals(clazz))
+                .map(taskDifficulty -> (T) taskDifficulty)
+                .collect(Collectors.toSet());
     }
 }

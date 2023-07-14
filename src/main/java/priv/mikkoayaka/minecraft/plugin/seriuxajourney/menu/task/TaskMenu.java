@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.wolflink.common.ioc.IOC;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.Border;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.Menu;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.ExplorationDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.icon.CreateTask;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.icon.SelectDifficulty;
 
@@ -17,7 +17,7 @@ public class TaskMenu extends Menu {
 
     @Getter
     @Setter
-    private TaskDifficulty taskDifficulty = null;
+    private ExplorationDifficulty explorationDifficulty = null;
 
     public TaskMenu(UUID uuid) {
         super(-1, "§0§l任务菜单", 27);

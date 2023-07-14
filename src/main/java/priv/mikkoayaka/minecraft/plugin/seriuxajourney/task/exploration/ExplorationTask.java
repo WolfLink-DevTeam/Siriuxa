@@ -8,7 +8,7 @@ import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.LinearStageHolder;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.ExplorationDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.EndStage;
@@ -23,10 +23,10 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
  */
 public class ExplorationTask extends Task {
     @Getter
-    private final TaskDifficulty difficulty;
+    private final ExplorationDifficulty difficulty;
 
-    public ExplorationTask(TaskDifficulty difficulty) {
-        super(IOC.getBean(Config.class).getBaseWheatLoss(),difficulty.wheatLostAcceleratedSpeed());
+    public ExplorationTask(ExplorationDifficulty difficulty) {
+        super(IOC.getBean(Config.class).getBaseWheatLoss(),difficulty.getWheatLostAcceleratedSpeed());
         this.difficulty = difficulty;
     }
 

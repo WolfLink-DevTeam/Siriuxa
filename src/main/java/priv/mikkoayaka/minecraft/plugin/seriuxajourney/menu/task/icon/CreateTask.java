@@ -47,12 +47,12 @@ public class CreateTask extends ItemIcon {
     }
 
     private boolean canCreate() {
-        return taskMenu.getTaskDifficulty() != null;
+        return taskMenu.getExplorationDifficulty() != null;
     }
     @Override
     public void leftClick(Player player) {
         if(!canCreate())return;
-        Result result = explorationService.createTask(player,taskMenu.getTaskDifficulty());
+        Result result = explorationService.createTask(player,taskMenu.getExplorationDifficulty());
         result.show(player);
         player.closeInventory();
         if(result.result()) {

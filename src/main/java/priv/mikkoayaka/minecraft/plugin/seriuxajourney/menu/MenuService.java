@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.Menu;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.ExplorationDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.TaskMenu;
 
 @Singleton
@@ -34,8 +34,8 @@ public class MenuService {
     public void display(Menu menu, Player player) {
         menu.display(player);
     }
-    public void selectDifficulty(Player player, TaskDifficulty taskDifficulty) {
+    public void selectDifficulty(Player player, ExplorationDifficulty explorationDifficulty) {
         TaskMenu taskMenu = findMenu(player, TaskMenu.class);
-        taskMenu.setTaskDifficulty(taskDifficulty);
+        taskMenu.setExplorationDifficulty(explorationDifficulty);
     }
 }

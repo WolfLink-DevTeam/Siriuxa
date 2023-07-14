@@ -12,7 +12,7 @@ import org.wolflink.minecraft.wolfird.framework.notifier.BaseNotifier;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.Result;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.VaultAPI;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.ExplorationDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.ConfigProjection;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.TaskRepository;
@@ -31,8 +31,8 @@ public class ExplorationService {
     private Config config;
     private final BaseNotifier notifier = SeriuxaJourney.getInstance().getNotifier();
 
-    public Result createTask(Player player,TaskDifficulty taskDifficulty) {
-        ExplorationTask task = new ExplorationTask(taskDifficulty);
+    public Result createTask(Player player, ExplorationDifficulty explorationDifficulty) {
+        ExplorationTask task = new ExplorationTask(explorationDifficulty);
         Result joinResult = joinTask(player,task);
         if(!joinResult.result())return joinResult;
         taskRepository.insert(task);
@@ -73,8 +73,8 @@ public class ExplorationService {
         if(taskRepository.findByPlayer(player) != null) {
             return new Result(false,"玩家当前已处在其他任务中，不允许加入。");
         }
-        int wheatCost = explorationTask.getDifficulty().wheatCost();
-        int wheatSupply = explorationTask.getDifficulty().wheatSupply();
+        int wheatCost = explorationTask.getDifficulty().getWheatCost();
+        int wheatSupply = explorationTask.getDifficulty().getWheatSupply();
         if(vaultAPI.getEconomy().getBalance(player) < wheatCost) {
             return new Result(false,"你需要支付 "+wheatCost+" 才能加入这次任务，显然你还没有足够的麦穗。");
         }
@@ -100,8 +100,8 @@ public class ExplorationService {
         // 清理掉没有玩家的任务
         if(task.getPlayerUuids().size() == 0) taskRepository.deleteByValue(task);
         Stage stage = task.getStageHolder().getThisStage();
-        int wheatCost = task.getDifficulty().wheatCost();
-        int wheatSupply = task.getDifficulty().wheatSupply();
+        int wheatCost = task.getDifficulty().getWheatCost();
+        int wheatSupply = task.getDifficulty().getWheatSupply();
         // 退回麦穗
         if(stage instanceof WaitStage || stage instanceof ReadyStage) {
             // 扣除该玩家提供的全部麦穗

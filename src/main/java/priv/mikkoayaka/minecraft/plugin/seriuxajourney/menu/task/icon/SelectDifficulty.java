@@ -33,9 +33,9 @@ public class SelectDifficulty extends ItemIcon {
     protected @NonNull ItemStack createIcon() {
         String difficultyName = "§7未指定";
         Material material = Material.ITEM_FRAME;
-        if(taskMenu.getTaskDifficulty() != null) {
-            difficultyName = taskMenu.getTaskDifficulty().color()+taskMenu.getTaskDifficulty().name();
-            material = taskMenu.getTaskDifficulty().icon();
+        if(taskMenu.getExplorationDifficulty() != null) {
+            difficultyName = taskMenu.getExplorationDifficulty().getColor()+taskMenu.getExplorationDifficulty().getName();
+            material = taskMenu.getExplorationDifficulty().getIcon();
         }
         return fastCreateItemStack(material,1,"§8[ §f当前难度 §8] §r"+difficultyName,
                 " ",
