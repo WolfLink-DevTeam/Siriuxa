@@ -66,7 +66,7 @@ public class ExplorationService {
      * 检查玩家是否有足够的麦穗
      */
     public Result joinTask(Player player,ExplorationTask explorationTask) {
-        Stage stage = explorationTask.getLinearStageHolder().getThisStage();
+        Stage stage = explorationTask.getStageHolder().getThisStage();
         if(!(stage instanceof WaitStage)) {
             return new Result(false,"当前任务状态为："+stage.getDisplayName()+"，不允许加入。");
         }
@@ -99,7 +99,7 @@ public class ExplorationService {
         task.getPlayerUuids().remove(player.getUniqueId());
         // 清理掉没有玩家的任务
         if(task.getPlayerUuids().size() == 0) taskRepository.deleteByValue(task);
-        Stage stage = task.getLinearStageHolder().getThisStage();
+        Stage stage = task.getStageHolder().getThisStage();
         int wheatCost = task.getDifficulty().wheatCost();
         int wheatSupply = task.getDifficulty().wheatSupply();
         // 退回麦穗

@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
+import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.region.TaskRegion;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
@@ -56,6 +57,10 @@ public abstract class Task {
      */
     private EvacuationZone availableEvacuationZone = null;
 
+    @Getter
+    private final StageHolder stageHolder;
+    protected abstract StageHolder initStageHolder();
+
     public Task(double baseWheatLoss,double wheatLostAcceleratedSpeed) {
         synchronized (this) {
             taskId = maxTaskId;
@@ -63,6 +68,7 @@ public abstract class Task {
         }
         this.wheatLostAcceleratedSpeed = wheatLostAcceleratedSpeed;
         this.baseWheatLoss = baseWheatLoss;
+        stageHolder = initStageHolder();
     }
     public void takeWheat(double wheat) {
         taskWheat -= wheat;

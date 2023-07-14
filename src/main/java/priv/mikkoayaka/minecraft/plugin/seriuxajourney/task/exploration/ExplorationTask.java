@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.LinearStageHolder;
+import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.Task;
@@ -23,14 +24,15 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 public class ExplorationTask extends Task {
     @Getter
     private final TaskDifficulty difficulty;
-    @Getter
-    private final LinearStageHolder linearStageHolder;
 
     public ExplorationTask(TaskDifficulty difficulty) {
         super(IOC.getBean(Config.class).getBaseWheatLoss(),difficulty.wheatLostAcceleratedSpeed());
         this.difficulty = difficulty;
-        // 绑定阶段持有者和阶段实例
-        linearStageHolder = new LinearStageHolder(false);
+    }
+
+    @Override
+    protected StageHolder initStageHolder() {
+        LinearStageHolder linearStageHolder = new LinearStageHolder(false);
         linearStageHolder.bindStages(new Stage[]{
                 new WaitStage(linearStageHolder),
                 new ReadyStage(linearStageHolder),
@@ -39,7 +41,9 @@ public class ExplorationTask extends Task {
         });
         // 进入等待阶段
         linearStageHolder.next();
+        return linearStageHolder;
     }
+
     @Override
     public void finish() {
         Config config = IOC.getBean(Config.class);
@@ -75,6 +79,6 @@ public class ExplorationTask extends Task {
 
     @Override
     public boolean canJoin() {
-        return linearStageHolder.getThisStage() instanceof WaitStage;
+        return getStageHolder().getThisStage() instanceof WaitStage;
     }
 }
