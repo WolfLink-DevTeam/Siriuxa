@@ -36,7 +36,4 @@ public class Config extends YamlConfig {
         }
         return location;
     }
-    public double getBaseWheatLoss() {
-        return get(ConfigProjection.WHEAT_LOSS_BASE);
-    }
 }

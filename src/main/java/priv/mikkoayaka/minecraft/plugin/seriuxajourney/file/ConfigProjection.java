@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum ConfigProjection {
-    WHEAT_LOSS_BASE("WheatLoss.Base",0.1), // 麦穗每秒流失量(基础值)
     LOBBY_WORLD_NAME("Lobby.WorldName","kg"), // 任务大厅世界
     LOBBY_LOCATION("Lobby.Location","-140 91 10"), // 任务大厅坐标
     EXPLORATION_TASK_WORLD_NAME("Task.Exploration.WorldName","normal-exploration"),

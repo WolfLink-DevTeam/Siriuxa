@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.region.TaskRegion;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
@@ -52,6 +53,8 @@ public abstract class Task {
     @Nullable
     private TaskRegion taskRegion = null;
 
+    private TaskDifficulty difficulty;
+
     /**
      * 当前可用的撤离点
      */
@@ -61,13 +64,14 @@ public abstract class Task {
     private final StageHolder stageHolder;
     protected abstract StageHolder initStageHolder();
 
-    public Task(double baseWheatLoss,double wheatLostAcceleratedSpeed) {
+    public Task(TaskDifficulty taskDifficulty) {
         synchronized (this) {
             taskId = maxTaskId;
             maxTaskId++;
         }
-        this.wheatLostAcceleratedSpeed = wheatLostAcceleratedSpeed;
-        this.baseWheatLoss = baseWheatLoss;
+        this.difficulty = taskDifficulty;
+        this.wheatLostAcceleratedSpeed = taskDifficulty.getWheatLostAcceleratedSpeed();
+        this.baseWheatLoss = taskDifficulty.getBaseWheatLoss();
         stageHolder = initStageHolder();
     }
     public void addWheat(double wheat) {

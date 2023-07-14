@@ -25,4 +25,13 @@ public class TaskDifficulty{
      * 难度名称
      */
     protected String name;
+
+    /**
+     * 基础麦穗流失速度
+     */
+    protected double baseWheatLoss;
+    /**
+     * 麦穗流速加快倍率(每5分钟)
+     */
+    protected double wheatLostAcceleratedSpeed;
 }

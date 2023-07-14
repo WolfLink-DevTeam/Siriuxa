@@ -29,7 +29,7 @@ public class ExplorationTask extends Task {
     private final LinearStageHolder stageHolder = (LinearStageHolder) super.getStageHolder();
 
     public ExplorationTask(ExplorationDifficulty difficulty) {
-        super(IOC.getBean(Config.class).getBaseWheatLoss(),difficulty.getWheatLostAcceleratedSpeed());
+        super(difficulty);
         this.difficulty = difficulty;
     }
 

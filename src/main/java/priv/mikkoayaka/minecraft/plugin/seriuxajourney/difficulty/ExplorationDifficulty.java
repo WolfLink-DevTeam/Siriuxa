@@ -16,10 +16,6 @@ public class ExplorationDifficulty extends TaskDifficulty{
      * 麦穗补助
      */
     private final int wheatSupply;
-    /**
-     * 麦穗流速加快倍率(每5分钟)
-     */
-    private final double wheatLostAcceleratedSpeed;
 
     /**
      * 受伤麦穗惩罚(每1点伤害)
@@ -45,11 +41,10 @@ public class ExplorationDifficulty extends TaskDifficulty{
     private final double expGainPercent;
 
     @Builder
-    public ExplorationDifficulty(Material icon, String color, int level, String name, int wheatCost, int wheatSupply, double wheatLostAcceleratedSpeed, double hurtWheatCost, double hurtDamageMultiple, int bringSlotAmount, double wheatGainPercent, double expGainPercent) {
-        super(icon, color, level, name);
+    public ExplorationDifficulty(Material icon, String color, int level, String name, int wheatCost, int wheatSupply,double baseWheatLoss, double wheatLostAcceleratedSpeed, double hurtWheatCost, double hurtDamageMultiple, int bringSlotAmount, double wheatGainPercent, double expGainPercent) {
+        super(icon, color, level, name,baseWheatLoss,wheatLostAcceleratedSpeed);
         this.wheatCost = wheatCost;
         this.wheatSupply = wheatSupply;
-        this.wheatLostAcceleratedSpeed = wheatLostAcceleratedSpeed;
         this.hurtWheatCost = hurtWheatCost;
         this.hurtDamageMultiple = hurtDamageMultiple;
         this.bringSlotAmount = bringSlotAmount;
