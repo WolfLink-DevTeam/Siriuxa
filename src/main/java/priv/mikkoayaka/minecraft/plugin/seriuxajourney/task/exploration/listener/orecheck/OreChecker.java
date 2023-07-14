@@ -14,6 +14,7 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.TaskRepository;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationTask;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.GameStage;
 
 import java.util.*;
 
@@ -36,8 +37,11 @@ public class OreChecker extends WolfirdListener {
         Player player = e.getPlayer();
         Location checkLoc = player.getLocation().add(0,-1,0);
         Task task = taskRepository.findByPlayer(player);
-        if(task == null) return;
-        if(!availableTaskClasses.contains(task.getClass())) return;
+        if(task == null) return; // 没有任务
+        if(!availableTaskClasses.contains(task.getClass())) return; // 任务模式不可用该检测
+        if(!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 任务没在游戏阶段
+        if(task.getTaskRegion() == null) return; // 任务区域未设定
+        if(checkLoc.getWorld() != task.getTaskRegion().getCenter().getWorld()) return; // 不在任务世界
         Block block = checkLoc.getBlock();
         Material material = block.getType();
         if(!oreValues.getOreMaterials().contains(material)) return;
