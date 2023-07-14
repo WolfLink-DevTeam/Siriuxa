@@ -58,8 +58,8 @@ public class OreValues {
     private final int maxRecordDate = 30;
     public OreValues() {
         Bukkit.getScheduler().runTaskAsynchronously(SeriuxaJourney.getInstance(),()->{
-            Calendar calendar = Calendar.getInstance();
             for (Material material : getOreMaterials()) {
+                Calendar calendar = Calendar.getInstance();
                 int count = 0;
                 for (int i = 0; i < maxRecordDate; i++) {
                     count += oreCache.getOreCache(calendar,material);

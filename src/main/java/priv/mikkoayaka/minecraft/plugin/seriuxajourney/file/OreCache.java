@@ -13,7 +13,7 @@ public class OreCache extends YamlConfig {
         super("SeriuxaJourneyOreCache", new HashMap<>());
     }
     private String getDate(Calendar calendar) {
-        return String.format("%4d%2d%2d",calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
+        return String.format("%4d%2d%2d",calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).replace(" ","0");
     }
     private String getPath(Calendar calendar,Material material) {
         return getDate(calendar)+"."+material.name().toLowerCase();

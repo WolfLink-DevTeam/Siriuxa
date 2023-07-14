@@ -13,6 +13,7 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Lang;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.OreCache;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.papi.TaskVariables;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener.hurtcheck.HurtChecker;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener.orecheck.OreChecker;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener.orecheck.OreValues;
 
@@ -45,6 +46,7 @@ public final class SeriuxaJourney extends WolfirdPlugin {
 
         // 注册全局监听器
         IOC.getBean(OreChecker.class).setEnabled(true);
+        IOC.getBean(HurtChecker.class).setEnabled(true);
     }
 
     @Override
@@ -54,5 +56,6 @@ public final class SeriuxaJourney extends WolfirdPlugin {
         IOC.getBean(Config.class).save();
         IOC.getBean(Lang.class).save();
         IOC.getBean(OreChecker.class).setEnabled(false);
+        IOC.getBean(HurtChecker.class).setEnabled(false);
     }
 }

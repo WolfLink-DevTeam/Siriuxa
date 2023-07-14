@@ -51,7 +51,7 @@ public class OreChecker extends WolfirdListener {
         for (Player teamPlayer : task.getPlayers()) {
             teamPlayer.playSound(teamPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP,1,1.5f);
             //TODO 改为 Hologram 提示
-            Notifier.chat("§f"+player.getName()+"§7刚刚出售了 "+lang.get("material."+material.name().toLowerCase(),"未知方块")+" §7换取 §f"+String.format("%.1f",wheatValue)+" §6麦穗",player);
+            Notifier.chat("§f"+player.getName()+" §7刚刚出售了 "+lang.get("material."+material.name().toLowerCase(),"未知方块")+" §7换取 §f"+String.format("%.1f",wheatValue)+" §6麦穗",player);
         }
         renderBlockBorder(block.getLocation());
     }
