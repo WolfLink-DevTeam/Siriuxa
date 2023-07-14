@@ -72,7 +72,8 @@ public class OreValues {
         });
     }
     public void record(Material material) {
-        todayMap.put(material,todayMap.get(material)+1);
+        if(todayMap.containsKey(material)) todayMap.put(material,todayMap.get(material)+1);
+        else todayMap.put(material,1);
     }
     public void save() {
         for (Map.Entry<Material,Integer> entry : todayMap.entrySet()) {
