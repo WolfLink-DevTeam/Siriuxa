@@ -41,9 +41,11 @@ public abstract class Menu {
         this.title = title;
         this.size = size;
         inventory = Bukkit.createInventory(null,size,title);
-        refresh();
-        if(refreshTicks <= 0)return;
-        SeriuxaJourney.getInstance().getSubScheduler().runTaskTimer(this::refresh,refreshTicks,refreshTicks);
+        Bukkit.getScheduler().runTaskLater(SeriuxaJourney.getInstance(),()->{
+            refresh();
+            if(refreshTicks <= 0)return;
+            SeriuxaJourney.getInstance().getSubScheduler().runTaskTimer(this::refresh,refreshTicks,refreshTicks);
+        },1);
     }
 
     /**

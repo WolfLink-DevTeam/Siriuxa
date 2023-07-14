@@ -37,8 +37,7 @@ public class SelectDifficulty extends ItemIcon {
         Material material = Material.ITEM_FRAME;
         Player player = taskMenu.getOwner();
         if(player == null || !player.isOnline()) return fastCreateItemStack(material,1,"§8[ §f当前难度 §8] §r玩家未在线");
-        ExplorationDifficultyMenu explorationDifficultyMenu = menuService.findMenu(player, ExplorationDifficultyMenu.class);
-        ExplorationDifficulty difficulty = explorationDifficultyMenu.getSelectedDifficulty();
+        ExplorationDifficulty difficulty = taskMenu.getSelectedDifficulty();
         if(difficulty != null) {
             difficultyName = difficulty.getColor()+difficulty.getName();
             material = difficulty.getIcon();
