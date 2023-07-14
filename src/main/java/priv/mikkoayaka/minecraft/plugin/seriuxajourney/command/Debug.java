@@ -8,7 +8,7 @@ import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.MenuService;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationService;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationTask;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.TaskRepository;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.TaskRepository;
 
 @Singleton
 public class Debug extends WolfirdCommand {

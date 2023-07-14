@@ -1,4 +1,4 @@
-package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task;
+package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common;
 
 import lombok.Data;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.region.TaskRegion;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.region.TaskRegion;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
 import java.util.HashSet;

@@ -5,8 +5,8 @@ import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.Task;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.TaskRepository;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.TaskRepository;
 
 @Singleton
 public class TaskVariables extends PlaceholderExpansion {

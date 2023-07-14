@@ -1,4 +1,4 @@
-package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.region;
+package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.region;
 
 import lombok.Getter;
 import net.md_5.bungee.api.ChatMessageType;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.Task;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;
 
 import java.util.ArrayList;
 import java.util.List;

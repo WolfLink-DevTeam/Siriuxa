@@ -1,8 +1,8 @@
-package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.region;
+package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.region;
 
 import org.bukkit.Location;
 import org.bukkit.World;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.Task;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
 import java.util.Objects;

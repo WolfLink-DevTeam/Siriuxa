@@ -1,4 +1,4 @@
-package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task;
+package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common;
 
 import lombok.Getter;
 import org.bukkit.Location;

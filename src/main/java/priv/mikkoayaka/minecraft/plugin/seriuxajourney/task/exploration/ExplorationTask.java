@@ -10,7 +10,7 @@ import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.LinearStag
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.Task;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.EndStage;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.GameStage;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.ReadyStage;

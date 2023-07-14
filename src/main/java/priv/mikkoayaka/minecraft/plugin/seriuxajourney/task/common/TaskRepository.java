@@ -1,9 +1,8 @@
-package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task;
+package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common;
 
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.database.repository.MapRepository;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationTask;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
