@@ -5,6 +5,7 @@ import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.database.repository.MapRepository;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 /**
@@ -79,6 +80,7 @@ public class DifficultyRepository extends MapRepository<DifficultyKey, TaskDiffi
                 .stream()
                 .filter(taskDifficulty -> taskDifficulty.getClass().equals(clazz))
                 .map(taskDifficulty -> (T) taskDifficulty)
-                .collect(Collectors.toSet());
+                .sorted(Comparator.comparingInt(o -> o.level))
+                .collect(Collectors.toList());
     }
 }

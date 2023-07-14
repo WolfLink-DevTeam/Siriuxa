@@ -8,6 +8,8 @@ import org.bukkit.inventory.Inventory;
 import org.wolflink.common.ioc.IOC;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
 
+import javax.annotation.Nullable;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 public abstract class Menu {
@@ -18,12 +20,23 @@ public abstract class Menu {
     private final String title;
     @Getter
     private final int size;
+    @Getter
+    private final UUID ownerUuid;
+
+    @Nullable
+    public Player getOwner() {
+        Player player = Bukkit.getPlayer(ownerUuid);
+        if(player == null || !player.isOnline()) return null;
+        return player;
+    }
+
     /**
      * 刷新周期设置小于0则为静态菜单
      * 静态菜单只会在打开时刷新一次
      * @param refreshTicks  刷新周期(刻)
      */
-    public Menu(long refreshTicks,String title,int size) {
+    public Menu(UUID ownerUuid, long refreshTicks, String title, int size) {
+        this.ownerUuid = ownerUuid;
         this.refreshTicks = refreshTicks;
         this.title = title;
         this.size = size;

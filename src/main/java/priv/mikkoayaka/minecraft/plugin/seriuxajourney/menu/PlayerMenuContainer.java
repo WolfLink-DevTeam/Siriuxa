@@ -19,7 +19,7 @@ public class PlayerMenuContainer {
 
     public PlayerMenuContainer(UUID uuid) {
         menuMap.put(TaskMenu.class,new TaskMenu(uuid));
-        menuMap.put(ExplorationDifficultyMenu.class, new ExplorationDifficultyMenu());
+        menuMap.put(ExplorationDifficultyMenu.class, new ExplorationDifficultyMenu(uuid));
     }
     @Nullable
     public static Menu findMenu(Player player,Class<? extends Menu> menuClass) {

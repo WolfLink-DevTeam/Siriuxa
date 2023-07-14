@@ -1,11 +1,13 @@
 package priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.icon;
 
 import lombok.NonNull;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.wolflink.common.ioc.IOC;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.ItemIcon;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.ExplorationDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.MenuService;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.difficulty.ExplorationDifficultyMenu;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.TaskMenu;
@@ -33,9 +35,13 @@ public class SelectDifficulty extends ItemIcon {
     protected @NonNull ItemStack createIcon() {
         String difficultyName = "§7未指定";
         Material material = Material.ITEM_FRAME;
-        if(taskMenu.getExplorationDifficulty() != null) {
-            difficultyName = taskMenu.getExplorationDifficulty().getColor()+taskMenu.getExplorationDifficulty().getName();
-            material = taskMenu.getExplorationDifficulty().getIcon();
+        Player player = taskMenu.getOwner();
+        if(player == null || !player.isOnline()) return fastCreateItemStack(material,1,"§8[ §f当前难度 §8] §r玩家未在线");
+        ExplorationDifficultyMenu explorationDifficultyMenu = menuService.findMenu(player, ExplorationDifficultyMenu.class);
+        ExplorationDifficulty difficulty = explorationDifficultyMenu.getSelectedDifficulty();
+        if(difficulty != null) {
+            difficultyName = difficulty.getColor()+difficulty.getName();
+            material = difficulty.getIcon();
         }
         return fastCreateItemStack(material,1,"§8[ §f当前难度 §8] §r"+difficultyName,
                 " ",
