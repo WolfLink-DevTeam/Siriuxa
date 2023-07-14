@@ -44,7 +44,7 @@ public class ReadyStage extends TaskStage {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            getStageHolder().next();
+            Bukkit.getScheduler().runTask(SeriuxaJourney.getInstance(),()->getStageHolder().next());
         });
 
     }
