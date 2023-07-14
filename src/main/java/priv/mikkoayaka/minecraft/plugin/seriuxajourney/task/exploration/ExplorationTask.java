@@ -11,6 +11,8 @@ import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolde
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.ExplorationDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.interfaces.HurtCheckAvailable;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.interfaces.OreCheckAvailable;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.stage.TaskLinearStageHolder;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.EndStage;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.GameStage;
@@ -22,7 +24,7 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
  * 自由探索任务
  * 活动区域大
  */
-public class ExplorationTask extends Task {
+public class ExplorationTask extends Task implements HurtCheckAvailable, OreCheckAvailable {
     @Getter
     private final ExplorationDifficulty difficulty;
     @Getter
@@ -83,5 +85,10 @@ public class ExplorationTask extends Task {
     @Override
     public boolean canJoin() {
         return getStageHolder().getThisStage() instanceof WaitStage;
+    }
+
+    @Override
+    public double getHurtWheatCost() {
+        return difficulty.getHurtWheatCost();
     }
 }
