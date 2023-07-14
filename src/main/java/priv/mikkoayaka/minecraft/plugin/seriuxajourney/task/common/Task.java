@@ -70,6 +70,9 @@ public abstract class Task {
         this.baseWheatLoss = baseWheatLoss;
         stageHolder = initStageHolder();
     }
+    public void addWheat(double wheat) {
+        taskWheat += wheat;
+    }
     public void takeWheat(double wheat) {
         taskWheat -= wheat;
         if(taskWheat <= 0) {

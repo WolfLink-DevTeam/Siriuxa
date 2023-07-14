@@ -11,7 +11,9 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.command.Debug;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.command.OpenTaskMenu;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Lang;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.OreCache;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.papi.TaskVariables;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener.orecheck.OreChecker;
 
 public final class SeriuxaJourney extends WolfirdPlugin {
 
@@ -24,6 +26,7 @@ public final class SeriuxaJourney extends WolfirdPlugin {
         // 加载配置文件和语言文件
         IOC.getBean(Config.class).load();
         IOC.getBean(Lang.class).load();
+        IOC.getBean(OreCache.class).load();
 
         IOC.getBean(VaultAPI.class); // 初始化 VaultAPI
 
@@ -38,10 +41,13 @@ public final class SeriuxaJourney extends WolfirdPlugin {
 
         // 注册变量
         IOC.getBean(TaskVariables.class).register();
+
+        // 注册全局监听器
+        IOC.getBean(OreChecker.class).setEnabled(true);
     }
 
     @Override
     public void beforeDisabled() {
-
+        IOC.getBean(OreChecker.class).setEnabled(false);
     }
 }
