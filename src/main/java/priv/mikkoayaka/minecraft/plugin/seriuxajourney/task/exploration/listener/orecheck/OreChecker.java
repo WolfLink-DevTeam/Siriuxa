@@ -51,7 +51,7 @@ public class OreChecker extends WolfirdListener {
         task.addWheat(wheatValue);
         for (Player teamPlayer : task.getPlayers()) {
             teamPlayer.playSound(teamPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP,1,1.5f);
-            teamPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent("§f"+player.getName()+"§7刚刚出售了"+material.name()+"§7换取 §f"+String.format("%.1f",wheatValue)+" §6麦穗"));
+            teamPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent("§f"+player.getName()+"§7刚刚出售了 "+material.getTranslationKey()+" §7换取 §f"+String.format("%.1f",wheatValue)+" §6麦穗"));
         }
         renderBlockBorder(block.getLocation());
     }
