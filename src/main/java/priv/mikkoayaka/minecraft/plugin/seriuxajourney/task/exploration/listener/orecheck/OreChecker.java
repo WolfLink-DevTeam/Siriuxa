@@ -6,15 +6,18 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Lang;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.TaskRepository;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationTask;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.GameStage;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
 import java.util.*;
 
@@ -31,7 +34,9 @@ public class OreChecker extends WolfirdListener {
     private TaskRepository taskRepository;
     @Inject
     private OreValues oreValues;
-    @EventHandler
+    @Inject
+    private Lang lang;
+    @EventHandler(priority = EventPriority.HIGHEST,ignoreCancelled = true)
     public void oreBlockCheck(PlayerToggleSneakEvent e)
     {
         Player player = e.getPlayer();
@@ -51,7 +56,8 @@ public class OreChecker extends WolfirdListener {
         task.addWheat(wheatValue);
         for (Player teamPlayer : task.getPlayers()) {
             teamPlayer.playSound(teamPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP,1,1.5f);
-            teamPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent("§f"+player.getName()+"§7刚刚出售了"+material.name()+"§7换取 §f"+String.format("%.1f",wheatValue)+" §6麦穗"));
+            //TODO 改为 Hologram 提示
+            Notifier.chat("§f"+player.getName()+"§7刚刚出售了 "+lang.get("material."+material.name().toLowerCase(),"未知方块")+" §7换取 §f"+String.format("%.1f",wheatValue)+" §6麦穗",player);
         }
         renderBlockBorder(block.getLocation());
     }

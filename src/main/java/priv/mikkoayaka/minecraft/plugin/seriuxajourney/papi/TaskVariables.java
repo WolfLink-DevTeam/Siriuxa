@@ -14,7 +14,7 @@ public class TaskVariables extends PlaceholderExpansion {
     private TaskRepository taskRepository;
     @Override
     public @NotNull String getIdentifier() {
-        return "SeriuxaJourney_Task";
+        return "SJTask";
     }
 
     @Override
