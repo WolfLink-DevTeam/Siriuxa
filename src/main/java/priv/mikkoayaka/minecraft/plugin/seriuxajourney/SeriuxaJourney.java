@@ -9,6 +9,7 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.VaultAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.MenuEventListener;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.command.Debug;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.command.OpenTaskMenu;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.command.TeamInvite;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Lang;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.OreCache;
@@ -40,6 +41,7 @@ public final class SeriuxaJourney extends WolfirdPlugin {
         bindCommand(IOC.getBean(CmdHelp.class,"sj"));
         bindCommand(IOC.getBean(OpenTaskMenu.class));
         bindCommand(IOC.getBean(Debug.class));
+        bindCommand(IOC.getBean(TeamInvite.class));
 
         // 注册变量
         IOC.getBean(TaskVariables.class).register();

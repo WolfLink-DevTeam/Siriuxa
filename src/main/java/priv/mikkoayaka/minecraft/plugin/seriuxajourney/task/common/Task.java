@@ -14,6 +14,7 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.BlockAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.WorldEditAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.region.TaskRegion;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.team.TaskTeam;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
 import java.util.*;
@@ -47,10 +48,12 @@ public abstract class Task {
      * 本次任务的麦穗余量
      */
     private double taskWheat = 0;
+
+//    private final Set<UUID> playerUuids = new HashSet<>();
     /**
-     * 本次任务玩家的 UUID 集合
+     * 本次任务的队伍
      */
-    private final Set<UUID> playerUuids = new HashSet<>();
+    private final TaskTeam taskTeam = new TaskTeam(this);
     @Nullable
     private TaskRegion taskRegion = null;
 
@@ -87,13 +90,10 @@ public abstract class Task {
     }
     public void takeWheat(double wheat,String reason) {
         takeWheat(wheat);
-        Notifier.broadcastChat(playerUuids,"本次任务损失了 "+wheat+" 麦穗，原因是"+reason);
+        Notifier.broadcastChat(taskTeam.getPlayers(),"本次任务损失了 "+wheat+" 麦穗，原因是"+reason);
     }
     public List<Player> getPlayers() {
-        return playerUuids.stream()
-                .map(Bukkit::getPlayer)
-                .filter(p -> p!=null&&p.isOnline())
-                .collect(Collectors.toList());
+        return taskTeam.getPlayers();
     }
     public void addWheatLossMultiple(double value) {
         wheatLossMultiple += value;
@@ -112,13 +112,13 @@ public abstract class Task {
      */
     public void startGameOverCheck() {
         finishCheckTaskId = Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(),()->{
-            if(playerUuids.size() == 0) {
+            if(taskTeam.size() == 0) {
                 stopCheck();
                 failed();
                 stageHolder.next();
                 return;
             }
-            if(waitForEvacuatePlayers().size() == playerUuids.size()) {
+            if(waitForEvacuatePlayers().size() == taskTeam.size()) {
                 stopCheck();
                 finish();
                 stageHolder.next();
@@ -233,8 +233,9 @@ public abstract class Task {
      * 清理本次任务
      * 在任务完成/失败后调用
      */
-    protected void clearTask() {
-        playerUuids.clear();
-        IOC.getBean(TaskRepository.class).deleteByKey(taskId);
+    protected void resetTask() {
+        getStageHolder().next();
+//        taskTeam.clear();
+//        IOC.getBean(TaskRepository.class).deleteByKey(taskId);
     }
 }

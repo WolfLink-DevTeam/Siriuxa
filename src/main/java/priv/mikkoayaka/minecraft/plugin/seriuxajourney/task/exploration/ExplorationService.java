@@ -75,7 +75,7 @@ public class ExplorationService {
         }
         EconomyResponse r = vaultAPI.getEconomy().withdrawPlayer(player,wheatCost);
         if(r.transactionSuccess()) {
-            explorationTask.getPlayerUuids().add(player.getUniqueId());
+            explorationTask.getTaskTeam().join(player.getUniqueId());
             explorationTask.setTaskWheat(explorationTask.getTaskWheat() + wheatCost + wheatSupply);
             return new Result(true,"加入成功");
         }
@@ -91,9 +91,9 @@ public class ExplorationService {
     public Result leaveTask(Player player) {
         ExplorationTask task = taskRepository.findByPlayer(ExplorationTask.class,player);
         if(task == null) return new Result(false,"你没有处在探索类型的任务当中。");
-        task.getPlayerUuids().remove(player.getUniqueId());
+        task.getTaskTeam().leave(player);
         // 清理掉没有玩家的任务
-        if(task.getPlayerUuids().size() == 0) taskRepository.deleteByValue(task);
+        if(task.getTaskTeam().size() == 0) taskRepository.deleteByValue(task);
         Stage stage = task.getStageHolder().getThisStage();
         int wheatCost = task.getDifficulty().getWheatCost();
         int wheatSupply = task.getDifficulty().getWheatSupply();
