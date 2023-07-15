@@ -3,6 +3,8 @@ package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.tasksta
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.stage.TaskLinearStageHolder;
@@ -24,6 +26,13 @@ public class ReadyStage extends TaskStage {
                     player.sendTitle("§f§l"+timeLeft,"§7任务即将开始，请做好准备",4,12,4);
                     player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME,1f,1.2f);
                     player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR,1f,1.2f);
+                    Bukkit.getScheduler().runTask(SeriuxaJourney.getInstance(),()->{
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,10 * 20,4,false,false,false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,10 * 20,0,false,false,false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,10 * 20,2,false,false,false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,10 * 20,4,false,false,false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION,10 * 20,4,false,false,false));
+                    });
                 }
                 timeLeft--;
                 try {
