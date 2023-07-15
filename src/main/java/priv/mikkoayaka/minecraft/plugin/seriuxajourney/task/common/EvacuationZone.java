@@ -19,6 +19,11 @@ public class EvacuationZone {
      */
     @Getter
     private final Location center;
+
+    /**
+     * 是否可用
+     */
+    private boolean available = false;
     /**
      * 撤离的安全区域半径
      */
@@ -29,7 +34,15 @@ public class EvacuationZone {
         if(world == null) throw new IllegalArgumentException("安全区坐标的世界为空");
         center.setY(world.getHighestBlockYAt(center.getBlockX(),center.getBlockZ()));
         this.safeRadius = safeRadius;
-        generateSchematic();
+    }
+    public void setAvailable(boolean value) {
+        if(available == value)return;
+        available = value;
+        if(available) {
+            generateSchematic();
+        } else {
+            undoSchematic();
+        }
     }
 
     /**
@@ -37,6 +50,7 @@ public class EvacuationZone {
      */
     public Set<Player> getPlayerInZone() {
         Set<Player> playerSet = new HashSet<>();
+        if(!available)return playerSet;
         for(Entity p : Objects.requireNonNull(center.getWorld())
                 .getNearbyEntities(center,safeRadius,safeRadius,safeRadius,
                         entity -> entity.getType().equals(EntityType.PLAYER))) {
@@ -46,9 +60,16 @@ public class EvacuationZone {
     }
 
     /**
-     * 生成结构
+     * TODO 生成结构
      */
     public void generateSchematic() {
         center.getBlock().setType(Material.BEACON);
+    }
+
+    /**
+     * TODO 撤销已生成的结构
+     */
+    public void undoSchematic() {
+        center.getBlock().setType(Material.AIR);
     }
 }
