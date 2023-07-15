@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.WorldEditAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.region.TaskRegion;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
@@ -146,10 +147,15 @@ public abstract class Task {
     public void start(TaskRegion taskRegion) {
         this.taskRegion = taskRegion;
         taskRegion.startCheck();
-        getPlayers().forEach(p -> p.teleport(taskRegion.getCenter()));
-        startGameOverCheck();
-        startTiming();
-        startEvacuateTask();
+        Bukkit.getScheduler().runTaskAsynchronously(SeriuxaJourney.getInstance(),()->{
+            IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(taskRegion.getCenter().clone().add(0,-3,0));
+            Bukkit.getScheduler().runTask(SeriuxaJourney.getInstance(),()->{
+                getPlayers().forEach(p -> p.teleport(taskRegion.getCenter()));
+                startGameOverCheck();
+                startTiming();
+                startEvacuateTask();
+            });
+        });
     }
     private void startEvacuateTask() {
         evacuateTaskId = Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(),()->{
