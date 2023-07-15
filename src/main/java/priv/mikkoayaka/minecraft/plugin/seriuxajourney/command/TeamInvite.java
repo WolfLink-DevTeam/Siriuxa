@@ -38,7 +38,7 @@ public class TeamInvite extends WolfirdCommand {
         return inviteMap.containsKey(uuid);
     }
     public TeamInvite() {
-        super(true, false, true, "sj team invite {player}", "邀请玩家加入队伍");
+        super(false, false, true, "sj team invite {player}", "邀请玩家加入队伍");
     }
     @Override
     protected void execute(CommandSender commandSender, String[] strings) {
