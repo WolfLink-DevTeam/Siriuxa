@@ -2,6 +2,9 @@ package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.region;
 
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.wolflink.common.ioc.IOC;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.ConfigProjection;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
@@ -13,11 +16,11 @@ public class SquareRegion extends TaskRegion{
     private final int centerX;
     private final int centerZ;
 
-    public SquareRegion(Task task, World world, int centerX, int centerZ, double radius) {
-        super(task,world,centerX,centerZ, radius);
-        this.worldName = world.getName();
-        this.centerX = centerX;
-        this.centerZ = centerZ;
+    public SquareRegion(Task task, Location center) {
+        super(task,center, IOC.getBean(Config.class).get(ConfigProjection.EXPLORATION_REGION_RADIUS));
+        this.worldName = Objects.requireNonNull(center.getWorld()).getName();
+        this.centerX = center.getBlockX();
+        this.centerZ = center.getBlockZ();
     }
 
     @Override

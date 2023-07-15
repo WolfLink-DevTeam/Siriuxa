@@ -9,6 +9,10 @@ public enum ConfigProjection {
     LOBBY_WORLD_NAME("Lobby.WorldName","kg"), // 任务大厅世界
     LOBBY_LOCATION("Lobby.Location","-140 91 10"), // 任务大厅坐标
     EXPLORATION_TASK_WORLD_NAME("Task.Exploration.WorldName","normal-exploration"),
+    EXPLORATION_REGION_TOTAL_LENGTH("Task.Exploration.Region.TotalLength",50000),
+    EXPLORATION_REGION_INDEX("Task.Exploration.Region.Index",1),
+    EXPLORATION_REGION_SPACING_RADIUS("Task.Exploration.Region.SpacingRadius",50),
+    EXPLORATION_REGION_RADIUS("Task.Exploration.Region.Radius",500)
     ;
     @Getter
     private final String path;

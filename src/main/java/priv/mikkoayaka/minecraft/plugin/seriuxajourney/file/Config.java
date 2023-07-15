@@ -36,4 +36,9 @@ public class Config extends YamlConfig {
         }
         return location;
     }
+    public int getNextRegionIndex() {
+        int value = get(ConfigProjection.EXPLORATION_REGION_INDEX);
+        update(ConfigProjection.EXPLORATION_REGION_INDEX.getPath(),value+1);
+        return value;
+    }
 }

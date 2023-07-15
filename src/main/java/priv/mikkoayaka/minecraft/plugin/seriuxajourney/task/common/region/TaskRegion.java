@@ -31,9 +31,8 @@ public abstract class TaskRegion {
     protected final Task task;
     @Getter
     protected final Location center;
-    public TaskRegion(Task task, World world, int centerX, int centerZ, double radius) {
-        int highestY = world.getHighestBlockYAt(centerX,centerZ);
-        this.center = new Location(world,centerX,highestY,centerZ);
+    public TaskRegion(Task task, Location center, double radius) {
+        this.center = center;
         this.radius = radius;
         this.task = task;
     }
