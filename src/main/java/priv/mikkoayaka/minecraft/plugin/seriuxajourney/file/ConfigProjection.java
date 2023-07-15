@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum ConfigProjection {
+    DEBUG("Debug",false),
     LOBBY_WORLD_NAME("Lobby.WorldName","kg"), // 任务大厅世界
     LOBBY_LOCATION("Lobby.Location","-140 91 10"), // 任务大厅坐标
     EXPLORATION_TASK_WORLD_NAME("Task.Exploration.WorldName","normal-exploration"),

@@ -43,7 +43,7 @@ public abstract class Task {
     /**
      * 麦穗流失加速度
      */
-    private double wheatLostAcceleratedSpeed;
+    private final double wheatLostAcceleratedSpeed;
     /**
      * 本次任务的麦穗余量
      */
@@ -53,7 +53,7 @@ public abstract class Task {
     /**
      * 本次任务的队伍
      */
-    private final TaskTeam taskTeam = new TaskTeam(this);
+    private TaskTeam taskTeam;
     @Nullable
     private TaskRegion taskRegion = null;
 
@@ -142,6 +142,7 @@ public abstract class Task {
         if(evacuateTaskId != -1) {
             Bukkit.getScheduler().cancelTask(evacuateTaskId);
             evacuateTaskId = -1;
+            availableEvacuationZone = null;
         }
     }
     public void start(TaskRegion taskRegion) {
@@ -174,7 +175,7 @@ public abstract class Task {
             }
             if(availableEvacuationZone != null) {
                 availableEvacuationZone.setAvailable(false);
-                Notifier.broadcastChat(getPlayers(),"坐标 X："+availableEvacuationZone.getCenter().getBlockX()+"Z："+availableEvacuationZone.getCenter().getBlockZ()+" 附近的飞艇已撤离，请等待下一艘飞艇接应。");
+                Notifier.broadcastChat(getPlayers(),"坐标 X："+availableEvacuationZone.getCenter().getBlockX()+" Z："+availableEvacuationZone.getCenter().getBlockZ()+" 附近的飞艇已撤离，请等待下一艘飞艇接应。");
                 availableEvacuationZone = null;
             } else {
                 availableEvacuationZone = new EvacuationZone(evacuateLocation,5);
@@ -210,7 +211,10 @@ public abstract class Task {
 
     private void stopCheck() {
         stopTiming();
-        if(taskRegion != null) taskRegion.stopCheck();
+        if(taskRegion != null) {
+            taskRegion.stopCheck();
+            taskRegion = null;
+        }
         stopEvacuateTask();
         stopFinishCheck();
     }
@@ -234,8 +238,8 @@ public abstract class Task {
      * 在任务完成/失败后调用
      */
     protected void resetTask() {
-        getStageHolder().next();
 //        taskTeam.clear();
-//        IOC.getBean(TaskRepository.class).deleteByKey(taskId);
+        taskTeam = new TaskTeam(this);
+        IOC.getBean(TaskRepository.class).deleteByKey(taskId);
     }
 }

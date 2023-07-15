@@ -1,5 +1,8 @@
 package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common;
 
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -7,6 +10,8 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.wolflink.common.ioc.IOC;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.WorldEditAPI;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -59,17 +64,25 @@ public class EvacuationZone {
         return playerSet;
     }
 
+    private EditSession editSession;
     /**
      * TODO 生成结构
      */
     public void generateSchematic() {
-        center.getBlock().setType(Material.BEACON);
+
+        editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(center.getWorld()));
+        EditSession another = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(center.getWorld()));
+        //TODO TEST
+        System.out.println(editSession == another);
+        IOC.getBean(WorldEditAPI.class).pasteEvacuationUnit(editSession,center);
+//        center.getBlock().setType(Material.BEACON);
     }
 
     /**
      * TODO 撤销已生成的结构
      */
     public void undoSchematic() {
-        center.getBlock().setType(Material.AIR);
+        IOC.getBean(WorldEditAPI.class).undoEvacuationUnit(editSession);
+        editSession = null;
     }
 }

@@ -23,6 +23,7 @@ public class GameStage extends TaskStage {
     }
     @Override
     protected void onEnter() {
+        super.onEnter();
         String worldName = config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME);
         World world = Bukkit.getWorld(worldName);
         if(world == null) {
@@ -37,6 +38,6 @@ public class GameStage extends TaskStage {
     }
     @Override
     protected void onLeave() {
-
+        super.onLeave();
     }
 }

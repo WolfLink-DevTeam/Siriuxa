@@ -8,7 +8,7 @@ public class TaskLinearStageHolder extends LinearStageHolder {
     @Getter
     private final Task task;
     public TaskLinearStageHolder(Task task) {
-        super(true);
+        super(false);
         this.task = task;
     }
 }

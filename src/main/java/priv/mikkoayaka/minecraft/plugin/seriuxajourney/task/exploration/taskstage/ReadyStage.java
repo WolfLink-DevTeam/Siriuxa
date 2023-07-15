@@ -18,6 +18,7 @@ public class ReadyStage extends TaskStage {
 
     @Override
     protected void onEnter() {
+        super.onEnter();
         Task task = getStageHolder().getTask();
         Bukkit.getScheduler().runTaskAsynchronously(SeriuxaJourney.getInstance(),()->{
             int timeLeft = 15;

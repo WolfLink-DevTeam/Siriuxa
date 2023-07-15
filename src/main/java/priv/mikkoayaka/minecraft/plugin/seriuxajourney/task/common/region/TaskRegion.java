@@ -42,7 +42,10 @@ public abstract class TaskRegion {
         taskId = Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(),this::check,20,20).getTaskId();
     }
     public void stopCheck() {
-        if(taskId != -1) Bukkit.getScheduler().cancelTask(taskId);
+        if(taskId != -1) {
+            Bukkit.getScheduler().cancelTask(taskId);
+            taskId = -1;
+        }
     }
     /**
      * 检测玩家是否在边界外

@@ -10,11 +10,12 @@ public class EndStage extends TaskStage {
 
     @Override
     protected void onEnter() {
+        super.onEnter();
         //TODO 转移物资，传送回城等
     }
 
     @Override
     protected void onLeave() {
-
+        super.onLeave();
     }
 }
