@@ -4,19 +4,19 @@ import lombok.Data;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.BlockAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.WorldEditAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.region.TaskRegion;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -89,11 +89,11 @@ public abstract class Task {
         takeWheat(wheat);
         Notifier.broadcastChat(playerUuids,"本次任务损失了 "+wheat+" 麦穗，原因是"+reason);
     }
-    public Set<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return playerUuids.stream()
                 .map(Bukkit::getPlayer)
                 .filter(p -> p!=null&&p.isOnline())
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
     public void addWheatLossMultiple(double value) {
         wheatLossMultiple += value;
@@ -148,8 +148,13 @@ public abstract class Task {
         this.taskRegion = taskRegion;
         Bukkit.getScheduler().runTaskAsynchronously(SeriuxaJourney.getInstance(),()->{
             IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(taskRegion.getCenter());
+            List<Location> beaconLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.BEACON,taskRegion.getCenter(),20);
             Bukkit.getScheduler().runTask(SeriuxaJourney.getInstance(),()->{
-                getPlayers().forEach(p -> p.teleport(taskRegion.getCenter()));
+                List<Player> playerList = getPlayers();
+                for (int i = 0; i < playerList.size(); i++) {
+                    Player player = playerList.get(i);
+                    player.teleport(beaconLocations.get(i%beaconLocations.size()));
+                }
                 startGameOverCheck();
                 startTiming();
                 startEvacuateTask();

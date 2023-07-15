@@ -123,14 +123,14 @@ public abstract class TaskRegion {
      */
     public Location getPlayerAverangeLocation() {
         World world = null;
-        Set<Player> playerSet = task.getPlayers();
+        List<Player> playerList = task.getPlayers();
         double totalX = 0;
         double totalZ = 0;
-        for (Player player : playerSet) {
+        for (Player player : playerList) {
             if(world == null) world = player.getWorld();
             totalX += player.getLocation().getX();
             totalZ += player.getLocation().getZ();
         }
-        return new Location(world,totalX / playerSet.size(),60,totalZ / playerSet.size());
+        return new Location(world,totalX / playerList.size(),60,totalZ / playerList.size());
     }
 }

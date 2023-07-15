@@ -6,6 +6,7 @@ import org.wolflink.minecraft.wolfird.framework.notifier.BaseNotifier;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,7 +36,7 @@ public class Notifier {
                     notifier.chat(msg,p);
                 });
     }
-    public static void broadcastChat(Set<Player> players,String msg) {
+    public static void broadcastChat(List<Player> players, String msg) {
         players.forEach(p -> {
             if(!p.isOnline())return;
             notifier.chat(msg,p);
