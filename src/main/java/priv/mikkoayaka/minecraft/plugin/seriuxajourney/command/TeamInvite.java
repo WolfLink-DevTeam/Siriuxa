@@ -43,6 +43,10 @@ public class TeamInvite extends WolfirdCommand {
     @Override
     protected void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
+        if(strings[0].equalsIgnoreCase(player.getName())) {
+            Notifier.chat("§c你不能邀请你自己。",player);
+            return;
+        }
         Player invited = Bukkit.getPlayer(strings[0]);
         if(invited == null || !invited.isOnline()) {
             Notifier.chat("§e邀请失败，未找到玩家：§f"+strings[0],player);
