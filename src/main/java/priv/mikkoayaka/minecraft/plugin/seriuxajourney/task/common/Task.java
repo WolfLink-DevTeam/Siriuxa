@@ -182,7 +182,7 @@ public abstract class Task {
                 Notifier.broadcastChat(getPlayers(),"飞艇已降落至坐标 X："+evacuateLocation.getBlockX()+" Z："+evacuateLocation.getBlockZ()+" 如有需要请尽快前往撤离。");
             }
             //TODO 30|15
-        },20 * 60 * 1,20 * 60 * 1).getTaskId();
+        },20 * 60 * 3,20 * 60 * 3).getTaskId();
     }
 
     /**

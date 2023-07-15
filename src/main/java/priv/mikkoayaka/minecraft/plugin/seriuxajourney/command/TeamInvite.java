@@ -8,8 +8,11 @@ import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.Result;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.TaskRepository;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationService;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationTask;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
 import java.util.HashMap;
@@ -21,6 +24,8 @@ public class TeamInvite extends WolfirdCommand {
 
     @Inject
     TaskRepository taskRepository;
+    @Inject
+    ExplorationService explorationService;
     /**
      * 被邀请人 - 邀请人
      */
@@ -42,6 +47,11 @@ public class TeamInvite extends WolfirdCommand {
         if(invited == null || !invited.isOnline()) {
             Notifier.chat("§e邀请失败，未找到玩家：§f"+strings[0],player);
         } else  {
+            Task task = taskRepository.findByPlayer(player);
+            if(task == null) {
+                Notifier.chat("§e邀请失败，你没有处于队伍中。",player);
+                return;
+            }
             inviteMap.put(invited.getUniqueId(),player.getName());
             Bukkit.getScheduler().runTaskLater(SeriuxaJourney.getInstance(),()->{
                 if(inviteMap.containsKey(invited.getUniqueId())) {
@@ -65,6 +75,15 @@ public class TeamInvite extends WolfirdCommand {
             else task = taskRepository.findByUuid(offlinePlayer.getUniqueId());
             if(task == null) {
                 Notifier.chat("§e该队伍已解散，无法加入。",invited);
+            } else {
+                Result result = explorationService.joinTask(invited, (ExplorationTask) task);
+                result.show(invited);
+                Player player = offlinePlayer.getPlayer();
+                if(result.result()) {
+                    Notifier.chat("§f"+invited.getName()+" §a加入了你的队伍。",player);
+                } else {
+                    Notifier.chat("§f"+invited.getName()+" §e尝试加入队伍但失败了。",player);
+                }
             }
             inviteMap.remove(invited.getUniqueId());
         }
