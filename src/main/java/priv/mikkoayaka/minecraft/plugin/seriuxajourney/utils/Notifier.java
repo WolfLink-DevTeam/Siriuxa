@@ -28,6 +28,9 @@ public class Notifier {
     public static void chat(String msg,Player player) {
         notifier.chat(msg,player);
     }
+    public static void notify(String msg,Player player) {
+        notifier.notify(msg,player);
+    }
     public static void broadcastChat(Collection<UUID> uuids, String msg) {
         uuids.stream()
                 .map(Bukkit::getPlayer)

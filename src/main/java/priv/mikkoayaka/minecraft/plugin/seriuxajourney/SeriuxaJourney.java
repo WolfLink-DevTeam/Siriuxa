@@ -7,9 +7,7 @@ import org.wolflink.minecraft.wolfird.framework.command.CmdHelp;
 import org.wolflink.minecraft.wolfird.framework.command.WolfirdCommandAnalyser;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.VaultAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.MenuEventListener;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.command.Debug;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.command.OpenTaskMenu;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.command.TeamInvite;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.command.*;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Lang;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.OreCache;
@@ -42,6 +40,8 @@ public final class SeriuxaJourney extends WolfirdPlugin {
         bindCommand(IOC.getBean(OpenTaskMenu.class));
         bindCommand(IOC.getBean(Debug.class));
         bindCommand(IOC.getBean(TeamInvite.class));
+        bindCommand(IOC.getBean(TeamAccept.class));
+        bindCommand(IOC.getBean(TeamDeny.class));
 
         // 注册变量
         IOC.getBean(TaskVariables.class).register();
