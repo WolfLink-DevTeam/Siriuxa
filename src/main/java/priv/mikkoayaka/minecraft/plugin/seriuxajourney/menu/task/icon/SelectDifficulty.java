@@ -3,6 +3,7 @@ package priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.icon;
 import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.wolflink.common.ioc.IOC;
@@ -23,6 +24,7 @@ public class SelectDifficulty extends ItemIcon {
 
     @Override
     public void leftClick(Player player) {
+        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES,1f,1f);
         menuService.display(ExplorationDifficultyMenu.class,player);
     }
 

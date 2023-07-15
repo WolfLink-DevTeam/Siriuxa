@@ -146,14 +146,14 @@ public abstract class Task {
     }
     public void start(TaskRegion taskRegion) {
         this.taskRegion = taskRegion;
-        taskRegion.startCheck();
         Bukkit.getScheduler().runTaskAsynchronously(SeriuxaJourney.getInstance(),()->{
-            IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(taskRegion.getCenter().clone().add(0,-3,0));
+            IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(taskRegion.getCenter());
             Bukkit.getScheduler().runTask(SeriuxaJourney.getInstance(),()->{
                 getPlayers().forEach(p -> p.teleport(taskRegion.getCenter()));
                 startGameOverCheck();
                 startTiming();
                 startEvacuateTask();
+                taskRegion.startCheck();
             });
         });
     }

@@ -34,10 +34,9 @@ public class ReadyStage extends TaskStage {
             }
             for (Player player : task.getPlayers()) {
                 player.sendTitle("§a§l任务开始","§7作业单元已准备就绪，开始投放",10,40,10);
+                player.playSound(player.getLocation(),Sound.BLOCK_RESPAWN_ANCHOR_CHARGE,1f,0.5f);
                 player.playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN,1f,0.5f);
-                player.playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN,1f,0.6f);
-                player.playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN,1f,0.7f);
-                player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_SHOOT,1f,0.5f);
+                player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH,1f,0.5f);
             }
             try {
                 Thread.sleep(1000);

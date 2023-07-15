@@ -25,8 +25,8 @@ public class GameStage extends TaskStage {
         getStageHolder().getTask().start(new SquareRegion(
                 getStageHolder().getTask(),
                 world,
-                (int) ((2 * Math.random() * Integer.MAX_VALUE) - Integer.MAX_VALUE),
-                (int) ((2 * Math.random() * Integer.MAX_VALUE) - Integer.MAX_VALUE),
+                (int) ((2 * Math.random() * 10000000) - 10000000),
+                (int) ((2 * Math.random() * 10000000) - 10000000),
                 500
         ));
     }

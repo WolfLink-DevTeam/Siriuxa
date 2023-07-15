@@ -56,6 +56,7 @@ public class CreateTask extends ItemIcon {
         result.show(player);
         player.closeInventory();
         if(result.result()) {
+            player.playSound(player.getLocation(),Sound.ITEM_BOOK_PAGE_TURN,1f,1f);
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP,1f,1.2f);
         } else {
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO,1f,0.8f);
