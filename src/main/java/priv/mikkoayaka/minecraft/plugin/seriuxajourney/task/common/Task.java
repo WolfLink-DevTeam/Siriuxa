@@ -153,7 +153,8 @@ public abstract class Task {
                 List<Player> playerList = getPlayers();
                 for (int i = 0; i < playerList.size(); i++) {
                     Player player = playerList.get(i);
-                    player.teleport(beaconLocations.get(i%beaconLocations.size()));
+                    if(beaconLocations.size() == 0) player.teleport(taskRegion.getCenter());
+                    else player.teleport(beaconLocations.get(i%beaconLocations.size()));
                 }
                 startGameOverCheck();
                 startTiming();
