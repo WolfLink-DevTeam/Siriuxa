@@ -147,7 +147,7 @@ public abstract class Task {
         this.taskRegion = taskRegion;
         this.taskWheat = taskTeam.size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
         Bukkit.getScheduler().runTaskAsynchronously(SeriuxaJourney.getInstance(),()->{
-            IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(taskRegion.getCenter());
+            IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(taskRegion.getCenter().clone().add(0,1,0));
             List<Location> beaconLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.BEACON,taskRegion.getCenter(),20);
             Bukkit.getScheduler().runTask(SeriuxaJourney.getInstance(),()->{
                 List<Player> playerList = getPlayers();
