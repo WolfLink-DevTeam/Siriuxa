@@ -12,7 +12,7 @@ public enum ConfigProjection {
     EXPLORATION_REGION_TOTAL_LENGTH("Task.Exploration.Region.TotalLength",50000),
     EXPLORATION_REGION_INDEX("Task.Exploration.Region.Index",1),
     EXPLORATION_REGION_SPACING_RADIUS("Task.Exploration.Region.SpacingRadius",50),
-    EXPLORATION_REGION_RADIUS("Task.Exploration.Region.Radius",500)
+    EXPLORATION_REGION_RADIUS("Task.Exploration.Region.Radius",500.0)
     ;
     @Getter
     private final String path;

@@ -17,9 +17,9 @@ public class RegionAPI {
     public Location autoGetRegionCenter(World world) {
         int index = config.getNextRegionIndex();
         int spacingRadius = config.get(ConfigProjection.EXPLORATION_REGION_SPACING_RADIUS);
-        int radius = config.get(ConfigProjection.EXPLORATION_REGION_RADIUS);
+        double radius = config.get(ConfigProjection.EXPLORATION_REGION_RADIUS);
         int maxLength = config.get(ConfigProjection.EXPLORATION_REGION_TOTAL_LENGTH);
-        int finalRadius = (spacingRadius + radius) * 2;
+        int finalRadius = (int) ((spacingRadius + radius) * 2);
         int maxRegionPerLine = maxLength / finalRadius;
         int x = index % maxRegionPerLine;
         int z = (index / maxRegionPerLine) % maxRegionPerLine;
