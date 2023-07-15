@@ -15,11 +15,11 @@ public abstract class TaskStage extends Stage {
 
     @Override
     protected void onEnter() {
-        Notifier.debug("任务"+getStageHolder().getTask().getTaskId()+"进入"+getDisplayName()+"阶段");
+        Notifier.debug("任务"+getStageHolder().getTask().getTaskUuid().toString()+"进入"+getDisplayName()+"阶段");
     }
 
     @Override
     protected void onLeave() {
-        Notifier.debug("任务"+getStageHolder().getTask().getTaskId()+"离开"+getDisplayName()+"阶段");
+        Notifier.debug("任务"+getStageHolder().getTask().getTaskUuid().toString()+"离开"+getDisplayName()+"阶段");
     }
 }

@@ -18,6 +18,7 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstag
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.GameStage;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.ReadyStage;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.WaitStage;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.team.TaskTeam;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
 /**
@@ -30,8 +31,8 @@ public class ExplorationTask extends Task implements HurtCheckAvailable, OreChec
     @Getter
     private final LinearStageHolder stageHolder = (LinearStageHolder) super.getStageHolder();
 
-    public ExplorationTask(ExplorationDifficulty difficulty) {
-        super(difficulty);
+    public ExplorationTask(TaskTeam taskTeam, ExplorationDifficulty difficulty) {
+        super(taskTeam,difficulty);
         this.difficulty = difficulty;
     }
 

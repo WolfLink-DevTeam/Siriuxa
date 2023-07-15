@@ -13,6 +13,9 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.TaskRepository;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationService;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationTask;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.team.TaskTeam;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.team.TaskTeamRepository;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.team.TaskTeamService;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
 import java.util.HashMap;
@@ -23,9 +26,9 @@ import java.util.UUID;
 public class TeamInvite extends WolfirdCommand {
 
     @Inject
-    TaskRepository taskRepository;
+    TaskTeamRepository taskTeamRepository;
     @Inject
-    ExplorationService explorationService;
+    TaskTeamService taskTeamService;
     /**
      * 被邀请人 - 邀请人
      */
@@ -43,16 +46,16 @@ public class TeamInvite extends WolfirdCommand {
     @Override
     protected void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
-        if(strings[0].equalsIgnoreCase(player.getName())) {
+        Player invited = Bukkit.getPlayer(strings[0]);
+        if(player == invited) {
             Notifier.chat("§c你不能邀请你自己。",player);
             return;
         }
-        Player invited = Bukkit.getPlayer(strings[0]);
         if(invited == null || !invited.isOnline()) {
             Notifier.chat("§e邀请失败，未找到玩家：§f"+strings[0],player);
         } else  {
-            Task task = taskRepository.findByPlayer(player);
-            if(task == null) {
+            TaskTeam taskTeam = taskTeamRepository.findByPlayer(player);
+            if(taskTeam == null) {
                 Notifier.chat("§e邀请失败，你没有处于队伍中。",player);
                 return;
             }
@@ -74,13 +77,13 @@ public class TeamInvite extends WolfirdCommand {
         } else {
             String senderName = inviteMap.get(invited.getUniqueId());
             OfflinePlayer offlinePlayer = Bukkit.getPlayer(senderName);
-            Task task;
-            if(offlinePlayer == null) task = null;
-            else task = taskRepository.findByUuid(offlinePlayer.getUniqueId());
-            if(task == null) {
+            TaskTeam taskTeam;
+            if(offlinePlayer == null) taskTeam = null;
+            else taskTeam = taskTeamRepository.findByPlayerUuid(offlinePlayer.getUniqueId());
+            if(taskTeam == null) {
                 Notifier.chat("§e该队伍已解散，无法加入。",invited);
             } else {
-                Result result = explorationService.joinTask(invited, (ExplorationTask) task);
+                Result result = taskTeamService.joinTeam(invited, taskTeam);
                 result.show(invited);
                 Player player = offlinePlayer.getPlayer();
                 if(result.result()) {

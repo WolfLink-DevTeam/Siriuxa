@@ -1,9 +1,13 @@
 package priv.mikkoayaka.minecraft.plugin.seriuxajourney.team;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;
 
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,15 +15,25 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class TaskTeam {
+    @Getter
+    private final UUID teamUuid = UUID.randomUUID();
     private final Set<UUID> memberUuids = new HashSet<>();
-    private final Task task;
-    public TaskTeam(Task task) {
-        this.task = task;
-    }
+    /**
+     * 当前选择的任务
+     */
+    @Nullable
+    @Setter
+    @Getter
+    private Task selectedTask = null;
     public List<Player> getPlayers() {
         return memberUuids.stream()
                 .map(Bukkit::getPlayer)
                 .filter(p -> p!=null&&p.isOnline())
+                .collect(Collectors.toList());
+    }
+    public List<OfflinePlayer> getOfflinePlayers() {
+        return memberUuids.stream()
+                .map(Bukkit::getOfflinePlayer)
                 .collect(Collectors.toList());
     }
     public int size() {
@@ -43,6 +57,11 @@ public class TaskTeam {
     }
     public void leave(UUID uuid) {
         memberUuids.remove(uuid);
+    }
+    public void clear() {
+        for (UUID uuid : memberUuids) {
+            leave(uuid);
+        }
     }
     public void leave(Player player) {
         leave(player.getUniqueId());

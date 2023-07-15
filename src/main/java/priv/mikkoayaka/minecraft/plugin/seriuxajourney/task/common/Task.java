@@ -17,11 +17,14 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.region.TaskRe
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.team.TaskTeam;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * 抽象任务类
+ * 接受需要支付麦穗
  * 麦穗会流失
  */
 @Data
@@ -29,9 +32,9 @@ public abstract class Task {
 
     private static int maxTaskId = 1;
     /**
-     * 任务ID
+     * 任务UUID
      */
-    private final int taskId;
+    private final UUID taskUuid = UUID.randomUUID();
     /**
      * 基础麦穗流失量(每秒)
      */
@@ -48,8 +51,6 @@ public abstract class Task {
      * 本次任务的麦穗余量
      */
     private double taskWheat = 0;
-
-//    private final Set<UUID> playerUuids = new HashSet<>();
     /**
      * 本次任务的队伍
      */
@@ -57,7 +58,7 @@ public abstract class Task {
     @Nullable
     private TaskRegion taskRegion = null;
 
-    private TaskDifficulty difficulty;
+    private final TaskDifficulty taskDifficulty;
 
     /**
      * 当前可用的撤离点
@@ -68,12 +69,9 @@ public abstract class Task {
     private final StageHolder stageHolder;
     protected abstract StageHolder initStageHolder();
 
-    public Task(TaskDifficulty taskDifficulty) {
-        synchronized (this) {
-            taskId = maxTaskId;
-            maxTaskId++;
-        }
-        this.difficulty = taskDifficulty;
+    public Task(TaskTeam taskTeam,TaskDifficulty taskDifficulty) {
+        this.taskTeam = taskTeam;
+        this.taskDifficulty = taskDifficulty;
         this.wheatLostAcceleratedSpeed = taskDifficulty.getWheatLostAcceleratedSpeed();
         this.baseWheatLoss = taskDifficulty.getBaseWheatLoss();
         stageHolder = initStageHolder();
@@ -147,6 +145,7 @@ public abstract class Task {
     }
     public void start(TaskRegion taskRegion) {
         this.taskRegion = taskRegion;
+        this.taskWheat = taskTeam.size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
         Bukkit.getScheduler().runTaskAsynchronously(SeriuxaJourney.getInstance(),()->{
             IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(taskRegion.getCenter());
             List<Location> beaconLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.BEACON,taskRegion.getCenter(),20);
@@ -226,7 +225,7 @@ public abstract class Task {
     /**
      * 麦穗为0，或玩家全部逃跑时，任务失败
      */
-    protected abstract void failed();
+    public abstract void failed();
 
     /**
      * 是否允许其他玩家加入
@@ -239,7 +238,7 @@ public abstract class Task {
      */
     protected void resetTask() {
 //        taskTeam.clear();
-        taskTeam = new TaskTeam(this);
-        IOC.getBean(TaskRepository.class).deleteByKey(taskId);
+        taskTeam = null;
+        IOC.getBean(TaskRepository.class).deleteByKey(taskUuid);
     }
 }

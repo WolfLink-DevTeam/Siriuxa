@@ -3,6 +3,7 @@ package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Inject;
@@ -17,8 +18,15 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.ConfigProjection;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.TaskRepository;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.region.SquareRegion;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.GameStage;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.ReadyStage;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.WaitStage;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.team.TaskTeam;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.team.TaskTeamRepository;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.team.TaskTeamService;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
+
+import java.util.List;
 
 @Singleton
 public class ExplorationService {
@@ -26,24 +34,46 @@ public class ExplorationService {
     @Inject
     private TaskRepository taskRepository;
     @Inject
+    private TaskTeamRepository taskTeamRepository;
+    @Inject
+    private TaskTeamService taskTeamService;
+    @Inject
     private VaultAPI vaultAPI;
     @Inject
     private Config config;
-    private final BaseNotifier notifier = SeriuxaJourney.getInstance().getNotifier();
 
-    public Result createTask(Player player, ExplorationDifficulty explorationDifficulty) {
-        ExplorationTask task = new ExplorationTask(explorationDifficulty);
-        Result joinResult = joinTask(player,task);
-        if(!joinResult.result())return joinResult;
+    public Result createTask(Player player,ExplorationDifficulty explorationDifficulty) {
+        Result result = taskTeamService.createTeam(player);
+        if(!result.result()) {
+            return result;
+        }
+        TaskTeam taskTeam = taskTeamRepository.findByPlayer(player);
+        if(taskTeam == null) return new Result(false,"玩家创建了队伍但未找到所在队伍");
+        return createTask(taskTeam,explorationDifficulty);
+    }
+    public Result createTask(TaskTeam taskTeam, ExplorationDifficulty explorationDifficulty) {
+        if(taskTeam.getSelectedTask() != null) return new Result(false,"当前队伍已经选择了任务，无法再次创建。");
+        double cost = explorationDifficulty.getWheatCost();
+        List<OfflinePlayer> offlinePlayers = taskTeam.getOfflinePlayers();
+        // 检查成员余额
+        for (OfflinePlayer offlinePlayer : offlinePlayers) {
+            if(vaultAPI.getEconomy(offlinePlayer) < cost) return new Result(false,"队伍中至少有一名成员无法支付本次任务费用。");
+        }
+        // 成员支付任务成本
+        for (OfflinePlayer offlinePlayer : offlinePlayers) {
+            vaultAPI.takeEconomy(offlinePlayer,cost);
+        }
+        // 创建任务
+        ExplorationTask task = new ExplorationTask(taskTeam,explorationDifficulty);
+        // 与队伍绑定
+        taskTeam.setSelectedTask(task);
         taskRepository.insert(task);
         return new Result(true,"任务登记完成。");
     }
     public Result readyTask(ExplorationTask explorationTask) {
         if(explorationTask == null)return new Result(false,"不存在的任务。");
-        //TODO X Z 动态分配
-        //TODO 玩家背包隔离
         if(explorationTask.getPlayers().size() == 0) {
-            taskRepository.deleteByKey(explorationTask.getTaskId());
+            taskRepository.deleteByKey(explorationTask.getTaskUuid());
             return new Result(false,"该任务没有任何在线玩家。");
         }
         if(explorationTask.getStageHolder().getThisStage() instanceof WaitStage) {
@@ -54,64 +84,27 @@ public class ExplorationService {
     }
 
     /**
-     * 尝试加入任务
+     * 删除任务，通知并解绑相关队伍
      *
-     * 检查任务是否可加入
-     * 检查玩家是否在其他任务中
-     * 检查玩家是否有足够的麦穗
+     * 任务如果在进行准备，进行阶段，结束阶段，会将所有玩家传送到大厅
      */
-    public Result joinTask(Player player,ExplorationTask explorationTask) {
-        Stage stage = explorationTask.getStageHolder().getThisStage();
-        if(!(stage instanceof WaitStage)) {
-            return new Result(false,"当前任务状态为："+stage.getDisplayName()+"，不允许加入。");
-        }
-        if(taskRepository.findByPlayer(player) != null) {
-            return new Result(false,"玩家当前已处在其他任务中，不允许加入。");
-        }
-        int wheatCost = explorationTask.getDifficulty().getWheatCost();
-        int wheatSupply = explorationTask.getDifficulty().getWheatSupply();
-        if(vaultAPI.getEconomy().getBalance(player) < wheatCost) {
-            return new Result(false,"你需要支付 "+wheatCost+" 才能加入这次任务，显然你还没有足够的麦穗。");
-        }
-        EconomyResponse r = vaultAPI.getEconomy().withdrawPlayer(player,wheatCost);
-        if(r.transactionSuccess()) {
-            explorationTask.getTaskTeam().join(player.getUniqueId());
-            explorationTask.setTaskWheat(explorationTask.getTaskWheat() + wheatCost + wheatSupply);
-            return new Result(true,"加入成功");
-        }
-        return new Result(false,"在尝试扣除麦穗余额时发生了错误。");
-    }
-
-    /**
-     * 离开玩家当前所处的任务
-     *
-     * 如果处于准备阶段，则退回玩家麦穗
-     * 否则不会退回
-     */
-    public Result leaveTask(Player player) {
-        ExplorationTask task = taskRepository.findByPlayer(ExplorationTask.class,player);
-        if(task == null) return new Result(false,"你没有处在探索类型的任务当中。");
-        task.getTaskTeam().leave(player);
-        // 清理掉没有玩家的任务
-        if(task.getTaskTeam().size() == 0) taskRepository.deleteByValue(task);
-        Stage stage = task.getStageHolder().getThisStage();
-        int wheatCost = task.getDifficulty().getWheatCost();
-        int wheatSupply = task.getDifficulty().getWheatSupply();
-        // 退回麦穗
-        if(stage instanceof WaitStage || stage instanceof ReadyStage) {
-            // 扣除该玩家提供的全部麦穗
-            task.takeWheat(wheatCost+wheatSupply);
-            EconomyResponse r = vaultAPI.getEconomy().depositPlayer(player,wheatCost);
-            if(!(r.transactionSuccess())) {
-                notifier.warn("在尝试退回玩家"+player.getName()+"麦穗时出现了问题。");
+    public Result deleteTask(ExplorationTask explorationTask) {
+        TaskTeam taskTeam = explorationTask.getTaskTeam();
+        if(taskTeam != null) {
+            Notifier.broadcastChat(taskTeam.getPlayers(),"§e队伍所选任务已被删除，请重新选择。");
+            Stage stage = explorationTask.getStageHolder().getThisStage();
+            if(!(stage instanceof WaitStage)) {
+                for (Player player : taskTeam.getPlayers()) {
+                    player.teleport(config.getLobbyLocation());
+                }
             }
-        } else {
-            // 任务中扣除其一半麦穗
-            task.takeWheat((wheatCost + wheatSupply) * 0.5,"玩家 "+player.getName()+" 中途退出了，但他仍保留下来一部分麦穗。");
+            taskTeam.setSelectedTask(null);
+            explorationTask.setTaskTeam(null);
         }
-        Location location = config.getLobbyLocation();
-        if(location != null) player.teleport(location);
-        // TODO 涉及到背包和等级隔离的问题
-        return new Result(true,"任务退出成功");
+        if(explorationTask.getStageHolder().getThisStage() instanceof GameStage) {
+            explorationTask.failed();
+        }
+        taskRepository.deleteByKey(explorationTask.getTaskUuid());
+        return new Result(true,"任务删除成功。");
     }
 }
