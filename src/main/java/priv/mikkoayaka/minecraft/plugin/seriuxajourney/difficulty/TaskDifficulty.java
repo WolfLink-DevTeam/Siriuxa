@@ -25,7 +25,14 @@ public class TaskDifficulty{
      * 难度名称
      */
     protected String name;
-
+    /**
+     * 麦穗成本
+     */
+    protected int wheatCost;
+    /**
+     * 麦穗补助
+     */
+    protected int wheatSupply;
     /**
      * 基础麦穗流失速度
      */

@@ -9,15 +9,6 @@ import org.bukkit.Material;
 @Data
 public class ExplorationDifficulty extends TaskDifficulty{
     /**
-     * 麦穗成本
-     */
-    private final int wheatCost;
-    /**
-     * 麦穗补助
-     */
-    private final int wheatSupply;
-
-    /**
      * 受伤麦穗惩罚(每1点伤害)
      */
     private final double hurtWheatCost;
@@ -42,9 +33,7 @@ public class ExplorationDifficulty extends TaskDifficulty{
 
     @Builder
     public ExplorationDifficulty(Material icon, String color, int level, String name, int wheatCost, int wheatSupply,double baseWheatLoss, double wheatLostAcceleratedSpeed, double hurtWheatCost, double hurtDamageMultiple, int bringSlotAmount, double wheatGainPercent, double expGainPercent) {
-        super(icon, color, level, name,baseWheatLoss,wheatLostAcceleratedSpeed);
-        this.wheatCost = wheatCost;
-        this.wheatSupply = wheatSupply;
+        super(icon, color, level, name,wheatCost,wheatSupply,baseWheatLoss,wheatLostAcceleratedSpeed);
         this.hurtWheatCost = hurtWheatCost;
         this.hurtDamageMultiple = hurtDamageMultiple;
         this.bringSlotAmount = bringSlotAmount;
