@@ -43,11 +43,12 @@ public class ExplorationService {
     private Config config;
 
     public Result createTask(Player player,ExplorationDifficulty explorationDifficulty) {
-        Result result = taskTeamService.createTeam(player);
-        if(!result.result()) {
-            return result;
-        }
         TaskTeam taskTeam = taskTeamRepository.findByPlayer(player);
+        if(taskTeam == null) {
+            Result result = taskTeamService.createTeam(player);
+            if(!result.result()) return result; // 队伍创建失败
+            taskTeam = taskTeamRepository.findByPlayer(player);
+        }
         if(taskTeam == null) return new Result(false,"玩家创建了队伍但未找到所在队伍");
         return createTask(taskTeam,explorationDifficulty);
     }
