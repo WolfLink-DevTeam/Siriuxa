@@ -3,6 +3,11 @@ version: '${project.version}'
 main: priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney
 api-version: '1.20'
 prefix: §6天狼星的旅途
+depend:
+  - FastAsyncWorldEdit
+  - Vault
+  - WolfirdFramework
+  - PlaceholderAPI
 commands:
   sj:
     aliases:
