@@ -189,14 +189,14 @@ public abstract class Task {
      * 获取当前麦穗每秒流失量
      */
     public double getWheatLossPerSecNow() {
-        return baseWheatLoss * wheatLossMultiple;
+        return baseWheatLoss * wheatLossMultiple * getTaskTeam().size();
     }
     int timingTask1Id = -1;
     int timingTask2Id = -1;
     private void startTiming() {
         timingTask1Id =
                 Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(),
-                        ()-> takeWheat(getBaseWheatLoss() * getWheatLossMultiple())
+                        ()-> takeWheat(getWheatLossPerSecNow())
                         ,20,20).getTaskId();
         timingTask2Id =
                 Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(),
