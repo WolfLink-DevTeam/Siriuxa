@@ -83,9 +83,7 @@ public abstract class Task {
         taskWheat -= wheat;
         if(taskWheat <= 0) {
             taskWheat = 0;
-            stageHolder.next();
-            stopCheck();
-            failed();
+            triggerFailed();
         }
     }
     public void takeWheat(double wheat,String reason) {
@@ -105,6 +103,16 @@ public abstract class Task {
 
     private int finishCheckTaskId = -1;
 
+    private void triggerFailed() {
+        stageHolder.next();
+        stopCheck();
+        failed();
+    }
+    private void triggerFinish() {
+        stageHolder.next();
+        stopCheck();
+        finish();
+    }
     /**
      * 游戏结束检查
      * 如果本次任务玩家数为0则意味着所有玩家逃跑/离线，宣布任务失败
@@ -113,15 +121,11 @@ public abstract class Task {
     public void startGameOverCheck() {
         finishCheckTaskId = Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(),()->{
             if(taskTeam.size() == 0) {
-                stageHolder.next();
-                stopCheck();
-                failed();
+                triggerFailed();
                 return;
             }
             if(waitForEvacuatePlayers().size() == taskTeam.size()) {
-                stageHolder.next();
-                stopCheck();
-                finish();
+                triggerFinish();
                 return;
             }
         },20,20).getTaskId();
