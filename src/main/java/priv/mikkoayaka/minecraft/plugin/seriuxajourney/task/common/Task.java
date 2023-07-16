@@ -83,6 +83,8 @@ public abstract class Task {
         taskWheat -= wheat;
         if(taskWheat <= 0) {
             taskWheat = 0;
+            stageHolder.next();
+            stopCheck();
             failed();
         }
     }
@@ -111,15 +113,15 @@ public abstract class Task {
     public void startGameOverCheck() {
         finishCheckTaskId = Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(),()->{
             if(taskTeam.size() == 0) {
+                stageHolder.next();
                 stopCheck();
                 failed();
-                stageHolder.next();
                 return;
             }
             if(waitForEvacuatePlayers().size() == taskTeam.size()) {
+                stageHolder.next();
                 stopCheck();
                 finish();
-                stageHolder.next();
                 return;
             }
         },20,20).getTaskId();
