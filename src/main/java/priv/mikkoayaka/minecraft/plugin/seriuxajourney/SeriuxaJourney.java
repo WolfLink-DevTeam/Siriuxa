@@ -16,6 +16,7 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.OreCache;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.monster.listener.MonsterListener;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.papi.TaskVariables;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.listener.FriendlyProtection;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.listener.FunctionBan;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.listener.HurtChecker;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.listener.orecheck.OreChecker;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.listener.orecheck.OreValues;
@@ -84,6 +85,7 @@ public final class SeriuxaJourney extends WolfirdPlugin {
         add(HurtChecker.class);
         add(MonsterListener.class);
         add(FriendlyProtection.class);
+        add(FunctionBan.class);
     }};
 
 }
