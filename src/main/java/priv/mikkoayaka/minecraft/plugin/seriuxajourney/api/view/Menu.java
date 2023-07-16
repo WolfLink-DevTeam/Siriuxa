@@ -56,14 +56,14 @@ public abstract class Menu {
         for (int i = 0; i < size; i++) {
             setIcon(i,emptyItemIcon);
         }
-        Border border = IOC.getBean(Border.class);
+        BorderIcon borderIcon = IOC.getBean(BorderIcon.class);
         if(size == 27) {
             Stream.of(0,1,2,3,4,5,6,7,8,18,19,20,21,22,23,24,25,26)
-                    .forEach(index -> setIcon(index,border));
+                    .forEach(index -> setIcon(index, borderIcon));
         }
         if(size == 54) {
             Stream.of(0,1,2,3,4,5,6,7,8,53,52,51,50,49,48,47,46,45)
-                    .forEach(index -> setIcon(index, border));
+                    .forEach(index -> setIcon(index, borderIcon));
         }
     }
 

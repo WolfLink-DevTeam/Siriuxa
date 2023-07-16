@@ -1,11 +1,9 @@
 package priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task;
 
-import lombok.Getter;
 import org.wolflink.common.ioc.IOC;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.Border;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.BorderIcon;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.Menu;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.ExplorationDifficulty;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.MenuService;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.difficulty.ExplorationDifficultyMenu;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.icon.CreateTask;
@@ -23,10 +21,10 @@ public class TaskMenu extends Menu {
 
     @Override
     public void overrideIcons() {
-        Border border = IOC.getBean(Border.class);
-        setIcon(9, border);
-        setIcon(15, border);
-        setIcon(17, border);
+        BorderIcon borderIcon = IOC.getBean(BorderIcon.class);
+        setIcon(9, borderIcon);
+        setIcon(15, borderIcon);
+        setIcon(17, borderIcon);
         setIcon(10, new SelectDifficulty(this));
         setIcon(16, new CreateTask(this));
     }

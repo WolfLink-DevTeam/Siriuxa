@@ -7,9 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import org.wolflink.common.ioc.Singleton;
 
 @Singleton
-public class Border extends Icon {
+public class BorderIcon extends Icon {
 
-    public Border() {
+    public BorderIcon() {
         super(false);
     }
 
