@@ -3,6 +3,7 @@ package priv.mikkoayaka.minecraft.plugin.seriuxajourney;
 import lombok.Getter;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.wolfird.framework.WolfirdPlugin;
+import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 import org.wolflink.minecraft.wolfird.framework.command.CmdHelp;
 import org.wolflink.minecraft.wolfird.framework.command.WolfirdCommandAnalyser;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.VaultAPI;
@@ -14,9 +15,13 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Lang;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.OreCache;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.monster.listener.MonsterListener;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.papi.TaskVariables;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener.hurtcheck.HurtChecker;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener.FriendlyProtection;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener.HurtChecker;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener.orecheck.OreChecker;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener.orecheck.OreValues;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class SeriuxaJourney extends WolfirdPlugin {
 
@@ -53,9 +58,9 @@ public final class SeriuxaJourney extends WolfirdPlugin {
         IOC.getBean(TaskVariables.class).register();
 
         // 注册全局监听器
-        IOC.getBean(OreChecker.class).setEnabled(true);
-        IOC.getBean(HurtChecker.class).setEnabled(true);
-        IOC.getBean(MonsterListener.class).setEnabled(true);
+        for(Class<? extends WolfirdListener> listenerClass : globalListenerClasses) {
+            IOC.getBean(listenerClass).setEnabled(true);
+        }
     }
 
     @Override
@@ -64,8 +69,21 @@ public final class SeriuxaJourney extends WolfirdPlugin {
         IOC.getBean(OreCache.class).save();
         IOC.getBean(Config.class).save();
         IOC.getBean(Lang.class).save();
-        IOC.getBean(OreChecker.class).setEnabled(false);
-        IOC.getBean(HurtChecker.class).setEnabled(false);
-        IOC.getBean(MonsterListener.class).setEnabled(false);
+
+        // 注销全局监听器
+        for(Class<? extends WolfirdListener> listenerClass : globalListenerClasses) {
+            IOC.getBean(listenerClass).setEnabled(false);
+        }
+
     }
+    /**
+     * 注册全局监听器
+     */
+    private static final List<Class<? extends WolfirdListener>> globalListenerClasses = new ArrayList<>(){{
+        add(OreChecker.class);
+        add(HurtChecker.class);
+        add(MonsterListener.class);
+        add(FriendlyProtection.class);
+    }};
+
 }

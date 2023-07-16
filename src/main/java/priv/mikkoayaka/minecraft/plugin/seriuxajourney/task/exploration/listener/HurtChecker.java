@@ -1,4 +1,4 @@
-package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener.hurtcheck;
+package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener;
 
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;

@@ -2,6 +2,7 @@ package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -59,6 +60,7 @@ public abstract class Task {
     @Nullable
     private TaskRegion taskRegion = null;
 
+    @NonNull
     private final TaskDifficulty taskDifficulty;
 
     /**
