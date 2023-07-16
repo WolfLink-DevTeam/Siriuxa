@@ -6,7 +6,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
@@ -23,9 +22,9 @@ public class MenuEventListener extends WolfirdListener {
         String title = e.getView().getTitle();
         Menu menu = menuService.findMenu(p,title);
         if(menu == null)return;
-        ItemIcon itemIcon = menu.getIcon(e.getSlot());
-        if(itemIcon == null)return;
-        invokeViewClick(p,itemIcon,e.getClick());
+        Icon icon = menu.getIcon(e.getSlot());
+        if(icon == null)return;
+        invokeViewClick(p, icon,e.getClick());
     }
     @EventHandler(priority = EventPriority.LOWEST)
     void onProtect(InventoryClickEvent e) {
@@ -37,8 +36,8 @@ public class MenuEventListener extends WolfirdListener {
         Menu menu = menuService.findMenu((Player) e.getWhoClicked(),title);
         if(menu != null) e.setCancelled(true);
     }
-    private void invokeViewClick(Player player, ItemIcon itemIcon, ClickType clickType) {
-        if(clickType.isLeftClick())itemIcon.leftClick(player);
-        if(clickType.isRightClick())itemIcon.rightClick(player);
+    private void invokeViewClick(Player player, Icon icon, ClickType clickType) {
+        if(clickType.isLeftClick()) icon.leftClick(player);
+        if(clickType.isRightClick()) icon.rightClick(player);
     }
 }

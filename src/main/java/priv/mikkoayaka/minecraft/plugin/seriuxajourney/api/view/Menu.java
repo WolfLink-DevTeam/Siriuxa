@@ -1,7 +1,6 @@
 package priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view;
 
 import lombok.Getter;
-import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -15,7 +14,7 @@ import java.util.stream.Stream;
 public abstract class Menu {
     private final Inventory inventory;
     private final long refreshTicks;
-    private ItemIcon[] icons;
+    private Icon[] icons;
     @Getter
     private final String title;
     @Getter
@@ -52,8 +51,8 @@ public abstract class Menu {
      * 格式化背包菜单，填充边界，空气等
      */
     private void initIcons() {
-        icons = new ItemIcon[size];
-        EmptyItemIcon emptyItemIcon = IOC.getBean(EmptyItemIcon.class);
+        icons = new Icon[size];
+        EmptyIcon emptyItemIcon = IOC.getBean(EmptyIcon.class);
         for (int i = 0; i < size; i++) {
             setIcon(i,emptyItemIcon);
         }
@@ -75,8 +74,8 @@ public abstract class Menu {
         initIcons();
         overrideIcons();
         for (int i = 0; i < size; i++) {
-            ItemIcon itemIcon = getIcon(i);
-            inventory.setItem(i,itemIcon.getIcon());
+            Icon icon = getIcon(i);
+            inventory.setItem(i, icon.getIcon());
         }
     }
 
@@ -85,11 +84,11 @@ public abstract class Menu {
      */
     protected abstract void overrideIcons();
 
-    public void setIcon(int index,ItemIcon icon) {
+    public void setIcon(int index, Icon icon) {
         if(index >= icons.length || index < 0)return;
         icons[index] = icon;
     }
-    public ItemIcon getIcon(int index) {
+    public Icon getIcon(int index) {
         if(index >= icons.length || index < 0) return null;
         return icons[index];
     }

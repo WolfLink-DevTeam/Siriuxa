@@ -7,8 +7,8 @@ import org.jetbrains.annotations.NotNull;
 import org.wolflink.common.ioc.Singleton;
 
 @Singleton
-public class EmptyItemIcon extends ItemIcon {
-    public EmptyItemIcon() {
+public class EmptyIcon extends Icon {
+    public EmptyIcon() {
         super(false);
     }
 

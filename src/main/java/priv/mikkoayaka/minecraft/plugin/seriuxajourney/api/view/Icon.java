@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class ItemIcon {
+public abstract class Icon {
     @Getter
     private final boolean needRefresh;
-    public ItemIcon(boolean needRefresh) {
+    public Icon(boolean needRefresh) {
         this.needRefresh = needRefresh;
     }
     private ItemStack itemStackCache;

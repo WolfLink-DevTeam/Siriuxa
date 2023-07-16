@@ -6,14 +6,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.wolflink.common.ioc.IOC;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.ItemIcon;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.Icon;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.DifficultyRepository;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.ExplorationDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.MenuService;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.TaskMenu;
 
-public class DifficultyIcon<T extends TaskDifficulty> extends ItemIcon {
+public class DifficultyIcon<T extends TaskDifficulty> extends Icon {
 
     private final T taskDifficulty;
     private final DifficultyRepository difficultyRepository;

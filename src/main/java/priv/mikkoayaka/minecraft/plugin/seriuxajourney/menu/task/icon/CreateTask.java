@@ -7,13 +7,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.wolflink.common.ioc.IOC;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.Result;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.ItemIcon;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.Icon;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.TaskMenu;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.TaskService;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationService;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationTask;
 
-public class CreateTask extends ItemIcon {
+public class CreateTask extends Icon {
 
     private final TaskService taskService;
     private final TaskMenu taskMenu;
