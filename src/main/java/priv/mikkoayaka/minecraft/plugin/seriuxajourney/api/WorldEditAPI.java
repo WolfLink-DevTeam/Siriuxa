@@ -4,21 +4,18 @@ import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.bukkit.BukkitCommandSender;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.session.ClipboardHolder;
-import com.sk89q.worldedit.session.SessionOwner;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.Framework;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.EvacuationZone;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
 import javax.annotation.Nullable;
@@ -28,7 +25,8 @@ import java.util.*;
 
 @Singleton
 public class WorldEditAPI {
-
+    @Inject
+    private LocalSessionHolder localSessionHolder;
     File schemFolder;
     public WorldEditAPI() {
         schemFolder = new File(Framework.getInstance().getDataFolder(), "seriuxajourney_schematic");
@@ -57,33 +55,24 @@ public class WorldEditAPI {
     /**
      * 从可用的工作单元中随机挑选一个生成
      */
-    @Nullable
-    public EditSession pasteWorkingUnit(Location center) {
+    public void pasteWorkingUnit(LocationCommandSender locationCommandSender) {
         List<File> workingUnitFiles = getWorkingUnitSchemFiles();
         if(workingUnitFiles.size() == 0) {
             Notifier.error("没有找到可用的工作单元结构");
-            return null;
+            return;
         }
         File schem = workingUnitFiles.get((int) (workingUnitFiles.size() * Math.random()));
-        return pasteSchem(schem,center);
+        pasteSchem(schem,locationCommandSender,false);
     }
     @Nullable
-    public EditSession pasteEvacuationUnit(Location center) {
+    public EditSession pasteEvacuationUnit(LocationCommandSender locationCommandSender) {
         List<File> evacuationUnitFiles = getEvacuationUnitSchemFiles();
         if(evacuationUnitFiles.size() == 0) {
             Notifier.error("没有找到可用的撤离单元结构");
             return null;
         }
         File schem = evacuationUnitFiles.get((int) (evacuationUnitFiles.size() * Math.random()));
-        return pasteSchem(schem,center);
-    }
-    public void undoEvacuationUnit(EditSession editSession) {
-        Notifier.debug("撤回了撤离仓生成操作");
-        editSession.undo(editSession);
-        editSession.close();
-    }
-    public void debug(Player player) {
-        pasteWorkingUnit(player.getLocation());
+        return pasteSchem(schem,locationCommandSender,true);
     }
     public void pasteSchem(EditSession editSession,File schem,Location center) {
         try {
@@ -102,12 +91,35 @@ public class WorldEditAPI {
         }
         Notifier.debug("在"+ Objects.requireNonNull(center.getWorld()).getName()+" "+center.getBlockX()+"|"+center.getBlockY()+"|"+center.getBlockZ()+"生成了一个结构："+schem.getName());
     }
-    public EditSession pasteSchem(File schem, Location center) {
+
+    /**
+     * 如果不需要撤销该操作，则会返回空值
+     */
+    @Nullable
+    public EditSession pasteSchem(File schem, LocationCommandSender locationCommandSender,boolean needUndo) {
+        Location center = locationCommandSender.getLocation();
         EditSession editSession = WorldEdit.getInstance().newEditSessionBuilder()
-                .actor(BukkitAdapter.adapt(new EvacuationCenter(center)))
+                .actor(BukkitAdapter.adapt(locationCommandSender))
                 .world(BukkitAdapter.adapt(center.getWorld()))
                 .build();
         pasteSchem(editSession,schem,center);
-        return editSession;
+        if(needUndo) {
+            Objects.requireNonNull(localSessionHolder.getLocalSession(locationCommandSender)).remember(editSession);
+            return editSession;
+        }
+        else {
+            editSession.close();
+            return null;
+        }
+    }
+    public void undoPaste(LocationCommandSender locationCommandSender, EditSession editSession) {
+        LocalSession localSession = localSessionHolder.getLocalSession(locationCommandSender);
+        if(localSession == null) {
+            Notifier.error("LocalSession 为空！");
+            return;
+        }
+        EditSession es = localSession.undo(null,editSession.getActor());
+        Notifier.debug("撤销了一个"+editSession.getWorld().getName()+"世界生成的结构");
+        es.close();
     }
 }

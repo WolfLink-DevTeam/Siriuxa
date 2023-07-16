@@ -11,6 +11,7 @@ import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.BlockAPI;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.LocationCommandSender;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.WorldEditAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.region.TaskRegion;
@@ -146,7 +147,7 @@ public abstract class Task {
         this.taskRegion = taskRegion;
         this.taskWheat = taskTeam.size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
         Bukkit.getScheduler().runTaskAsynchronously(SeriuxaJourney.getInstance(),()->{
-            IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(taskRegion.getCenter().clone().add(0,1,0));
+            IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(new LocationCommandSender(taskRegion.getCenter().clone().add(0,2,0)));
             List<Location> beaconLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.BEACON,taskRegion.getCenter(),20);
             Bukkit.getScheduler().runTask(SeriuxaJourney.getInstance(),()->{
                 List<Player> playerList = getPlayers();

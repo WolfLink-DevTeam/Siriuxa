@@ -1,5 +1,6 @@
 package priv.mikkoayaka.minecraft.plugin.seriuxajourney.api;
 
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -16,11 +17,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 import java.util.UUID;
 
-public class EvacuationCenter implements BlockCommandSender {
+public class LocationCommandSender implements BlockCommandSender {
 
+    @Getter
     private final Location location;
     private final UUID uuid = UUID.randomUUID();
-    public EvacuationCenter(Location center) {
+    public LocationCommandSender(Location center) {
         location = center;
     }
 

@@ -4,33 +4,24 @@ import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.bukkit.BukkitBlockCommandSender;
-import com.sk89q.worldedit.bukkit.BukkitPlayerBlockBag;
-import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldedit.extent.inventory.BlockBag;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.block.CommandBlock;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.EvacuationCenter;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.LocationCommandSender;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.WorldEditAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.UUID;
 
 public class EvacuationZone {
 
+    private final LocationCommandSender locationCommandSender;
     /**
      * 撤离的安全区域中心
      */
@@ -51,7 +42,7 @@ public class EvacuationZone {
         if(world == null) throw new IllegalArgumentException("安全区坐标的世界为空");
         center.setY(world.getHighestBlockYAt(center.getBlockX(),center.getBlockZ()));
         this.safeRadius = safeRadius;
-        evacuationCenter = new EvacuationCenter(center);
+        this.locationCommandSender = new LocationCommandSender(center);
     }
     public void setAvailable(boolean value) {
         if(available == value)return;
@@ -76,27 +67,18 @@ public class EvacuationZone {
         }
         return playerSet;
     }
-    private final EvacuationCenter evacuationCenter;
-    private final LocalSession localSession = new LocalSession(WorldEdit.getInstance().getConfiguration());
     private EditSession editSession;
     /**
      * TODO 生成结构
      */
     public void generateSchematic() {
-        localSession.setWorldOverride(BukkitAdapter.adapt(center.getWorld()));
-        Notifier.debug("飞艇结构已生成");
-        editSession = IOC.getBean(WorldEditAPI.class).pasteEvacuationUnit(center);
-        localSession.remember(editSession);
-//        editSession.commit();
-//        center.getBlock().setType(Material.BEACON);
+        editSession = IOC.getBean(WorldEditAPI.class).pasteEvacuationUnit(locationCommandSender);
     }
 
     /**
      * TODO 撤销已生成的结构
      */
     public void undoSchematic() {
-        localSession.undo(null,editSession.getActor());
-//        editSession.close();
-        Notifier.debug("飞艇结构已撤回");
+        IOC.getBean(WorldEditAPI.class).undoPaste(locationCommandSender,editSession);
     }
 }

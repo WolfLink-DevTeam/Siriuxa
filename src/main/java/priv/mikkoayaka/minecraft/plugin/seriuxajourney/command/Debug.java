@@ -27,6 +27,5 @@ public class Debug extends WolfirdCommand {
     @Override
     protected void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
-        IOC.getBean(WorldEditAPI.class).debug(player);
     }
 }
