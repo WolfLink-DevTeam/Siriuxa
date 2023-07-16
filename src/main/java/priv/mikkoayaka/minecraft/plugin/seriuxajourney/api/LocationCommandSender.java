@@ -1,9 +1,13 @@
 package priv.mikkoayaka.minecraft.plugin.seriuxajourney.api;
 
+import com.sk89q.worldedit.LocalSession;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
@@ -21,9 +25,14 @@ public class LocationCommandSender implements BlockCommandSender {
 
     @Getter
     private final Location location;
+    @Getter
+    private final LocalSession localSession;
     private final UUID uuid = UUID.randomUUID();
     public LocationCommandSender(Location center) {
         location = center;
+        World world = center.getWorld();
+        localSession = new LocalSession(WorldEdit.getInstance().getConfiguration());
+        localSession.setWorldOverride(BukkitAdapter.adapt(world));
     }
 
     @NotNull

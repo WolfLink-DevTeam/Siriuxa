@@ -25,8 +25,6 @@ import java.util.*;
 
 @Singleton
 public class WorldEditAPI {
-    @Inject
-    private LocalSessionHolder localSessionHolder;
     File schemFolder;
     public WorldEditAPI() {
         schemFolder = new File(Framework.getInstance().getDataFolder(), "seriuxajourney_schematic");
@@ -104,7 +102,7 @@ public class WorldEditAPI {
                 .build();
         pasteSchem(editSession,schem,center);
         if(needUndo) {
-            Objects.requireNonNull(localSessionHolder.getLocalSession(locationCommandSender)).remember(editSession);
+            locationCommandSender.getLocalSession().remember(editSession);
             return editSession;
         }
         else {
@@ -113,7 +111,7 @@ public class WorldEditAPI {
         }
     }
     public void undoPaste(LocationCommandSender locationCommandSender, EditSession editSession) {
-        LocalSession localSession = localSessionHolder.getLocalSession(locationCommandSender);
+        LocalSession localSession = locationCommandSender.getLocalSession();
         if(localSession == null) {
             Notifier.error("LocalSession 为空！");
             return;
