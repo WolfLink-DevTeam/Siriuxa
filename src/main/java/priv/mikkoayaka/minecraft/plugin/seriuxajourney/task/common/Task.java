@@ -14,6 +14,8 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.BlockAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.WorldEditAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.region.TaskRegion;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationService;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationTask;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.team.TaskTeam;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
@@ -238,7 +240,7 @@ public abstract class Task {
      */
     protected void resetTask() {
 //        taskTeam.clear();
-        taskTeam = null;
-        IOC.getBean(TaskRepository.class).deleteByKey(taskUuid);
+        //TODO 暂时的实现
+        IOC.getBean(ExplorationService.class).deleteTask((ExplorationTask) this);
     }
 }
