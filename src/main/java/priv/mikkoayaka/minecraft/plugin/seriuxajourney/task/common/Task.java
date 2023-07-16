@@ -187,7 +187,7 @@ public abstract class Task {
                 Notifier.broadcastChat(getPlayers(),"坐标 X："+availableEvacuationZone.getCenter().getBlockX()+" Z："+availableEvacuationZone.getCenter().getBlockZ()+" 附近的飞艇已撤离，请等待下一艘飞艇接应。");
                 availableEvacuationZone = null;
             } else {
-                availableEvacuationZone = new EvacuationZone(evacuateLocation.add(0,1,0),5);
+                availableEvacuationZone = new EvacuationZone(evacuateLocation.add(0,25,0),5);
                 availableEvacuationZone.setAvailable(true);
                 Notifier.broadcastChat(getPlayers(),"飞艇已降落至坐标 X："+evacuateLocation.getBlockX()+" Z："+evacuateLocation.getBlockZ()+" 如有需要请尽快前往撤离。");
             }
