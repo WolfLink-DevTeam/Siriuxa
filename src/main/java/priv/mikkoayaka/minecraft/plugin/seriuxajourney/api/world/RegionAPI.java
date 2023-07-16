@@ -1,4 +1,4 @@
-package priv.mikkoayaka.minecraft.plugin.seriuxajourney.api;
+package priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.world;
 
 import org.bukkit.Location;
 import org.bukkit.World;

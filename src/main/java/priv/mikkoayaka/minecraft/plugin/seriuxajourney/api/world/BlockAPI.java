@@ -1,4 +1,4 @@
-package priv.mikkoayaka.minecraft.plugin.seriuxajourney.api;
+package priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.world;
 
 import lombok.NonNull;
 import org.bukkit.Location;

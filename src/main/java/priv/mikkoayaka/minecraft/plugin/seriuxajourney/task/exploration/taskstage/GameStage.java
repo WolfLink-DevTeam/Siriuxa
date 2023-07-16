@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.wolflink.common.ioc.IOC;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.RegionAPI;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.world.RegionAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.ConfigProjection;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;

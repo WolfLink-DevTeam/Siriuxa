@@ -10,13 +10,11 @@ import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.BlockAPI;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.LocationCommandSender;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.WorldEditAPI;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.world.BlockAPI;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.world.LocationCommandSender;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.world.WorldEditAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.difficulty.TaskDifficulty;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.region.TaskRegion;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationService;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationTask;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.team.TaskTeam;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
