@@ -54,10 +54,6 @@ public class ExplorationTask extends Task implements HurtCheckAvailable, OreChec
     public void finish() {
         Config config = IOC.getBean(Config.class);
         Location lobbyLocation = config.getLobbyLocation();
-        if(lobbyLocation == null) {
-            Notifier.error("大厅坐标未设置！");
-            return;
-        }
         for (Player player : getPlayers()) {
             player.teleport(lobbyLocation);
             player.sendTitle("§a任务完成","§7前往领取本次任务的报酬吧",10,80,10);
@@ -71,10 +67,6 @@ public class ExplorationTask extends Task implements HurtCheckAvailable, OreChec
     public void failed() {
         Config config = IOC.getBean(Config.class);
         Location lobbyLocation = config.getLobbyLocation();
-        if(lobbyLocation == null) {
-            Notifier.error("大厅坐标未设置！");
-            return;
-        }
         for (Player player : getPlayers()) {
             player.teleport(lobbyLocation);
             player.sendTitle("§c任务失败","§7真可惜...下次再尝试吧",10,80,10);

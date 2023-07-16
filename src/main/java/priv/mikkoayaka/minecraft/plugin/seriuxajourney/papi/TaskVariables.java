@@ -41,19 +41,17 @@ public class TaskVariables extends PlaceholderExpansion {
         if(params.equalsIgnoreCase("team_size")) {
             return String.valueOf(task.getTaskTeam().size());
         }
-        if(params.equalsIgnoreCase("wheat_change")) {
+        if(params.equalsIgnoreCase("detail_wheat")) {
             double value = task.getTaskStat().getWheatChange();
-            if(value == 0) return "";
-            String format;
-            if(value > 0) format = "§a(+%.1f)";
-            else format = "§c(-%.1f)";
-            return String.format(format,value);
+            if(value > 0) return "§f%.1f§a(+%.1f)".formatted(task.getTaskWheat(),value);
+            else if(value < 0) return "§f%.1f§c(%.1f)".formatted(task.getTaskWheat(),value);
+            else return "§f%.1f".formatted(task.getTaskWheat());
         }
         if(params.equalsIgnoreCase("stage")) {
             return task.getStageHolder().getThisStage().getDisplayName();
         }
         if(params.equalsIgnoreCase("difficulty")) {
-            return task.getTaskDifficulty().getName();
+            return task.getTaskDifficulty().getColor()+task.getTaskDifficulty().getName();
         }
         if(params.equalsIgnoreCase("evacuable")) {
             if(task.getAvailableEvacuationZone() != null) return "§a可撤离";
