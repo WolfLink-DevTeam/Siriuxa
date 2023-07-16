@@ -1,6 +1,5 @@
-package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener;
+package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.listener;
 
-import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,11 +11,7 @@ import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.TaskRepository;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.interfaces.HurtCheckAvailable;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationTask;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.GameStage;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Singleton
 public class HurtChecker extends WolfirdListener {

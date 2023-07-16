@@ -1,7 +1,5 @@
-package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener.orecheck;
+package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.listener.orecheck;
 
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -16,11 +14,8 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Lang;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.TaskRepository;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.interfaces.OreCheckAvailable;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationTask;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.GameStage;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
-
-import java.util.*;
 
 @Singleton
 public class OreChecker extends WolfirdListener {

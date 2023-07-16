@@ -1,4 +1,4 @@
-package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener.orecheck;
+package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.listener.orecheck;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

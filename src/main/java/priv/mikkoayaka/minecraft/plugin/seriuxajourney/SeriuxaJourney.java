@@ -15,10 +15,10 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Lang;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.OreCache;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.monster.listener.MonsterListener;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.papi.TaskVariables;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener.FriendlyProtection;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener.HurtChecker;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener.orecheck.OreChecker;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener.orecheck.OreValues;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.listener.FriendlyProtection;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.listener.HurtChecker;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.listener.orecheck.OreChecker;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.listener.orecheck.OreValues;
 
 import java.util.ArrayList;
 import java.util.List;

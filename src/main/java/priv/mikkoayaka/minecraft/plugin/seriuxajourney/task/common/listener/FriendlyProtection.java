@@ -1,4 +1,4 @@
-package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.listener;
+package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.listener;
 
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
