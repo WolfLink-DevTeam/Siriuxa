@@ -36,7 +36,6 @@ public class EvacuationZone {
         this.center = center;
         World world = center.getWorld();
         if(world == null) throw new IllegalArgumentException("安全区坐标的世界为空");
-        center.setY(world.getHighestBlockYAt(center.getBlockX(),center.getBlockZ()));
         this.safeRadius = safeRadius;
         this.locationCommandSender = new LocationCommandSender(center);
     }
