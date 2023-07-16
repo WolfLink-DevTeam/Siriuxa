@@ -64,7 +64,7 @@ public class ExplorationTask extends Task implements HurtCheckAvailable, OreChec
             player.playSound(player.getLocation(),Sound.ENTITY_PLAYER_LEVELUP,1f,1.2f);
             player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST,1f,1f);
         }
-        resetTask();
+        deleteTask();
     }
 
     @Override
@@ -80,7 +80,7 @@ public class ExplorationTask extends Task implements HurtCheckAvailable, OreChec
             player.sendTitle("§c任务失败","§7真可惜...下次再尝试吧",10,80,10);
             player.playSound(player.getLocation(),Sound.ENTITY_VILLAGER_NO,1f,0.8f);
         }
-        resetTask();
+        deleteTask();
     }
 
     @Override

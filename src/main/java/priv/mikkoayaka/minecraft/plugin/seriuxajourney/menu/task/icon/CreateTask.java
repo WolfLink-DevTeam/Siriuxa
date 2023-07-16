@@ -9,16 +9,18 @@ import org.wolflink.common.ioc.IOC;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.Result;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.ItemIcon;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.TaskMenu;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.TaskService;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationService;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationTask;
 
 public class CreateTask extends ItemIcon {
 
-    private final ExplorationService explorationService;
+    private final TaskService taskService;
     private final TaskMenu taskMenu;
     public CreateTask(TaskMenu taskMenu) {
         super(false);
         this.taskMenu = taskMenu;
-        explorationService = IOC.getBean(ExplorationService.class);
+        taskService = IOC.getBean(TaskService.class);
     }
 
     @Override
@@ -52,7 +54,7 @@ public class CreateTask extends ItemIcon {
     @Override
     public void leftClick(Player player) {
         if(!canCreate())return;
-        Result result = explorationService.createTask(player,taskMenu.getSelectedDifficulty());
+        Result result = taskService.create(player, ExplorationTask.class,taskMenu.getSelectedDifficulty());
         result.show(player);
         player.closeInventory();
         if(result.result()) {

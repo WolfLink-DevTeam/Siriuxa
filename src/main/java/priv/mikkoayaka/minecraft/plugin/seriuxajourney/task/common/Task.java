@@ -238,9 +238,7 @@ public abstract class Task {
      * 清理本次任务
      * 在任务完成/失败后调用
      */
-    protected void resetTask() {
-//        taskTeam.clear();
-        //TODO 暂时的实现
-        IOC.getBean(ExplorationService.class).deleteTask((ExplorationTask) this);
+    protected void deleteTask() {
+        IOC.getBean(TaskService.class).delete(this);
     }
 }

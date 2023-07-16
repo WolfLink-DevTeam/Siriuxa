@@ -11,6 +11,7 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.VaultAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.TaskRepository;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.TaskService;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationService;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationTask;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.GameStage;
@@ -49,9 +50,8 @@ public class TaskTeamService {
         taskTeam.clear();
         Task task = taskTeam.getSelectedTask();
         if(task != null) {
-            // TODO 暂时只有这种类的任务，强转了
-            ExplorationService explorationService = IOC.getBean(ExplorationService.class);
-            explorationService.deleteTask((ExplorationTask) task);
+            TaskService taskService = IOC.getBean(TaskService.class);
+            taskService.delete(task);
         }
         taskTeamRepository.deleteByKey(taskTeam.getTeamUuid());
         return new Result(true,"队伍已解散。");
