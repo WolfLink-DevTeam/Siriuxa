@@ -63,16 +63,10 @@ public class EvacuationZone {
         return playerSet;
     }
     private EditSession editSession;
-    /**
-     * TODO 生成结构
-     */
     public void generateSchematic() {
         editSession = IOC.getBean(WorldEditAPI.class).pasteEvacuationUnit(locationCommandSender);
     }
 
-    /**
-     * TODO 撤销已生成的结构
-     */
     public void undoSchematic() {
         IOC.getBean(WorldEditAPI.class).undoPaste(locationCommandSender,editSession);
     }
