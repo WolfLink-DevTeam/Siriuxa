@@ -28,7 +28,10 @@ import java.util.*;
 @Data
 public abstract class Task {
 
-    private static int maxTaskId = 1;
+    /**
+     * 任务数据统计类(纯异步)
+     */
+    private final TaskStat taskStat = new TaskStat(this);
     /**
      * 任务UUID
      */
@@ -103,11 +106,13 @@ public abstract class Task {
 
     private void triggerFailed() {
         stageHolder.next();
+        taskStat.stop();
         stopCheck();
         failed();
     }
     private void triggerFinish() {
         stageHolder.next();
+        taskStat.stop();
         stopCheck();
         finish();
     }
@@ -149,6 +154,7 @@ public abstract class Task {
     }
     public void start(TaskRegion taskRegion) {
         this.taskRegion = taskRegion;
+        taskStat.start();
         this.taskWheat = taskTeam.size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
         Bukkit.getScheduler().runTaskAsynchronously(SeriuxaJourney.getInstance(),()->{
             IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(new LocationCommandSender(taskRegion.getCenter().clone().add(0,2,0)));

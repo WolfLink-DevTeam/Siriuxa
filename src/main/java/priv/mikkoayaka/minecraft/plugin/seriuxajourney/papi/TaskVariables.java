@@ -33,13 +33,31 @@ public class TaskVariables extends PlaceholderExpansion {
         Task task = taskRepository.findByPlayerUuid(offlinePlayer.getUniqueId());
         if(task == null) return "玩家未处于任务中";
         if(params.equalsIgnoreCase("wheat")) {
-            return String.format("%.2f",task.getTaskWheat());
+            return String.format("%.1f",task.getTaskWheat());
         }
         if(params.equalsIgnoreCase("wheat_loss_per_sec")) {
-            return String.format("%.2f",task.getWheatLossPerSecNow());
+            return String.format("%.1f",task.getWheatLossPerSecNow());
         }
         if(params.equalsIgnoreCase("team_size")) {
             return String.valueOf(task.getTaskTeam().size());
+        }
+        if(params.equalsIgnoreCase("wheat_change")) {
+            double value = task.getTaskStat().getWheatChange();
+            if(value == 0) return "";
+            String format;
+            if(value > 0) format = "§a(+%.1f)";
+            else format = "§c(-%.1f)";
+            return String.format(format,value);
+        }
+        if(params.equalsIgnoreCase("stage")) {
+            return task.getStageHolder().getThisStage().getDisplayName();
+        }
+        if(params.equalsIgnoreCase("difficulty")) {
+            return task.getTaskDifficulty().getName();
+        }
+        if(params.equalsIgnoreCase("evacuable")) {
+            if(task.getAvailableEvacuationZone() != null) return "§a可撤离";
+            else return "§c无法撤离";
         }
         return "没做完呢";
     }
