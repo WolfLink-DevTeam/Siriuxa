@@ -19,10 +19,7 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.Explorat
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.team.TaskTeam;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 抽象任务类
@@ -179,12 +176,12 @@ public abstract class Task {
                 Notifier.broadcastChat(getPlayers(),"坐标 X："+availableEvacuationZone.getCenter().getBlockX()+" Z："+availableEvacuationZone.getCenter().getBlockZ()+" 附近的飞艇已撤离，请等待下一艘飞艇接应。");
                 availableEvacuationZone = null;
             } else {
-                availableEvacuationZone = new EvacuationZone(evacuateLocation,5);
+                availableEvacuationZone = new EvacuationZone(evacuateLocation.add(0,1,0),5);
                 availableEvacuationZone.setAvailable(true);
                 Notifier.broadcastChat(getPlayers(),"飞艇已降落至坐标 X："+evacuateLocation.getBlockX()+" Z："+evacuateLocation.getBlockZ()+" 如有需要请尽快前往撤离。");
             }
             //TODO 30|15
-        },20 * 60 * 3,20 * 60 * 3).getTaskId();
+        },20 * 60,20 * 60).getTaskId();
     }
 
     /**

@@ -21,6 +21,7 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.EvacuationZone;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.*;
@@ -56,25 +57,28 @@ public class WorldEditAPI {
     /**
      * 从可用的工作单元中随机挑选一个生成
      */
-    public void pasteWorkingUnit(Location center) {
+    @Nullable
+    public EditSession pasteWorkingUnit(Location center) {
         List<File> workingUnitFiles = getWorkingUnitSchemFiles();
         if(workingUnitFiles.size() == 0) {
             Notifier.error("没有找到可用的工作单元结构");
-            return;
+            return null;
         }
         File schem = workingUnitFiles.get((int) (workingUnitFiles.size() * Math.random()));
-        pasteSchem(schem,center);
+        return pasteSchem(schem,center);
     }
-    public void pasteEvacuationUnit(EditSession editSession,Location center) {
+    @Nullable
+    public EditSession pasteEvacuationUnit(Location center) {
         List<File> evacuationUnitFiles = getEvacuationUnitSchemFiles();
         if(evacuationUnitFiles.size() == 0) {
             Notifier.error("没有找到可用的撤离单元结构");
-            return;
+            return null;
         }
         File schem = evacuationUnitFiles.get((int) (evacuationUnitFiles.size() * Math.random()));
-        pasteSchem(editSession,schem,center);
+        return pasteSchem(schem,center);
     }
     public void undoEvacuationUnit(EditSession editSession) {
+        Notifier.debug("撤回了撤离仓生成操作");
         editSession.undo(editSession);
         editSession.close();
     }
@@ -96,11 +100,14 @@ public class WorldEditAPI {
             e.printStackTrace();
             Notifier.error("在拷贝结构时出现异常，相关结构文件："+schem.getName());
         }
-
+        Notifier.debug("在"+ Objects.requireNonNull(center.getWorld()).getName()+" "+center.getBlockX()+"|"+center.getBlockY()+"|"+center.getBlockZ()+"生成了一个结构："+schem.getName());
     }
-    public void pasteSchem(File schem, Location center) {
-        EditSession editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(center.getWorld()));
+    public EditSession pasteSchem(File schem, Location center) {
+        EditSession editSession = WorldEdit.getInstance().newEditSessionBuilder()
+                .actor(BukkitAdapter.adapt(new EvacuationCenter(center)))
+                .world(BukkitAdapter.adapt(center.getWorld()))
+                .build();
         pasteSchem(editSession,schem,center);
-        editSession.close();
+        return editSession;
     }
 }

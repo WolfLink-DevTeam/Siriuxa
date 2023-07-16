@@ -86,7 +86,7 @@ public class TaskService {
                 }
             }
             taskTeam.setSelectedTask(null);
-            task.setTaskTeam(null);
+            task.setTaskTeam(new TaskTeam());
         }
         if(task.getStageHolder().getThisStage() instanceof GameStage) {
             task.failed();
