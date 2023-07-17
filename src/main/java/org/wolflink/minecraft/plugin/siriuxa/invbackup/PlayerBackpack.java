@@ -89,7 +89,7 @@ public class PlayerBackpack implements ConfigurationSerializable {
         boots = (ItemStack) map.get("boots");
         offhand = (ItemStack) map.get("offhand");
         level = (int) map.get("level");
-        exp = (float) map.get("exp");
+        exp = (float)((double) map.get("exp"));
         items = (ItemStack[]) map.get("items");
     }
     @NotNull
