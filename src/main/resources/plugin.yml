@@ -1,6 +1,6 @@
-name: SeriuxaJourney
+name: Siriuxa
 version: '${project.version}'
-main: priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney
+main: priv.mikkoayaka.minecraft.plugin.seriuxajourney.Siriuxa
 api-version: '1.20'
 prefix: §6天狼星的旅途
 depend:
