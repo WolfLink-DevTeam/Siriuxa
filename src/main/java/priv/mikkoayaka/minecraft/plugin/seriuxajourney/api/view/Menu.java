@@ -25,26 +25,27 @@ public abstract class Menu {
     @Nullable
     public Player getOwner() {
         Player player = Bukkit.getPlayer(ownerUuid);
-        if(player == null || !player.isOnline()) return null;
+        if (player == null || !player.isOnline()) return null;
         return player;
     }
 
     /**
      * 刷新周期设置小于0则为静态菜单
      * 静态菜单只会在打开时刷新一次
-     * @param refreshTicks  刷新周期(刻)
+     *
+     * @param refreshTicks 刷新周期(刻)
      */
     public Menu(UUID ownerUuid, long refreshTicks, String title, int size) {
         this.ownerUuid = ownerUuid;
         this.refreshTicks = refreshTicks;
         this.title = title;
         this.size = size;
-        inventory = Bukkit.createInventory(null,size,title);
-        Bukkit.getScheduler().runTaskLater(SeriuxaJourney.getInstance(),()->{
+        inventory = Bukkit.createInventory(null, size, title);
+        Bukkit.getScheduler().runTaskLater(SeriuxaJourney.getInstance(), () -> {
             refresh();
-            if(refreshTicks <= 0)return;
-            SeriuxaJourney.getInstance().getSubScheduler().runTaskTimer(this::refresh,refreshTicks,refreshTicks);
-        },1);
+            if (refreshTicks <= 0) return;
+            SeriuxaJourney.getInstance().getSubScheduler().runTaskTimer(this::refresh, refreshTicks, refreshTicks);
+        }, 1);
     }
 
     /**
@@ -54,15 +55,15 @@ public abstract class Menu {
         icons = new Icon[size];
         EmptyIcon emptyItemIcon = IOC.getBean(EmptyIcon.class);
         for (int i = 0; i < size; i++) {
-            setIcon(i,emptyItemIcon);
+            setIcon(i, emptyItemIcon);
         }
         BorderIcon borderIcon = IOC.getBean(BorderIcon.class);
-        if(size == 27) {
-            Stream.of(0,1,2,3,4,5,6,7,8,18,19,20,21,22,23,24,25,26)
+        if (size == 27) {
+            Stream.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 18, 19, 20, 21, 22, 23, 24, 25, 26)
                     .forEach(index -> setIcon(index, borderIcon));
         }
-        if(size == 54) {
-            Stream.of(0,1,2,3,4,5,6,7,8,53,52,51,50,49,48,47,46,45)
+        if (size == 54) {
+            Stream.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 53, 52, 51, 50, 49, 48, 47, 46, 45)
                     .forEach(index -> setIcon(index, borderIcon));
         }
     }
@@ -85,13 +86,15 @@ public abstract class Menu {
     protected abstract void overrideIcons();
 
     public void setIcon(int index, Icon icon) {
-        if(index >= icons.length || index < 0)return;
+        if (index >= icons.length || index < 0) return;
         icons[index] = icon;
     }
+
     public Icon getIcon(int index) {
-        if(index >= icons.length || index < 0) return null;
+        if (index >= icons.length || index < 0) return null;
         return icons[index];
     }
+
     /**
      * 将菜单展示给玩家
      */

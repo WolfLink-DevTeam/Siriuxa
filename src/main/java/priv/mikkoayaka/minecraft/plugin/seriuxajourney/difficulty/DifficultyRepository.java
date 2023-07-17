@@ -75,10 +75,12 @@ public class DifficultyRepository extends MapRepository<DifficultyKey, TaskDiffi
                 .expGainPercent(1.0)
                 .build());
     }
+
     @Override
     public DifficultyKey getPrimaryKey(TaskDifficulty taskDifficulty) {
-        return new DifficultyKey(taskDifficulty.getClass(),taskDifficulty.getLevel());
+        return new DifficultyKey(taskDifficulty.getClass(), taskDifficulty.getLevel());
     }
+
     public <T extends TaskDifficulty> Collection<T> findByType(Class<T> clazz) {
         return findAll()
                 .stream()

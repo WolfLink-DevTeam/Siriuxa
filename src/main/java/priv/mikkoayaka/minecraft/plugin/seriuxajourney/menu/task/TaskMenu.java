@@ -14,8 +14,9 @@ import java.util.UUID;
 public class TaskMenu extends Menu {
 
     private final MenuService menuService;
+
     public TaskMenu(UUID uuid) {
-        super(uuid,-1, "§0§l任务菜单", 27);
+        super(uuid, -1, "§0§l任务菜单", 27);
         menuService = IOC.getBean(MenuService.class);
     }
 

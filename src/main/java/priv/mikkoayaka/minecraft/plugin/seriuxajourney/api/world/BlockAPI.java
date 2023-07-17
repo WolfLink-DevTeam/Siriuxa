@@ -18,15 +18,15 @@ public class BlockAPI {
     public List<Location> searchBlock(Material material, Location center, int radius) {
         World world = center.getWorld();
         List<Location> result = new ArrayList<>();
-        if(world == null) return result;
+        if (world == null) return result;
         int centerX = center.getBlockX();
         int centerY = center.getBlockY();
         int centerZ = center.getBlockZ();
         for (int y = -radius; y <= radius; y++) {
             for (int x = -radius; x <= radius; x++) {
                 for (int z = -radius; z <= radius; z++) {
-                    if(world.getBlockAt(centerX+x,centerY+y,centerZ+z).getType().equals(material)) {
-                        result.add(center.clone().add(x,y,z));
+                    if (world.getBlockAt(centerX + x, centerY + y, centerZ + z).getType().equals(material)) {
+                        result.add(center.clone().add(x, y, z));
                     }
                 }
             }

@@ -11,6 +11,7 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.ConfigProjection;
 public class RegionAPI {
     @Inject
     Config config;
+
     /**
      * 根据区块索引指针划分区块区域
      */
@@ -25,7 +26,7 @@ public class RegionAPI {
         int z = (index / maxRegionPerLine) % maxRegionPerLine;
         int centerX = -maxLength + x * finalRadius;
         int centerZ = -maxLength + z * finalRadius;
-        int y = world.getHighestBlockYAt(centerX,centerZ);
-        return new Location(world,centerX,y,centerZ);
+        int y = world.getHighestBlockYAt(centerX, centerZ);
+        return new Location(world, centerX, y, centerZ);
     }
 }

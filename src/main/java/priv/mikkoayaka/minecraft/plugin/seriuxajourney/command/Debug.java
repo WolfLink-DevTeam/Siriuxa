@@ -8,14 +8,12 @@ import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.invbackup.InvBackupService;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.MenuService;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.ExplorationService;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.TaskRepository;
 
 @Singleton
 public class Debug extends WolfirdCommand {
     @Inject
     private InvBackupService invBackupService;
+
     public Debug() {
         super(true, false, true, "sj debug", "开发者调试指令");
     }
@@ -24,8 +22,8 @@ public class Debug extends WolfirdCommand {
     protected void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
         invBackupService.saveMainInv(player).show(player);
-        Bukkit.getScheduler().runTaskLater(SeriuxaJourney.getInstance(),()->{
+        Bukkit.getScheduler().runTaskLater(SeriuxaJourney.getInstance(), () -> {
             invBackupService.loadMainInv(player).show(player);
-        },20 * 5);
+        }, 20 * 5);
     }
 }

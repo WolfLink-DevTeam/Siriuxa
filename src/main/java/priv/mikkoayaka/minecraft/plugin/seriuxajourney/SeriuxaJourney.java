@@ -51,7 +51,7 @@ public final class SeriuxaJourney extends WolfirdPlugin {
 
         // 注册指令
         IOC.getBean(WolfirdCommandAnalyser.class).register("sj");
-        bindCommand(IOC.getBean(CmdHelp.class,"sj"));
+        bindCommand(IOC.getBean(CmdHelp.class, "sj"));
         bindCommand(IOC.getBean(OpenTaskMenu.class));
         bindCommand(IOC.getBean(Debug.class));
         bindCommand(IOC.getBean(TeamInvite.class));
@@ -69,7 +69,7 @@ public final class SeriuxaJourney extends WolfirdPlugin {
         IOC.getBean(TaskVariables.class).register();
 
         // 注册全局监听器
-        for(Class<? extends WolfirdListener> listenerClass : globalListenerClasses) {
+        for (Class<? extends WolfirdListener> listenerClass : globalListenerClasses) {
             IOC.getBean(listenerClass).setEnabled(true);
         }
     }
@@ -88,7 +88,7 @@ public final class SeriuxaJourney extends WolfirdPlugin {
         }
 
         // 注销全局监听器
-        for(Class<? extends WolfirdListener> listenerClass : globalListenerClasses) {
+        for (Class<? extends WolfirdListener> listenerClass : globalListenerClasses) {
             IOC.getBean(listenerClass).setEnabled(false);
         }
 
@@ -97,19 +97,19 @@ public final class SeriuxaJourney extends WolfirdPlugin {
     /**
      * 初始化配置文件
      */
-    private static final List<Class<? extends YamlConfig>> configs = new ArrayList<>(){{
-       add(OreCache.class);
-       add(Config.class);
-       add(Lang.class);
+    private static final List<Class<? extends YamlConfig>> configs = new ArrayList<>() {{
+        add(OreCache.class);
+        add(Config.class);
+        add(Lang.class);
     }};
-    private static final List<Class<? extends FileDB>> databases = new ArrayList<>(){{
+    private static final List<Class<? extends FileDB>> databases = new ArrayList<>() {{
         add(InventoryDB.class);
         add(OreDB.class);
     }};
     /**
      * 注册全局监听器
      */
-    private static final List<Class<? extends WolfirdListener>> globalListenerClasses = new ArrayList<>(){{
+    private static final List<Class<? extends WolfirdListener>> globalListenerClasses = new ArrayList<>() {{
         add(OreChecker.class);
         add(HurtChecker.class);
         add(FriendlyProtection.class);

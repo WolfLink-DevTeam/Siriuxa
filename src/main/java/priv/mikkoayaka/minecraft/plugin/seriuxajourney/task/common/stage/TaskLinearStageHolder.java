@@ -7,6 +7,7 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;
 public class TaskLinearStageHolder extends LinearStageHolder {
     @Getter
     private final Task task;
+
     public TaskLinearStageHolder(Task task) {
         super(false);
         this.task = task;

@@ -15,29 +15,31 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.MenuService;
 public class MenuEventListener extends WolfirdListener {
     @Inject
     MenuService menuService;
+
     @EventHandler
     void onService(InventoryClickEvent e) {
-        if(!(e.getWhoClicked() instanceof Player)) return;
-        Player p = (Player) e.getWhoClicked();
+        if (!(e.getWhoClicked() instanceof Player p)) return;
         String title = e.getView().getTitle();
-        Menu menu = menuService.findMenu(p,title);
-        if(menu == null)return;
+        Menu menu = menuService.findMenu(p, title);
+        if (menu == null) return;
         Icon icon = menu.getIcon(e.getSlot());
-        if(icon == null)return;
-        invokeViewClick(p, icon,e.getClick());
+        if (icon == null) return;
+        invokeViewClick(p, icon, e.getClick());
     }
+
     @EventHandler(priority = EventPriority.LOWEST)
     void onProtect(InventoryClickEvent e) {
         // 点击自己的背包
-        if(e.getWhoClicked().getInventory().equals(e.getClickedInventory())) {
+        if (e.getWhoClicked().getInventory().equals(e.getClickedInventory())) {
             return;
         }
         String title = e.getWhoClicked().getOpenInventory().getTitle();
-        Menu menu = menuService.findMenu((Player) e.getWhoClicked(),title);
-        if(menu != null) e.setCancelled(true);
+        Menu menu = menuService.findMenu((Player) e.getWhoClicked(), title);
+        if (menu != null) e.setCancelled(true);
     }
+
     private void invokeViewClick(Player player, Icon icon, ClickType clickType) {
-        if(clickType.isLeftClick()) icon.leftClick(player);
-        if(clickType.isRightClick()) icon.rightClick(player);
+        if (clickType.isLeftClick()) icon.leftClick(player);
+        if (clickType.isRightClick()) icon.rightClick(player);
     }
 }

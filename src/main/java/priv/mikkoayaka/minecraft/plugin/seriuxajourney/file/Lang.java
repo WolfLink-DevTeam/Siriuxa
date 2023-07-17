@@ -9,10 +9,11 @@ public class Lang extends YamlConfig {
     public Lang() {
         super("SeriuxaJourneyLang", LangProjection.asMap());
     }
+
     @NonNull
     public <T> T get(LangProjection langProjection) {
         T result = super.get(langProjection.getPath());
-        if(result == null)return (T) langProjection.getDefaultValue();
+        if (result == null) return (T) langProjection.getDefaultValue();
         else return result;
     }
 }

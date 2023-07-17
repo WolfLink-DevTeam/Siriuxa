@@ -13,22 +13,25 @@ public class TaskStat {
     private double nowWheat = 0;
 
     private boolean started = false;
+
     public double getWheatChange() {
         return nowWheat - lastWheat;
     }
+
     public TaskStat(Task task) {
         this.task = task;
     }
 
     public void start() {
-        if(started) return;
-        subScheduler.runTaskTimerAsync(()->{
+        if (started) return;
+        subScheduler.runTaskTimerAsync(() -> {
             lastWheat = nowWheat;
             nowWheat = task.getTaskWheat();
-        },20,20);
+        }, 20, 20);
     }
+
     public void stop() {
-        if(!started) return;
+        if (!started) return;
         subScheduler.cancelAllTasks();
     }
 }

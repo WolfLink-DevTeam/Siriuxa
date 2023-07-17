@@ -7,7 +7,7 @@ import org.bukkit.Material;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ExplorationDifficulty extends TaskDifficulty{
+public class ExplorationDifficulty extends TaskDifficulty {
     /**
      * 受伤麦穗惩罚(每1点伤害)
      */
@@ -32,8 +32,8 @@ public class ExplorationDifficulty extends TaskDifficulty{
     private final double expGainPercent;
 
     @Builder
-    public ExplorationDifficulty(Material icon, String color, int level, String name, int wheatCost, int wheatSupply,double baseWheatLoss, double wheatLostAcceleratedSpeed, double hurtWheatCost, double hurtDamageMultiple, int bringSlotAmount, double wheatGainPercent, double expGainPercent) {
-        super(icon, color, level, name,wheatCost,wheatSupply,baseWheatLoss,wheatLostAcceleratedSpeed);
+    public ExplorationDifficulty(Material icon, String color, int level, String name, int wheatCost, int wheatSupply, double baseWheatLoss, double wheatLostAcceleratedSpeed, double hurtWheatCost, double hurtDamageMultiple, int bringSlotAmount, double wheatGainPercent, double expGainPercent) {
+        super(icon, color, level, name, wheatCost, wheatSupply, baseWheatLoss, wheatLostAcceleratedSpeed);
         this.hurtWheatCost = hurtWheatCost;
         this.hurtDamageMultiple = hurtDamageMultiple;
         this.bringSlotAmount = bringSlotAmount;

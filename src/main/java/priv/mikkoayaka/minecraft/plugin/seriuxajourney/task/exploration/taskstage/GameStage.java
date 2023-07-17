@@ -16,18 +16,20 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 public class GameStage extends TaskStage {
     private final Config config;
     private final Task task;
+
     public GameStage(TaskLinearStageHolder stageHolder) {
         super("正在进行", stageHolder);
         task = stageHolder.getTask();
         config = IOC.getBean(Config.class);
     }
+
     @Override
     protected void onEnter() {
         super.onEnter();
         String worldName = config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME);
         World world = Bukkit.getWorld(worldName);
-        if(world == null) {
-            Notifier.error(worldName+"世界不存在！请检查配置文件");
+        if (world == null) {
+            Notifier.error(worldName + "世界不存在！请检查配置文件");
             return;
         }
         Location regionCenter = IOC.getBean(RegionAPI.class).autoGetRegionCenter(world);
@@ -36,6 +38,7 @@ public class GameStage extends TaskStage {
                 regionCenter
         ));
     }
+
     @Override
     protected void onLeave() {
         super.onLeave();

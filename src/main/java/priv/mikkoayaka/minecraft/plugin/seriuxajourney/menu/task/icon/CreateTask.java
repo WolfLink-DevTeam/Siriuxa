@@ -16,6 +16,7 @@ public class CreateTask extends Icon {
 
     private final TaskService taskService;
     private final TaskMenu taskMenu;
+
     public CreateTask(TaskMenu taskMenu) {
         super(false);
         this.taskMenu = taskMenu;
@@ -24,8 +25,8 @@ public class CreateTask extends Icon {
 
     @Override
     protected @NonNull ItemStack createIcon() {
-        if(canCreate()) {
-            return fastCreateItemStack(Material.WRITABLE_BOOK,1,"§8[ §f登记任务 §8]",
+        if (canCreate()) {
+            return fastCreateItemStack(Material.WRITABLE_BOOK, 1, "§8[ §f登记任务 §8]",
                     " ",
                     "  §7完成任务登记后，前往 §f空降勘探仓 §7，准备降落。",
                     "  §7当然，你可以在一旁的补给处再做一些准备，购买物资什么的。",
@@ -35,7 +36,7 @@ public class CreateTask extends Icon {
                     " "
             );
         } else {
-            return fastCreateItemStack(Material.WRITABLE_BOOK,1,"§8[ §f登记任务 §8]",
+            return fastCreateItemStack(Material.WRITABLE_BOOK, 1, "§8[ §f登记任务 §8]",
                     " ",
                     "  §7完成任务登记后，前往 §f空降勘探仓 §7，准备降落。",
                     "  §7当然，你可以在一旁的补给处再做一些准备，购买物资什么的。",
@@ -50,17 +51,18 @@ public class CreateTask extends Icon {
     private boolean canCreate() {
         return taskMenu.getSelectedDifficulty() != null;
     }
+
     @Override
     public void leftClick(Player player) {
-        if(!canCreate())return;
-        Result result = taskService.create(player, ExplorationTask.class,taskMenu.getSelectedDifficulty());
+        if (!canCreate()) return;
+        Result result = taskService.create(player, ExplorationTask.class, taskMenu.getSelectedDifficulty());
         result.show(player);
         player.closeInventory();
-        if(result.result()) {
-            player.playSound(player.getLocation(),Sound.ITEM_BOOK_PAGE_TURN,1f,1f);
-            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP,1f,1.2f);
+        if (result.result()) {
+            player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1f);
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f);
         } else {
-            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO,1f,0.8f);
+            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 0.8f);
         }
     }
 

@@ -8,6 +8,7 @@ public abstract class TaskStage extends Stage {
 
     @Getter
     private final TaskLinearStageHolder stageHolder;
+
     public TaskStage(String displayName, TaskLinearStageHolder stageHolder) {
         super(displayName, stageHolder);
         this.stageHolder = stageHolder;
@@ -15,11 +16,11 @@ public abstract class TaskStage extends Stage {
 
     @Override
     protected void onEnter() {
-        Notifier.debug("任务"+getStageHolder().getTask().getTaskUuid().toString()+"进入"+getDisplayName()+"阶段");
+        Notifier.debug("任务" + getStageHolder().getTask().getTaskUuid().toString() + "进入" + getDisplayName() + "阶段");
     }
 
     @Override
     protected void onLeave() {
-        Notifier.debug("任务"+getStageHolder().getTask().getTaskUuid().toString()+"离开"+getDisplayName()+"阶段");
+        Notifier.debug("任务" + getStageHolder().getTask().getTaskUuid().toString() + "离开" + getDisplayName() + "阶段");
     }
 }

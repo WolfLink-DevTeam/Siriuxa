@@ -10,6 +10,7 @@ import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 public class TeamAccept extends WolfirdCommand {
     @Inject
     private TeamInvite teamInvite;
+
     public TeamAccept() {
         super(false, false, true, "sj team accept", "接受队伍邀请");
     }

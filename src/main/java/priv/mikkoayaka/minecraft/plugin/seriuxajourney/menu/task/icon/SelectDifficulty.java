@@ -15,6 +15,7 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.TaskMenu;
 public class SelectDifficulty extends Icon {
     private final TaskMenu taskMenu;
     private final MenuService menuService;
+
     public SelectDifficulty(TaskMenu taskMenu) {
         super(false);
         this.menuService = IOC.getBean(MenuService.class);
@@ -23,8 +24,8 @@ public class SelectDifficulty extends Icon {
 
     @Override
     public void leftClick(Player player) {
-        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES,1f,1f);
-        menuService.display(ExplorationDifficultyMenu.class,player);
+        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1f, 1f);
+        menuService.display(ExplorationDifficultyMenu.class, player);
     }
 
     @Override
@@ -37,16 +38,17 @@ public class SelectDifficulty extends Icon {
         String difficultyName = "§7未指定";
         Material material = Material.ITEM_FRAME;
         Player player = taskMenu.getOwner();
-        if(player == null || !player.isOnline()) return fastCreateItemStack(material,1,"§8[ §f当前难度 §8] §r玩家未在线");
+        if (player == null || !player.isOnline())
+            return fastCreateItemStack(material, 1, "§8[ §f当前难度 §8] §r玩家未在线");
         ExplorationDifficulty difficulty = taskMenu.getSelectedDifficulty();
-        if(difficulty != null) {
-            difficultyName = difficulty.getColor()+difficulty.getName();
+        if (difficulty != null) {
+            difficultyName = difficulty.getColor() + difficulty.getName();
             material = difficulty.getIcon();
         }
-        return fastCreateItemStack(material,1,"§8[ §f当前难度 §8] §r"+difficultyName,
+        return fastCreateItemStack(material, 1, "§8[ §f当前难度 §8] §r" + difficultyName,
                 " ",
                 "  §7想要轻松完成任务，还是尝试挑战困难？",
                 " "
-                );
+        );
     }
 }

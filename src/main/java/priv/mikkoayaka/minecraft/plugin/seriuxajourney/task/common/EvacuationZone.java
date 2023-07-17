@@ -32,17 +32,19 @@ public class EvacuationZone {
      * 撤离的安全区域半径
      */
     private final int safeRadius;
+
     public EvacuationZone(Location center, int safeRadius) {
         this.center = center;
         World world = center.getWorld();
-        if(world == null) throw new IllegalArgumentException("安全区坐标的世界为空");
+        if (world == null) throw new IllegalArgumentException("安全区坐标的世界为空");
         this.safeRadius = safeRadius;
         this.locationCommandSender = new LocationCommandSender(center);
     }
+
     public void setAvailable(boolean value) {
-        if(available == value)return;
+        if (available == value) return;
         available = value;
-        if(available) {
+        if (available) {
             generateSchematic();
         } else {
             undoSchematic();
@@ -54,20 +56,22 @@ public class EvacuationZone {
      */
     public Set<Player> getPlayerInZone() {
         Set<Player> playerSet = new HashSet<>();
-        if(!available)return playerSet;
-        for(Entity p : Objects.requireNonNull(center.getWorld())
-                .getNearbyEntities(center,safeRadius,safeRadius,safeRadius,
+        if (!available) return playerSet;
+        for (Entity p : Objects.requireNonNull(center.getWorld())
+                .getNearbyEntities(center, safeRadius, safeRadius, safeRadius,
                         entity -> entity.getType().equals(EntityType.PLAYER))) {
             playerSet.add((Player) p);
         }
         return playerSet;
     }
+
     private EditSession editSession;
+
     public void generateSchematic() {
         editSession = IOC.getBean(WorldEditAPI.class).pasteEvacuationUnit(locationCommandSender);
     }
 
     public void undoSchematic() {
-        IOC.getBean(WorldEditAPI.class).undoPaste(locationCommandSender,editSession);
+        IOC.getBean(WorldEditAPI.class).undoPaste(locationCommandSender, editSession);
     }
 }

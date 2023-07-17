@@ -10,6 +10,7 @@ import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 public class TeamDeny extends WolfirdCommand {
     @Inject
     private TeamInvite teamInvite;
+
     public TeamDeny() {
         super(false, false, true, "sj team deny", "拒绝队伍邀请");
     }

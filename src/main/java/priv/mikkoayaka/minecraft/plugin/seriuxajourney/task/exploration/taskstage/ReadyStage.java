@@ -20,19 +20,19 @@ public class ReadyStage extends TaskStage {
     protected void onEnter() {
         super.onEnter();
         Task task = getStageHolder().getTask();
-        Bukkit.getScheduler().runTaskAsynchronously(SeriuxaJourney.getInstance(),()->{
+        Bukkit.getScheduler().runTaskAsynchronously(SeriuxaJourney.getInstance(), () -> {
             int timeLeft = 15;
             while (timeLeft > 0) {
                 for (Player player : task.getPlayers()) {
-                    player.sendTitle("§f§l"+timeLeft,"§7任务即将开始，请做好准备",4,12,4);
-                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME,1f,1.2f);
-                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR,1f,1.2f);
-                    Bukkit.getScheduler().runTask(SeriuxaJourney.getInstance(),()->{
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,10 * 20,4,false,false,false));
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,10 * 20,0,false,false,false));
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,10 * 20,2,false,false,false));
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,10 * 20,4,false,false,false));
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION,10 * 20,4,false,false,false));
+                    player.sendTitle("§f§l" + timeLeft, "§7任务即将开始，请做好准备", 4, 12, 4);
+                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1f, 1.2f);
+                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR, 1f, 1.2f);
+                    Bukkit.getScheduler().runTask(SeriuxaJourney.getInstance(), () -> {
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 10 * 20, 4, false, false, false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10 * 20, 0, false, false, false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10 * 20, 2, false, false, false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, 10 * 20, 4, false, false, false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 10 * 20, 4, false, false, false));
                     });
                 }
                 timeLeft--;
@@ -43,17 +43,17 @@ public class ReadyStage extends TaskStage {
                 }
             }
             for (Player player : task.getPlayers()) {
-                player.sendTitle("§a§l任务开始","§7作业单元已准备就绪，开始投放",10,40,10);
-                player.playSound(player.getLocation(),Sound.BLOCK_RESPAWN_ANCHOR_CHARGE,1f,0.5f);
-                player.playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN,1f,0.5f);
-                player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH,1f,0.5f);
+                player.sendTitle("§a§l任务开始", "§7作业单元已准备就绪，开始投放", 10, 40, 10);
+                player.playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, 1f, 0.5f);
+                player.playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, 1f, 0.5f);
+                player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1f, 0.5f);
             }
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            Bukkit.getScheduler().runTask(SeriuxaJourney.getInstance(),()->getStageHolder().next());
+            Bukkit.getScheduler().runTask(SeriuxaJourney.getInstance(), () -> getStageHolder().next());
         });
 
     }

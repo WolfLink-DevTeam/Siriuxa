@@ -12,6 +12,7 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.TaskRepositor
 public class TaskVariables extends PlaceholderExpansion {
     @Inject
     private TaskRepository taskRepository;
+
     @Override
     public @NotNull String getIdentifier() {
         return "SJTask";
@@ -28,33 +29,33 @@ public class TaskVariables extends PlaceholderExpansion {
     }
 
     @Override
-    public String onRequest(OfflinePlayer offlinePlayer, @NotNull String params){
-        if(offlinePlayer == null)return "不存在的玩家";
+    public String onRequest(OfflinePlayer offlinePlayer, @NotNull String params) {
+        if (offlinePlayer == null) return "不存在的玩家";
         Task task = taskRepository.findByPlayerUuid(offlinePlayer.getUniqueId());
-        if(task == null) return "玩家未处于任务中";
-        if(params.equalsIgnoreCase("wheat")) {
-            return String.format("%.1f",task.getTaskWheat());
+        if (task == null) return "玩家未处于任务中";
+        if (params.equalsIgnoreCase("wheat")) {
+            return String.format("%.1f", task.getTaskWheat());
         }
-        if(params.equalsIgnoreCase("wheat_loss_per_sec")) {
-            return String.format("%.1f",task.getWheatLossPerSecNow());
+        if (params.equalsIgnoreCase("wheat_loss_per_sec")) {
+            return String.format("%.1f", task.getWheatLossPerSecNow());
         }
-        if(params.equalsIgnoreCase("team_size")) {
+        if (params.equalsIgnoreCase("team_size")) {
             return String.valueOf(task.getTaskTeam().size());
         }
-        if(params.equalsIgnoreCase("detail_wheat")) {
+        if (params.equalsIgnoreCase("detail_wheat")) {
             double value = task.getTaskStat().getWheatChange();
-            if(value > 0) return "§f%.1f§a(+%.1f)".formatted(task.getTaskWheat(),value);
-            else if(value < 0) return "§f%.1f§c(%.1f)".formatted(task.getTaskWheat(),value);
+            if (value > 0) return "§f%.1f§a(+%.1f)".formatted(task.getTaskWheat(), value);
+            else if (value < 0) return "§f%.1f§c(%.1f)".formatted(task.getTaskWheat(), value);
             else return "§f%.1f".formatted(task.getTaskWheat());
         }
-        if(params.equalsIgnoreCase("stage")) {
+        if (params.equalsIgnoreCase("stage")) {
             return task.getStageHolder().getThisStage().getDisplayName();
         }
-        if(params.equalsIgnoreCase("difficulty")) {
-            return task.getTaskDifficulty().getColor()+task.getTaskDifficulty().getName();
+        if (params.equalsIgnoreCase("difficulty")) {
+            return task.getTaskDifficulty().getColor() + task.getTaskDifficulty().getName();
         }
-        if(params.equalsIgnoreCase("evacuable")) {
-            if(task.getAvailableEvacuationZone() != null) return "§a可撤离";
+        if (params.equalsIgnoreCase("evacuable")) {
+            if (task.getAvailableEvacuationZone() != null) return "§a可撤离";
             else return "§c无法撤离";
         }
         return "没做完呢";

@@ -25,23 +25,28 @@ public class TaskTeam {
     @Setter
     @Getter
     private Task selectedTask = null;
+
     public List<Player> getPlayers() {
         return memberUuids.stream()
                 .map(Bukkit::getPlayer)
-                .filter(p -> p!=null&&p.isOnline())
+                .filter(p -> p != null && p.isOnline())
                 .collect(Collectors.toList());
     }
+
     public List<OfflinePlayer> getOfflinePlayers() {
         return memberUuids.stream()
                 .map(Bukkit::getOfflinePlayer)
                 .collect(Collectors.toList());
     }
+
     public int size() {
         return memberUuids.size();
     }
+
     public boolean contains(UUID uuid) {
         return memberUuids.contains(uuid);
     }
+
     public boolean contains(Player player) {
         return contains(player.getUniqueId());
     }
@@ -52,17 +57,21 @@ public class TaskTeam {
     public void join(Player player) {
         join(player.getUniqueId());
     }
+
     public void join(UUID uuid) {
         memberUuids.add(uuid);
     }
+
     public void leave(UUID uuid) {
         memberUuids.remove(uuid);
     }
+
     public void clear() {
         for (UUID uuid : memberUuids) {
             leave(uuid);
         }
     }
+
     public void leave(Player player) {
         leave(player.getUniqueId());
     }

@@ -12,11 +12,13 @@ public class TeamKick extends WolfirdCommand {
     public TeamKick() {
         super(false, false, true, "sj team kick {player}", "踢出指定玩家。");
     }
+
     @Inject
     private TaskTeamService taskTeamService;
+
     @Override
     protected void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
-        taskTeamService.kickPlayer(player,strings[0]).show(player);
+        taskTeamService.kickPlayer(player, strings[0]).show(player);
     }
 }

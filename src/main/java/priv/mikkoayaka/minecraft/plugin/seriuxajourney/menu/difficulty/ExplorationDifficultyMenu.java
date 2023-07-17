@@ -6,6 +6,6 @@ import java.util.UUID;
 
 public class ExplorationDifficultyMenu extends DifficultyMenu<ExplorationDifficulty> {
     public ExplorationDifficultyMenu(UUID ownerUuid) {
-        super(ownerUuid,ExplorationDifficulty.class);
+        super(ownerUuid, ExplorationDifficulty.class);
     }
 }

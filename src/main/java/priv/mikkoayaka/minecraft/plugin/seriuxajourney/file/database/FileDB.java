@@ -14,30 +14,32 @@ import java.util.Map;
 public abstract class FileDB {
 
     protected final File folder;
-    private final Map<File,FileConfiguration> fileConfigurations = new HashMap<>();
+    private final Map<File, FileConfiguration> fileConfigurations = new HashMap<>();
 
     @Nullable
     public FileConfiguration getFileConfiguration(File file) {
         return fileConfigurations.get(file);
     }
+
     public FileDB(String folderName) {
-        folder = new File(SeriuxaJourney.getInstance().getDataFolder(),folderName);
-        if(!folder.exists()) folder.mkdirs();
+        folder = new File(SeriuxaJourney.getInstance().getDataFolder(), folderName);
+        if (!folder.exists()) folder.mkdirs();
     }
+
     private void load(File folder) {
         File[] subFiles = folder.listFiles();
-        if(subFiles == null) return;
+        if (subFiles == null) return;
         for (File subFile : subFiles) {
-            if(subFile.isFile()) {
-                fileConfigurations.put(subFile,YamlConfiguration.loadConfiguration(subFile));
-                Notifier.debug("加载了一个文件："+subFile.getName());
-            }
-            else load(subFile);
+            if (subFile.isFile()) {
+                fileConfigurations.put(subFile, YamlConfiguration.loadConfiguration(subFile));
+                Notifier.debug("加载了一个文件：" + subFile.getName());
+            } else load(subFile);
         }
     }
+
     public FileConfiguration createAndLoad(File file) {
         File parent = file.getParentFile();
-        if(!parent.exists()) parent.mkdirs();
+        if (!parent.exists()) parent.mkdirs();
         try {
             file.createNewFile();
         } catch (Exception e) {
@@ -45,20 +47,22 @@ public abstract class FileDB {
             Notifier.error("在创建文件时出现异常。");
         }
         FileConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
-        fileConfigurations.put(file,fileConfiguration);
+        fileConfigurations.put(file, fileConfiguration);
         return fileConfiguration;
     }
+
     public void load() {
         fileConfigurations.clear();
         load(folder);
     }
+
     public void save() {
         fileConfigurations.forEach((file, fileConfiguration) -> {
             try {
                 fileConfiguration.save(file);
             } catch (IOException e) {
                 e.printStackTrace();
-                Notifier.error("在保存文件："+file.getName()+" 时出现问题。");
+                Notifier.error("在保存文件：" + file.getName() + " 时出现问题。");
             }
         });
     }

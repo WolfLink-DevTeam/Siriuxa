@@ -20,7 +20,10 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.region.TaskRe
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.team.TaskTeam;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * 抽象任务类
@@ -71,37 +74,44 @@ public abstract class Task implements INamable {
 
     @Getter
     private final StageHolder stageHolder;
+
     protected abstract StageHolder initStageHolder();
 
-    public Task(TaskTeam taskTeam,TaskDifficulty taskDifficulty) {
+    public Task(TaskTeam taskTeam, TaskDifficulty taskDifficulty) {
         this.taskTeam = taskTeam;
         this.taskDifficulty = taskDifficulty;
         this.wheatLostAcceleratedSpeed = taskDifficulty.getWheatLostAcceleratedSpeed();
         this.baseWheatLoss = taskDifficulty.getBaseWheatLoss();
         stageHolder = initStageHolder();
     }
+
     public void addWheat(double wheat) {
         taskWheat += wheat;
     }
+
     public void takeWheat(double wheat) {
         taskWheat -= wheat;
-        if(taskWheat <= 0) {
+        if (taskWheat <= 0) {
             taskWheat = 0;
             triggerFailed();
         }
     }
-    public void takeWheat(double wheat,String reason) {
+
+    public void takeWheat(double wheat, String reason) {
         takeWheat(wheat);
-        Notifier.broadcastChat(taskTeam.getPlayers(),"本次任务损失了 "+wheat+" 麦穗，原因是"+reason);
+        Notifier.broadcastChat(taskTeam.getPlayers(), "本次任务损失了 " + wheat + " 麦穗，原因是" + reason);
     }
+
     public List<Player> getPlayers() {
         return taskTeam.getPlayers();
     }
+
     public void addWheatLossMultiple(double value) {
         wheatLossMultiple += value;
     }
+
     public Set<Player> waitForEvacuatePlayers() {
-        if(availableEvacuationZone == null) return new HashSet<>();
+        if (availableEvacuationZone == null) return new HashSet<>();
         else return availableEvacuationZone.getPlayerInZone();
     }
 
@@ -113,31 +123,33 @@ public abstract class Task implements INamable {
         stopCheck();
         failed();
     }
+
     private void triggerFinish() {
         stageHolder.next();
         taskStat.stop();
         stopCheck();
         finish();
     }
+
     /**
      * 游戏结束检查
      * 如果本次任务玩家数为0则意味着所有玩家逃跑/离线，宣布任务失败
      * 如果撤离玩家数和任务玩家数一致，则任务完成
      */
     public void startGameOverCheck() {
-        finishCheckTaskId = Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(),()->{
-            if(taskTeam.size() == 0) {
+        finishCheckTaskId = Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(), () -> {
+            if (taskTeam.size() == 0) {
                 triggerFailed();
                 return;
             }
-            if(waitForEvacuatePlayers().size() == taskTeam.size()) {
+            if (waitForEvacuatePlayers().size() == taskTeam.size()) {
                 triggerFinish();
-                return;
             }
-        },20,20).getTaskId();
+        }, 20, 20).getTaskId();
     }
+
     public void stopFinishCheck() {
-        if(finishCheckTaskId != -1) {
+        if (finishCheckTaskId != -1) {
             Bukkit.getScheduler().cancelTask(finishCheckTaskId);
             finishCheckTaskId = -1;
         }
@@ -149,25 +161,26 @@ public abstract class Task implements INamable {
      * 停止生成撤离点
      */
     public void stopEvacuateTask() {
-        if(evacuateTaskId != -1) {
+        if (evacuateTaskId != -1) {
             Bukkit.getScheduler().cancelTask(evacuateTaskId);
             evacuateTaskId = -1;
             availableEvacuationZone = null;
         }
     }
+
     public void start(TaskRegion taskRegion) {
         this.taskRegion = taskRegion;
         taskStat.start();
         this.taskWheat = taskTeam.size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
-        Bukkit.getScheduler().runTaskAsynchronously(SeriuxaJourney.getInstance(),()->{
-            IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(new LocationCommandSender(taskRegion.getCenter().clone().add(0,2,0)));
-            List<Location> beaconLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.BEACON,taskRegion.getCenter(),20);
-            Bukkit.getScheduler().runTask(SeriuxaJourney.getInstance(),()->{
+        Bukkit.getScheduler().runTaskAsynchronously(SeriuxaJourney.getInstance(), () -> {
+            IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(new LocationCommandSender(taskRegion.getCenter().clone().add(0, 2, 0)));
+            List<Location> beaconLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.BEACON, taskRegion.getCenter(), 20);
+            Bukkit.getScheduler().runTask(SeriuxaJourney.getInstance(), () -> {
                 List<Player> playerList = getPlayers();
                 for (int i = 0; i < playerList.size(); i++) {
                     Player player = playerList.get(i);
-                    if(beaconLocations.size() == 0) player.teleport(taskRegion.getCenter());
-                    else player.teleport(beaconLocations.get(i%beaconLocations.size()));
+                    if (beaconLocations.size() == 0) player.teleport(taskRegion.getCenter());
+                    else player.teleport(beaconLocations.get(i % beaconLocations.size()));
                 }
                 startGameOverCheck();
                 startTiming();
@@ -176,27 +189,28 @@ public abstract class Task implements INamable {
             });
         });
     }
+
     private void startEvacuateTask() {
-        evacuateTaskId = Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(),()->{
-            if(taskRegion == null) return;
+        evacuateTaskId = Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(), () -> {
+            if (taskRegion == null) return;
             Location evacuateLocation = taskRegion.getEvacuateLocation((int) taskRegion.getRadius());
-            if(evacuateLocation == null) {
+            if (evacuateLocation == null) {
                 stopCheck();
                 failed();
                 return;
             }
-            evacuateLocation = evacuateLocation.add(0,25,0);
-            if(availableEvacuationZone != null) {
+            evacuateLocation = evacuateLocation.add(0, 25, 0);
+            if (availableEvacuationZone != null) {
                 availableEvacuationZone.setAvailable(false);
-                Notifier.broadcastChat(getPlayers(),"坐标 X："+availableEvacuationZone.getCenter().getBlockX()+" Z："+availableEvacuationZone.getCenter().getBlockZ()+" 附近的飞艇已撤离，请等待下一艘飞艇接应。");
+                Notifier.broadcastChat(getPlayers(), "坐标 X：" + availableEvacuationZone.getCenter().getBlockX() + " Z：" + availableEvacuationZone.getCenter().getBlockZ() + " 附近的飞艇已撤离，请等待下一艘飞艇接应。");
                 availableEvacuationZone = null;
             } else {
-                availableEvacuationZone = new EvacuationZone(evacuateLocation,5);
+                availableEvacuationZone = new EvacuationZone(evacuateLocation, 5);
                 availableEvacuationZone.setAvailable(true);
-                Notifier.broadcastChat(getPlayers(),"飞艇已停留至坐标 X："+evacuateLocation.getBlockX()+" Z："+evacuateLocation.getBlockZ()+" 附近，如有需要请尽快前往撤离。");
+                Notifier.broadcastChat(getPlayers(), "飞艇已停留至坐标 X：" + evacuateLocation.getBlockX() + " Z：" + evacuateLocation.getBlockZ() + " 附近，如有需要请尽快前往撤离。");
             }
             //TODO 30|15
-        },20 * 60,20 * 60).getTaskId();
+        }, 20 * 60, 20 * 60).getTaskId();
     }
 
     /**
@@ -205,32 +219,36 @@ public abstract class Task implements INamable {
     public double getWheatLossPerSecNow() {
         return baseWheatLoss * wheatLossMultiple * getTaskTeam().size();
     }
+
     int timingTask1Id = -1;
     int timingTask2Id = -1;
+
     private void startTiming() {
         timingTask1Id =
                 Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(),
-                        ()-> takeWheat(getWheatLossPerSecNow())
-                        ,20,20).getTaskId();
+                        () -> takeWheat(getWheatLossPerSecNow())
+                        , 20, 20).getTaskId();
         timingTask2Id =
                 Bukkit.getScheduler().runTaskTimer(SeriuxaJourney.getInstance(),
-                        ()-> addWheatLossMultiple(wheatLostAcceleratedSpeed)
-                        ,20 * 60 * 5,20 * 60 * 5).getTaskId();
+                        () -> addWheatLossMultiple(wheatLostAcceleratedSpeed)
+                        , 20 * 60 * 5, 20 * 60 * 5).getTaskId();
     }
+
     private void stopTiming() {
-        if(timingTask1Id != -1) Bukkit.getScheduler().cancelTask(timingTask1Id);
-        if(timingTask2Id != -1) Bukkit.getScheduler().cancelTask(timingTask2Id);
+        if (timingTask1Id != -1) Bukkit.getScheduler().cancelTask(timingTask1Id);
+        if (timingTask2Id != -1) Bukkit.getScheduler().cancelTask(timingTask2Id);
     }
 
     private void stopCheck() {
         stopTiming();
-        if(taskRegion != null) {
+        if (taskRegion != null) {
             taskRegion.stopCheck();
             taskRegion = null;
         }
         stopEvacuateTask();
         stopFinishCheck();
     }
+
     /**
      * 任务玩家全部撤离时任务完成
      */

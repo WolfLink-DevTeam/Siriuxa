@@ -1,13 +1,10 @@
 package priv.mikkoayaka.minecraft.plugin.seriuxajourney.invbackup;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
@@ -16,8 +13,6 @@ import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.wolfird.framework.config.Json;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.SerializeAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
-
-import java.util.List;
 
 /**
  * 玩家背包
@@ -37,15 +32,16 @@ public class PlayerBackpack {
     private int level = 0; // 等级
     private float exp = 0; // 当前等级的经验值
     private ItemStack[] items; // 背包物品
+
     public PlayerBackpack(Player player) {
         EntityEquipment equipment = player.getEquipment();
-        if(equipment != null) {
+        if (equipment != null) {
             helmet = equipment.getHelmet();
             chestplate = equipment.getChestplate();
             leggings = equipment.getLeggings();
             boots = equipment.getBoots();
             offhand = equipment.getItemInOffHand();
-        } else Notifier.error("玩家"+player.getName()+"装备栏为空！");
+        } else Notifier.error("玩家" + player.getName() + "装备栏为空！");
         level = player.getLevel();
         exp = player.getExp();
         items = new ItemStack[36];
@@ -55,42 +51,45 @@ public class PlayerBackpack {
             items[i] = playerInv.getItem(i);
         }
     }
+
     public void apply(Player player) {
         EntityEquipment equipment = player.getEquipment();
-        if(equipment == null) {
-            Notifier.error("玩家"+player.getName()+"装备栏为空！");
+        if (equipment == null) {
+            Notifier.error("玩家" + player.getName() + "装备栏为空！");
             return;
         }
-        if(helmet != null) equipment.setHelmet(helmet);
-        if(chestplate != null) equipment.setChestplate(chestplate);
-        if(leggings != null) equipment.setLeggings(leggings);
-        if(boots != null) equipment.setBoots(boots);
-        if(offhand != null) equipment.setItemInOffHand(offhand);
+        if (helmet != null) equipment.setHelmet(helmet);
+        if (chestplate != null) equipment.setChestplate(chestplate);
+        if (leggings != null) equipment.setLeggings(leggings);
+        if (boots != null) equipment.setBoots(boots);
+        if (offhand != null) equipment.setItemInOffHand(offhand);
         player.setLevel(level);
         player.setExp(exp);
         Inventory inventory = player.getInventory();
-        if(items != null) for (int i = 0; i < 36; i++) {
-            inventory.setItem(i,items[i]);
+        if (items != null) for (int i = 0; i < 36; i++) {
+            inventory.setItem(i, items[i]);
         }
-        Notifier.debug("背包信息已应用至"+player.getName());
+        Notifier.debug("背包信息已应用至" + player.getName());
     }
+
     public JsonObject toJsonObject() {
         SerializeAPI serializeAPI = IOC.getBean(SerializeAPI.class);
         JsonObject result = new JsonObject();
-        result.addProperty("helmet",serializeAPI.itemStack(helmet));
-        result.addProperty("chestplate",serializeAPI.itemStack(chestplate));
-        result.addProperty("leggings",serializeAPI.itemStack(leggings));
-        result.addProperty("boots",serializeAPI.itemStack(boots));
-        result.addProperty("offhand",serializeAPI.itemStack(offhand));
-        result.addProperty("level",level);
-        result.addProperty("exp",exp);
+        result.addProperty("helmet", serializeAPI.itemStack(helmet));
+        result.addProperty("chestplate", serializeAPI.itemStack(chestplate));
+        result.addProperty("leggings", serializeAPI.itemStack(leggings));
+        result.addProperty("boots", serializeAPI.itemStack(boots));
+        result.addProperty("offhand", serializeAPI.itemStack(offhand));
+        result.addProperty("level", level);
+        result.addProperty("exp", exp);
         JsonArray jsonArray = new JsonArray();
         for (int i = 0; i < 36; i++) {
             jsonArray.add(serializeAPI.itemStack(items[i]));
         }
-        result.add("items",jsonArray);
+        result.add("items", jsonArray);
         return result;
     }
+
     public static PlayerBackpack fromJsonObject(JsonObject jsonObject) {
         SerializeAPI serializeAPI = IOC.getBean(SerializeAPI.class);
         ItemStack[] items = new ItemStack[36];
@@ -109,6 +108,7 @@ public class PlayerBackpack {
         playerBackpack.setItems(items);
         return playerBackpack;
     }
+
     @Getter
     private static PlayerBackpack emptyBackpack = new PlayerBackpack();
 }

@@ -15,6 +15,7 @@ public class TeamLeave extends WolfirdCommand {
 
     @Inject
     private TaskTeamService taskTeamService;
+
     @Override
     protected void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;

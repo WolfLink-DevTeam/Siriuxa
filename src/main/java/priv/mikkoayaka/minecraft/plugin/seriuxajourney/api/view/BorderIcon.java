@@ -14,12 +14,15 @@ public class BorderIcon extends Icon {
     }
 
     @Override
-    public void leftClick(Player player) { }
+    public void leftClick(Player player) {
+    }
 
     @Override
-    public void rightClick(Player player) { }
+    public void rightClick(Player player) {
+    }
+
     @Override
     protected @NotNull ItemStack createIcon() {
-        return fastCreateItemStack(Material.ORANGE_STAINED_GLASS_PANE,1," ");
+        return fastCreateItemStack(Material.ORANGE_STAINED_GLASS_PANE, 1, " ");
     }
 }

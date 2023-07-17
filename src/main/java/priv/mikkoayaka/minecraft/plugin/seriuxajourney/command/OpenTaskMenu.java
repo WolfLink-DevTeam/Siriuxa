@@ -12,6 +12,7 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.menu.task.TaskMenu;
 public class OpenTaskMenu extends WolfirdCommand {
     @Inject
     private MenuService menuService;
+
     public OpenTaskMenu() {
         super(true, false, true, "sj menu task", "打开任务菜单");
     }
@@ -19,6 +20,6 @@ public class OpenTaskMenu extends WolfirdCommand {
     @Override
     protected void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
-        menuService.display(TaskMenu.class,player);
+        menuService.display(TaskMenu.class, player);
     }
 }

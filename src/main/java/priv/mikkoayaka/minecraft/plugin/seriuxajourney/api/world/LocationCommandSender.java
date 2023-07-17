@@ -28,6 +28,7 @@ public class LocationCommandSender implements BlockCommandSender {
     @Getter
     private final LocalSession localSession;
     private final UUID uuid = UUID.randomUUID();
+
     public LocationCommandSender(Location center) {
         location = center;
         World world = center.getWorld();

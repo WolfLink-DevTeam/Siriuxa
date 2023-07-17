@@ -15,6 +15,7 @@ public class TaskReady extends WolfirdCommand {
     private TaskRepository taskRepository;
     @Inject
     private TaskService taskService;
+
     public TaskReady() {
         super(true, false, true, "sj task ready", "开始任务");
     }

@@ -1,6 +1,5 @@
 package priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.listener;
 
-import com.sk89q.worldedit.event.platform.BlockInteractEvent;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -25,6 +24,7 @@ public class FunctionBan extends WolfirdListener {
 
     @Inject
     private TaskRepository taskRepository;
+
     /**
      * 任务过程中禁止使用末影箱
      */
@@ -32,9 +32,9 @@ public class FunctionBan extends WolfirdListener {
     void banTaskEnderChest(InventoryOpenEvent event) {
         HumanEntity humanEntity = event.getPlayer();
         Task task = taskRepository.findByPlayerUuid(humanEntity.getUniqueId());
-        if(task == null) return; // 没在任务中
-        if(!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 没在游戏阶段
-        if(event.getInventory().getType().equals(InventoryType.ENDER_CHEST)) {
+        if (task == null) return; // 没在任务中
+        if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 没在游戏阶段
+        if (event.getInventory().getType().equals(InventoryType.ENDER_CHEST)) {
             Notifier.chat("末影箱空间已经受到了严重感染，千万不要打开它！", (Player) humanEntity);
             event.setCancelled(true);
         }
@@ -47,8 +47,8 @@ public class FunctionBan extends WolfirdListener {
     void banTaskVillager(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
         Task task = taskRepository.findByPlayerUuid(player.getUniqueId());
-        if(task == null) return; // 没在任务中
-        if(!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 没在游戏阶段
-        if(event.getRightClicked().getType().equals(EntityType.VILLAGER)) event.setCancelled(true);
+        if (task == null) return; // 没在任务中
+        if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 没在游戏阶段
+        if (event.getRightClicked().getType().equals(EntityType.VILLAGER)) event.setCancelled(true);
     }
 }
