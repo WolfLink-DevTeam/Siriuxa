@@ -13,7 +13,6 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.ConfigProjection;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Lang;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.OreCache;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.monster.listener.MonsterListener;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.papi.TaskVariables;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.listener.FriendlyProtection;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.listener.FunctionBan;
@@ -83,7 +82,6 @@ public final class SeriuxaJourney extends WolfirdPlugin {
     private static final List<Class<? extends WolfirdListener>> globalListenerClasses = new ArrayList<>(){{
         add(OreChecker.class);
         add(HurtChecker.class);
-        add(MonsterListener.class);
         add(FriendlyProtection.class);
         add(FunctionBan.class);
     }};
