@@ -52,6 +52,7 @@ public final class SeriuxaJourney extends WolfirdPlugin {
         bindCommand(IOC.getBean(TeamDeny.class));
         bindCommand(IOC.getBean(TaskReady.class));
         bindCommand(IOC.getBean(TeamCreate.class));
+        bindCommand(IOC.getBean(TeamInfo.class));
 
         notifier.setDebugMode(IOC.getBean(Config.class).get(ConfigProjection.DEBUG));
 
