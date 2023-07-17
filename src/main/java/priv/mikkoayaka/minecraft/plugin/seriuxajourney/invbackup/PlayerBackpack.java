@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -33,8 +34,8 @@ public class PlayerBackpack {
     private ItemStack leggings;
     private ItemStack boots;
     private ItemStack offhand;
-    private int level; // 等级
-    private float exp; // 当前等级的经验值
+    private int level = 0; // 等级
+    private float exp = 0; // 当前等级的经验值
     private ItemStack[] items; // 背包物品
     public PlayerBackpack(Player player) {
         EntityEquipment equipment = player.getEquipment();
@@ -60,15 +61,15 @@ public class PlayerBackpack {
             Notifier.error("玩家"+player.getName()+"装备栏为空！");
             return;
         }
-        equipment.setHelmet(helmet);
-        equipment.setChestplate(chestplate);
-        equipment.setLeggings(leggings);
-        equipment.setBoots(boots);
-        equipment.setItemInOffHand(offhand);
+        if(helmet != null) equipment.setHelmet(helmet);
+        if(chestplate != null) equipment.setChestplate(chestplate);
+        if(leggings != null) equipment.setLeggings(leggings);
+        if(boots != null) equipment.setBoots(boots);
+        if(offhand != null) equipment.setItemInOffHand(offhand);
         player.setLevel(level);
         player.setExp(exp);
         Inventory inventory = player.getInventory();
-        for (int i = 0; i < 36; i++) {
+        if(items != null) for (int i = 0; i < 36; i++) {
             inventory.setItem(i,items[i]);
         }
         Notifier.debug("背包信息已应用至"+player.getName());
@@ -108,4 +109,6 @@ public class PlayerBackpack {
         playerBackpack.setItems(items);
         return playerBackpack;
     }
+    @Getter
+    private static PlayerBackpack emptyBackpack = new PlayerBackpack();
 }
