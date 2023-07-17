@@ -1,7 +1,13 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.common;
 
 import lombok.Data;
+import org.bukkit.entity.Player;
+import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @Data
 public class TaskStat {

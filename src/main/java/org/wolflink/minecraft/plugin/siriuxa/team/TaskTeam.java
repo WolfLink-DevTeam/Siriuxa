@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public class TaskTeam {
     @Getter
     private final UUID teamUuid = UUID.randomUUID();
+    @Getter
     private final Set<UUID> memberUuids = new HashSet<>();
     /**
      * 当前选择的任务

@@ -9,6 +9,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
+import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.INamable;
@@ -20,10 +22,7 @@ import org.wolflink.minecraft.plugin.siriuxa.task.common.region.TaskRegion;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
 import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 抽象任务类
@@ -33,6 +32,10 @@ import java.util.UUID;
 @Data
 public abstract class Task implements INamable {
 
+    /**
+     * 任务开始时间
+     */
+    private Calendar startTime;
     /**
      * 任务数据统计类(纯异步)
      */
@@ -171,6 +174,7 @@ public abstract class Task implements INamable {
     public void start(TaskRegion taskRegion) {
         this.taskRegion = taskRegion;
         taskStat.start();
+        startTime = Calendar.getInstance();
         this.taskWheat = taskTeam.size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
             IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(new LocationCommandSender(taskRegion.getCenter().clone().add(0, 2, 0)));
@@ -270,5 +274,49 @@ public abstract class Task implements INamable {
      */
     protected void deleteTask() {
         IOC.getBean(TaskService.class).delete(this);
+    }
+
+
+    private final Map<UUID, PlayerTaskRecord> playerRecordMap = new HashMap<>();
+    /**
+     * 初始化任务快照
+     */
+    private void initRecord() {
+        Set<UUID> memberUuids = taskTeam.getMemberUuids();
+        for (UUID uuid : memberUuids) {
+            PlayerTaskRecord record = PlayerTaskRecord.builder()
+                    .playerUuid(uuid)
+                    .taskUuid(taskUuid)
+                    .teamSize(memberUuids.size())
+                    .taskDifficulty(taskDifficulty.getName())
+                    .taskType(getName())
+                    .build();
+            playerRecordMap.put(uuid,record);
+        }
+    }
+
+    /**
+     * 填充玩家任务快照
+     */
+    private void fillRecord(Player player) {
+        PlayerTaskRecord record = playerRecordMap.get(player.getUniqueId());
+        if(record == null) {
+            Notifier.error("未能找到玩家"+player.getName()+"的任务记录类。");
+            return;
+        }
+        record.setPlayerBackpack(new PlayerBackpack(player));
+    }
+    /**
+     * 完成任务快照，并保存到本地
+     * 在任务结束阶段调用
+     */
+    private void finishRecord() {
+        TaskRecordDB taskRecordDB = IOC.getBean(TaskRecordDB.class);
+        for (PlayerTaskRecord playerTaskRecord : playerRecordMap.values()) {
+            long nowMills = Calendar.getInstance().getTimeInMillis();
+            playerTaskRecord.setUsingTimeInMills(nowMills - startTime.getTimeInMillis());
+            playerTaskRecord.setFinishedTimeInMills(nowMills);
+        }
+        // TODO 保存到本地文件
     }
 }
