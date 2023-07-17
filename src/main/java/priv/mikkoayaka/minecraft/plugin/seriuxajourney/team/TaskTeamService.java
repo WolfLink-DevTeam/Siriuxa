@@ -1,6 +1,7 @@
 package priv.mikkoayaka.minecraft.plugin.seriuxajourney.team;
 
 import net.milkbowl.vault.economy.EconomyResponse;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Inject;
@@ -17,6 +18,8 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.Explorat
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.GameStage;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.ReadyStage;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.WaitStage;
+
+import java.util.Objects;
 
 @Singleton
 public class TaskTeamService {
@@ -83,11 +86,11 @@ public class TaskTeamService {
     /**
      * 离开队伍，同时也会离开当前任务
      */
-    public Result leaveTeam(Player player) {
-        TaskTeam taskTeam = taskTeamRepository.findByPlayer(player);
+    public Result leaveTeam(OfflinePlayer offlinePlayer) {
+        TaskTeam taskTeam = taskTeamRepository.findByPlayerUuid(offlinePlayer.getUniqueId());
         if(taskTeam == null) return new Result(false,"你没有在队伍中。");
         Task task = taskTeam.getSelectedTask();
-        taskTeam.leave(player);
+        taskTeam.leave(offlinePlayer.getUniqueId());
         if(task != null) {
             if(taskTeam.size() == 0) {
                 taskTeamRepository.deleteByKey(taskTeam.getTeamUuid());
@@ -97,19 +100,33 @@ public class TaskTeamService {
                 taskRepository.deleteByKey(task.getTaskUuid());
             }
             // TODO 玩家背包，等级
-            player.teleport(config.getLobbyLocation());
-
+            if(offlinePlayer.isOnline()) {
+                Objects.requireNonNull(offlinePlayer.getPlayer()).teleport(config.getLobbyLocation());
+            }
             Stage stage = task.getStageHolder().getThisStage();
             int wheatCost = task.getTaskDifficulty().getWheatCost();
             int wheatSupply = task.getTaskDifficulty().getWheatSupply();
             // 退回麦穗
             if(stage instanceof WaitStage || stage instanceof ReadyStage) {
-                vaultAPI.addEconomy(player,wheatCost);
+                vaultAPI.addEconomy(offlinePlayer,wheatCost);
             } else {
                 // 任务中扣除其一半麦穗
-                task.takeWheat(wheatCost + wheatSupply,"玩家 "+player.getName()+" 中途退出了，Ta的麦穗也随风而逝。");
+                task.takeWheat(wheatCost + wheatSupply,"玩家 "+offlinePlayer.getName()+" 中途退出了，Ta的麦穗也随风而逝。");
             }
         }
         return new Result(true,"队伍退出成功。");
+    }
+    //TODO 投票踢人
+    public Result kickPlayer(Player player,String kickedPrefix) {
+        TaskTeam taskTeam = taskTeamRepository.findByPlayer(player);
+        if(taskTeam == null) return new Result(false,"你没有处在队伍中。");
+        for (OfflinePlayer offlinePlayer : taskTeam.getOfflinePlayers()) {
+            if(Objects.requireNonNull(offlinePlayer.getName()).startsWith(kickedPrefix)) {
+                if(player.getName().equals(offlinePlayer.getName())) return new Result(false,"你不能踢出你自己。");
+                leaveTeam(offlinePlayer);
+                return new Result(true,"踢出成功。");
+            }
+        }
+        return new Result(false,"未在队伍中找到名字以"+kickedPrefix+"开头的玩家。");
     }
 }
