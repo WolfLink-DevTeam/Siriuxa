@@ -12,7 +12,7 @@ public class TeamAccept extends WolfirdCommand {
     private TeamInvite teamInvite;
 
     public TeamAccept() {
-        super(false, false, true, "sj team accept", "接受队伍邀请");
+        super(false, false, true, "sx team accept", "接受队伍邀请");
     }
 
     @Override

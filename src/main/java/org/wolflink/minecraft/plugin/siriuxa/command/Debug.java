@@ -15,7 +15,7 @@ public class Debug extends WolfirdCommand {
     private InvBackupService invBackupService;
 
     public Debug() {
-        super(true, false, true, "sj debug", "开发者调试指令");
+        super(true, false, true, "sx debug", "开发者调试指令");
     }
 
     @Override

@@ -17,7 +17,7 @@ public class TaskReady extends WolfirdCommand {
     private TaskService taskService;
 
     public TaskReady() {
-        super(true, false, true, "sj task ready", "开始任务");
+        super(true, false, true, "sx task ready", "开始任务");
     }
 
     @Override

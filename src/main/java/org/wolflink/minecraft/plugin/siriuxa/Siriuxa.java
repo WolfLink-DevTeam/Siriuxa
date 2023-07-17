@@ -50,8 +50,8 @@ public final class Siriuxa extends WolfirdPlugin {
         IOC.getBean(MenuEventListener.class).setEnabled(true);
 
         // 注册指令
-        IOC.getBean(WolfirdCommandAnalyser.class).register("sj");
-        bindCommand(IOC.getBean(CmdHelp.class, "sj"));
+        IOC.getBean(WolfirdCommandAnalyser.class).register("sx");
+        bindCommand(IOC.getBean(CmdHelp.class, "sx"));
         bindCommand(IOC.getBean(OpenTaskMenu.class));
         bindCommand(IOC.getBean(Debug.class));
         bindCommand(IOC.getBean(TeamInvite.class));

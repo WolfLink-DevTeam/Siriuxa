@@ -10,7 +10,7 @@ import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 @Singleton
 public class TeamLeave extends WolfirdCommand {
     public TeamLeave() {
-        super(false, false, true, "sj team leave", "离开当前所在队伍。");
+        super(false, false, true, "sx team leave", "离开当前所在队伍。");
     }
 
     @Inject

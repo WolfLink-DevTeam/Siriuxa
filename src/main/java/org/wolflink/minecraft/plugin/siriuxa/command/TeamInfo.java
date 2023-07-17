@@ -14,7 +14,7 @@ import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
 @Singleton
 public class TeamInfo extends WolfirdCommand {
     public TeamInfo() {
-        super(false, false, true, "sj team", "查看队伍详细信息");
+        super(false, false, true, "sx team", "查看队伍详细信息");
     }
 
     @Inject

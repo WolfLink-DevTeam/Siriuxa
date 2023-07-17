@@ -14,7 +14,7 @@ public class OpenTaskMenu extends WolfirdCommand {
     private MenuService menuService;
 
     public OpenTaskMenu() {
-        super(true, false, true, "sj menu task", "打开任务菜单");
+        super(true, false, true, "sx menu task", "打开任务菜单");
     }
 
     @Override

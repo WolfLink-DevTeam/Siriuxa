@@ -10,7 +10,7 @@ import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 @Singleton
 public class TeamKick extends WolfirdCommand {
     public TeamKick() {
-        super(false, false, true, "sj team kick {player}", "踢出指定玩家。");
+        super(false, false, true, "sx team kick {player}", "踢出指定玩家。");
     }
 
     @Inject

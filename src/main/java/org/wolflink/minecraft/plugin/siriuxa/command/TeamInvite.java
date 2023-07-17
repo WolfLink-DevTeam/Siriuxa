@@ -38,7 +38,7 @@ public class TeamInvite extends WolfirdCommand {
     }
 
     public TeamInvite() {
-        super(false, false, true, "sj team invite {player}", "邀请玩家加入队伍");
+        super(false, false, true, "sx team invite {player}", "邀请玩家加入队伍");
     }
 
     @Override

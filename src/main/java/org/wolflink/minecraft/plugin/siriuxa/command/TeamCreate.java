@@ -14,7 +14,7 @@ public class TeamCreate extends WolfirdCommand {
     private TaskTeamService taskTeamService;
 
     public TeamCreate() {
-        super(true, false, true, "sj team create", "创建一个小队");
+        super(true, false, true, "sx team create", "创建一个小队");
     }
 
     @Override

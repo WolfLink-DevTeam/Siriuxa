@@ -12,7 +12,7 @@ public class TeamDeny extends WolfirdCommand {
     private TeamInvite teamInvite;
 
     public TeamDeny() {
-        super(false, false, true, "sj team deny", "拒绝队伍邀请");
+        super(false, false, true, "sx team deny", "拒绝队伍邀请");
     }
 
     @Override
