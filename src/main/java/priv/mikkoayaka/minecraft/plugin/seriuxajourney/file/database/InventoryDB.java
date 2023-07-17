@@ -2,10 +2,12 @@ package priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.database;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.DateAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.invbackup.PlayerBackpack;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
@@ -54,18 +56,20 @@ public class InventoryDB extends FileDB{
 
     }
     private void saveCache(Player player,PlayerBackpack playerBackpack) {
-        File cacheInvFolder = new File(cacheDataFolder,player.getName());
-        if(!cacheInvFolder.exists()) cacheInvFolder.mkdirs();
-        String time = dateAPI.getTime(Calendar.getInstance());
-        File cacheFile = new File(cacheInvFolder,time+".yml");
-        FileConfiguration cache = createAndLoad(cacheFile);
-        cache.set("data",playerBackpack.toJsonObject().toString());
-        try {
-            cache.save(cacheFile);
-            Notifier.debug("已保存玩家"+player.getName()+"在时间"+time+"的缓存背包信息。");
-        } catch (Exception e) {
-            e.printStackTrace();
-            Notifier.error("在尝试保存玩家"+player.getName()+"背包缓存信息时出现问题。");
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(SeriuxaJourney.getInstance(),()->{
+            File cacheInvFolder = new File(cacheDataFolder,player.getName());
+            if(!cacheInvFolder.exists()) cacheInvFolder.mkdirs();
+            String time = dateAPI.getTime(Calendar.getInstance());
+            File cacheFile = new File(cacheInvFolder,time+".yml");
+            FileConfiguration cache = createAndLoad(cacheFile);
+            cache.set("data",playerBackpack.toJsonObject().toString());
+            try {
+                cache.save(cacheFile);
+                Notifier.debug("已保存玩家"+player.getName()+"在时间"+time+"的缓存背包信息。");
+            } catch (Exception e) {
+                e.printStackTrace();
+                Notifier.error("在尝试保存玩家"+player.getName()+"背包缓存信息时出现问题。");
+            }
+        });
     }
 }
