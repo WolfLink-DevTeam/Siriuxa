@@ -1,18 +1,19 @@
 package org.wolflink.minecraft.plugin.siriuxa.invbackup;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.wolflink.common.ioc.IOC;
-import org.wolflink.minecraft.wolfird.framework.config.Json;
-import org.wolflink.minecraft.plugin.siriuxa.api.SerializeAPI;
+import org.jetbrains.annotations.NotNull;
 import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.wolfird.framework.config.Json;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 玩家背包
@@ -23,7 +24,7 @@ import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
 @Data
 @Json
 @NoArgsConstructor
-public class PlayerBackpack {
+public class PlayerBackpack implements ConfigurationSerializable {
     private ItemStack helmet;
     private ItemStack chestplate;
     private ItemStack leggings;
@@ -48,7 +49,9 @@ public class PlayerBackpack {
         // 拷贝背包
         Inventory playerInv = player.getInventory();
         for (int i = 0; i < 36; i++) {
-            items[i] = playerInv.getItem(i);
+            ItemStack is = playerInv.getItem(i);
+            if(is != null) items[i] = is.clone();
+            else items[i] = null;
         }
     }
 
@@ -72,43 +75,34 @@ public class PlayerBackpack {
         Notifier.debug("背包信息已应用至" + player.getName());
     }
 
-    public JsonObject toJsonObject() {
-        SerializeAPI serializeAPI = IOC.getBean(SerializeAPI.class);
-        JsonObject result = new JsonObject();
-        result.addProperty("helmet", serializeAPI.itemStack(helmet));
-        result.addProperty("chestplate", serializeAPI.itemStack(chestplate));
-        result.addProperty("leggings", serializeAPI.itemStack(leggings));
-        result.addProperty("boots", serializeAPI.itemStack(boots));
-        result.addProperty("offhand", serializeAPI.itemStack(offhand));
-        result.addProperty("level", level);
-        result.addProperty("exp", exp);
-        JsonArray jsonArray = new JsonArray();
-        for (int i = 0; i < 36; i++) {
-            jsonArray.add(serializeAPI.itemStack(items[i]));
-        }
-        result.add("items", jsonArray);
-        return result;
-    }
-
-    public static PlayerBackpack fromJsonObject(JsonObject jsonObject) {
-        SerializeAPI serializeAPI = IOC.getBean(SerializeAPI.class);
-        ItemStack[] items = new ItemStack[36];
-        JsonArray jsonArray = jsonObject.getAsJsonArray("items");
-        for (int i = 0; i < 36; i++) {
-            items[i] = serializeAPI.itemStack(jsonArray.get(i).getAsString());
-        }
-        PlayerBackpack playerBackpack = new PlayerBackpack();
-        playerBackpack.setHelmet(serializeAPI.itemStack(jsonObject.get("helmet").getAsString()));
-        playerBackpack.setChestplate(serializeAPI.itemStack(jsonObject.get("chestplate").getAsString()));
-        playerBackpack.setLeggings(serializeAPI.itemStack(jsonObject.get("leggings").getAsString()));
-        playerBackpack.setBoots(serializeAPI.itemStack(jsonObject.get("boots").getAsString()));
-        playerBackpack.setOffhand(serializeAPI.itemStack(jsonObject.get("offhand").getAsString()));
-        playerBackpack.setLevel(jsonObject.get("level").getAsInt());
-        playerBackpack.setExp(jsonObject.get("exp").getAsFloat());
-        playerBackpack.setItems(items);
-        return playerBackpack;
-    }
-
     @Getter
     private static PlayerBackpack emptyBackpack = new PlayerBackpack();
+
+    public PlayerBackpack(Map<String,Object> map) {
+        helmet = (ItemStack) map.get("helmet");
+        chestplate = (ItemStack) map.get("chestplate");
+        leggings = (ItemStack) map.get("leggings");
+        boots = (ItemStack) map.get("boots");
+        offhand = (ItemStack) map.get("offhand");
+        level = (int) map.get("level");
+        exp = (float) map.get("exp");
+        items = (ItemStack[]) map.get("items");
+    }
+    @NotNull
+    @Override
+    public Map<String, Object> serialize() {
+        Map<String,Object> map = new HashMap<>();
+        map.put("helmet",helmet);
+        map.put("chestplate",chestplate);
+        map.put("leggings",leggings);
+        map.put("boots",boots);
+        map.put("offhand",offhand);
+        map.put("level",level);
+        map.put("exp",exp);
+        map.put("items",items);
+        return map;
+    }
+    public static PlayerBackpack deserialize(Map<String,Object> map) {
+        return new PlayerBackpack(map);
+    }
 }

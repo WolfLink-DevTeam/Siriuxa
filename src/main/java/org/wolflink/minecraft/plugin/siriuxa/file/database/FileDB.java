@@ -31,9 +31,14 @@ public abstract class FileDB {
         if (subFiles == null) return;
         for (File subFile : subFiles) {
             if (subFile.isFile()) {
-                fileConfigurations.put(subFile, YamlConfiguration.loadConfiguration(subFile));
-                Notifier.debug("加载了一个文件：" + subFile.getName());
-            } else load(subFile);
+                try {
+                    FileConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(subFile);
+                    fileConfigurations.put(subFile, fileConfiguration);
+                    Notifier.debug("加载了一个文件：" + subFile.getName());
+                } catch (Exception ignore) {
+                    Notifier.warn("加载文件：" + subFile.getName()+" 失败。");
+                }
+            } else if(subFile.isDirectory()) load(subFile);
         }
     }
 

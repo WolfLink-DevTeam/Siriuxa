@@ -6,7 +6,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.api.DateAPI;
-import org.wolflink.minecraft.plugin.siriuxa.api.SerializeAPI;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.PlayerTaskRecord;
 import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
 
@@ -19,8 +18,7 @@ public class TaskRecordDB extends FileDB{
     }
     @Inject
     private DateAPI dateAPI;
-    @Inject
-    private SerializeAPI serializeAPI;
+
 
     public void saveRecord(PlayerTaskRecord playerTaskRecord) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerTaskRecord.getPlayerUuid());

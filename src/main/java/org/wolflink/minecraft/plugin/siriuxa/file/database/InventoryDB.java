@@ -1,7 +1,5 @@
 package org.wolflink.minecraft.plugin.siriuxa.file.database;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -40,21 +38,20 @@ public class InventoryDB extends FileDB {
             Notifier.debug("未能获取到玩家的主要背包信息");
             return null;
         }
-        JsonObject jo = new Gson().fromJson(fileConfiguration.getString("data"), JsonObject.class);
+        PlayerBackpack playerBackpack = (PlayerBackpack) fileConfiguration.get("data");
         Notifier.debug("已加载玩家的主要背包信息");
-        return PlayerBackpack.fromJsonObject(jo);
+        return playerBackpack;
     }
 
     public void saveMain(Player player, PlayerBackpack playerBackpack) {
         File mainInvFile = new File(mainDataFolder, player.getName() + ".yml");
         FileConfiguration fileConfiguration = getFileConfiguration(mainInvFile);
         if (fileConfiguration != null) {
-            JsonObject oldJO = new Gson().fromJson(fileConfiguration.getString("data"), JsonObject.class);
-            PlayerBackpack oldPack = PlayerBackpack.fromJsonObject(oldJO);
+            PlayerBackpack oldPack = (PlayerBackpack) fileConfiguration.get("data");
             saveCache(player, oldPack);
         }
         fileConfiguration = createAndLoad(mainInvFile);
-        fileConfiguration.set("data", playerBackpack.toJsonObject().toString());
+        fileConfiguration.set("data",playerBackpack);
         Notifier.debug("已保存玩家" + player.getName() + "的主要背包信息。");
 
     }
@@ -66,7 +63,7 @@ public class InventoryDB extends FileDB {
             String time = dateAPI.getTime(Calendar.getInstance());
             File cacheFile = new File(cacheInvFolder, time + ".yml");
             FileConfiguration cache = createAndLoad(cacheFile);
-            cache.set("data", playerBackpack.toJsonObject().toString());
+            cache.set("data",playerBackpack);
             try {
                 cache.save(cacheFile);
                 Notifier.debug("已保存玩家" + player.getName() + "在时间" + time + "的缓存背包信息。");
