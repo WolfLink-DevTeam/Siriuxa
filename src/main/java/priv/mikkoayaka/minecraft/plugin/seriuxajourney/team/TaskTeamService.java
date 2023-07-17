@@ -107,7 +107,7 @@ public class TaskTeamService {
                 vaultAPI.addEconomy(player,wheatCost);
             } else {
                 // 任务中扣除其一半麦穗
-                task.takeWheat((wheatCost + wheatSupply) * 0.5,"玩家 "+player.getName()+" 中途退出了，但他仍保留下来一部分麦穗。");
+                task.takeWheat(wheatCost + wheatSupply,"玩家 "+player.getName()+" 中途退出了，Ta的麦穗也随风而逝。");
             }
         }
         return new Result(true,"队伍退出成功。");
