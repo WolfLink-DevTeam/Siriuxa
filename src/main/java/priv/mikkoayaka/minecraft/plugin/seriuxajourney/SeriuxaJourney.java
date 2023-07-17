@@ -10,11 +10,13 @@ import org.wolflink.minecraft.wolfird.framework.config.YamlConfig;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.VaultAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.MenuEventListener;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.command.*;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.*;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Config;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.ConfigProjection;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.Lang;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.OreCache;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.database.FileDB;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.database.InventoryDB;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.database.OreDB;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.monster.listener.MonsterListener;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.papi.TaskVariables;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.listener.FriendlyProtection;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.listener.FunctionBan;
@@ -110,7 +112,6 @@ public final class SeriuxaJourney extends WolfirdPlugin {
     private static final List<Class<? extends WolfirdListener>> globalListenerClasses = new ArrayList<>(){{
         add(OreChecker.class);
         add(HurtChecker.class);
-        add(MonsterListener.class);
         add(FriendlyProtection.class);
         add(FunctionBan.class);
     }};
