@@ -21,6 +21,9 @@ public class ExplorationService {
         if(taskTeam.getSelectedTask() != null) return new Result(false,"当前队伍已经选择了任务，无法再次创建。");
         double cost = explorationDifficulty.getWheatCost();
         List<OfflinePlayer> offlinePlayers = taskTeam.getOfflinePlayers();
+        for (OfflinePlayer offlinePlayer : offlinePlayers) {
+            if(!offlinePlayer.isOnline()) return new Result(false,"队伍中有离线玩家，无法开始任务。");
+        }
         // 检查成员余额
         for (OfflinePlayer offlinePlayer : offlinePlayers) {
             if(vaultAPI.getEconomy(offlinePlayer) < cost) return new Result(false,"队伍中至少有一名成员无法支付本次任务费用。");

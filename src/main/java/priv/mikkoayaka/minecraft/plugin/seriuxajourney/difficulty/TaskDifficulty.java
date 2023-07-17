@@ -4,11 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bukkit.Material;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.INamable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TaskDifficulty{
+public class TaskDifficulty implements INamable {
     /**
      * 难度图标
      */

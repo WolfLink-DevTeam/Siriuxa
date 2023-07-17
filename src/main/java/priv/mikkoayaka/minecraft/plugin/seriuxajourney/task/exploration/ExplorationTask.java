@@ -19,7 +19,6 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstag
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.ReadyStage;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.exploration.taskstage.WaitStage;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.team.TaskTeam;
-import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
 /**
  * 自由探索任务
@@ -83,5 +82,15 @@ public class ExplorationTask extends Task implements HurtCheckAvailable, OreChec
     @Override
     public double getHurtWheatCost() {
         return difficulty.getHurtWheatCost();
+    }
+
+    @Override
+    public String getName() {
+        return "自由勘探";
+    }
+
+    @Override
+    public String getColor() {
+        return "§f";
     }
 }

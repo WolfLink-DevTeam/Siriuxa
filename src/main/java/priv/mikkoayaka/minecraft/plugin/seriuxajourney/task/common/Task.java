@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.SeriuxaJourney;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.INamable;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.world.BlockAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.world.LocationCommandSender;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.world.WorldEditAPI;
@@ -27,7 +28,7 @@ import java.util.*;
  * 麦穗会流失
  */
 @Data
-public abstract class Task {
+public abstract class Task implements INamable {
 
     /**
      * 任务数据统计类(纯异步)
