@@ -57,8 +57,15 @@ public class InventoryDB extends FileDB{
         File cacheInvFolder = new File(cacheDataFolder,player.getName());
         if(!cacheInvFolder.exists()) cacheInvFolder.mkdirs();
         String time = dateAPI.getTime(Calendar.getInstance());
-        FileConfiguration cache = createAndLoad(new File(cacheInvFolder,time+".yml"));
+        File cacheFile = new File(cacheInvFolder,time+".yml");
+        FileConfiguration cache = createAndLoad(cacheFile);
         cache.set("data",playerBackpack.toJsonObject().toString());
-        Notifier.debug("已保存玩家"+player.getName()+"在时间"+time+"的缓存背包信息。");
+        try {
+            cache.save(cacheFile);
+            Notifier.debug("已保存玩家"+player.getName()+"在时间"+time+"的缓存背包信息。");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Notifier.error("在尝试保存玩家"+player.getName()+"背包缓存信息时出现问题。");
+        }
     }
 }
