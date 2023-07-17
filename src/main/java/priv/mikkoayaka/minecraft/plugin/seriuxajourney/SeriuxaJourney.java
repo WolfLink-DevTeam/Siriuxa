@@ -11,6 +11,9 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.VaultAPI;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.view.MenuEventListener;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.command.*;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.*;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.database.FileDB;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.database.InventoryDB;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.file.database.OreDB;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.monster.listener.MonsterListener;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.papi.TaskVariables;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.listener.FriendlyProtection;
@@ -33,6 +36,10 @@ public final class SeriuxaJourney extends WolfirdPlugin {
         // 加载配置文件和语言文件
         for (Class<? extends YamlConfig> config : configs) {
             IOC.getBean(config).load();
+        }
+        // 加载数据库
+        for (Class<? extends FileDB> db : databases) {
+            IOC.getBean(db).load();
         }
 
         IOC.getBean(VaultAPI.class); // 初始化 VaultAPI
@@ -69,6 +76,11 @@ public final class SeriuxaJourney extends WolfirdPlugin {
     public void beforeDisabled() {
         IOC.getBean(OreValues.class).save();
 
+        // 保存数据库
+        for (Class<? extends FileDB> db : databases) {
+            IOC.getBean(db).save();
+        }
+
         for (Class<? extends YamlConfig> config : configs) {
             IOC.getBean(config).save();
         }
@@ -87,7 +99,10 @@ public final class SeriuxaJourney extends WolfirdPlugin {
        add(OreCache.class);
        add(Config.class);
        add(Lang.class);
-       add(InventoryCache.class);
+    }};
+    private static final List<Class<? extends FileDB>> databases = new ArrayList<>(){{
+        add(InventoryDB.class);
+        add(OreDB.class);
     }};
     /**
      * 注册全局监听器
