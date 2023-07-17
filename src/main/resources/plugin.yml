@@ -1,14 +1,14 @@
 name: Siriuxa
 version: '${project.version}'
-main: org.wolflink.minecraft.plugin.seriuxajourney.Siriuxa
+main: org.wolflink.minecraft.plugin.siriuxa.Siriuxa
 api-version: '1.20'
-prefix: §6天狼星的旅途
+prefix: §6Siriuxa
 depend:
   - FastAsyncWorldEdit
   - Vault
   - WolfirdFramework
   - PlaceholderAPI
 commands:
-  sj:
+  sx:
     aliases:
-      - seriuxajourney
+      - siriuxa

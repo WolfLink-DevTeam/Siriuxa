@@ -1,10 +1,10 @@
 # Spice And Wolf - Unlimited 周目 | 赛季：Seriuxa - 星辉：探索与光明
 
-> 灾难之后，地面已不适合生存，玩家们经过艰苦卓绝的奋斗，建立起空中基地Seriuxa，而最重要的生存物资...目前只能冒险从地面获取。
+> 灾难之后，地面已不适合生存，玩家们经过艰苦卓绝的奋斗，建立起空中基地Siriuxa，而最重要的生存物资...目前只能冒险从地面获取。
 > 
 > 等待他们的，究竟是一场空中楼阁，还是真正的希望？
 
-由[`WolfLink-DevTeam`](https://github.com/WolfLink-DevTeam)出品的，基于`Minecraft 1.20.1` `Paper`端的自定义玩法，`Spice And Wolf`服务器，`Seriuxa - 星辉：探索与光明`赛季。
+由[`WolfLink-DevTeam`](https://github.com/WolfLink-DevTeam)出品的，基于`Minecraft 1.20.1` `Paper`端的自定义玩法，`Spice And Wolf`服务器，`Siriuxa - 星辉：探索与光明`赛季。
 
 ## 关于随机事件和决策事件的玩家共创
 > Note:
@@ -19,3 +19,5 @@
 - 极端天气（暴雨、暴雪、酸雨等）
 - 世界各处（地表/地底/自定义结构）的幸存者NPC（交易型/任务型）
 - 特殊植物（麦穗实体化？）
+- 特殊矿物
+- 怪物潮（血月？）
