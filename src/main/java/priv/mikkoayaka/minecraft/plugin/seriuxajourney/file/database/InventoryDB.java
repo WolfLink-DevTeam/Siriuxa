@@ -47,11 +47,11 @@ public class InventoryDB extends FileDB{
             JsonObject oldJO = new Gson().fromJson(fileConfiguration.getString("data"),JsonObject.class);
             PlayerBackpack oldPack = PlayerBackpack.fromJsonObject(oldJO);
             saveCache(player,oldPack);
-        } else {
-            fileConfiguration = createAndLoad(mainInvFile);
-            fileConfiguration.set("data",playerBackpack.toJsonObject().toString());
-            Notifier.debug("已保存玩家"+player.getName()+"的主要背包信息。");
         }
+        fileConfiguration = createAndLoad(mainInvFile);
+        fileConfiguration.set("data",playerBackpack.toJsonObject().toString());
+        Notifier.debug("已保存玩家"+player.getName()+"的主要背包信息。");
+
     }
     private void saveCache(Player player,PlayerBackpack playerBackpack) {
         File cacheInvFolder = new File(cacheDataFolder,player.getName());
