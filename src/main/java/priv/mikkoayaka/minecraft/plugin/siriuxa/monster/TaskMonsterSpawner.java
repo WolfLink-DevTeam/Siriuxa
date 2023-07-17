@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import priv.mikkoayaka.minecraft.plugin.siriuxa.Siriuxa;
 import priv.mikkoayaka.minecraft.plugin.siriuxa.task.common.Task;
 
@@ -31,7 +30,7 @@ public class TaskMonsterSpawner {
     @Setter
     private boolean onSpawn = true;
 
-    public TaskMonsterSpawner(@NotNull Task task) {
+    public TaskMonsterSpawner(@NonNull Task task) {
         this.task = task;
         this.taskLevel = task.getTaskDifficulty().getLevel();
         switch (this.taskLevel) {
@@ -59,14 +58,11 @@ public class TaskMonsterSpawner {
         }
     }
 
-    @Setter
     private double healthMultiple = 0;
-    @Setter
     private double movementMultiple = 0;
-    @Setter
     private double damageMultiple = 0;
 
-    public void spawnMob(double minRadius, double maxRadius, Location @NotNull ... locations) {
+    public void spawnMob(double minRadius, double maxRadius, Location @NonNull ... locations) {
         if (maxRadius - minRadius < 1.0 || minRadius < 1.0)
             throw new IllegalArgumentException("Invalid minRadius or maxRadius value.");
         List<BukkitTask> spawnTasks = null;
@@ -75,7 +71,7 @@ public class TaskMonsterSpawner {
         }
     }
 
-    private @NotNull BukkitTask spawnMobTask(double minRadius, double maxRadius, Location loc) {
+    private @NonNull BukkitTask spawnMobTask(double minRadius, double maxRadius, Location loc) {
         Plugin plugin = Siriuxa.getInstance();
         return Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             World world = loc.getWorld();
@@ -86,7 +82,7 @@ public class TaskMonsterSpawner {
         }, 20L, 20 * 5L);
     }
 
-    private void spawnMobAroundPlayer(double minRadius, double maxRadius, Location loc, World world, @NotNull List<EntityType> nearbyEntityTypes) {
+    private void spawnMobAroundPlayer(double minRadius, double maxRadius, Location loc, World world, @NonNull List<EntityType> nearbyEntityTypes) {
         if (!nearbyEntityTypes.contains(EntityType.PLAYER)) return;
         if (isMobCountOverLimit(maxRadius, nearbyEntityTypes)) return;
         double r = maxRadius - minRadius;
@@ -95,6 +91,7 @@ public class TaskMonsterSpawner {
         double y = world.getHighestBlockYAt((int) x, (int) z);
         Location spawnLoc = new Location(world, x, y, z);
         if (spawnLoc.getBlock().isLiquid()) return;
+
         // customize the mob type, health, movement speed and damage
         int temp = random.nextInt(100);
         EntityType entityType;
@@ -114,7 +111,7 @@ public class TaskMonsterSpawner {
     }
 
     @Contract(pure = true)
-    private static boolean isMobCountOverLimit(double maxRadius, @NotNull List<EntityType> nearbyEntityTypes) {
+    private static boolean isMobCountOverLimit(double maxRadius, @NonNull List<EntityType> nearbyEntityTypes) {
         int mobCount = 0;
         for (EntityType entityType : nearbyEntityTypes) {
             if (entityType == EntityType.PLAYER) continue;
