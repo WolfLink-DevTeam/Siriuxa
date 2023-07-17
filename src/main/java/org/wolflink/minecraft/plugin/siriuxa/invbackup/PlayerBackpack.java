@@ -37,11 +37,15 @@ public class PlayerBackpack implements ConfigurationSerializable {
     public PlayerBackpack(Player player) {
         EntityEquipment equipment = player.getEquipment();
         if (equipment != null) {
-            helmet = equipment.getHelmet();
-            chestplate = equipment.getChestplate();
-            leggings = equipment.getLeggings();
-            boots = equipment.getBoots();
-            offhand = equipment.getItemInOffHand();
+            if(equipment.getHelmet() == null) helmet = null;
+            else helmet = equipment.getHelmet().clone();
+            if(equipment.getChestplate() == null) chestplate = null;
+            else chestplate = equipment.getChestplate().clone();
+            if(equipment.getLeggings() == null) leggings = null;
+            else leggings = equipment.getLeggings().clone();
+            if(equipment.getBoots() == null) boots = null;
+            else boots = equipment.getBoots().clone();
+            offhand = equipment.getItemInOffHand().clone();
         } else Notifier.error("玩家" + player.getName() + "装备栏为空！");
         level = player.getLevel();
         exp = player.getExp();
@@ -61,17 +65,17 @@ public class PlayerBackpack implements ConfigurationSerializable {
             Notifier.error("玩家" + player.getName() + "装备栏为空！");
             return;
         }
-        if (helmet != null) equipment.setHelmet(helmet);
-        if (chestplate != null) equipment.setChestplate(chestplate);
-        if (leggings != null) equipment.setLeggings(leggings);
-        if (boots != null) equipment.setBoots(boots);
-        if (offhand != null) equipment.setItemInOffHand(offhand);
+        equipment.setHelmet(helmet);
+        equipment.setChestplate(chestplate);
+        equipment.setLeggings(leggings);
+        equipment.setBoots(boots);
+        equipment.setItemInOffHand(offhand);
         player.setLevel(level);
         player.setExp(exp);
         Inventory inventory = player.getInventory();
         if (items != null) for (int i = 0; i < 36; i++) {
             inventory.setItem(i, items[i]);
-        }
+        } else player.getInventory().clear();
         Notifier.debug("背包信息已应用至" + player.getName());
     }
 

@@ -16,10 +16,6 @@ public class TaskRecordDB extends FileDB{
     public TaskRecordDB() {
         super("task_cache");
     }
-    @Inject
-    private DateAPI dateAPI;
-
-
     public void saveRecord(PlayerTaskRecord playerTaskRecord) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerTaskRecord.getPlayerUuid());
         String playerName = offlinePlayer.getName();
@@ -30,8 +26,17 @@ public class TaskRecordDB extends FileDB{
         File playerFolder = new File(folder,playerName);
         if(!playerFolder.exists())playerFolder.mkdirs();
         // 用任务 UUID 作为文件名
-        File recordFile = new File(playerFolder,playerTaskRecord.getTaskUuid().toString());
+        File recordFile = new File(playerFolder,playerTaskRecord.getTaskUuid().toString()+".yml");
         FileConfiguration configuration = createAndLoad(recordFile);
+        configuration.set("data",playerTaskRecord);
+        try {
+            configuration.save(recordFile);
+            Notifier.debug(offlinePlayer.getName()+"的任务记录"+playerTaskRecord.getTaskUuid()+"已保存。");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Notifier.error("在尝试保存任务记录时出现异常。");
+        }
+
 //        configuration.set("data",);
 
     }

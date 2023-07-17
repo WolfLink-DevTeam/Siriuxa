@@ -121,16 +121,20 @@ public abstract class Task implements INamable {
     private int finishCheckTaskId = -1;
 
     private void triggerFailed() {
+        getPlayers().forEach(this::fillRecord);
         stageHolder.next();
         taskStat.stop();
         stopCheck();
+        finishRecord();
         failed();
     }
 
     private void triggerFinish() {
+        getPlayers().forEach(this::fillRecord);
         stageHolder.next();
         taskStat.stop();
         stopCheck();
+        finishRecord();
         finish();
     }
 
@@ -173,6 +177,7 @@ public abstract class Task implements INamable {
 
     public void start(TaskRegion taskRegion) {
         this.taskRegion = taskRegion;
+        initRecord();
         taskStat.start();
         startTime = Calendar.getInstance();
         this.taskWheat = taskTeam.size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
@@ -284,19 +289,19 @@ public abstract class Task implements INamable {
     private void initRecord() {
         Set<UUID> memberUuids = taskTeam.getMemberUuids();
         for (UUID uuid : memberUuids) {
-            PlayerTaskRecord record = PlayerTaskRecord.builder()
-                    .playerUuid(uuid)
-                    .taskUuid(taskUuid)
-                    .teamSize(memberUuids.size())
-                    .taskDifficulty(taskDifficulty.getName())
-                    .taskType(getName())
-                    .build();
+            PlayerTaskRecord record = new PlayerTaskRecord();
+            record.setPlayerUuid(uuid);
+            record.setTaskUuid(taskUuid);
+                    record.setTeamSize(memberUuids.size());
+                    record.setTaskDifficulty(taskDifficulty.getName());
+                    record.setTaskType(getName());
             playerRecordMap.put(uuid,record);
         }
     }
 
     /**
      * 填充玩家任务快照
+     * TODO 在单个玩家撤离时调用
      */
     private void fillRecord(Player player) {
         PlayerTaskRecord record = playerRecordMap.get(player.getUniqueId());
@@ -316,7 +321,7 @@ public abstract class Task implements INamable {
             long nowMills = Calendar.getInstance().getTimeInMillis();
             playerTaskRecord.setUsingTimeInMills(nowMills - startTime.getTimeInMillis());
             playerTaskRecord.setFinishedTimeInMills(nowMills);
+            taskRecordDB.saveRecord(playerTaskRecord);
         }
-        // TODO 保存到本地文件
     }
 }

@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.command.*;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.FileDB;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.wolfird.framework.WolfirdPlugin;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 import org.wolflink.minecraft.wolfird.framework.command.CmdHelp;
@@ -105,6 +106,7 @@ public final class Siriuxa extends WolfirdPlugin {
     private static final List<Class<? extends FileDB>> databases = new ArrayList<>() {{
         add(InventoryDB.class);
         add(OreDB.class);
+        add(TaskRecordDB.class);
     }};
     /**
      * 注册全局监听器
