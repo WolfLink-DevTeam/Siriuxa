@@ -4,6 +4,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Inject;
+import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.task.common.Task;
@@ -11,6 +12,7 @@ import priv.mikkoayaka.minecraft.plugin.seriuxajourney.team.TaskTeam;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.team.TaskTeamRepository;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.utils.Notifier;
 
+@Singleton
 public class TeamInfo extends WolfirdCommand {
     public TeamInfo() {
         super(false, false, true, "sj team", "查看队伍详细信息");

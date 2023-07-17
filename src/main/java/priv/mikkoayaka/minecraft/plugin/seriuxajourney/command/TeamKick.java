@@ -3,9 +3,11 @@ package priv.mikkoayaka.minecraft.plugin.seriuxajourney.command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Inject;
+import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 import priv.mikkoayaka.minecraft.plugin.seriuxajourney.team.TaskTeamService;
 
+@Singleton
 public class TeamKick extends WolfirdCommand {
     public TeamKick() {
         super(false, false, true, "sj team kick {player}", "踢出指定玩家。");

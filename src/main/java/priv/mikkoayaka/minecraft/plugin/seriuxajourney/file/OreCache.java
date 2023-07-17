@@ -1,25 +1,27 @@
 package priv.mikkoayaka.minecraft.plugin.seriuxajourney.file;
 
 import org.bukkit.Material;
+import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.config.YamlConfig;
+import priv.mikkoayaka.minecraft.plugin.seriuxajourney.api.DateAPI;
 
 import java.util.Calendar;
 import java.util.HashMap;
 
 @Singleton
 public class OreCache extends YamlConfig {
+    @Inject
+    private DateAPI dateAPI;
     public OreCache() {
         super("SeriuxaJourneyOreCache", new HashMap<>());
     }
-    private String getDate(Calendar calendar) {
-        return String.format("%4d%2d%2d",calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).replace(" ","0");
-    }
-    private String getPath(Calendar calendar,Material material) {
-        return getDate(calendar)+"."+material.name().toLowerCase();
-    }
+
     private String getPath(Material material) {
-        return getDate(Calendar.getInstance())+"."+material.name().toLowerCase();
+        return dateAPI.getDate(Calendar.getInstance())+"."+material.name().toLowerCase();
+    }
+    public String getPath(Calendar calendar, Material material) {
+        return dateAPI.getDate(calendar)+"."+material.name().toLowerCase();
     }
     public int getOreCache(Calendar calendar,Material material) {
         return get(getPath(calendar,material),0);
