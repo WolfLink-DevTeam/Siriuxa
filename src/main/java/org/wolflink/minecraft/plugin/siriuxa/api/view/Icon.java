@@ -15,7 +15,7 @@ public abstract class Icon {
     @Getter
     private final boolean needRefresh;
 
-    public Icon(boolean needRefresh) {
+    protected Icon(boolean needRefresh) {
         this.needRefresh = needRefresh;
     }
 
@@ -37,6 +37,7 @@ public abstract class Icon {
         else loreList = Arrays.asList(lores);
         ItemStack itemStack = new ItemStack(material, count);
         ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null) throw new NullPointerException("ItemMeta is null");
         itemMeta.setDisplayName(displayName);
         itemMeta.setLore(loreList);
         itemStack.setItemMeta(itemMeta);
