@@ -65,7 +65,7 @@ public class TeamInvite extends WolfirdCommand {
                     Notifier.chat("§e来自 §f" + player.getName() + " §e的邀请已过期。", invited);
                 }
             }, 20 * 30);
-            Notifier.notify("§a" + player.getName() + " §f邀请你加入Ta的队伍，请在30秒内回应。\n§a同意 §f/sj team accept\n§c拒绝 §f/sj team deny", invited);
+            Notifier.notify("§a" + player.getName() + " §f邀请你加入Ta的队伍，请在30秒内回应。\n§a\n§a同意 §f/sx team accept\n§c拒绝 §f/sx team deny\n§a", invited);
             Notifier.chat("邀请成功，等待对方回应。", player);
         }
     }
