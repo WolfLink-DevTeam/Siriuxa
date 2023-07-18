@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
 
 public class TaskTeam {
     @Getter
@@ -31,13 +31,13 @@ public class TaskTeam {
         return memberUuids.stream()
                 .map(Bukkit::getPlayer)
                 .filter(p -> p != null && p.isOnline())
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<OfflinePlayer> getOfflinePlayers() {
         return memberUuids.stream()
                 .map(Bukkit::getOfflinePlayer)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public int size() {

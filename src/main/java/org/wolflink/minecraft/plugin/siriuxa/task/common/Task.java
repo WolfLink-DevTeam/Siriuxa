@@ -14,7 +14,7 @@ import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
-import org.wolflink.minecraft.plugin.siriuxa.api.INamable;
+import org.wolflink.minecraft.plugin.siriuxa.api.INameable;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.BlockAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.LocationCommandSender;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.WorldEditAPI;
@@ -31,7 +31,7 @@ import java.util.*;
  * 麦穗会流失
  */
 @Data
-public abstract class Task implements INamable {
+public abstract class Task implements INameable {
 
     /**
      * 任务开始时间

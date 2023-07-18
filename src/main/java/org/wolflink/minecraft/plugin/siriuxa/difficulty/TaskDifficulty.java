@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bukkit.Material;
-import org.wolflink.minecraft.plugin.siriuxa.api.INamable;
+import org.wolflink.minecraft.plugin.siriuxa.api.INameable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TaskDifficulty implements INamable {
+public class TaskDifficulty implements INameable {
     /**
      * 难度图标
      */

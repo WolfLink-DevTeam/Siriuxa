@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Contract;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -63,9 +64,9 @@ public class TaskMonsterSpawner {
     private double damageMultiple = 0;
 
     public void spawnMob(double minRadius, double maxRadius, Location @NonNull ... locations) {
-        if (maxRadius - minRadius < 1.0 || minRadius < 1.0)
+        if (maxRadius - minRadius < 1.0 || minRadius < 1.0 || minRadius > 64.0)
             throw new IllegalArgumentException("Invalid minRadius or maxRadius value.");
-        List<BukkitTask> spawnTasks = null;
+        List<BukkitTask> spawnTasks = new ArrayList<>();
         for (Location loc : locations) {
             if (onSpawn) spawnTasks.add(spawnMobTask(minRadius, maxRadius, loc));
         }

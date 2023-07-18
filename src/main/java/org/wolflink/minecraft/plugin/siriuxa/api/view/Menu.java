@@ -35,7 +35,7 @@ public abstract class Menu {
      *
      * @param refreshTicks 刷新周期(刻)
      */
-    public Menu(UUID ownerUuid, long refreshTicks, String title, int size) {
+    protected Menu(UUID ownerUuid, long refreshTicks, String title, int size) {
         this.ownerUuid = ownerUuid;
         this.refreshTicks = refreshTicks;
         this.title = title;

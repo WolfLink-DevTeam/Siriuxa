@@ -30,7 +30,7 @@ public class VaultAPI {
             return false;
         }
         economy = rsp.getProvider();
-        return economy != null;
+        return true;
     }
 
     public double getEconomy(OfflinePlayer offlinePlayer) {

@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.UUID;
 
 public class Notifier {
+    private Notifier() {
+        throw new UnsupportedOperationException("Utility class cannot be instantiated.");
+    }
+
     private static final BaseNotifier notifier = Siriuxa.getInstance().getNotifier();
 
     public static void info(String msg) {
@@ -40,9 +44,7 @@ public class Notifier {
         uuids.stream()
                 .map(Bukkit::getPlayer)
                 .filter(p -> p != null && p.isOnline())
-                .forEach(p -> {
-                    notifier.chat(msg, p);
-                });
+                .forEach(p -> notifier.chat(msg, p));
     }
 
     public static void broadcastChat(List<Player> players, String msg) {

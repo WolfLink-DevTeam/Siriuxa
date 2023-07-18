@@ -37,14 +37,10 @@ public class PlayerBackpack implements ConfigurationSerializable {
     public PlayerBackpack(Player player) {
         EntityEquipment equipment = player.getEquipment();
         if (equipment != null) {
-            if(equipment.getHelmet() == null) helmet = null;
-            else helmet = equipment.getHelmet().clone();
-            if(equipment.getChestplate() == null) chestplate = null;
-            else chestplate = equipment.getChestplate().clone();
-            if(equipment.getLeggings() == null) leggings = null;
-            else leggings = equipment.getLeggings().clone();
-            if(equipment.getBoots() == null) boots = null;
-            else boots = equipment.getBoots().clone();
+            helmet = equipment.getHelmet() == null ? null : equipment.getHelmet().clone();
+            chestplate = equipment.getChestplate() == null ? null : equipment.getChestplate().clone();
+            leggings = equipment.getLeggings() == null ? null : equipment.getLeggings().clone();
+            boots = equipment.getBoots() == null ? null : equipment.getBoots().clone();
             offhand = equipment.getItemInOffHand().clone();
         } else Notifier.error("玩家" + player.getName() + "装备栏为空！");
         level = player.getLevel();
@@ -53,9 +49,8 @@ public class PlayerBackpack implements ConfigurationSerializable {
         // 拷贝背包
         Inventory playerInv = player.getInventory();
         for (int i = 0; i < 36; i++) {
-            ItemStack is = playerInv.getItem(i);
-            if(is != null) items[i] = is.clone();
-            else items[i] = null;
+            ItemStack itemStack = playerInv.getItem(i);
+            items[i] = playerInv.getItem(i) == null ? null : playerInv.getItem(i).clone();
         }
     }
 
@@ -75,38 +70,41 @@ public class PlayerBackpack implements ConfigurationSerializable {
         Inventory inventory = player.getInventory();
         if (items != null) for (int i = 0; i < 36; i++) {
             inventory.setItem(i, items[i]);
-        } else player.getInventory().clear();
+        }
+        else player.getInventory().clear();
         Notifier.debug("背包信息已应用至" + player.getName());
     }
 
     @Getter
     private static PlayerBackpack emptyBackpack = new PlayerBackpack();
 
-    public PlayerBackpack(Map<String,Object> map) {
+    public PlayerBackpack(Map<String, Object> map) {
         helmet = (ItemStack) map.get("helmet");
         chestplate = (ItemStack) map.get("chestplate");
         leggings = (ItemStack) map.get("leggings");
         boots = (ItemStack) map.get("boots");
         offhand = (ItemStack) map.get("offhand");
         level = (int) map.get("level");
-        exp = (float)((double) map.get("exp"));
+        exp = (float) ((double) map.get("exp"));
         items = (ItemStack[]) map.get("items");
     }
+
     @NotNull
     @Override
     public Map<String, Object> serialize() {
-        Map<String,Object> map = new HashMap<>();
-        map.put("helmet",helmet);
-        map.put("chestplate",chestplate);
-        map.put("leggings",leggings);
-        map.put("boots",boots);
-        map.put("offhand",offhand);
-        map.put("level",level);
-        map.put("exp",exp);
-        map.put("items",items);
+        Map<String, Object> map = new HashMap<>();
+        map.put("helmet", helmet);
+        map.put("chestplate", chestplate);
+        map.put("leggings", leggings);
+        map.put("boots", boots);
+        map.put("offhand", offhand);
+        map.put("level", level);
+        map.put("exp", exp);
+        map.put("items", items);
         return map;
     }
-    public static PlayerBackpack deserialize(Map<String,Object> map) {
+
+    public static PlayerBackpack deserialize(Map<String, Object> map) {
         return new PlayerBackpack(map);
     }
 }
