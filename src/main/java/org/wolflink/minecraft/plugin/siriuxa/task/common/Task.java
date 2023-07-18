@@ -6,6 +6,7 @@ import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
@@ -323,5 +324,21 @@ public abstract class Task implements INamable {
             playerTaskRecord.setFinishedTimeInMills(nowMills);
             taskRecordDB.saveRecord(playerTaskRecord);
         }
+    }
+
+    /**
+     * 撤离玩家
+     * (适用于只有部分玩家乘坐撤离飞艇的情况)
+     */
+    public void evacuate(Player player) {
+
+    }
+
+    /**
+     * 玩家逃跑
+     * (适用于任务过程中玩家非正常离开任务的情况)
+     */
+    public void escape(OfflinePlayer offlinePlayer) {
+
     }
 }

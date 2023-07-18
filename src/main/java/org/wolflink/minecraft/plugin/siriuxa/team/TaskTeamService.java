@@ -84,36 +84,18 @@ public class TaskTeamService {
     }
 
     /**
-     * 离开队伍，同时也会离开当前任务
+     * 离开队伍，同时也会离开当前任务(算作逃跑)
      */
     public Result leaveTeam(OfflinePlayer offlinePlayer) {
         TaskTeam taskTeam = taskTeamRepository.findByPlayerUuid(offlinePlayer.getUniqueId());
         if (taskTeam == null) return new Result(false, "你没有在队伍中。");
         Task task = taskTeam.getSelectedTask();
-        taskTeam.leave(offlinePlayer.getUniqueId());
+        // 玩家处在任务中
         if (task != null) {
-            if (taskTeam.size() == 0) {
-                taskTeamRepository.deleteByKey(taskTeam.getTeamUuid());
-                if (task.getStageHolder().getThisStage() instanceof GameStage) {
-                    task.failed();
-                }
-                taskRepository.deleteByKey(task.getTaskUuid());
-            }
-            // TODO 玩家背包，等级
-            if (offlinePlayer.isOnline()) {
-                Objects.requireNonNull(offlinePlayer.getPlayer()).teleport(config.getLobbyLocation());
-            }
-            Stage stage = task.getStageHolder().getThisStage();
-            int wheatCost = task.getTaskDifficulty().getWheatCost();
-            int wheatSupply = task.getTaskDifficulty().getWheatSupply();
-            // 退回麦穗
-            if (stage instanceof WaitStage || stage instanceof ReadyStage) {
-                vaultAPI.addEconomy(offlinePlayer, wheatCost);
-            } else {
-                // 任务中扣除其一半麦穗
-                task.takeWheat(wheatCost + wheatSupply, "玩家 " + offlinePlayer.getName() + " 中途退出了，Ta的麦穗也随风而逝。");
-            }
+            TaskService taskService = IOC.getBean(TaskService.class);
+            taskService.leave(task,offlinePlayer);
         }
+        taskTeam.leave(offlinePlayer.getUniqueId());
         return new Result(true, "队伍退出成功。");
     }
 
