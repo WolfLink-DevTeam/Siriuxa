@@ -1,5 +1,6 @@
 package org.wolflink.minecraft.plugin.siriuxa.team;
 
+import lombok.NonNull;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
@@ -11,8 +12,6 @@ import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskRepository;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskService;
-import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.GameStage;
-import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.ReadyStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.WaitStage;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 
@@ -82,21 +81,24 @@ public class TaskTeamService {
         taskTeam.join(player);
         return new Result(true, "加入成功");
     }
-
-    /**
-     * 离开队伍，同时也会离开当前任务(算作逃跑)
-     */
-    public Result leaveTeam(OfflinePlayer offlinePlayer) {
-        TaskTeam taskTeam = taskTeamRepository.findByPlayerUuid(offlinePlayer.getUniqueId());
-        if (taskTeam == null) return new Result(false, "你没有在队伍中。");
+    public Result leave(@NonNull OfflinePlayer offlinePlayer,@NonNull TaskTeam taskTeam) {
         Task task = taskTeam.getSelectedTask();
         // 玩家处在任务中
         if (task != null) {
             TaskService taskService = IOC.getBean(TaskService.class);
-            taskService.leave(task,offlinePlayer);
+            Result result = taskService.leave(task,offlinePlayer);
+            if (!result.result()) return result;
         }
         taskTeam.leave(offlinePlayer.getUniqueId());
         return new Result(true, "队伍退出成功。");
+    }
+    /**
+     * 离开队伍，同时也会离开当前任务(算作逃跑)
+     */
+    public Result leave(@NonNull OfflinePlayer offlinePlayer) {
+        TaskTeam taskTeam = taskTeamRepository.findByPlayerUuid(offlinePlayer.getUniqueId());
+        if (taskTeam == null) return new Result(false, "你没有在队伍中。");
+        return leave(offlinePlayer,taskTeam);
     }
 
     //TODO 投票踢人
@@ -106,7 +108,7 @@ public class TaskTeamService {
         for (OfflinePlayer offlinePlayer : taskTeam.getOfflinePlayers()) {
             if (Objects.requireNonNull(offlinePlayer.getName()).startsWith(kickedPrefix)) {
                 if (player.getName().equals(offlinePlayer.getName())) return new Result(false, "你不能踢出你自己。");
-                leaveTeam(offlinePlayer);
+                leave(offlinePlayer);
                 return new Result(true, "踢出成功。");
             }
         }
