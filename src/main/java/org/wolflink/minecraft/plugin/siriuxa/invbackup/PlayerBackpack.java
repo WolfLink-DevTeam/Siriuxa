@@ -12,7 +12,9 @@ import org.jetbrains.annotations.NotNull;
 import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
 import org.wolflink.minecraft.wolfird.framework.config.Json;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,7 +34,7 @@ public class PlayerBackpack implements ConfigurationSerializable {
     private ItemStack offhand;
     private int level = 0; // 等级
     private float exp = 0; // 当前等级的经验值
-    private ItemStack[] items; // 背包物品
+    private List<ItemStack> items; // 背包物品
 
     public PlayerBackpack(Player player) {
         EntityEquipment equipment = player.getEquipment();
@@ -45,12 +47,12 @@ public class PlayerBackpack implements ConfigurationSerializable {
         } else Notifier.error("玩家" + player.getName() + "装备栏为空！");
         level = player.getLevel();
         exp = player.getExp();
-        items = new ItemStack[36];
+        items = new ArrayList<>();
         // 拷贝背包
         Inventory playerInv = player.getInventory();
         for (int i = 0; i < 36; i++) {
             ItemStack itemStack = playerInv.getItem(i);
-            items[i] = playerInv.getItem(i) == null ? null : playerInv.getItem(i).clone();
+            items.add(itemStack == null ? null : itemStack.clone());
         }
     }
 
@@ -69,7 +71,7 @@ public class PlayerBackpack implements ConfigurationSerializable {
         player.setExp(exp);
         Inventory inventory = player.getInventory();
         if (items != null) for (int i = 0; i < 36; i++) {
-            inventory.setItem(i, items[i]);
+            inventory.setItem(i, i < items.size() ? items.get(i) : null);
         }
         else player.getInventory().clear();
         Notifier.debug("背包信息已应用至" + player.getName());
@@ -86,7 +88,7 @@ public class PlayerBackpack implements ConfigurationSerializable {
         offhand = (ItemStack) map.get("offhand");
         level = (int) map.get("level");
         exp = (float) ((double) map.get("exp"));
-        items = (ItemStack[]) map.get("items");
+        items = (List<ItemStack>) map.get("items");
     }
 
     @NotNull
