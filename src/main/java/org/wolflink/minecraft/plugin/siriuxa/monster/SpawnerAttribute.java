@@ -15,9 +15,9 @@ public class SpawnerAttribute {
     public SpawnerAttribute(TaskDifficulty taskDifficulty) {
         switch (taskDifficulty.getLevel()) {
             case 1 -> { // 轻松
-                healthMultiple = 0.6;
-                movementMultiple = 0.8;
-                damageMultiple = 0.6;
+                healthMultiple = 0.8;
+                movementMultiple = 0.85;
+                damageMultiple = 0.8;
             }
             case 2 -> { // 常规
                 healthMultiple = 1.0;
@@ -26,13 +26,13 @@ public class SpawnerAttribute {
             }
             case 3 -> { // 困难
                 healthMultiple = 1.5;
-                movementMultiple = 1.2;
-                damageMultiple = 1.5;
+                movementMultiple = 1.15;
+                damageMultiple = 1.2;
             }
             case 4 -> { // 专家
                 healthMultiple = 2.0;
-                movementMultiple = 1.5;
-                damageMultiple = 2.0;
+                movementMultiple = 1.3;
+                damageMultiple = 1.5;
             }
             default -> {
                 healthMultiple = 1.0;
