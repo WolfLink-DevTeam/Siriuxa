@@ -8,6 +8,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
+import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeamRepository;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
@@ -33,11 +34,12 @@ public class FriendlyProtection extends WolfirdListener {
         if (aTeam != bTeam) return; // 不在同一个队伍
         Task task = aTeam.getSelectedTask();
         if (task == null) return; // 没选择任务
+        if(!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 没在游戏阶段
         TaskDifficulty taskDifficulty = task.getTaskDifficulty();
         int level = taskDifficulty.getLevel();
         if (level <= 2) {
-            event.setCancelled(true);
             Notifier.chat("§c你的队友受到了某种神秘力量的保护，你无法伤害Ta。", b);
+            event.setCancelled(true);
         }
     }
 }
