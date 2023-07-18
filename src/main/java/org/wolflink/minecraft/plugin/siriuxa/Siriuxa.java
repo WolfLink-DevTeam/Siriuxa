@@ -15,7 +15,6 @@ import org.wolflink.minecraft.plugin.siriuxa.api.view.MenuEventListener;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
 import org.wolflink.minecraft.plugin.siriuxa.file.Lang;
-import org.wolflink.minecraft.plugin.siriuxa.file.OreCache;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.InventoryDB;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.OreDB;
 import org.wolflink.minecraft.plugin.siriuxa.papi.TaskVariables;
@@ -77,7 +76,7 @@ public final class Siriuxa extends WolfirdPlugin {
 
     @Override
     public void beforeDisabled() {
-        IOC.getBean(OreValues.class).save();
+        IOC.getBean(OreValues.class).doSave();
 
         // 保存数据库
         for (Class<? extends FileDB> db : databases) {
@@ -99,7 +98,6 @@ public final class Siriuxa extends WolfirdPlugin {
      * 初始化配置文件
      */
     private static final List<Class<? extends YamlConfig>> configs = new ArrayList<>() {{
-        add(OreCache.class);
         add(Config.class);
         add(Lang.class);
     }};
