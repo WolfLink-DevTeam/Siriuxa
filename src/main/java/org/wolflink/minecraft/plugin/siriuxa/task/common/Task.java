@@ -10,18 +10,20 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
-import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
-import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
-import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.INameable;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.BlockAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.LocationCommandSender;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.WorldEditAPI;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
+import org.wolflink.minecraft.plugin.siriuxa.file.Config;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
+import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.region.TaskRegion;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
+import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeamRepository;
 import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 
 import java.util.*;
 
@@ -62,9 +64,9 @@ public abstract class Task implements INameable {
      */
     private double taskWheat = 0;
     /**
-     * 本次任务的队伍
+     * 参与本次任务的玩家
      */
-    private TaskTeam taskTeam;
+    private Set<UUID> playerUuids;
     @Nullable
     private TaskRegion taskRegion = null;
 
@@ -79,14 +81,32 @@ public abstract class Task implements INameable {
     @Getter
     private final StageHolder stageHolder;
 
+    private UUID teamUuid = null;
+
     protected abstract StageHolder initStageHolder();
 
     public Task(TaskTeam taskTeam, TaskDifficulty taskDifficulty) {
-        this.taskTeam = taskTeam;
+        this.teamUuid = taskTeam.getTeamUuid();
+        this.playerUuids = taskTeam.getMemberUuids();
         this.taskDifficulty = taskDifficulty;
         this.wheatLostAcceleratedSpeed = taskDifficulty.getWheatLostAcceleratedSpeed();
         this.baseWheatLoss = taskDifficulty.getBaseWheatLoss();
         stageHolder = initStageHolder();
+    }
+
+    public List<OfflinePlayer> getOfflinePlayers() {
+        return playerUuids.stream()
+                .map(Bukkit::getOfflinePlayer)
+                .toList();
+    }
+    public int size() {
+        return playerUuids.size();
+    }
+    public boolean contains(UUID uuid) {
+        return playerUuids.contains(uuid);
+    }
+    public boolean contains(Player player) {
+        return contains(player.getUniqueId());
     }
 
     public void addWheat(double wheat) {
@@ -103,11 +123,17 @@ public abstract class Task implements INameable {
 
     public void takeWheat(double wheat, String reason) {
         takeWheat(wheat);
-        Notifier.broadcastChat(taskTeam.getPlayers(), "本次任务损失了 " + wheat + " 麦穗，原因是" + reason);
+        Notifier.broadcastChat(getPlayers(), "本次任务损失了 " + wheat + " 麦穗，原因是" + reason);
     }
 
+    /**
+     * 获取该任务中的所有在线玩家
+     */
     public List<Player> getPlayers() {
-        return taskTeam.getPlayers();
+        return playerUuids.stream()
+                .map(Bukkit::getPlayer)
+                .filter(p -> p != null && p.isOnline())
+                .toList();
     }
 
     public void addWheatLossMultiple(double value) {
@@ -146,11 +172,11 @@ public abstract class Task implements INameable {
      */
     public void startGameOverCheck() {
         finishCheckTaskId = Bukkit.getScheduler().runTaskTimer(Siriuxa.getInstance(), () -> {
-            if (taskTeam.size() == 0) {
+            if (size() == 0) {
                 triggerFailed();
                 return;
             }
-            if (waitForEvacuatePlayers().size() == taskTeam.size()) {
+            if (waitForEvacuatePlayers().size() == size()) {
                 triggerFinish();
             }
         }, 20, 20).getTaskId();
@@ -175,22 +201,20 @@ public abstract class Task implements INameable {
             availableEvacuationZone = null;
         }
     }
-
+    private List<Location> beaconLocations = new ArrayList<>();
     public void start(TaskRegion taskRegion) {
         this.taskRegion = taskRegion;
         initRecord();
         taskStat.start();
         startTime = Calendar.getInstance();
-        this.taskWheat = taskTeam.size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
+        this.taskWheat = size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
             IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(new LocationCommandSender(taskRegion.getCenter().clone().add(0, 2, 0)));
-            List<Location> beaconLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.BEACON, taskRegion.getCenter(), 20);
+            beaconLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.BEACON, taskRegion.getCenter(), 30);
             Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> {
                 List<Player> playerList = getPlayers();
-                for (int i = 0; i < playerList.size(); i++) {
-                    Player player = playerList.get(i);
-                    if (beaconLocations.size() == 0) player.teleport(taskRegion.getCenter());
-                    else player.teleport(beaconLocations.get(i % beaconLocations.size()));
+                for (Player player : playerList) {
+                    IOC.getBean(TaskService.class).goTask(player,this);
                 }
                 startGameOverCheck();
                 startTiming();
@@ -227,7 +251,7 @@ public abstract class Task implements INameable {
      * 获取当前麦穗每秒流失量
      */
     public double getWheatLossPerSecNow() {
-        return baseWheatLoss * wheatLossMultiple * getTaskTeam().size();
+        return baseWheatLoss * wheatLossMultiple * size();
     }
 
     int timingTask1Id = -1;
@@ -279,24 +303,27 @@ public abstract class Task implements INameable {
      * 在任务完成/失败后调用
      */
     protected void deleteTask() {
-        IOC.getBean(TaskService.class).delete(this);
+        TaskTeam taskTeam = IOC.getBean(TaskTeamRepository.class).find(teamUuid);
+        if(taskTeam != null) taskTeam.setSelectedTask(null);
+        teamUuid = null;
+//        IOC.getBean(TaskService.class).delete(this);
     }
 
 
     private final Map<UUID, PlayerTaskRecord> playerRecordMap = new HashMap<>();
+
     /**
      * 初始化任务快照
      */
     private void initRecord() {
-        Set<UUID> memberUuids = taskTeam.getMemberUuids();
-        for (UUID uuid : memberUuids) {
+        for (UUID uuid : playerUuids) {
             PlayerTaskRecord record = new PlayerTaskRecord();
             record.setPlayerUuid(uuid);
             record.setTaskUuid(taskUuid);
-                    record.setTeamSize(memberUuids.size());
-                    record.setTaskDifficulty(taskDifficulty.getName());
-                    record.setTaskType(getName());
-            playerRecordMap.put(uuid,record);
+            record.setTeamSize(size());
+            record.setTaskDifficulty(taskDifficulty.getName());
+            record.setTaskType(getName());
+            playerRecordMap.put(uuid, record);
         }
     }
 
@@ -306,12 +333,13 @@ public abstract class Task implements INameable {
      */
     private void fillRecord(Player player) {
         PlayerTaskRecord record = playerRecordMap.get(player.getUniqueId());
-        if(record == null) {
-            Notifier.error("未能找到玩家"+player.getName()+"的任务记录类。");
+        if (record == null) {
+            Notifier.error("未能找到玩家" + player.getName() + "的任务记录类。");
             return;
         }
         record.setPlayerBackpack(new PlayerBackpack(player));
     }
+
     /**
      * 完成任务快照，并保存到本地
      * 在任务结束阶段调用
@@ -331,7 +359,9 @@ public abstract class Task implements INameable {
      * (适用于只有部分玩家乘坐撤离飞艇的情况)
      */
     public void evacuate(Player player) {
-
+        playerUuids.remove(player.getUniqueId());
+        Notifier.broadcastChat(playerUuids,"玩家"+player.getName()+"已乘坐飞艇撤离。");
+        player.teleport(IOC.getBean(Config.class).getLobbyLocation());
     }
 
     /**
@@ -339,6 +369,7 @@ public abstract class Task implements INameable {
      * (适用于任务过程中玩家非正常离开任务的情况)
      */
     public void escape(OfflinePlayer offlinePlayer) {
-
+        playerUuids.remove(offlinePlayer.getUniqueId());
+        Notifier.broadcastChat(playerUuids,"玩家"+offlinePlayer.getName()+"在任务过程中失踪了。");
     }
 }

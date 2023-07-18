@@ -1,13 +1,24 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.common;
 
+import lombok.NonNull;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
+import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.Result;
 import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.InventoryDB;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.OfflinePlayerDB;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.OfflinePlayerRecord;
+import org.wolflink.minecraft.plugin.siriuxa.invbackup.InvBackupService;
+import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
+import org.wolflink.minecraft.plugin.siriuxa.task.common.region.TaskRegion;
+import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.EndStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.ReadyStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.WaitStage;
@@ -18,7 +29,10 @@ import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeamService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Singleton
 public class TaskService {
@@ -97,73 +111,79 @@ public class TaskService {
         return new Result(false, "任务当前不处于等待阶段，无法准备。");
     }
 
+    private final Map<UUID,Integer> escapeTaskMap = new HashMap<>();
+
     /**
-     * 删除任务，通知并解绑相关队伍
-     * <p>
-     * 任务如果在进行准备，进行阶段，结束阶段，会将所有玩家传送到大厅
+     * 玩家离线触发
      */
-    public Result delete(Task task) {
-        TaskTeam taskTeam = task.getTaskTeam();
-        if (taskTeam != null) {
-            Notifier.broadcastChat(taskTeam.getPlayers(), "§e队伍所选任务已被删除，请重新选择。");
-            Stage stage = task.getStageHolder().getThisStage();
-            if (!(stage instanceof WaitStage)) {
-                for (Player player : taskTeam.getPlayers()) {
-                    player.teleport(config.getLobbyLocation());
-                }
-            }
-            taskTeam.setSelectedTask(null);
-            task.setTaskTeam(new TaskTeam());
-        }
-        if (task.getStageHolder().getThisStage() instanceof GameStage) {
-            task.failed();
-        }
-        taskRepository.deleteByKey(task.getTaskUuid());
-        return new Result(true, "任务删除成功。");
-    }
-    public Result leave(Task task,OfflinePlayer offlinePlayer) {
-        if(!task.getTaskTeam().getOfflinePlayers().contains(offlinePlayer)) return new Result(false,"你没有参与该任务，无法离开。");
-        // 该玩家是参与任务的最后一人
-        if (task.getTaskTeam().size() == 1) {
-            // 如果在游戏阶段则立刻中止
-            if (task.getStageHolder().getThisStage() instanceof GameStage) {
-                task.setTaskWheat(0);
-                return new Result(true,"你已成功离开该任务，但因此任务失败了。");
-            }
-            taskRepository.deleteByKey(task.getTaskUuid());
-        }
-        Stage stage = task.getStageHolder().getThisStage();
-        int wheatCost = task.getTaskDifficulty().getWheatCost();
-        int wheatSupply = task.getTaskDifficulty().getWheatSupply();
-        // 退回麦穗
-        if (stage instanceof WaitStage || stage instanceof ReadyStage) {
-            vaultAPI.addEconomy(offlinePlayer, wheatCost);
-        } else {
-            // 任务中扣除其一半麦穗
-            task.takeWheat(wheatCost + wheatSupply, "玩家 " + offlinePlayer.getName() + " 中途退出了，Ta的麦穗也随风而逝。");
-        }
-        return new Result(true,"你已成功离开该任务。");
+    public void offline(@NonNull Task task,@NonNull Player player) {
+        OfflinePlayerDB offlinePlayerDB = IOC.getBean(OfflinePlayerDB.class);
+        // 已经有标记计时了
+        if(escapeTaskMap.containsKey(player.getUniqueId())) return;
+        OfflinePlayerRecord offlinePlayerRecord = new OfflinePlayerRecord(player);
+        offlinePlayerDB.save(offlinePlayerRecord);
+        // 如果玩家还在任务中，3分钟后标记其为逃跑状态，在下次上线时触发相关方法
+        int taskId = Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance(),()->{
+            offlinePlayerRecord.setTaskEscape(true);
+            offlinePlayerDB.save(offlinePlayerRecord);
+            task.escape(player);
+        },20 * 60 * 3).getTaskId();
+        escapeTaskMap.put(player.getUniqueId(),taskId);
     }
 
     /**
-     * 加入任务
-     * 支付任务费用
-     * 加入对应团队
+     * 玩家上线时触发
      */
-    public Result join(Task task,Player player) {
-        if (IOC.getBean(TaskTeamService.class).isInTeam(player)) {
-            return new Result(false,"你已处于队伍中了，无法再加入任务。");
+    public void online(@NonNull Player player) {
+        OfflinePlayerDB offlinePlayerDB = IOC.getBean(OfflinePlayerDB.class);
+        // 清理标记计时任务
+        if(escapeTaskMap.containsKey(player.getUniqueId())) {
+            Bukkit.getScheduler().cancelTask(escapeTaskMap.get(player.getUniqueId()));
+            escapeTaskMap.remove(player.getUniqueId());
         }
-        Stage stage = task.getStageHolder().getThisStage();
-        if (!(stage instanceof WaitStage)) {
-            return new Result(false, "当前任务状态为：" + stage.getDisplayName() + "，不允许加入。");
+        OfflinePlayerRecord offlinePlayerRecord = offlinePlayerDB.load(player);
+        if(offlinePlayerRecord == null) return; // 没有离线记录数据
+        boolean escapeMark = offlinePlayerRecord.isTaskEscape();
+        // 玩家从任务中逃跑
+        if(escapeMark) {
+            offlinePlayerRecord.setTaskEscape(false);
+            goLobby(player);
         }
-        int wheatCost = task.getTaskDifficulty().getWheatCost();
-        if (vaultAPI.getEconomy().getBalance(player) < wheatCost) {
-            return new Result(false, "你需要支付 " + wheatCost + " 才能加入这次任务，显然你还没有足够的麦穗。");
+    }
+
+    /**
+     * 回到大厅
+     */
+    public void goLobby(Player player) {
+        InventoryDB inventoryDB = IOC.getBean(InventoryDB.class);
+        PlayerBackpack mainInv = inventoryDB.loadMain(player);
+        if(mainInv == null) {
+            Notifier.error("未能找到玩家"+player.getName()+"的主背包数据。");
+            return;
         }
-        if(!vaultAPI.takeEconomy(player, wheatCost)) return new Result(false,"在尝试支付任务费用时出现问题。");
-        task.getTaskTeam().join(player);
-        return new Result(true,"成功加入任务以及相关队伍。");
+        PlayerBackpack.getEmptyBackpack().apply(player);
+        mainInv.apply(player);
+        // 传送回城
+        player.teleport(config.getLobbyLocation());
+    }
+
+    /**
+     * 前往任务地点
+     */
+    public void goTask(Player player,Task task) {
+        TaskRegion taskRegion = task.getTaskRegion();
+        if(taskRegion == null) {
+            Notifier.error("任务区域为空，玩家无法进入任务区域！");
+            return;
+        }
+        InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
+        // 保存玩家背包信息
+        invBackupService.saveMainInv(player);
+        // 应用空背包信息
+        PlayerBackpack.getEmptyBackpack().apply(player);
+        // 传送到指定方块上
+        List<Location> spawnLocations = task.getBeaconLocations();
+        if(spawnLocations.size() == 0) player.teleport(task.getTaskRegion().getCenter());
+        else player.teleport(spawnLocations.get((int) (Math.random() * spawnLocations.size())));
     }
 }

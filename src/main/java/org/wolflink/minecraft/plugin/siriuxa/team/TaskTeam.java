@@ -1,5 +1,6 @@
 package org.wolflink.minecraft.plugin.siriuxa.team;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -14,18 +15,14 @@ import java.util.Set;
 import java.util.UUID;
 
 
+@Data
 public class TaskTeam {
-    @Getter
-    private final UUID teamUuid = UUID.randomUUID();
-    @Getter
-    private final Set<UUID> memberUuids = new HashSet<>();
+    private UUID teamUuid = UUID.randomUUID();
+    private Set<UUID> memberUuids = new HashSet<>();
     /**
      * 当前选择的任务
      */
-    @Nullable
-    @Setter
-    @Getter
-    private Task selectedTask = null;
+    @Nullable private Task selectedTask = null;
 
     public List<Player> getPlayers() {
         return memberUuids.stream()

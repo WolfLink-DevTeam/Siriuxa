@@ -35,12 +35,6 @@ public class GameStage extends TaskStage {
             Notifier.error(worldName + "世界不存在！请检查配置文件");
             return;
         }
-        InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
-        //缓存玩家背包
-        for (Player player : task.getPlayers()) {
-            invBackupService.saveMainInv(player);
-            PlayerBackpack.getEmptyBackpack().apply(player);
-        }
         Location regionCenter = IOC.getBean(RegionAPI.class).autoGetRegionCenter(world);
         getStageHolder().getTask().start(new SquareRegion(
                 getStageHolder().getTask(),
@@ -51,6 +45,5 @@ public class GameStage extends TaskStage {
     @Override
     protected void onLeave() {
         super.onLeave();
-        //TODO 保存任务背包
     }
 }
