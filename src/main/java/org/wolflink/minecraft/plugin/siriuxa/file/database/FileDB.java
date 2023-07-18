@@ -36,9 +36,9 @@ public abstract class FileDB {
                     fileConfigurations.put(subFile, fileConfiguration);
                     Notifier.debug("加载了一个文件：" + subFile.getName());
                 } catch (Exception ignore) {
-                    Notifier.warn("加载文件：" + subFile.getName()+" 失败。");
+                    Notifier.warn("加载文件：" + subFile.getName() + " 失败。");
                 }
-            } else if(subFile.isDirectory()) load(subFile);
+            } else if (subFile.isDirectory()) load(subFile);
         }
     }
 

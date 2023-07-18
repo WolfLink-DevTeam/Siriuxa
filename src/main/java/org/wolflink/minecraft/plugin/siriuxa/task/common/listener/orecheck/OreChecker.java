@@ -39,7 +39,7 @@ public class OreChecker extends WolfirdListener {
         Block block = checkLoc.getBlock();
         Material material = block.getType();
         if (!oreValues.getOreMaterials().contains(material)) return;
-        oreValues.record(material);
+        oreValues.doRecord(material);
         block.setType(Material.AIR);
         double wheatValue = oreValues.getOreValue(material);
         task.addWheat(wheatValue);

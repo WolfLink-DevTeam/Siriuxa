@@ -51,9 +51,8 @@ public class InventoryDB extends FileDB {
             saveCache(player, oldPack);
         }
         fileConfiguration = createAndLoad(mainInvFile);
-        fileConfiguration.set("data",playerBackpack);
+        fileConfiguration.set("data", playerBackpack);
         Notifier.debug("已保存玩家" + player.getName() + "的主要背包信息。");
-
     }
 
     private void saveCache(Player player, PlayerBackpack playerBackpack) {
@@ -63,7 +62,7 @@ public class InventoryDB extends FileDB {
             String time = dateAPI.getTime(Calendar.getInstance());
             File cacheFile = new File(cacheInvFolder, time + ".yml");
             FileConfiguration cache = createAndLoad(cacheFile);
-            cache.set("data",playerBackpack);
+            cache.set("data", playerBackpack);
             try {
                 cache.save(cacheFile);
                 Notifier.debug("已保存玩家" + player.getName() + "在时间" + time + "的缓存背包信息。");
