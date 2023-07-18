@@ -82,7 +82,7 @@ public class TeamInvite extends WolfirdCommand {
             if (taskTeam == null) {
                 Notifier.chat("§e该队伍已解散，无法加入。", invited);
             } else {
-                Result result = taskTeamService.joinTeam(invited, taskTeam);
+                Result result = taskTeamService.join(invited, taskTeam);
                 result.show(invited);
                 Player player = offlinePlayer.getPlayer();
                 if (result.result()) {

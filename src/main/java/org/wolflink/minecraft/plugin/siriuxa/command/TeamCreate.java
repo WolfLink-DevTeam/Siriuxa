@@ -20,6 +20,6 @@ public class TeamCreate extends WolfirdCommand {
     @Override
     protected void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
-        taskTeamService.createTeam(player).show(player);
+        taskTeamService.create(player).show(player);
     }
 }

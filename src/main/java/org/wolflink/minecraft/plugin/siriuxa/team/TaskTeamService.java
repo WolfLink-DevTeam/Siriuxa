@@ -22,14 +22,14 @@ public class TaskTeamService {
 
     @Inject
     private TaskTeamRepository taskTeamRepository;
-    @Inject
-    private TaskRepository taskRepository;
-    @Inject
-    private VaultAPI vaultAPI;
+
     @Inject
     private Config config;
 
-    public Result createTeam(Player player) {
+    /**
+     * 创建一个队伍
+     */
+    public Result create(Player player) {
         if (taskTeamRepository.findByPlayer(player) != null)
             return new Result(false, "你当前已处于其它队伍中，无法创建队伍。");
         TaskTeam taskTeam = new TaskTeam();
@@ -38,17 +38,11 @@ public class TaskTeamService {
         return new Result(true, "队伍创建成功。");
     }
 
-    public TaskTeam createTeam() {
-        TaskTeam taskTeam = new TaskTeam();
-        taskTeamRepository.insert(taskTeam);
-        return taskTeam;
-    }
-
     /**
      * 解散队伍
      * 队伍的任务也会删除
      */
-    public Result deleteTeam(TaskTeam taskTeam) {
+    public Result delete(TaskTeam taskTeam) {
         taskTeam.clear();
         Task task = taskTeam.getSelectedTask();
         if (task != null) {
@@ -62,25 +56,21 @@ public class TaskTeamService {
     /**
      * 加入队伍
      */
-    public Result joinTeam(Player player, TaskTeam taskTeam) {
+    public Result join(Player player, TaskTeam taskTeam) {
         if (taskTeamRepository.findByPlayer(player) != null) {
             return new Result(false, "玩家当前已处在其他队伍中，不允许加入。");
         }
         Task task = taskTeam.getSelectedTask();
         if (task != null) {
-            Stage stage = task.getStageHolder().getThisStage();
-            if (!(stage instanceof WaitStage)) {
-                return new Result(false, "当前任务状态为：" + stage.getDisplayName() + "，不允许加入。");
-            }
-            int wheatCost = task.getTaskDifficulty().getWheatCost();
-            if (vaultAPI.getEconomy().getBalance(player) < wheatCost) {
-                return new Result(false, "你需要支付 " + wheatCost + " 才能加入这次任务，显然你还没有足够的麦穗。");
-            }
-            vaultAPI.takeEconomy(player, wheatCost);
+            return IOC.getBean(TaskService.class).join(task,player);
+        } else {
+            taskTeam.join(player);
+            return new Result(true, "加入成功");
         }
-        taskTeam.join(player);
-        return new Result(true, "加入成功");
     }
+    /**
+     * 离开队伍，同时也会离开当前任务(如果任务在进行中则算作逃跑)
+     */
     public Result leave(@NonNull OfflinePlayer offlinePlayer,@NonNull TaskTeam taskTeam) {
         Task task = taskTeam.getSelectedTask();
         // 玩家处在任务中
@@ -92,17 +82,17 @@ public class TaskTeamService {
         taskTeam.leave(offlinePlayer.getUniqueId());
         return new Result(true, "队伍退出成功。");
     }
-    /**
-     * 离开队伍，同时也会离开当前任务(算作逃跑)
-     */
     public Result leave(@NonNull OfflinePlayer offlinePlayer) {
         TaskTeam taskTeam = taskTeamRepository.findByPlayerUuid(offlinePlayer.getUniqueId());
         if (taskTeam == null) return new Result(false, "你没有在队伍中。");
         return leave(offlinePlayer,taskTeam);
     }
 
-    //TODO 投票踢人
-    public Result kickPlayer(Player player, String kickedPrefix) {
+    /**
+     * 将指定前缀的玩家从队伍中踢出
+     * TODO 投票踢人
+     */
+    public Result kick(Player player, String kickedPrefix) {
         TaskTeam taskTeam = taskTeamRepository.findByPlayer(player);
         if (taskTeam == null) return new Result(false, "你没有处在队伍中。");
         for (OfflinePlayer offlinePlayer : taskTeam.getOfflinePlayers()) {
@@ -113,5 +103,13 @@ public class TaskTeamService {
             }
         }
         return new Result(false, "未在队伍中找到名字以" + kickedPrefix + "开头的玩家。");
+    }
+
+    /**
+     * 判断玩家是否处于队伍中
+     */
+    public boolean isInTeam(Player player) {
+        TaskTeam taskTeam = taskTeamRepository.findByPlayer(player);
+        return taskTeam != null;
     }
 }

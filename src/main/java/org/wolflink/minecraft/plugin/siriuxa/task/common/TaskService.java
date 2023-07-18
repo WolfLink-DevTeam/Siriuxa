@@ -44,7 +44,7 @@ public class TaskService {
         TaskTeam taskTeam = taskTeamRepository.findByPlayer(player);
         if (taskTeam == null) {
             TaskTeamService taskTeamService = IOC.getBean(TaskTeamService.class);
-            Result result = taskTeamService.createTeam(player);
+            Result result = taskTeamService.create(player);
             if (!result.result()) return result; // 队伍创建失败
             taskTeam = taskTeamRepository.findByPlayer(player);
         }
@@ -143,5 +143,27 @@ public class TaskService {
             task.takeWheat(wheatCost + wheatSupply, "玩家 " + offlinePlayer.getName() + " 中途退出了，Ta的麦穗也随风而逝。");
         }
         return new Result(true,"你已成功离开该任务。");
+    }
+
+    /**
+     * 加入任务
+     * 支付任务费用
+     * 加入对应团队
+     */
+    public Result join(Task task,Player player) {
+        if (IOC.getBean(TaskTeamService.class).isInTeam(player)) {
+            return new Result(false,"你已处于队伍中了，无法再加入任务。");
+        }
+        Stage stage = task.getStageHolder().getThisStage();
+        if (!(stage instanceof WaitStage)) {
+            return new Result(false, "当前任务状态为：" + stage.getDisplayName() + "，不允许加入。");
+        }
+        int wheatCost = task.getTaskDifficulty().getWheatCost();
+        if (vaultAPI.getEconomy().getBalance(player) < wheatCost) {
+            return new Result(false, "你需要支付 " + wheatCost + " 才能加入这次任务，显然你还没有足够的麦穗。");
+        }
+        if(!vaultAPI.takeEconomy(player, wheatCost)) return new Result(false,"在尝试支付任务费用时出现问题。");
+        task.getTaskTeam().join(player);
+        return new Result(true,"成功加入任务以及相关队伍。");
     }
 }
