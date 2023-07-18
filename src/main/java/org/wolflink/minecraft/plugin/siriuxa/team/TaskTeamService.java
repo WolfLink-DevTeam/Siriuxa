@@ -3,6 +3,7 @@ package org.wolflink.minecraft.plugin.siriuxa.team;
 import lombok.NonNull;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.units.qual.N;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
@@ -65,5 +66,20 @@ public class TaskTeamService {
             taskTeam.join(player);
             return new Result(true, "成功加入队伍。");
         }
+    }
+
+    /**
+     * 玩家主动离开队伍
+     * 如果队伍已经选择了任务，则无法退出
+     */
+    public Result leave(@NonNull Player player,@NonNull TaskTeam taskTeam) {
+        if(taskTeam.getSelectedTask() != null) return new Result(false,"队伍已经选择了任务，无法退出。");
+        taskTeam.leave(player);
+        return new Result(true,"退出队伍成功。");
+    }
+    public Result leave(@NonNull Player player) {
+        TaskTeam taskTeam = taskTeamRepository.findByPlayer(player);
+        if(taskTeam == null) return new Result(false,"你没有处在任何队伍中。");
+        return leave(player,taskTeam);
     }
 }
