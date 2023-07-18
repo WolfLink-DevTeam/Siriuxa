@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.LocationCommandSender;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.WorldEditAPI;
+import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -33,10 +34,14 @@ public class EvacuationZone {
      */
     private final int safeRadius;
 
-    public EvacuationZone(Location center, int safeRadius) {
-        this.center = center;
-        World world = center.getWorld();
-        if (world == null) throw new IllegalArgumentException("安全区坐标的世界为空");
+    /**
+     * 归属的任务
+     */
+    private final Task task;
+
+    public EvacuationZone(Task task,World world,int x,int z, int safeRadius) {
+        this.task = task;
+        this.center = new Location(world,x,world.getHighestBlockYAt(x,z)+25,z);
         this.safeRadius = safeRadius;
         this.locationCommandSender = new LocationCommandSender(center);
     }
@@ -53,6 +58,7 @@ public class EvacuationZone {
 
     /**
      * 获取在当前撤离区域的玩家
+     * TODO 撤离判断
      */
     public Set<Player> getPlayerInZone() {
         Set<Player> playerSet = new HashSet<>();
@@ -69,9 +75,11 @@ public class EvacuationZone {
 
     public void generateSchematic() {
         editSession = IOC.getBean(WorldEditAPI.class).pasteEvacuationUnit(locationCommandSender);
+        Notifier.broadcastChat(task.getPlayers(), "飞艇已停留至坐标 X：" + center.getBlockX() + " Z：" + center.getBlockZ() + " 附近，如有需要请尽快前往撤离。");
     }
 
     public void undoSchematic() {
+        Notifier.broadcastChat(task.getPlayers(), "坐标 X：" + center.getBlockX() + " Z：" + center.getBlockZ() + " 附近的飞艇已撤离，请等待下一艘飞艇接应。");
         IOC.getBean(WorldEditAPI.class).undoPaste(locationCommandSender, editSession);
     }
 }

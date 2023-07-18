@@ -239,19 +239,15 @@ public abstract class Task implements INameable {
             if (taskRegion == null) return;
             Location evacuateLocation = taskRegion.getEvacuateLocation((int) taskRegion.getRadius());
             if (evacuateLocation == null) {
-                stopCheck();
-                failed();
+                triggerFailed();
                 return;
             }
-            evacuateLocation = evacuateLocation.add(0, 25, 0);
             if (availableEvacuationZone != null) {
                 availableEvacuationZone.setAvailable(false);
-                Notifier.broadcastChat(getPlayers(), "坐标 X：" + availableEvacuationZone.getCenter().getBlockX() + " Z：" + availableEvacuationZone.getCenter().getBlockZ() + " 附近的飞艇已撤离，请等待下一艘飞艇接应。");
                 availableEvacuationZone = null;
             } else {
-                availableEvacuationZone = new EvacuationZone(evacuateLocation, 5);
+                availableEvacuationZone = new EvacuationZone(this,evacuateLocation.getWorld(),evacuateLocation.getBlockX(),evacuateLocation.getBlockZ(), 5);
                 availableEvacuationZone.setAvailable(true);
-                Notifier.broadcastChat(getPlayers(), "飞艇已停留至坐标 X：" + evacuateLocation.getBlockX() + " Z：" + evacuateLocation.getBlockZ() + " 附近，如有需要请尽快前往撤离。");
             }
             //TODO 30|15
         }, 20 * 60, 20 * 60).getTaskId();
