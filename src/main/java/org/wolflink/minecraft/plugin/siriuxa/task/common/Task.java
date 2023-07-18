@@ -3,10 +3,7 @@ package org.wolflink.minecraft.plugin.siriuxa.task.common;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
@@ -153,7 +150,13 @@ public abstract class Task implements INameable {
         taskStat.stop();
         stopCheck();
         finishRecord();
+        for (Player player : getPlayers()) {
+            IOC.getBean(TaskService.class).goLobby(player);
+            player.sendTitle("§c任务失败", "§7真可惜...下次再尝试吧", 10, 80, 10);
+            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 0.8f);
+        }
         failed();
+        deleteTask();
     }
 
     private void triggerFinish() {
@@ -162,7 +165,14 @@ public abstract class Task implements INameable {
         taskStat.stop();
         stopCheck();
         finishRecord();
+        for (Player player : getPlayers()) {
+            IOC.getBean(TaskService.class).goLobby(player);
+            player.sendTitle("§a任务完成", "§7前往领取本次任务的报酬吧", 10, 80, 10);
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f);
+            player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1f, 1f);
+        }
         finish();
+        deleteTask();
     }
 
     /**
