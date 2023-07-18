@@ -39,8 +39,10 @@ public class TaskMonsterSpawner {
     public void setEnabled(boolean value) {
         if(enabled == value)return;
         enabled = value;
-        if(enabled) startSpawnMob();
-        else stopSpawnMob();
+        Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(),()->{
+            if(enabled) startSpawnMob();
+            else stopSpawnMob();
+        });
     }
 
     public TaskMonsterSpawner(@NonNull Task task) {
@@ -92,13 +94,15 @@ public class TaskMonsterSpawner {
         else if (temp < 90) entityType = EntityType.SPIDER; // 10%
         else if (temp < 99) entityType = EntityType.CREEPER; // 9%
         else entityType = EntityType.WARDEN; // 1%
-        Monster monster = (Monster) world.spawnEntity(spawnLoc, entityType);
-        AttributeInstance maxHealth = monster.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-        AttributeInstance movementSpeed = monster.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
-        AttributeInstance attackDamage = monster.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
-        if (maxHealth != null) maxHealth.setBaseValue(maxHealth.getBaseValue() * spawnerAttribute.getHealthMultiple());
-        if (movementSpeed != null) movementSpeed.setBaseValue(movementSpeed.getBaseValue() * spawnerAttribute.getMovementMultiple());
-        if (attackDamage != null) attackDamage.setBaseValue(attackDamage.getBaseValue() * spawnerAttribute.getDamageMultiple());
+        Bukkit.getScheduler().runTask(Siriuxa.getInstance(),()->{
+            Monster monster = (Monster) world.spawnEntity(spawnLoc, entityType);
+            AttributeInstance maxHealth = monster.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+            AttributeInstance movementSpeed = monster.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
+            AttributeInstance attackDamage = monster.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
+            if (maxHealth != null) maxHealth.setBaseValue(maxHealth.getBaseValue() * spawnerAttribute.getHealthMultiple());
+            if (movementSpeed != null) movementSpeed.setBaseValue(movementSpeed.getBaseValue() * spawnerAttribute.getMovementMultiple());
+            if (attackDamage != null) attackDamage.setBaseValue(attackDamage.getBaseValue() * spawnerAttribute.getDamageMultiple());
+        });
     }
 
     private static boolean isMobCountOverLimit(double radius, @NonNull Location center) {
