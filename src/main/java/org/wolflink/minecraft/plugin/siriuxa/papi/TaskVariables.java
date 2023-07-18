@@ -40,7 +40,7 @@ public class TaskVariables extends PlaceholderExpansion {
             return String.format("%.1f", task.getWheatLossPerSecNow());
         }
         if (params.equalsIgnoreCase("team_size")) {
-            return String.valueOf(task.getTaskTeam().size());
+            return String.valueOf(task.size());
         }
         if (params.equalsIgnoreCase("detail_wheat")) {
             double value = task.getTaskStat().getWheatChange();
