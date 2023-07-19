@@ -68,6 +68,7 @@ public class CreateTask extends Icon {
 
     @Override
     public void rightClick(Player player) {
-
+        // 和左键单击相同的效果
+        leftClick(player);
     }
 }

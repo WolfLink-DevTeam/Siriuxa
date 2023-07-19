@@ -33,9 +33,9 @@ public class TaskMonsterSpawner {
     private int spawnTaskId = -1;
 
     public void setEnabled(boolean value) {
-        if(enabled == value)return;
+        if (enabled == value) return;
         enabled = value;
-        if(enabled) startSpawnMob();
+        if (enabled) startSpawnMob();
         else stopSpawnMob();
     }
 
@@ -43,15 +43,18 @@ public class TaskMonsterSpawner {
         this.task = task;
         spawnerAttribute = new SpawnerAttribute(task.getTaskDifficulty());
     }
+
     private final int MIN_RADIUS = 10;
     private final int MAX_RADIUS = 20;
+
     private void startSpawnMob() {
-        if(spawnTaskId == -1) {
-            spawnTaskId = spawnMobTask(MIN_RADIUS,MAX_RADIUS).getTaskId();
+        if (spawnTaskId == -1) {
+            spawnTaskId = spawnMobTask(MIN_RADIUS, MAX_RADIUS).getTaskId();
         }
     }
+
     private void stopSpawnMob() {
-        if(spawnTaskId != -1) {
+        if (spawnTaskId != -1) {
             Bukkit.getScheduler().cancelTask(spawnTaskId);
             spawnTaskId = -1;
         }
@@ -59,25 +62,21 @@ public class TaskMonsterSpawner {
 
     private @NonNull BukkitTask spawnMobTask(int minRadius, int maxRadius) {
         Plugin plugin = Siriuxa.getInstance();
-        return Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-            task.getPlayers().forEach(p -> {
-                Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(),()->{
-                    spawnMobAroundPlayer(minRadius, maxRadius, p);
-                });
-            });
-        }, 20 * 15, 20 * 15);
+        return Bukkit.getScheduler().runTaskTimer(plugin,
+                () -> task.getPlayers().forEach(p -> Bukkit.getScheduler().runTaskAsynchronously(plugin,
+                        () -> spawnMobAroundPlayer(minRadius, maxRadius, p))), 20 * 15, 20 * 15);
     }
 
     /**
      * (半异步)在玩家周围生成一只怪物
      */
-    private void spawnMobAroundPlayer(int minRadius, int maxRadius,Player player) {
+    private void spawnMobAroundPlayer(int minRadius, int maxRadius, @NonNull Player player) {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         Location loc = player.getLocation();
         World world = loc.getWorld();
         assert world != null;
         if (isMobCountOverLimit(maxRadius, loc)) return;
-        double r = random.nextInt(minRadius,maxRadius);
+        double r = random.nextInt(minRadius, maxRadius);
         double x = loc.getX() + random.nextDouble() * r * 2 - r;
         double z = loc.getZ() + random.nextDouble() * r * 2 - r;
         double y = world.getHighestBlockYAt((int) x, (int) z);
@@ -85,7 +84,7 @@ public class TaskMonsterSpawner {
         if (spawnLoc.getBlock().isLiquid()) return;
 
         EntityType entityType = spawnerAttribute.randomType();
-        Bukkit.getScheduler().runTask(Siriuxa.getInstance(),()->{
+        Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> {
             Monster monster = (Monster) world.spawnEntity(spawnLoc, entityType);
             AttributeInstance maxHealth = monster.getAttribute(Attribute.GENERIC_MAX_HEALTH);
             AttributeInstance movementSpeed = monster.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
@@ -94,14 +93,16 @@ public class TaskMonsterSpawner {
                 maxHealth.setBaseValue(maxHealth.getBaseValue() * spawnerAttribute.getHealthMultiple());
                 monster.setHealth(maxHealth.getBaseValue());
             }
-            if (movementSpeed != null) movementSpeed.setBaseValue(movementSpeed.getBaseValue() * spawnerAttribute.getMovementMultiple());
-            if (attackDamage != null) attackDamage.setBaseValue(attackDamage.getBaseValue() * spawnerAttribute.getDamageMultiple());
+            if (movementSpeed != null)
+                movementSpeed.setBaseValue(movementSpeed.getBaseValue() * spawnerAttribute.getMovementMultiple());
+            if (attackDamage != null)
+                attackDamage.setBaseValue(attackDamage.getBaseValue() * spawnerAttribute.getDamageMultiple());
         });
     }
 
     private static boolean isMobCountOverLimit(double radius, @NonNull Location center) {
         int mobCount = Objects.requireNonNull(center.getWorld())
-                .getNearbyEntities(center,radius,radius,radius, entity -> entity instanceof Monster)
+                .getNearbyEntities(center, radius, radius, radius, Monster.class::isInstance)
                 .size();
         // 示例:
         // 半径:15, 怪物上限~50
