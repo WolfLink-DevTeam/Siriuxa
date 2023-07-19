@@ -31,7 +31,9 @@ public class TaskRecordIcon extends Icon {
         iconName = String.format(iconName,date);
         String taskResult = playerTaskRecord.isSuccess() ? "§a完成" : "§c失败";
         int minutes = (int) (playerTaskRecord.getUsingTimeInMills() / 60000);
-        String claimStatus = (playerTaskRecord.isClaimed()&&playerTaskRecord.isSuccess()) ? "§7物资已领取" : "§a可领取物资";
+        String claimStatus;
+        if(!playerTaskRecord.isSuccess()) claimStatus = "§c物资已丢失";
+        else claimStatus = playerTaskRecord.isClaimed() ? "§7物资已领取" : "§a可领取物资";
         return fastCreateItemStack(Material.PAPER,1,iconName,
                 " ",
                 "  §7完成时间 §f"+timeFormat.format(taskFinishedDate),
