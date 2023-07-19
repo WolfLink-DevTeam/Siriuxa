@@ -2,6 +2,7 @@ package org.wolflink.minecraft.plugin.siriuxa.menu.task.icon;
 
 import lombok.NonNull;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -25,6 +26,7 @@ public class ExplorationBackpackItem extends Icon {
         if(itemStack != null) {
             this.itemStack = itemStack.clone();
             ItemMeta itemMeta = itemStack.getItemMeta();
+            if(itemMeta == null) return;
             List<String> lores = new ArrayList<>(){{
                add(" ");
                add("  §f左键 §a选择物品");
@@ -41,14 +43,17 @@ public class ExplorationBackpackItem extends Icon {
     protected @NonNull ItemStack createIcon() {
         if(itemStack == null) return new ItemStack(Material.AIR);
         if(explorationBackpackMenu.containSlot(index)) {
-            String itemName = Objects.requireNonNull(itemStack.getItemMeta()).getDisplayName();
-            return fastCreateItemStack(Material.LIME_STAINED_GLASS_PANE,itemStack.getAmount(),"§a已选择 "+itemName,itemStack.getItemMeta().getLore());
+            ItemMeta itemMeta = itemStack.getItemMeta();
+            if(itemMeta == null) return itemStack;
+            String itemName = itemMeta.getDisplayName();
+            return fastCreateItemStack(Material.LIME_STAINED_GLASS_PANE,itemStack.getAmount(),"§a已选择 "+itemName,itemMeta.getLore());
         } else return itemStack;
     }
 
     @Override
     public void leftClick(Player player) {
         if(itemStack == null) return;
+        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL,1f,1.2f);
         explorationBackpackMenu.selectSlot(index);
     }
 
