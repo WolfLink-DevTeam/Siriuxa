@@ -44,8 +44,8 @@ public class TaskMonsterSpawner {
         spawnerAttribute = new SpawnerAttribute(task.getTaskDifficulty());
     }
 
-    private final int MIN_RADIUS = 10;
-    private final int MAX_RADIUS = 20;
+    private final int MIN_RADIUS = 12;
+    private final int MAX_RADIUS = 24;
 
     private void startSpawnMob() {
         if (spawnTaskId == -1) {
@@ -64,7 +64,7 @@ public class TaskMonsterSpawner {
         Plugin plugin = Siriuxa.getInstance();
         return Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             task.getPlayers().forEach(p -> spawnMobAroundPlayer(minRadius, maxRadius, p));
-        }, 20 * 15, 20 * 15);
+        }, 20 * 15L, 20 * 15L);
     }
 
     /**
@@ -75,11 +75,13 @@ public class TaskMonsterSpawner {
         Location loc = player.getLocation();
         World world = loc.getWorld();
         assert world != null;
+        if (!isDecidedToSpawn(spawnerAttribute.getDecideSpawnChance(), random)) return;
         if (isMobCountOverLimit(maxRadius, loc)) return;
         double r = random.nextInt(minRadius, maxRadius);
         double x = loc.getX() + random.nextDouble() * r * 2 - r;
         double z = loc.getZ() + random.nextDouble() * r * 2 - r;
         double y = world.getHighestBlockYAt((int) x, (int) z);
+        // TODO: Spawn mob at any possible height
         Location spawnLoc = new Location(world, x, y, z);
         if (spawnLoc.getBlock().isLiquid()) return;
         EntityType entityType = spawnerAttribute.randomType();
@@ -91,8 +93,10 @@ public class TaskMonsterSpawner {
             maxHealth.setBaseValue(maxHealth.getBaseValue() * spawnerAttribute.getHealthMultiple());
             monster.setHealth(maxHealth.getBaseValue());
         }
-        if (movementSpeed != null) movementSpeed.setBaseValue(movementSpeed.getBaseValue() * spawnerAttribute.getMovementMultiple());
-        if (attackDamage != null) attackDamage.setBaseValue(attackDamage.getBaseValue() * spawnerAttribute.getDamageMultiple());
+        if (movementSpeed != null)
+            movementSpeed.setBaseValue(movementSpeed.getBaseValue() * spawnerAttribute.getMovementMultiple());
+        if (attackDamage != null)
+            attackDamage.setBaseValue(attackDamage.getBaseValue() * spawnerAttribute.getDamageMultiple());
     }
 
     // 必须同步计算
@@ -101,10 +105,13 @@ public class TaskMonsterSpawner {
                 .getNearbyEntities(center, radius, radius, radius, Monster.class::isInstance)
                 .size();
         // 示例:
-        // 半径:15, 怪物上限~50
-        // 半径:20, 怪物上限~80
-        // 半径:25, 怪物上限~120
+        // 半径:12, 怪物上限~16
+        // 半径:24, 怪物上限~64
         // 不考虑半径太大的情况
-        return mobCount > 15 + (radius * radius / 6.0);
+        return mobCount > (radius * radius / 9.0);
+    }
+
+    private static boolean isDecidedToSpawn(double spawnChance, @NonNull ThreadLocalRandom random) {
+        return random.nextDouble() < spawnChance;
     }
 }
