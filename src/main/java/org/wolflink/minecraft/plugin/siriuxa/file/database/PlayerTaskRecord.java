@@ -75,8 +75,8 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
         map.put("taskUuid",taskUuid.toString());
         map.put("isSuccess",isSuccess);
         map.put("playerBackpack",playerBackpack);
-        map.put("usingTimeInMills",usingTimeInMills);
-        map.put("finishedTimeInMills",finishedTimeInMills);
+        map.put("usingTimeInMills",Long.toString(usingTimeInMills));
+        map.put("finishedTimeInMills",Long.toString(finishedTimeInMills));
         map.put("teamSize",teamSize);
         map.put("taskDifficulty",taskDifficulty);
         map.put("taskType",taskType);
@@ -87,8 +87,8 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
         taskUuid = UUID.fromString((String) map.get("taskUuid"));
         isSuccess = (boolean) map.get("isSuccess");
         playerBackpack = (PlayerBackpack) map.get("playerBackpack");
-        usingTimeInMills = (int) map.get("usingTimeInMills");
-        finishedTimeInMills = (int) map.get("finishedTimeInMills");
+        usingTimeInMills = Long.parseLong((String) map.get("usingTimeInMills"));
+        finishedTimeInMills = Long.parseLong((String) map.get("finishedTimeInMills"));
         teamSize = (int) map.get("teamSize");
         taskDifficulty = (String) map.get("taskDifficulty");
         taskType = (String) map.get("taskType");
