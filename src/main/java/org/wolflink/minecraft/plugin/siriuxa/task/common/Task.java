@@ -231,7 +231,7 @@ public abstract class Task implements INameable {
         this.taskWheat = size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
             IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(new LocationCommandSender(taskRegion.getCenter().clone().add(0, 2, 0)));
-            beaconLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.BEACON, taskRegion.getCenter(), 30);
+            beaconLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.END_PORTAL_FRAME, taskRegion.getCenter(), 30);
             Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> {
                 List<Player> playerList = getPlayers();
                 for (Player player : playerList) {
