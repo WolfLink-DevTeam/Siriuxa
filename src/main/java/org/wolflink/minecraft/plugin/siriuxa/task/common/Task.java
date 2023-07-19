@@ -83,12 +83,13 @@ public abstract class Task implements INameable {
 
     protected abstract StageHolder initStageHolder();
 
-    private final TaskMonsterSpawner taskMonsterSpawner = new TaskMonsterSpawner(this);
+    private final TaskMonsterSpawner taskMonsterSpawner;
 
     public Task(TaskTeam taskTeam, TaskDifficulty taskDifficulty) {
         this.teamUuid = taskTeam.getTeamUuid();
         this.playerUuids = taskTeam.getMemberUuids();
         this.taskDifficulty = taskDifficulty;
+        this.taskMonsterSpawner = new TaskMonsterSpawner(this);
         this.wheatLostAcceleratedSpeed = taskDifficulty.getWheatLostAcceleratedSpeed();
         this.baseWheatLoss = taskDifficulty.getBaseWheatLoss();
         stageHolder = initStageHolder();
