@@ -118,7 +118,7 @@ public class TaskService {
      */
     public void offline(@NonNull Task task,@NonNull Player player) {
         OfflinePlayerDB offlinePlayerDB = IOC.getBean(OfflinePlayerDB.class);
-        Notifier.debug("玩家"+player.getName()+"上线了。");
+        Notifier.debug("玩家"+player.getName()+"离线了。");
         // 已经有标记计时了
         if(escapeTaskMap.containsKey(player.getUniqueId())) return;
         Notifier.debug("正在尝试保存玩家"+player.getName()+"保存玩家离线数据。");

@@ -317,6 +317,8 @@ public abstract class Task implements INameable {
         TaskTeam taskTeam = IOC.getBean(TaskTeamRepository.class).find(teamUuid);
         if(taskTeam != null) taskTeam.setSelectedTask(null);
         teamUuid = null;
+        playerUuids.clear();
+        IOC.getBean(TaskRepository.class).deleteByKey(taskUuid);
 //        IOC.getBean(TaskService.class).delete(this);
     }
 
