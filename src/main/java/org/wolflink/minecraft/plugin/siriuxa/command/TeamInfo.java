@@ -49,9 +49,9 @@ public class TeamInfo extends WolfirdCommand {
             String color;
             if (offlinePlayer.isOnline()) color = "§a(在线) ";
             else color = "§c(离线) ";
-            msg.append(color).append(offlinePlayer.getName()).append("\n§r\n");
+            msg.append(color).append(offlinePlayer.getName());
         }
-
+        msg.append("\n§r");
         Notifier.notify(taskInfo + msg, player);
     }
 }

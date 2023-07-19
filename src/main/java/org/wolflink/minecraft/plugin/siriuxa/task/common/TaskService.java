@@ -122,7 +122,7 @@ public class TaskService {
         if(escapeTaskMap.containsKey(player.getUniqueId())) return;
         OfflinePlayerRecord offlinePlayerRecord = new OfflinePlayerRecord(player);
         offlinePlayerDB.save(offlinePlayerRecord);
-        // 如果玩家还在任务中，3分钟后标记其为逃跑状态，在下次上线时触发相关方法
+        // 如果玩家还在任务中，3分钟后都没再次登录，并且任务还在进行中，则标记其为逃跑状态，在下次上线时触发相关方法
         int taskId = Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance(),()->{
             if(task.getStageHolder().getThisStage() instanceof GameStage) {
                 offlinePlayerRecord.setTaskEscape(true);
