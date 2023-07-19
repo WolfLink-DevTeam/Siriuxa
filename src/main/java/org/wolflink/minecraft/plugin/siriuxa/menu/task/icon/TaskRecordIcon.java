@@ -4,8 +4,11 @@ import lombok.NonNull;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
+import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
+import org.wolflink.minecraft.plugin.siriuxa.menu.task.ExplorationBackpackMenu;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -45,7 +48,12 @@ public class TaskRecordIcon extends Icon {
 
     @Override
     public void leftClick(Player player) {
-
+        if(!playerTaskRecord.isClaimed() && playerTaskRecord.isSuccess()) {
+            MenuService menuService = IOC.getBean(MenuService.class);
+            ExplorationBackpackMenu menu = menuService.findMenu(player, ExplorationBackpackMenu.class);
+            menu.setPlayerTaskRecord(playerTaskRecord);
+            IOC.getBean(MenuService.class).display(menu,player);
+        }
     }
 
     @Override

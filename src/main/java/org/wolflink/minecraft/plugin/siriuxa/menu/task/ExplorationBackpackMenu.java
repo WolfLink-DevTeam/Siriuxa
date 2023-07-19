@@ -1,5 +1,6 @@
 package org.wolflink.minecraft.plugin.siriuxa.menu.task;
 
+import lombok.Setter;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -23,15 +24,15 @@ import java.util.stream.Stream;
 
 public class ExplorationBackpackMenu extends Menu {
 
-    private final PlayerTaskRecord playerTaskRecord;
+    @Setter
+    private PlayerTaskRecord playerTaskRecord = null;
 
     /**
      * 刷新周期设置小于0则为静态菜单
      * 静态菜单只会在打开时刷新一次
      */
-    protected ExplorationBackpackMenu(UUID ownerUuid, PlayerTaskRecord playerTaskRecord) {
+    public ExplorationBackpackMenu(UUID ownerUuid) {
         super(ownerUuid, 5, "§0§l任务背包", 54);
-        this.playerTaskRecord = playerTaskRecord;
     }
     private final Set<Integer> selectedSlots = new HashSet<>();
 
@@ -85,6 +86,7 @@ public class ExplorationBackpackMenu extends Menu {
                 .forEach(index -> setIcon(index, emptyIcon));
         // 放置新的边界图标
         Stream.of(0,1,2,3,5,6,7,8,9,10,16,17).forEach(index -> setIcon(index,borderIcon));
+        if(playerTaskRecord == null) return;
         setIcon(4,new ClaimTaskReward(this));
         PlayerBackpack playerBackpack = playerTaskRecord.getPlayerBackpack();
         if(playerBackpack == null) return;
