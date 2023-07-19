@@ -16,6 +16,7 @@ import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
+import org.wolflink.minecraft.plugin.siriuxa.monster.TaskMonsterSpawner;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.region.TaskRegion;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeamRepository;
@@ -82,6 +83,8 @@ public abstract class Task implements INameable {
 
     protected abstract StageHolder initStageHolder();
 
+    private final TaskMonsterSpawner taskMonsterSpawner = new TaskMonsterSpawner(this);
+
     public Task(TaskTeam taskTeam, TaskDifficulty taskDifficulty) {
         this.teamUuid = taskTeam.getTeamUuid();
         this.playerUuids = taskTeam.getMemberUuids();
@@ -147,7 +150,6 @@ public abstract class Task implements INameable {
     private void triggerFailed() {
         getPlayers().forEach(this::fillRecord);
         stageHolder.next();
-        taskStat.stop();
         stopCheck();
         finishRecord();
         for (Player player : getPlayers()) {
@@ -162,7 +164,6 @@ public abstract class Task implements INameable {
     private void triggerFinish() {
         getPlayers().forEach(this::fillRecord);
         stageHolder.next();
-        taskStat.stop();
         stopCheck();
         finishRecord();
         for (Player player : getPlayers()) {
@@ -230,6 +231,7 @@ public abstract class Task implements INameable {
                 startTiming();
                 startEvacuateTask();
                 taskRegion.startCheck();
+                taskMonsterSpawner.setEnabled(true);
             });
         });
     }
@@ -280,6 +282,8 @@ public abstract class Task implements INameable {
     }
 
     private void stopCheck() {
+        taskMonsterSpawner.setEnabled(false);
+        taskStat.stop();
         stopTiming();
         if (taskRegion != null) {
             taskRegion.stopCheck();
