@@ -60,16 +60,12 @@ public class TaskMonsterSpawner {
     private @NonNull BukkitTask spawnMobTask(int minRadius, int maxRadius) {
         Plugin plugin = Siriuxa.getInstance();
         return Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-            task.getPlayers().forEach(p -> {
-                Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(),()->{
-                    spawnMobAroundPlayer(minRadius, maxRadius, p);
-                });
-            });
+            task.getPlayers().forEach(p -> spawnMobAroundPlayer(minRadius, maxRadius, p));
         }, 20 * 15, 20 * 15);
     }
 
     /**
-     * (半异步)在玩家周围生成一只怪物
+     * 在玩家周围生成一只怪物
      */
     private void spawnMobAroundPlayer(int minRadius, int maxRadius,Player player) {
         ThreadLocalRandom random = ThreadLocalRandom.current();
@@ -83,22 +79,20 @@ public class TaskMonsterSpawner {
         double y = world.getHighestBlockYAt((int) x, (int) z);
         Location spawnLoc = new Location(world, x, y, z);
         if (spawnLoc.getBlock().isLiquid()) return;
-
         EntityType entityType = spawnerAttribute.randomType();
-        Bukkit.getScheduler().runTask(Siriuxa.getInstance(),()->{
-            Monster monster = (Monster) world.spawnEntity(spawnLoc, entityType);
-            AttributeInstance maxHealth = monster.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-            AttributeInstance movementSpeed = monster.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
-            AttributeInstance attackDamage = monster.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
-            if (maxHealth != null) {
-                maxHealth.setBaseValue(maxHealth.getBaseValue() * spawnerAttribute.getHealthMultiple());
-                monster.setHealth(maxHealth.getBaseValue());
-            }
-            if (movementSpeed != null) movementSpeed.setBaseValue(movementSpeed.getBaseValue() * spawnerAttribute.getMovementMultiple());
-            if (attackDamage != null) attackDamage.setBaseValue(attackDamage.getBaseValue() * spawnerAttribute.getDamageMultiple());
-        });
+        Monster monster = (Monster) world.spawnEntity(spawnLoc, entityType);
+        AttributeInstance maxHealth = monster.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        AttributeInstance movementSpeed = monster.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
+        AttributeInstance attackDamage = monster.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
+        if (maxHealth != null) {
+            maxHealth.setBaseValue(maxHealth.getBaseValue() * spawnerAttribute.getHealthMultiple());
+            monster.setHealth(maxHealth.getBaseValue());
+        }
+        if (movementSpeed != null) movementSpeed.setBaseValue(movementSpeed.getBaseValue() * spawnerAttribute.getMovementMultiple());
+        if (attackDamage != null) attackDamage.setBaseValue(attackDamage.getBaseValue() * spawnerAttribute.getDamageMultiple());
     }
 
+    // 必须同步计算
     private static boolean isMobCountOverLimit(double radius, @NonNull Location center) {
         int mobCount = Objects.requireNonNull(center.getWorld())
                 .getNearbyEntities(center,radius,radius,radius, entity -> entity instanceof Monster)
