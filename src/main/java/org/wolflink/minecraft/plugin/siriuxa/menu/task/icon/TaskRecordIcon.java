@@ -15,7 +15,7 @@ import java.util.Locale;
 
 public class TaskRecordIcon extends Icon {
     private final PlayerTaskRecord playerTaskRecord;
-    public TaskRecordIcon(PlayerTaskRecord playerTaskRecord) {
+    public TaskRecordIcon(@NonNull PlayerTaskRecord playerTaskRecord) {
         super(false);
         this.playerTaskRecord = playerTaskRecord;
     }

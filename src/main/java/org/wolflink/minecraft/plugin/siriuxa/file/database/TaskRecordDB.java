@@ -53,7 +53,8 @@ public class TaskRecordDB extends FileDB {
                 continue;
             }
             try {
-                result.add((PlayerTaskRecord) fileConfiguration.get("data"));
+                PlayerTaskRecord playerTaskRecord = (PlayerTaskRecord) fileConfiguration.get("data");
+                if(playerTaskRecord != null) result.add(playerTaskRecord);
             } catch (Exception e) {
                 e.printStackTrace();
                 Notifier.error("在尝试转换任务记录文件："+recordFile.getAbsolutePath()+"为 PlayerTaskRecord 类型时出现问题。");
