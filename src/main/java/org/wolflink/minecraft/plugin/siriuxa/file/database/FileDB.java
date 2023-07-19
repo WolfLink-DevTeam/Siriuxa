@@ -14,11 +14,15 @@ import java.util.Map;
 public abstract class FileDB {
 
     protected final File folder;
-    private final Map<File, FileConfiguration> fileConfigurations = new HashMap<>();
+    private final Map<String, FileConfiguration> fileConfigurations = new HashMap<>();
 
     @Nullable
     public FileConfiguration getFileConfiguration(File file) {
-        return fileConfigurations.get(file);
+        if(!fileConfigurations.containsKey(file.getAbsolutePath())) {
+            Notifier.debug("没能找到文件"+file.getAbsolutePath()+"的FileConfiguration对象");
+            return null;
+        }
+        return fileConfigurations.get(file.getAbsolutePath());
     }
 
     public FileDB(String folderName) {
@@ -33,7 +37,7 @@ public abstract class FileDB {
             if (subFile.isFile()) {
                 try {
                     FileConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(subFile);
-                    fileConfigurations.put(subFile, fileConfiguration);
+                    fileConfigurations.put(subFile.getAbsolutePath(), fileConfiguration);
                     Notifier.debug("加载了一个文件：" + subFile.getName());
                 } catch (Exception ignore) {
                     Notifier.warn("加载文件：" + subFile.getName() + " 失败。");
@@ -52,7 +56,7 @@ public abstract class FileDB {
             Notifier.error("在创建文件时出现异常。");
         }
         FileConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
-        fileConfigurations.put(file, fileConfiguration);
+        fileConfigurations.put(file.getAbsolutePath(), fileConfiguration);
         return fileConfiguration;
     }
 
@@ -62,12 +66,12 @@ public abstract class FileDB {
     }
 
     public void save() {
-        fileConfigurations.forEach((file, fileConfiguration) -> {
+        fileConfigurations.forEach((path, fileConfiguration) -> {
             try {
-                fileConfiguration.save(file);
+                fileConfiguration.save(new File(path));
             } catch (IOException e) {
                 e.printStackTrace();
-                Notifier.error("在保存文件：" + file.getName() + " 时出现问题。");
+                Notifier.error("在保存文件：" + path + " 时出现问题。");
             }
         });
     }
