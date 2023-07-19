@@ -45,8 +45,8 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
     @Override
     public Map<String, Object> serialize() {
         Map<String,Object> map = new HashMap<>();
-        map.put("playerUuid",playerUuid);
-        map.put("taskUuid",taskUuid);
+        map.put("playerUuid",playerUuid.toString());
+        map.put("taskUuid",taskUuid.toString());
         map.put("playerBackpack",playerBackpack);
         map.put("usingTimeInMills",usingTimeInMills);
         map.put("finishedTimeInMills",finishedTimeInMills);
@@ -56,8 +56,8 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
         return map;
     }
     public PlayerTaskRecord(Map<String,Object> map) {
-        playerUuid = (UUID) map.get("playerUuid");
-        taskUuid = (UUID) map.get("taskUuid");
+        playerUuid = UUID.fromString((String) map.get("playerUuid"));
+        taskUuid = UUID.fromString((String) map.get("taskUuid"));
         playerBackpack = (PlayerBackpack) map.get("playerBackpack");
         usingTimeInMills = (long) map.get("usingTimeInMills");
         finishedTimeInMills = (long) map.get("finishedTimeInMills");
