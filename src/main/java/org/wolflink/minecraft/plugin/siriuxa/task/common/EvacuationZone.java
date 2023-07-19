@@ -3,6 +3,7 @@ package org.wolflink.minecraft.plugin.siriuxa.task.common;
 import com.sk89q.worldedit.EditSession;
 import lombok.Getter;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -58,7 +59,6 @@ public class EvacuationZone {
 
     /**
      * 获取在当前撤离区域的玩家
-     * TODO 撤离判断
      */
     public Set<Player> getPlayerInZone() {
         Set<Player> playerSet = new HashSet<>();
@@ -66,7 +66,10 @@ public class EvacuationZone {
         for (Entity p : Objects.requireNonNull(center.getWorld())
                 .getNearbyEntities(center, safeRadius, safeRadius, safeRadius,
                         entity -> entity.getType().equals(EntityType.PLAYER))) {
-            playerSet.add((Player) p);
+            // 玩家脚下是末地门
+            if(p.getLocation().clone().add(0,-1,0).getBlock().getType().equals(Material.END_PORTAL_FRAME)) {
+                playerSet.add((Player) p);
+            }
         }
         return playerSet;
     }
