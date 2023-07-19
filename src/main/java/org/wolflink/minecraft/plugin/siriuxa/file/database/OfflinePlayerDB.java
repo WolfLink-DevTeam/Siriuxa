@@ -1,5 +1,6 @@
 package org.wolflink.minecraft.plugin.siriuxa.file.database;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Singleton;
@@ -31,8 +32,8 @@ public class OfflinePlayerDB extends FileDB {
         }
     }
     @Nullable
-    public OfflinePlayerRecord load(Player player) {
-        File dataFile = new File(folder,player.getName()+".yml");
+    public OfflinePlayerRecord load(OfflinePlayer offlinePlayer) {
+        File dataFile = new File(folder,offlinePlayer.getName()+".yml");
         FileConfiguration fileConfiguration = getFileConfiguration(dataFile);
         if(fileConfiguration == null) return null;
         try {

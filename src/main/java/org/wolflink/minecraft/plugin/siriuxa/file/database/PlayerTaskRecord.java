@@ -1,10 +1,11 @@
-package org.wolflink.minecraft.plugin.siriuxa.task.common;
+package org.wolflink.minecraft.plugin.siriuxa.file.database;
 
 import lombok.Data;
 import lombok.NonNull;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
+import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,9 +23,14 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
         teamSize = task.size();
         taskType = task.getName();
         taskDifficulty = task.getTaskDifficulty().getName();
+        isEscape = false;
     }
     private final UUID playerUuid;
     private final UUID taskUuid;
+    /**
+     * 玩家是否逃跑
+     */
+    private boolean isEscape;
     /**
      * 任务是否成功
      */

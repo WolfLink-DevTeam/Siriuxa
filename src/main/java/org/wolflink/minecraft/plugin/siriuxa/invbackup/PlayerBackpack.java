@@ -3,6 +3,7 @@ package org.wolflink.minecraft.plugin.siriuxa.invbackup;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;

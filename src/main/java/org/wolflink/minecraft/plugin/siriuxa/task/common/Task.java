@@ -14,6 +14,9 @@ import org.wolflink.minecraft.plugin.siriuxa.api.world.LocationCommandSender;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.WorldEditAPI;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.OfflinePlayerDB;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.OfflinePlayerRecord;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.monster.TaskMonsterSpawner;
@@ -339,13 +342,24 @@ public abstract class Task implements INameable {
      * 填充玩家任务快照
      * TODO 在单个玩家撤离时调用
      */
-    private void fillRecord(Player player) {
-        PlayerTaskRecord record = playerRecordMap.get(player.getUniqueId());
+    private void fillRecord(OfflinePlayer offlinePlayer) {
+        PlayerTaskRecord record = playerRecordMap.get(offlinePlayer.getUniqueId());
         if (record == null) {
-            Notifier.error("未能找到玩家" + player.getName() + "的任务记录类。");
+            Notifier.error("在尝试补充任务记录数据时，未找到玩家"+offlinePlayer.getName()+"的任务记录类。");
             return;
         }
-        record.setPlayerBackpack(new PlayerBackpack(player));
+        PlayerBackpack playerBackpack;
+        Player player = offlinePlayer.getPlayer();
+        if(player == null || player.isOnline()) {
+            OfflinePlayerRecord offlinePlayerRecord = IOC.getBean(OfflinePlayerDB.class).load(offlinePlayer);
+            if(offlinePlayerRecord == null) {
+                Notifier.error("在尝试补充任务记录数据时，未找到离线玩家"+offlinePlayer.getName()+"的离线缓存数据。");
+                return;
+            }
+            playerBackpack = offlinePlayerRecord.getPlayerBackpack();
+            record.setEscape(true); //标记玩家逃跑
+        } else playerBackpack = new PlayerBackpack(player);
+        record.setPlayerBackpack(playerBackpack); // 保存玩家背包到任务记录中
     }
 
     /**
@@ -377,6 +391,7 @@ public abstract class Task implements INameable {
      * (适用于任务过程中玩家非正常离开任务的情况)
      */
     public void escape(OfflinePlayer offlinePlayer) {
+        fillRecord(offlinePlayer);
         playerUuids.remove(offlinePlayer.getUniqueId());
         Notifier.debug("玩家"+offlinePlayer.getName()+"在任务过程中失踪了。");
         Notifier.broadcastChat(playerUuids,"玩家"+offlinePlayer.getName()+"在任务过程中失踪了。");
