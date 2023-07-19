@@ -1,24 +1,21 @@
 package org.wolflink.minecraft.plugin.siriuxa.monster;
 
 import lombok.NonNull;
-import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
-import org.jetbrains.annotations.Contract;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 
-import java.util.*;
+import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * 任务怪物生成器
@@ -28,7 +25,6 @@ public class TaskMonsterSpawner {
 
     @NonNull
     private final Task task;
-    private final Random random = new Random(114514);
 
     private boolean enabled = false;
 
@@ -39,18 +35,16 @@ public class TaskMonsterSpawner {
     public void setEnabled(boolean value) {
         if(enabled == value)return;
         enabled = value;
-        Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(),()->{
-            if(enabled) startSpawnMob();
-            else stopSpawnMob();
-        });
+        if(enabled) startSpawnMob();
+        else stopSpawnMob();
     }
 
     public TaskMonsterSpawner(@NonNull Task task) {
         this.task = task;
         spawnerAttribute = new SpawnerAttribute(task.getTaskDifficulty());
     }
-    private final double MIN_RADIUS = 10.0;
-    private final double MAX_RADIUS = 20.0;
+    private final int MIN_RADIUS = 10;
+    private final int MAX_RADIUS = 20;
     private void startSpawnMob() {
         if(spawnTaskId == -1) {
             spawnTaskId = spawnMobTask(MIN_RADIUS,MAX_RADIUS).getTaskId();
@@ -63,37 +57,34 @@ public class TaskMonsterSpawner {
         }
     }
 
-    private @NonNull BukkitTask spawnMobTask(double minRadius, double maxRadius) {
+    private @NonNull BukkitTask spawnMobTask(int minRadius, int maxRadius) {
         Plugin plugin = Siriuxa.getInstance();
         return Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-            task.getPlayers().forEach(p -> spawnMobAroundPlayer(minRadius, maxRadius, p));
+            task.getPlayers().forEach(p -> {
+                Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(),()->{
+                    spawnMobAroundPlayer(minRadius, maxRadius, p);
+                });
+            });
         }, 20 * 15, 20 * 15);
     }
 
     /**
-     * 在玩家周围生成一只怪物
+     * (半异步)在玩家周围生成一只怪物
      */
-    private void spawnMobAroundPlayer(double minRadius, double maxRadius,Player player) {
+    private void spawnMobAroundPlayer(int minRadius, int maxRadius,Player player) {
+        ThreadLocalRandom random = ThreadLocalRandom.current();
         Location loc = player.getLocation();
         World world = loc.getWorld();
         assert world != null;
         if (isMobCountOverLimit(maxRadius, loc)) return;
-        double r = maxRadius - minRadius;
-        double x = loc.getX() + Math.random() * r * 2 - r;
-        double z = loc.getZ() + Math.random() * r * 2 - r;
+        double r = random.nextInt(minRadius,maxRadius);
+        double x = loc.getX() + random.nextDouble() * r * 2 - r;
+        double z = loc.getZ() + random.nextDouble() * r * 2 - r;
         double y = world.getHighestBlockYAt((int) x, (int) z);
         Location spawnLoc = new Location(world, x, y, z);
         if (spawnLoc.getBlock().isLiquid()) return;
 
-        // customize the mob type, health, movement speed and damage
-        int temp = random.nextInt(100);
-        EntityType entityType;
-        if (temp < 20) return; // 20% chance to not spawn any mob
-        else if (temp < 60) entityType = EntityType.ZOMBIE; // 40%
-        else if (temp < 80) entityType = EntityType.SKELETON; // 20%
-        else if (temp < 90) entityType = EntityType.SPIDER; // 10%
-        else if (temp < 99) entityType = EntityType.CREEPER; // 9%
-        else entityType = EntityType.WARDEN; // 1%
+        EntityType entityType = spawnerAttribute.randomType();
         Bukkit.getScheduler().runTask(Siriuxa.getInstance(),()->{
             Monster monster = (Monster) world.spawnEntity(spawnLoc, entityType);
             AttributeInstance maxHealth = monster.getAttribute(Attribute.GENERIC_MAX_HEALTH);
