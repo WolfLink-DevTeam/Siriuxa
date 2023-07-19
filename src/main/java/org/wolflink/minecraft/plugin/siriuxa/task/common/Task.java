@@ -330,12 +330,7 @@ public abstract class Task implements INameable {
      */
     private void initRecord() {
         for (UUID uuid : playerUuids) {
-            PlayerTaskRecord record = new PlayerTaskRecord();
-            record.setPlayerUuid(uuid);
-            record.setTaskUuid(taskUuid);
-            record.setTeamSize(size());
-            record.setTaskDifficulty(taskDifficulty.getName());
-            record.setTaskType(getName());
+            PlayerTaskRecord record = new PlayerTaskRecord(uuid,this);
             playerRecordMap.put(uuid, record);
         }
     }

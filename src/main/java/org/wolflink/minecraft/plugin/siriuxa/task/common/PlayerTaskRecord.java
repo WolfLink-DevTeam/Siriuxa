@@ -1,7 +1,7 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.common;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
@@ -14,11 +14,24 @@ import java.util.UUID;
  * 可以被序列化的任务记录
  */
 @Data
-@NoArgsConstructor
 public class PlayerTaskRecord implements ConfigurationSerializable {
-    private UUID playerUuid;
-    private UUID taskUuid;
-
+    public PlayerTaskRecord(@NonNull UUID playerUuid,@NonNull Task task) {
+        this.playerUuid = playerUuid;
+        taskUuid = task.getTaskUuid();
+        isSuccess = false;
+        teamSize = task.size();
+        taskType = task.getName();
+        taskDifficulty = task.getTaskDifficulty().getName();
+    }
+    private final UUID playerUuid;
+    private final UUID taskUuid;
+    /**
+     * 任务是否成功
+     */
+    private boolean isSuccess;
+    /**
+     * 玩家背包
+     */
     private PlayerBackpack playerBackpack;
     /**
      * 任务用时
@@ -31,15 +44,15 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
     /**
      * 团队规模
      */
-    private int teamSize;
+    private final int teamSize;
     /**
      * 任务难度
      */
-    private String taskDifficulty;
+    private final String taskDifficulty;
     /**
      * 任务类型
      */
-    private String taskType;
+    private final String taskType;
 
     @NotNull
     @Override
@@ -47,6 +60,7 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
         Map<String,Object> map = new HashMap<>();
         map.put("playerUuid",playerUuid.toString());
         map.put("taskUuid",taskUuid.toString());
+        map.put("isSuccess",isSuccess);
         map.put("playerBackpack",playerBackpack);
         map.put("usingTimeInMills",usingTimeInMills);
         map.put("finishedTimeInMills",finishedTimeInMills);
@@ -58,6 +72,7 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
     public PlayerTaskRecord(Map<String,Object> map) {
         playerUuid = UUID.fromString((String) map.get("playerUuid"));
         taskUuid = UUID.fromString((String) map.get("taskUuid"));
+        isSuccess = (boolean) map.get("isSuccess");
         playerBackpack = (PlayerBackpack) map.get("playerBackpack");
         usingTimeInMills = (long) map.get("usingTimeInMills");
         finishedTimeInMills = (long) map.get("finishedTimeInMills");
