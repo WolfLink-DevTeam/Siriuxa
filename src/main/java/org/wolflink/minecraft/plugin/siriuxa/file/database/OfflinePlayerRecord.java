@@ -28,7 +28,7 @@ public class OfflinePlayerRecord implements ConfigurationSerializable {
     private boolean taskEscape;
 
     public OfflinePlayerRecord(Map<String,Object> map) {
-        uuid = (UUID) map.get("uuid");
+        uuid = UUID.fromString((String) map.get("uuid"));
         name = (String) map.get("name");
         playerBackpack = (PlayerBackpack) map.get("playerBackpack");
         taskEscape = (boolean) map.get("taskEscape");
@@ -37,7 +37,7 @@ public class OfflinePlayerRecord implements ConfigurationSerializable {
     @Override
     public Map<String, Object> serialize() {
         Map<String,Object> map = new HashMap<>();
-        map.put("uuid",uuid);
+        map.put("uuid",uuid.toString());
         map.put("name",name);
         map.put("playerBackpack",playerBackpack);
         map.put("taskEscape",taskEscape);
