@@ -33,7 +33,7 @@ public class OreDB extends FileDB {
         FileConfiguration fileConfiguration = getFileConfiguration(new File(folder, getPath(calendar)));
         if (fileConfiguration == null) {
             Notifier.debug("尝试获取" + material.name() + "数据失败。");
-            return -1;
+            return 0;
         }
         return fileConfiguration.getInt(material.name().toLowerCase(), 0);
     }
