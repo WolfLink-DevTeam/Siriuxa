@@ -381,6 +381,7 @@ public abstract class Task implements INameable {
      */
     public void escape(OfflinePlayer offlinePlayer) {
         playerUuids.remove(offlinePlayer.getUniqueId());
+        Notifier.debug("玩家"+offlinePlayer.getName()+"在任务过程中失踪了。");
         Notifier.broadcastChat(playerUuids,"玩家"+offlinePlayer.getName()+"在任务过程中失踪了。");
     }
 }

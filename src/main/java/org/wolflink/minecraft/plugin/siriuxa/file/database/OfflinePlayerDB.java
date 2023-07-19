@@ -24,6 +24,7 @@ public class OfflinePlayerDB extends FileDB {
         fileConfiguration.set("data",offlinePlayerRecord);
         try {
             fileConfiguration.save(dataFile);
+            Notifier.debug("玩家"+dataFile.getName()+"的离线数据已保存。");
         } catch (Exception e) {
             e.printStackTrace();
             Notifier.error("在尝试保存离线玩家记录"+dataFile.getName()+"的时候出现了问题。");
