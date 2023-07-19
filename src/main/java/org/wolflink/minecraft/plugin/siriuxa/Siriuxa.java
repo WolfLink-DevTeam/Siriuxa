@@ -5,6 +5,7 @@ import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.command.*;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.FileDB;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
+import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.JoinQuitListener;
 import org.wolflink.minecraft.wolfird.framework.WolfirdPlugin;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 import org.wolflink.minecraft.wolfird.framework.command.CmdHelp;
@@ -114,6 +115,7 @@ public final class Siriuxa extends WolfirdPlugin {
         add(HurtChecker.class);
         add(FriendlyProtection.class);
         add(FunctionBan.class);
+        add(JoinQuitListener.class);
     }};
 
 }
