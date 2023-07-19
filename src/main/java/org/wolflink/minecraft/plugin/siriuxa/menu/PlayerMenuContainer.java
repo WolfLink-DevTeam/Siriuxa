@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Menu;
 import org.wolflink.minecraft.plugin.siriuxa.menu.difficulty.ExplorationDifficultyMenu;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskMenu;
+import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskRecordMenu;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +19,7 @@ public class PlayerMenuContainer {
     public PlayerMenuContainer(UUID uuid) {
         menuMap.put(TaskMenu.class, new TaskMenu(uuid));
         menuMap.put(ExplorationDifficultyMenu.class, new ExplorationDifficultyMenu(uuid));
+        menuMap.put(TaskRecordMenu.class,new TaskRecordMenu(uuid));
     }
 
     @Nullable

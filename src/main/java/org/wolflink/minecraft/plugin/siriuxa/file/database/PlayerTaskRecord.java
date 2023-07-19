@@ -24,9 +24,16 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
         taskType = task.getName();
         taskDifficulty = task.getTaskDifficulty().getName();
         isEscape = false;
+        isClaimed = false;
     }
     private final UUID playerUuid;
     private final UUID taskUuid;
+
+    /**
+     * 任务奖励是否已被领取
+     */
+    private boolean isClaimed;
+
     /**
      * 玩家是否逃跑
      */
