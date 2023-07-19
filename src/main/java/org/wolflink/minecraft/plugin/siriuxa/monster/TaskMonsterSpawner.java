@@ -99,7 +99,10 @@ public class TaskMonsterSpawner {
             AttributeInstance maxHealth = monster.getAttribute(Attribute.GENERIC_MAX_HEALTH);
             AttributeInstance movementSpeed = monster.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
             AttributeInstance attackDamage = monster.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
-            if (maxHealth != null) maxHealth.setBaseValue(maxHealth.getBaseValue() * spawnerAttribute.getHealthMultiple());
+            if (maxHealth != null) {
+                maxHealth.setBaseValue(maxHealth.getBaseValue() * spawnerAttribute.getHealthMultiple());
+                monster.setHealth(maxHealth.getBaseValue());
+            }
             if (movementSpeed != null) movementSpeed.setBaseValue(movementSpeed.getBaseValue() * spawnerAttribute.getMovementMultiple());
             if (attackDamage != null) attackDamage.setBaseValue(attackDamage.getBaseValue() * spawnerAttribute.getDamageMultiple());
         });
