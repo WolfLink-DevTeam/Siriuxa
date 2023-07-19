@@ -350,7 +350,7 @@ public abstract class Task implements INameable {
         }
         PlayerBackpack playerBackpack;
         Player player = offlinePlayer.getPlayer();
-        if(player == null || player.isOnline()) {
+        if(player == null || !player.isOnline()) {
             OfflinePlayerRecord offlinePlayerRecord = IOC.getBean(OfflinePlayerDB.class).load(offlinePlayer);
             if(offlinePlayerRecord == null) {
                 Notifier.error("在尝试补充任务记录数据时，未找到离线玩家"+offlinePlayer.getName()+"的离线缓存数据。");
