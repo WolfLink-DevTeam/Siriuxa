@@ -88,6 +88,11 @@ public abstract class Task implements INameable {
 
     private final TaskMonsterSpawner taskMonsterSpawner;
 
+    /**
+     * 任务是否已完成
+     */
+    private boolean isSuccess = false;
+
     public Task(TaskTeam taskTeam, TaskDifficulty taskDifficulty) {
         this.teamUuid = taskTeam.getTeamUuid();
         this.playerUuids = taskTeam.getMemberUuids();
@@ -166,6 +171,7 @@ public abstract class Task implements INameable {
     }
 
     private void triggerFinish() {
+        isSuccess = true;
         getPlayers().forEach(this::fillRecord);
         stageHolder.next();
         stopCheck();
@@ -348,6 +354,7 @@ public abstract class Task implements INameable {
             Notifier.error("在尝试补充任务记录数据时，未找到玩家"+offlinePlayer.getName()+"的任务记录类。");
             return;
         }
+        record.setSuccess(isSuccess); // 设置任务状态
         PlayerBackpack playerBackpack;
         Player player = offlinePlayer.getPlayer();
         if(player == null || !player.isOnline()) {
