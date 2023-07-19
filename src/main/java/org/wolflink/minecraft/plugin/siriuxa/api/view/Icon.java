@@ -31,17 +31,20 @@ public abstract class Icon {
     @NonNull
     protected abstract ItemStack createIcon();
 
-    protected ItemStack fastCreateItemStack(Material material, int count, String displayName, String... lores) {
-        List<String> loreList;
-        if (lores == null || lores.length == 0) loreList = new ArrayList<>();
-        else loreList = Arrays.asList(lores);
+    protected ItemStack fastCreateItemStack(Material material,int count,String displayName,List<String> lores) {
         ItemStack itemStack = new ItemStack(material, count);
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null) throw new NullPointerException("ItemMeta is null");
         itemMeta.setDisplayName(displayName);
-        itemMeta.setLore(loreList);
+        itemMeta.setLore(lores);
         itemStack.setItemMeta(itemMeta);
         return itemStack;
+    }
+    protected ItemStack fastCreateItemStack(Material material, int count, String displayName, String... lores) {
+        List<String> loreList;
+        if (lores == null || lores.length == 0) loreList = new ArrayList<>();
+        else loreList = Arrays.asList(lores);
+        return fastCreateItemStack(material,count,displayName,loreList);
     }
 
     public abstract void leftClick(Player player);

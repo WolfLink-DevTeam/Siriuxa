@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.database.repository.MapRepository;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.stream.Collectors;
@@ -79,6 +80,13 @@ public class DifficultyRepository extends MapRepository<DifficultyKey, TaskDiffi
     @Override
     public DifficultyKey getPrimaryKey(TaskDifficulty taskDifficulty) {
         return new DifficultyKey(taskDifficulty.getClass(), taskDifficulty.getLevel());
+    }
+    @Nullable
+    public ExplorationDifficulty findByName(String name) {
+        for (ExplorationDifficulty explorationDifficulty : findByType(ExplorationDifficulty.class)) {
+            if(name.equals(explorationDifficulty.getName()))return explorationDifficulty;
+        }
+        return null;
     }
 
     public <T extends TaskDifficulty> Collection<T> findByType(Class<T> clazz) {
