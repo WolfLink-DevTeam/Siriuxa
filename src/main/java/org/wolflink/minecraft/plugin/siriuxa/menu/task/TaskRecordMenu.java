@@ -26,7 +26,7 @@ public class TaskRecordMenu extends Menu {
         int startIndex = 10;
         List<PlayerTaskRecord> recordList = IOC.getBean(TaskRecordDB.class).loadRecords(getOfflineOwner().getName());
         int maxLen = Math.min(recordList.size(), 28);
-        for (int i = 0; i < 28; i++) {
+        for (int i = 0; i < maxLen; i++) {
             PlayerTaskRecord playerTaskRecord = recordList.get(i);
             setIcon(startIndex+i,new TaskRecordIcon(playerTaskRecord));
             if((i+1)%7 == 0)startIndex += 2;
