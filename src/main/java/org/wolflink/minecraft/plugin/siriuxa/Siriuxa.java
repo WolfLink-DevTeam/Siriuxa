@@ -1,10 +1,12 @@
 package org.wolflink.minecraft.plugin.siriuxa;
 
 import lombok.Getter;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.command.*;
-import org.wolflink.minecraft.plugin.siriuxa.file.database.FileDB;
-import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.*;
+import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.JoinQuitListener;
 import org.wolflink.minecraft.wolfird.framework.WolfirdPlugin;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
@@ -16,8 +18,6 @@ import org.wolflink.minecraft.plugin.siriuxa.api.view.MenuEventListener;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
 import org.wolflink.minecraft.plugin.siriuxa.file.Lang;
-import org.wolflink.minecraft.plugin.siriuxa.file.database.InventoryDB;
-import org.wolflink.minecraft.plugin.siriuxa.file.database.OreDB;
 import org.wolflink.minecraft.plugin.siriuxa.papi.TaskVariables;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.FriendlyProtection;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.FunctionBan;
@@ -36,6 +36,7 @@ public final class Siriuxa extends WolfirdPlugin {
     @Override
     public void afterEnabled() {
         instance = this;
+        serializableClasses.forEach(ConfigurationSerialization::registerClass);
         // 加载配置文件和语言文件
         for (Class<? extends YamlConfig> config : configs) {
             IOC.getBean(config).load();
@@ -94,6 +95,7 @@ public final class Siriuxa extends WolfirdPlugin {
             IOC.getBean(listenerClass).setEnabled(false);
         }
 
+        serializableClasses.forEach(ConfigurationSerialization::unregisterClass);
     }
 
     /**
@@ -117,6 +119,11 @@ public final class Siriuxa extends WolfirdPlugin {
         add(FriendlyProtection.class);
         add(FunctionBan.class);
         add(JoinQuitListener.class);
+    }};
+    private static final List<Class<? extends ConfigurationSerializable>> serializableClasses = new ArrayList<>(){{
+       add(PlayerBackpack.class);
+       add(PlayerTaskRecord.class);
+       add(OfflinePlayerRecord.class);
     }};
 
 }
