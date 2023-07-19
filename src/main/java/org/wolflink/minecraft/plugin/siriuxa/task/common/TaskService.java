@@ -124,17 +124,21 @@ public class TaskService {
         Notifier.debug("正在尝试保存玩家"+player.getName()+"保存玩家离线数据。");
         OfflinePlayerRecord offlinePlayerRecord = new OfflinePlayerRecord(player);
         offlinePlayerDB.save(offlinePlayerRecord);
-        // 如果玩家还在任务中，3分钟后都没再次登录，并且任务还在进行中，则标记其为逃跑状态，在下次上线时触发相关方法
-        int taskId = Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance(),()->{
-            Notifier.debug("正在判断玩家"+player.getName()+"是否从任务中逃跑。");
-            if(task.getStageHolder().getThisStage() instanceof GameStage) {
-                offlinePlayerRecord.setTaskEscape(true);
-                offlinePlayerDB.save(offlinePlayerRecord);
-                task.escape(player);
-                Notifier.debug("玩家"+player.getName()+"从任务中逃跑了。");
-            }
-        },20 * 60 * 3).getTaskId();
-        escapeTaskMap.put(player.getUniqueId(),taskId);
+        // 如果玩家还在进行中的任务中，3分钟后都没再次登录，并且任务还在进行中或者已结束，则标记其为逃跑状态，在下次上线时触发相关方法
+        Stage nowStage = task.getStageHolder().getThisStage();
+        if(nowStage instanceof GameStage) {
+            int taskId = Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance(),()->{
+                Notifier.debug("正在判断玩家"+player.getName()+"是否从任务中逃跑。");
+                Stage futureStage = task.getStageHolder().getThisStage();
+                if(futureStage instanceof GameStage || futureStage instanceof EndStage) {
+                    offlinePlayerRecord.setTaskEscape(true);
+                    offlinePlayerDB.save(offlinePlayerRecord);
+                    task.escape(player);
+                    Notifier.debug("玩家"+player.getName()+"从任务中逃跑了。");
+                }
+            },20 * 60 * 3).getTaskId();
+            escapeTaskMap.put(player.getUniqueId(),taskId);
+        }
     }
 
     /**

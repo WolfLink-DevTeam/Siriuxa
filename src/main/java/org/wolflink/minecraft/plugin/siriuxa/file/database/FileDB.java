@@ -39,7 +39,8 @@ public abstract class FileDB {
                     FileConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(subFile);
                     fileConfigurations.put(subFile.getAbsolutePath(), fileConfiguration);
                     Notifier.debug("加载了一个文件：" + subFile.getName());
-                } catch (Exception ignore) {
+                } catch (Exception e) {
+                    e.printStackTrace();
                     Notifier.warn("加载文件：" + subFile.getName() + " 失败。");
                 }
             } else if (subFile.isDirectory()) load(subFile);
