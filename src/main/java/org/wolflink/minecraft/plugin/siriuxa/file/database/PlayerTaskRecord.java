@@ -80,6 +80,8 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
         map.put("teamSize",teamSize);
         map.put("taskDifficulty",taskDifficulty);
         map.put("taskType",taskType);
+        map.put("isEscape",isEscape);
+        map.put("isClaimed",isClaimed);
         return map;
     }
     public PlayerTaskRecord(Map<String,Object> map) {
@@ -92,6 +94,8 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
         teamSize = (int) map.get("teamSize");
         taskDifficulty = (String) map.get("taskDifficulty");
         taskType = (String) map.get("taskType");
+        isClaimed = (boolean) map.get("isClaimed");
+        isEscape = (boolean) map.get("isEscape");
     }
     public static PlayerTaskRecord deserialize(Map<String,Object> map) {
         return new PlayerTaskRecord(map);
