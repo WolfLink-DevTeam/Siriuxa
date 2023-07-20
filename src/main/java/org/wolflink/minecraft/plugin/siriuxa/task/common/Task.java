@@ -26,6 +26,7 @@ import org.wolflink.minecraft.plugin.siriuxa.task.common.region.TaskRegion;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeamRepository;
 import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 
 import java.util.*;
@@ -38,6 +39,10 @@ import java.util.*;
 @Data
 public abstract class Task implements INameable {
 
+    /**
+     * 任务过程中的调度器，在任务结束后其中的所有任务都会销毁
+     */
+    private final SubScheduler subScheduler = new SubScheduler();
     /**
      * 任务开始时间
      */
@@ -156,8 +161,6 @@ public abstract class Task implements INameable {
         else return availableEvacuationZone.getPlayerInZone();
     }
 
-    private int finishCheckTaskId = -1;
-
     @NonNull
     public TaskTeam getTeam() {
         return IOC.getBean(TaskTeamRepository.class).find(teamUuid);
@@ -171,7 +174,7 @@ public abstract class Task implements INameable {
         failed();
         for (Player player : getTeam().getPlayers()) {
             IOC.getBean(TaskService.class).goLobby(player);
-            Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance(),()->{
+            Siriuxa.getInstance().getSubScheduler().runTaskLater(()->{
                 player.sendTitle("§c任务失败", "§7真可惜...下次再尝试吧", 10, 80, 10);
                 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 0.8f);
             },20 * 3);
@@ -188,7 +191,7 @@ public abstract class Task implements INameable {
         finish();
         for (Player player : getTeam().getPlayers()) {
             IOC.getBean(TaskService.class).goLobby(player);
-            Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance(),()->{
+            Siriuxa.getInstance().getSubScheduler().runTaskLater(()->{
                 player.sendTitle("§a任务完成", "§7前往领取本次任务的报酬吧", 10, 80, 10);
                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f);
                 player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1f, 1f);
@@ -203,7 +206,7 @@ public abstract class Task implements INameable {
      * 如果撤离玩家数和任务玩家数一致，则任务完成
      */
     public void startGameOverCheck() {
-        finishCheckTaskId = Bukkit.getScheduler().runTaskTimer(Siriuxa.getInstance(), () -> {
+        subScheduler.runTaskTimer(() -> {
             if (size() == 0) {
                 triggerFailed();
                 return;
@@ -211,27 +214,7 @@ public abstract class Task implements INameable {
             if (waitForEvacuatePlayers().size() == size()) {
                 triggerFinish();
             }
-        }, 20, 20).getTaskId();
-    }
-
-    public void stopFinishCheck() {
-        if (finishCheckTaskId != -1) {
-            Bukkit.getScheduler().cancelTask(finishCheckTaskId);
-            finishCheckTaskId = -1;
-        }
-    }
-
-    private int evacuateTaskId = -1;
-
-    /**
-     * 停止生成撤离点
-     */
-    public void stopEvacuateTask() {
-        if (evacuateTaskId != -1) {
-            Bukkit.getScheduler().cancelTask(evacuateTaskId);
-            evacuateTaskId = -1;
-            availableEvacuationZone = null;
-        }
+        }, 20, 20);
     }
     private List<Location> beaconLocations = new ArrayList<>();
     public void start(TaskRegion taskRegion) {
@@ -264,13 +247,15 @@ public abstract class Task implements INameable {
                 startTiming();
                 startEvacuateTask((int) (30+10*Math.random()));
                 taskRegion.startCheck();
-                taskMonsterSpawner.setEnabled(true);
+                subScheduler.runTaskLater(()->{
+                    taskMonsterSpawner.setEnabled(true);
+                },20 * 60 * 5);
             });
         });
     }
 
     private void startEvacuateTask(int minutes) {
-        evacuateTaskId = Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance(), () -> {
+        subScheduler.runTaskLater(() -> {
             if (taskRegion == null) return;
             Location evacuateLocation = taskRegion.getEvacuateLocation((int) taskRegion.getRadius());
             if (evacuateLocation == null) {
@@ -286,7 +271,7 @@ public abstract class Task implements INameable {
                 availableEvacuationZone.setAvailable(true);
                 startEvacuateTask((int) (12+8*Math.random()));
             }
-        }, 20L * 60 * minutes).getTaskId();
+        }, 20L * 60 * minutes);
     }
 
     /**
@@ -296,35 +281,21 @@ public abstract class Task implements INameable {
         return baseWheatLoss * wheatLossMultiple * size();
     }
 
-    int timingTask1Id = -1;
-    int timingTask2Id = -1;
-
     private void startTiming() {
-        timingTask1Id =
-                Bukkit.getScheduler().runTaskTimer(Siriuxa.getInstance(),
-                        () -> takeWheat(getWheatLossPerSecNow())
-                        , 20, 20).getTaskId();
-        timingTask2Id =
-                Bukkit.getScheduler().runTaskTimer(Siriuxa.getInstance(),
-                        () -> addWheatLossMultiple(wheatLostAcceleratedSpeed)
-                        , 20 * 60 * 5, 20 * 60 * 5).getTaskId();
-    }
-
-    private void stopTiming() {
-        if (timingTask1Id != -1) Bukkit.getScheduler().cancelTask(timingTask1Id);
-        if (timingTask2Id != -1) Bukkit.getScheduler().cancelTask(timingTask2Id);
+                subScheduler.runTaskTimer(() -> takeWheat(getWheatLossPerSecNow())
+                        , 20, 20);
+                subScheduler.runTaskTimer(() -> addWheatLossMultiple(wheatLostAcceleratedSpeed)
+                        , 20 * 60 * 5, 20 * 60 * 5);
     }
 
     private void stopCheck() {
         taskMonsterSpawner.setEnabled(false);
         taskStat.stop();
-        stopTiming();
+        subScheduler.cancelAllTasks();
         if (taskRegion != null) {
             taskRegion.stopCheck();
             taskRegion = null;
         }
-        stopEvacuateTask();
-        stopFinishCheck();
     }
 
     /**
