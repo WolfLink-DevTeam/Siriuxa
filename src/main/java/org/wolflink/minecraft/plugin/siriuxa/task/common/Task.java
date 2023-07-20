@@ -12,9 +12,11 @@ import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.INameable;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.BlockAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.LocationCommandSender;
+import org.wolflink.minecraft.plugin.siriuxa.api.world.RegionAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.WorldEditAPI;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
+import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.OfflinePlayerDB;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.OfflinePlayerRecord;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
@@ -22,6 +24,7 @@ import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.loot.ChestLoot;
 import org.wolflink.minecraft.plugin.siriuxa.monster.TaskMonsterSpawner;
+import org.wolflink.minecraft.plugin.siriuxa.task.common.region.SquareRegion;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.region.TaskRegion;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeamRepository;
@@ -222,15 +225,28 @@ public abstract class Task implements INameable {
         }, 20, 20);
     }
     private List<Location> beaconLocations = new ArrayList<>();
-    public void start(TaskRegion taskRegion) {
-        this.taskRegion = taskRegion;
+
+    public void preLoad() {
+        subScheduler.runTaskLaterAsync(()->{
+            String worldName = IOC.getBean(Config.class).get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME);
+            World world = Bukkit.getWorld(worldName);
+            if (world == null) {
+                Notifier.error(worldName + "世界不存在！请检查配置文件");
+                return;
+            }
+            Location regionCenter = IOC.getBean(RegionAPI.class).autoGetRegionCenter(world);
+            this.taskRegion = new SquareRegion(this,regionCenter);
+            IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(new LocationCommandSender(taskRegion.getCenter().clone().add(0, 2, 0)));
+        },0);
+    }
+    public void start() {
         initRecord();
         taskStat.start();
         startTime = Calendar.getInstance();
         this.taskWheat = size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
         maxPlayerAmount = getTeam().size();
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
-            IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(new LocationCommandSender(taskRegion.getCenter().clone().add(0, 2, 0)));
+
             beaconLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.END_PORTAL_FRAME, taskRegion.getCenter(), 30);
             Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> {
                 // 战利品箱子数量

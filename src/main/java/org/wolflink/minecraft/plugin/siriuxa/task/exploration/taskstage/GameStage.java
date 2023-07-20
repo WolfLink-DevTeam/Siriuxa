@@ -29,17 +29,7 @@ public class GameStage extends TaskStage {
     @Override
     protected void onEnter() {
         super.onEnter();
-        String worldName = config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME);
-        World world = Bukkit.getWorld(worldName);
-        if (world == null) {
-            Notifier.error(worldName + "世界不存在！请检查配置文件");
-            return;
-        }
-        Location regionCenter = IOC.getBean(RegionAPI.class).autoGetRegionCenter(world);
-        getStageHolder().getTask().start(new SquareRegion(
-                getStageHolder().getTask(),
-                regionCenter
-        ));
+        getStageHolder().getTask().start();
     }
 
     @Override
