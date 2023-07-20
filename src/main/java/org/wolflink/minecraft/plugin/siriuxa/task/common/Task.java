@@ -158,17 +158,24 @@ public abstract class Task implements INameable {
 
     private int finishCheckTaskId = -1;
 
+    @NonNull
+    public TaskTeam getTeam() {
+        return IOC.getBean(TaskTeamRepository.class).find(teamUuid);
+    }
+
     private void triggerFailed() {
         getPlayers().forEach(this::fillRecord);
         stageHolder.next();
         stopCheck();
         finishRecord();
-        for (Player player : getPlayers()) {
-            IOC.getBean(TaskService.class).goLobby(player);
-            player.sendTitle("§c任务失败", "§7真可惜...下次再尝试吧", 10, 80, 10);
-            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 0.8f);
-        }
         failed();
+        for (Player player : getTeam().getPlayers()) {
+            IOC.getBean(TaskService.class).goLobby(player);
+            Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance(),()->{
+                player.sendTitle("§c任务失败", "§7真可惜...下次再尝试吧", 10, 80, 10);
+                player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 0.8f);
+            },20 * 3);
+        }
         deleteTask();
     }
 
@@ -178,13 +185,15 @@ public abstract class Task implements INameable {
         stageHolder.next();
         stopCheck();
         finishRecord();
-        for (Player player : getPlayers()) {
-            IOC.getBean(TaskService.class).goLobby(player);
-            player.sendTitle("§a任务完成", "§7前往领取本次任务的报酬吧", 10, 80, 10);
-            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f);
-            player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1f, 1f);
-        }
         finish();
+        for (Player player : getTeam().getPlayers()) {
+            IOC.getBean(TaskService.class).goLobby(player);
+            Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance(),()->{
+                player.sendTitle("§a任务完成", "§7前往领取本次任务的报酬吧", 10, 80, 10);
+                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f);
+                player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1f, 1f);
+            },20 * 3);
+        }
         deleteTask();
     }
 
@@ -408,6 +417,14 @@ public abstract class Task implements INameable {
         player.teleport(IOC.getBean(Config.class).getLobbyLocation());
     }
 
+    public void death(Player player) {
+        fillRecord(player);
+        playerUuids.remove(player.getUniqueId());
+        player.setGameMode(GameMode.SPECTATOR);
+        Notifier.debug("玩家"+player.getName()+"在任务中阵亡了。");
+        Notifier.broadcastChat(playerUuids,"玩家"+player.getName()+"在任务中阵亡了。");
+        if(playerUuids.size() == 0) triggerFailed();
+    }
     /**
      * 玩家逃跑
      * (适用于任务过程中玩家非正常离开任务的情况)
