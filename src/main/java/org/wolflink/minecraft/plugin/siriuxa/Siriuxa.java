@@ -7,7 +7,7 @@ import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.command.*;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.*;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.JoinQuitListener;
+import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.*;
 import org.wolflink.minecraft.wolfird.framework.WolfirdPlugin;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 import org.wolflink.minecraft.wolfird.framework.command.CmdHelp;
@@ -19,9 +19,6 @@ import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
 import org.wolflink.minecraft.plugin.siriuxa.file.Lang;
 import org.wolflink.minecraft.plugin.siriuxa.papi.TaskVariables;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.FriendlyProtection;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.FunctionBan;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.HurtChecker;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.orecheck.OreChecker;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.orecheck.OreValues;
 
@@ -119,6 +116,7 @@ public final class Siriuxa extends WolfirdPlugin {
         add(FriendlyProtection.class);
         add(FunctionBan.class);
         add(JoinQuitListener.class);
+        add(DeathDuringTask.class);
     }};
     private static final List<Class<? extends ConfigurationSerializable>> serializableClasses = new ArrayList<>(){{
        add(PlayerBackpack.class);
