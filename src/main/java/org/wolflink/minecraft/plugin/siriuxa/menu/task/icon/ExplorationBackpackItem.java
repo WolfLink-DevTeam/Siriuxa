@@ -25,7 +25,7 @@ public class ExplorationBackpackItem extends Icon {
         this.explorationBackpackMenu = explorationBackpackMenu;
         if(itemStack != null) {
             this.itemStack = itemStack.clone();
-            ItemMeta itemMeta = itemStack.getItemMeta();
+            ItemMeta itemMeta = this.itemStack.getItemMeta();
             if(itemMeta == null) return;
             List<String> lores = new ArrayList<>(){{
                add(" ");
@@ -34,7 +34,7 @@ public class ExplorationBackpackItem extends Icon {
                add(" ");
             }};
             itemMeta.setLore(lores);
-            itemStack.setItemMeta(itemMeta);
+            this.itemStack.setItemMeta(itemMeta);
         }
         else this.itemStack = null;
     }
