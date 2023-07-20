@@ -25,6 +25,7 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
         taskDifficulty = task.getTaskDifficulty().getName();
         isEscape = false;
         isClaimed = false;
+        wheat = task.getTaskWheat();
     }
     private final UUID playerUuid;
     private final UUID taskUuid;
@@ -66,6 +67,10 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
      * 任务类型
      */
     private final String taskType;
+    /**
+     * 剩余麦穗
+     */
+    private final double wheat;
 
     @NotNull
     @Override
@@ -82,6 +87,7 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
         map.put("taskType",taskType);
         map.put("isEscape",isEscape);
         map.put("isClaimed",isClaimed);
+        map.put("wheat",wheat);
         return map;
     }
     public PlayerTaskRecord(Map<String,Object> map) {
@@ -96,6 +102,7 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
         taskType = (String) map.get("taskType");
         isClaimed = (boolean) map.get("isClaimed");
         isEscape = (boolean) map.get("isEscape");
+        wheat = (double) map.get("wheat");
     }
     public static PlayerTaskRecord deserialize(Map<String,Object> map) {
         return new PlayerTaskRecord(map);

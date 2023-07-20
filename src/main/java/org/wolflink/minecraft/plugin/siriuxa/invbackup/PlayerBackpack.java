@@ -33,8 +33,7 @@ public class PlayerBackpack implements ConfigurationSerializable {
     private ItemStack leggings;
     private ItemStack boots;
     private ItemStack offhand;
-    private int level = 0; // 等级
-    private float exp = 0; // 当前等级的经验值
+    private int totalExp = 0; // 经验合计
     private List<ItemStack> items; // 背包物品
 
     public PlayerBackpack(Player player) {
@@ -46,8 +45,7 @@ public class PlayerBackpack implements ConfigurationSerializable {
             boots = equipment.getBoots() == null ? null : equipment.getBoots().clone();
             offhand = equipment.getItemInOffHand().clone();
         } else Notifier.error("玩家" + player.getName() + "装备栏为空！");
-        level = player.getLevel();
-        exp = player.getExp();
+        totalExp = player.getTotalExperience();
         items = new ArrayList<>();
         // 拷贝背包
         Inventory playerInv = player.getInventory();
@@ -68,8 +66,7 @@ public class PlayerBackpack implements ConfigurationSerializable {
         equipment.setLeggings(leggings);
         equipment.setBoots(boots);
         equipment.setItemInOffHand(offhand);
-        player.setLevel(level);
-        player.setExp(exp);
+        player.setTotalExperience(totalExp);
         Inventory inventory = player.getInventory();
         if (items != null) for (int i = 0; i < 36; i++) {
             inventory.setItem(i, i < items.size() ? items.get(i) : null);
@@ -87,8 +84,7 @@ public class PlayerBackpack implements ConfigurationSerializable {
         leggings = (ItemStack) map.get("leggings");
         boots = (ItemStack) map.get("boots");
         offhand = (ItemStack) map.get("offhand");
-        level = (int) map.get("level");
-        exp = (float) ((double) map.get("exp"));
+        totalExp = (int) map.get("totalExp");
         items = (List<ItemStack>) map.get("items");
     }
 
@@ -101,8 +97,7 @@ public class PlayerBackpack implements ConfigurationSerializable {
         map.put("leggings", leggings);
         map.put("boots", boots);
         map.put("offhand", offhand);
-        map.put("level", level);
-        map.put("exp", exp);
+        map.put("totalExp", totalExp);
         map.put("items", items);
         return map;
     }
