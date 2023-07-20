@@ -253,15 +253,15 @@ public abstract class Task implements INameable {
                 }
                 startGameOverCheck();
                 startTiming();
-                startEvacuateTask();
+                startEvacuateTask((int) (30+10*Math.random()));
                 taskRegion.startCheck();
                 taskMonsterSpawner.setEnabled(true);
             });
         });
     }
 
-    private void startEvacuateTask() {
-        evacuateTaskId = Bukkit.getScheduler().runTaskTimer(Siriuxa.getInstance(), () -> {
+    private void startEvacuateTask(int minutes) {
+        evacuateTaskId = Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance(), () -> {
             if (taskRegion == null) return;
             Location evacuateLocation = taskRegion.getEvacuateLocation((int) taskRegion.getRadius());
             if (evacuateLocation == null) {
@@ -271,12 +271,13 @@ public abstract class Task implements INameable {
             if (availableEvacuationZone != null) {
                 availableEvacuationZone.setAvailable(false);
                 availableEvacuationZone = null;
+                startEvacuateTask((int) (12+8*Math.random()));
             } else {
                 availableEvacuationZone = new EvacuationZone(this,evacuateLocation.getWorld(),evacuateLocation.getBlockX(),evacuateLocation.getBlockZ(), 30);
                 availableEvacuationZone.setAvailable(true);
+                startEvacuateTask((int) (12+8*Math.random()));
             }
-            //TODO 30|15
-        }, 20 * 60, 20 * 60).getTaskId();
+        }, 20L * 60 * minutes).getTaskId();
     }
 
     /**
