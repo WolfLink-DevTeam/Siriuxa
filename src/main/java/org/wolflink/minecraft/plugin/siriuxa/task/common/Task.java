@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.INameable;
+import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.BlockAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.LocationCommandSender;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.RegionAPI;
@@ -419,6 +420,9 @@ public abstract class Task implements INameable {
         Notifier.broadcastChat(playerUuids,"玩家"+player.getName()+"在任务中阵亡了。");
         player.sendTitle("§c§l死", "§7嘿！别这么灰心丧气的嘛，下次加油！", 10, 80, 10);
         player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1f, 0.5f);
+        String returnWheat = String.format("%.2f",taskDifficulty.getWheatCost() * 0.8);
+        IOC.getBean(VaultAPI.class).addEconomy(player,Double.parseDouble(returnWheat));
+        Notifier.chat("登记任务花费的麦穗已退还 80%，祝你在下次任务中好运！",player);
         if(playerUuids.size() == 0) triggerFailed();
     }
     /**
@@ -429,6 +433,8 @@ public abstract class Task implements INameable {
         fillRecord(offlinePlayer);
         playerUuids.remove(offlinePlayer.getUniqueId());
         Notifier.debug("玩家"+offlinePlayer.getName()+"在任务过程中失踪了。");
+        String returnWheat = String.format("%.2f",taskDifficulty.getWheatCost() * 0.8);
+        IOC.getBean(VaultAPI.class).addEconomy(offlinePlayer,Double.parseDouble(returnWheat));
         Notifier.broadcastChat(playerUuids,"玩家"+offlinePlayer.getName()+"在任务过程中失踪了。");
     }
 }
