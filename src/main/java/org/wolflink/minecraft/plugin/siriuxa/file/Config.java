@@ -24,7 +24,7 @@ public class Config extends YamlConfig {
     public Location getLobbyLocation() {
         String worldName = get(ConfigProjection.LOBBY_WORLD_NAME);
         World lobbyWorld = Bukkit.getWorld(worldName);
-        if (lobbyWorld == null) throw new NullPointerException("配置文件中没有设置 LobbyLocation");
+        if (lobbyWorld == null) throw new NullPointerException("配置文件中没有设置 LobbyWorld");
         String xyzString = get(ConfigProjection.LOBBY_LOCATION);
         String[] xyz = xyzString.split(" ");
         Location location;
@@ -35,6 +35,22 @@ public class Config extends YamlConfig {
             System.out.println("配置文件 LobbyLocation 相关配置出现异常。");
         }
         throw new NullPointerException("配置文件中没有设置 LobbyLocation");
+    }
+    @NonNull
+    public Location getReadyLocation() {
+        String worldName = get(ConfigProjection.LOBBY_WORLD_NAME);
+        World lobbyWorld = Bukkit.getWorld(worldName);
+        if (lobbyWorld == null) throw new NullPointerException("配置文件中没有设置 LobbyWorld");
+        String xyzString = get(ConfigProjection.LOBBY_READY_LOCATION);
+        String[] xyz = xyzString.split(" ");
+        Location location;
+        try {
+            location = new Location(lobbyWorld, Integer.parseInt(xyz[0]), Integer.parseInt(xyz[1]), Integer.parseInt(xyz[2]));
+            return location;
+        } catch (Exception e) {
+            System.out.println("配置文件 LobbyReadyLocation 相关配置出现异常。");
+        }
+        throw new NullPointerException("配置文件中没有设置 LobbyReadyLocation");
     }
 
     public int getNextRegionIndex() {
