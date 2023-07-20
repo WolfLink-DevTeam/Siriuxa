@@ -118,6 +118,7 @@ public final class Siriuxa extends WolfirdPlugin {
         add(FunctionBan.class);
         add(JoinQuitListener.class);
         add(DeathDuringTask.class);
+        add(PlayerRespawn.class);
     }};
     private static final List<Class<? extends ConfigurationSerializable>> serializableClasses = new ArrayList<>(){{
        add(PlayerBackpack.class);
