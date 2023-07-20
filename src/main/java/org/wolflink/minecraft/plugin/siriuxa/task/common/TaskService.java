@@ -1,10 +1,7 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.common;
 
 import lombok.NonNull;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Inject;
@@ -201,7 +198,12 @@ public class TaskService {
         // 传送到指定方块上
         List<Location> spawnLocations = task.getBeaconLocations();
         if(spawnLocations.size() == 0) player.teleport(task.getTaskRegion().getCenter());
-        else player.teleport(spawnLocations.get((int) (Math.random() * spawnLocations.size())));
+        else {
+            Location location = spawnLocations.get((int) (Math.random() * spawnLocations.size())).clone().add(0.5,0,0.5);
+            location.getBlock().setType(Material.AIR);
+            location.clone().add(0,1,0).getBlock().setType(Material.AIR);
+            player.teleport(location);
+        }
         if(!player.isOp()) player.setGameMode(GameMode.SURVIVAL);
     }
 }
