@@ -100,6 +100,11 @@ public abstract class Task implements INameable {
      */
     private boolean isSuccess = false;
 
+    /**
+     * 任务进行过程中最大玩家数量
+     */
+    private int maxPlayerAmount;
+
     public Task(TaskTeam taskTeam, TaskDifficulty taskDifficulty) {
         this.teamUuid = taskTeam.getTeamUuid();
         this.playerUuids = taskTeam.getMemberUuids();
@@ -223,6 +228,7 @@ public abstract class Task implements INameable {
         taskStat.start();
         startTime = Calendar.getInstance();
         this.taskWheat = size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
+        maxPlayerAmount = getTeam().size();
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
             IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(new LocationCommandSender(taskRegion.getCenter().clone().add(0, 2, 0)));
             beaconLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.END_PORTAL_FRAME, taskRegion.getCenter(), 30);
@@ -349,6 +355,7 @@ public abstract class Task implements INameable {
             Notifier.error("在尝试补充任务记录数据时，未找到玩家"+offlinePlayer.getName()+"的任务记录类。");
             return;
         }
+        record.setWheat(taskWheat / maxPlayerAmount); // 保存任务麦穗
         record.setSuccess(isSuccess); // 设置任务状态
         PlayerBackpack playerBackpack;
         Player player = offlinePlayer.getPlayer();

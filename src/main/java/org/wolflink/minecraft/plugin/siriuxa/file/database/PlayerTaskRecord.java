@@ -70,7 +70,7 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
     /**
      * 剩余麦穗
      */
-    private final double wheat;
+    private double wheat;
 
     @NotNull
     @Override
