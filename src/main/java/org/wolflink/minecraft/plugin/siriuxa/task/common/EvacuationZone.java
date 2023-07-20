@@ -67,7 +67,7 @@ public class EvacuationZone {
                 .getNearbyEntities(center, safeRadius, safeRadius, safeRadius,
                         entity -> entity.getType().equals(EntityType.PLAYER))) {
             // 玩家脚下是末地门
-            if(p.getLocation().clone().add(0,-1,0).getBlock().getType().equals(Material.END_PORTAL_FRAME)) {
+            if(p.getLocation().clone().getBlock().getType().equals(Material.END_PORTAL_FRAME)) {
                 playerSet.add((Player) p);
             }
         }

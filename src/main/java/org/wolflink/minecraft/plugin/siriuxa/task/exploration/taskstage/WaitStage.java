@@ -33,16 +33,14 @@ public class WaitStage extends TaskStage {
             Set<UUID> readyPlayers = new HashSet<>();
             for (Player player : Objects.requireNonNull(readyLoc.getWorld())
                     .getNearbyEntities(readyLoc,radius,radius,radius, entity -> entity.getType() == EntityType.PLAYER)
-                    .stream()
-                    .map(entity -> (Player) entity)
-                    .collect(Collectors.toSet())) {
-                if(task.getPlayerUuids().contains(player.getUniqueId())) {
-                    if(player.getLocation().add(0,-1,0).getBlock().getType().equals(Material.END_PORTAL_FRAME)) {
+                    .stream().map(entity -> (Player) entity).collect(Collectors.toSet())) {
+                if(task.getTeam().contains(player)) {
+                    if(player.getLocation().clone().getBlock().getType().equals(Material.END_PORTAL_FRAME)) {
                         readyPlayers.add(player.getUniqueId());
                     }
                 }
             }
-            if(readyPlayers.size() == task.getPlayerUuids().size()) {
+            if(readyPlayers.size() == task.getTeam().size()) {
                 Bukkit.getScheduler().runTask(Siriuxa.getInstance(),()->{
                     IOC.getBean(TaskService.class).ready(task);
                 });
