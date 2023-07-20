@@ -273,7 +273,7 @@ public abstract class Task implements INameable {
                 availableEvacuationZone.setAvailable(false);
                 availableEvacuationZone = null;
             } else {
-                availableEvacuationZone = new EvacuationZone(this,evacuateLocation.getWorld(),evacuateLocation.getBlockX(),evacuateLocation.getBlockZ(), 5);
+                availableEvacuationZone = new EvacuationZone(this,evacuateLocation.getWorld(),evacuateLocation.getBlockX(),evacuateLocation.getBlockZ(), 30);
                 availableEvacuationZone.setAvailable(true);
             }
             //TODO 30|15
