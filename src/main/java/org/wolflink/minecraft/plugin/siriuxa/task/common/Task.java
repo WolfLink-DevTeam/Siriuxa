@@ -300,7 +300,7 @@ public abstract class Task implements INameable {
      * 获取当前麦穗每秒流失量
      */
     public double getWheatLossPerSecNow() {
-        return baseWheatLoss * wheatLossMultiple * size();
+        return baseWheatLoss * wheatLossMultiple * maxPlayerAmount;
     }
 
     private void startTiming() {
