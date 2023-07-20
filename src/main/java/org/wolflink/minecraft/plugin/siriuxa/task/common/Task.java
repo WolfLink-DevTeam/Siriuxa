@@ -235,7 +235,6 @@ public abstract class Task implements INameable {
             IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(new LocationCommandSender(taskRegion.getCenter().clone().add(0, 2, 0)));
             beaconLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.END_PORTAL_FRAME, taskRegion.getCenter(), 30);
             Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> {
-
                 // 战利品箱子数量
                 int lootChestAmount = 0;
                 // 生成初始战利品
@@ -245,7 +244,7 @@ public abstract class Task implements INameable {
                     Chest chest = (Chest) location.getBlock().getState();
                     new ChestLoot(chest).applyLootTable();
                     lootChestAmount++;
-                    if(lootChestAmount >= size()) return; // 跟人数有关
+                    if(lootChestAmount >= size()) break; // 跟人数有关
                 }
 
                 List<Player> playerList = getPlayers();
