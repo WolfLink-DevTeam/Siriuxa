@@ -2,6 +2,7 @@ package org.wolflink.minecraft.plugin.siriuxa.task.common;
 
 import lombok.NonNull;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -180,6 +181,7 @@ public class TaskService {
         mainInv.apply(player);
         // 传送回城
         player.teleport(config.getLobbyLocation());
+        if(!player.isOp()) player.setGameMode(GameMode.SURVIVAL);
     }
 
     /**
@@ -200,5 +202,6 @@ public class TaskService {
         List<Location> spawnLocations = task.getBeaconLocations();
         if(spawnLocations.size() == 0) player.teleport(task.getTaskRegion().getCenter());
         else player.teleport(spawnLocations.get((int) (Math.random() * spawnLocations.size())));
+        if(!player.isOp()) player.setGameMode(GameMode.SURVIVAL);
     }
 }
