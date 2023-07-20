@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
 import org.bukkit.*;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
@@ -19,6 +20,7 @@ import org.wolflink.minecraft.plugin.siriuxa.file.database.OfflinePlayerRecord;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
+import org.wolflink.minecraft.plugin.siriuxa.loot.ChestLoot;
 import org.wolflink.minecraft.plugin.siriuxa.monster.TaskMonsterSpawner;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.region.TaskRegion;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
@@ -233,6 +235,19 @@ public abstract class Task implements INameable {
             IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(new LocationCommandSender(taskRegion.getCenter().clone().add(0, 2, 0)));
             beaconLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.END_PORTAL_FRAME, taskRegion.getCenter(), 30);
             Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> {
+
+                // 战利品箱子数量
+                int lootChestAmount = 0;
+                // 生成初始战利品
+                List<Location> chestLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.CHEST, taskRegion.getCenter(), 30);
+                for (Location location : chestLocations) {
+                    if(location.getBlock().getType() != Material.CHEST) continue;
+                    Chest chest = (Chest) location.getBlock().getState();
+                    new ChestLoot(chest).applyLootTable();
+                    lootChestAmount++;
+                    if(lootChestAmount >= size()) return; // 跟人数有关
+                }
+
                 List<Player> playerList = getPlayers();
                 for (Player player : playerList) {
                     IOC.getBean(TaskService.class).goTask(player,this);
