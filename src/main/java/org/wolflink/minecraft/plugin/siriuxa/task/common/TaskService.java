@@ -165,7 +165,7 @@ public class TaskService {
     }
 
     /**
-     * 回到大厅
+     * 回到大厅(读取主背包后清理主背包数据)
      */
     public void goLobby(Player player) {
         InventoryDB inventoryDB = IOC.getBean(InventoryDB.class);
@@ -176,6 +176,7 @@ public class TaskService {
         }
         PlayerBackpack.getEmptyBackpack().apply(player);
         mainInv.apply(player);
+        inventoryDB.saveMain(player,PlayerBackpack.getEmptyBackpack());
         // 传送回城
         player.teleport(config.getLobbyLocation());
         if(!player.isOp()) player.setGameMode(GameMode.SURVIVAL);
