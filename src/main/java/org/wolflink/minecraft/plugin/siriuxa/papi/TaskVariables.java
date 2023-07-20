@@ -32,7 +32,7 @@ public class TaskVariables extends PlaceholderExpansion {
     public String onRequest(OfflinePlayer offlinePlayer, @NotNull String params) {
         if (offlinePlayer == null) return "不存在的玩家";
         Task task = taskRepository.findByPlayerUuid(offlinePlayer.getUniqueId());
-        if (task == null) return "玩家未处于任务中";
+        if (task == null) return "暂无任务";
         if (params.equalsIgnoreCase("wheat")) {
             return String.format("%.1f", task.getTaskWheat());
         }
@@ -40,7 +40,7 @@ public class TaskVariables extends PlaceholderExpansion {
             return String.format("%.1f", task.getWheatLossPerSecNow());
         }
         if (params.equalsIgnoreCase("team_size")) {
-            return String.valueOf(task.size());
+            return task.size()+"人";
         }
         if (params.equalsIgnoreCase("detail_wheat")) {
             double value = task.getTaskStat().getWheatChange();

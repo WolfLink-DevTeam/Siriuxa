@@ -175,7 +175,7 @@ public abstract class Task implements INameable {
         for (Player player : getTeam().getPlayers()) {
             IOC.getBean(TaskService.class).goLobby(player);
             Siriuxa.getInstance().getSubScheduler().runTaskLater(()->{
-                player.sendTitle("§c任务失败", "§7真可惜...下次再尝试吧", 10, 80, 10);
+                player.sendTitle("§c任务失败", "§7嘿！别灰心丧气的，下次加油！", 10, 80, 10);
                 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 0.8f);
             },20 * 3);
         }
@@ -394,6 +394,8 @@ public abstract class Task implements INameable {
         player.setGameMode(GameMode.SPECTATOR);
         Notifier.debug("玩家"+player.getName()+"在任务中阵亡了。");
         Notifier.broadcastChat(playerUuids,"玩家"+player.getName()+"在任务中阵亡了。");
+        player.sendTitle("§c§l死", "§7嘿！别这么灰心丧气的嘛，下次加油！", 10, 80, 10);
+        player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1f, 0.5f);
         if(playerUuids.size() == 0) triggerFailed();
     }
     /**
