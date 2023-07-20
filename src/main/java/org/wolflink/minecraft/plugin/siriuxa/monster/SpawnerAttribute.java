@@ -27,9 +27,9 @@ public class SpawnerAttribute {
                 movementMultiple = 0.85;
                 damageMultiple = 0.8;
                 decideSpawnChance = 0.6;
-                weightMap.put(EntityType.ZOMBIE, 40);
-                weightMap.put(EntityType.HUSK, 40);
-                weightMap.put(EntityType.ZOMBIE_VILLAGER, 40);
+                weightMap.put(EntityType.ZOMBIE, 50);
+                weightMap.put(EntityType.HUSK, 50);
+                weightMap.put(EntityType.ZOMBIE_VILLAGER, 50);
                 weightMap.put(EntityType.SKELETON, 20);
                 weightMap.put(EntityType.STRAY, 20);
                 weightMap.put(EntityType.SILVERFISH, 20);
@@ -41,9 +41,9 @@ public class SpawnerAttribute {
                 movementMultiple = 1.0;
                 damageMultiple = 1.0;
                 decideSpawnChance = 0.7;
-                weightMap.put(EntityType.ZOMBIE, 40);
-                weightMap.put(EntityType.HUSK, 40);
-                weightMap.put(EntityType.ZOMBIE_VILLAGER, 40);
+                weightMap.put(EntityType.ZOMBIE, 50);
+                weightMap.put(EntityType.HUSK, 50);
+                weightMap.put(EntityType.ZOMBIE_VILLAGER, 50);
                 weightMap.put(EntityType.SKELETON, 20);
                 weightMap.put(EntityType.STRAY, 20);
                 weightMap.put(EntityType.SILVERFISH, 20);
@@ -56,9 +56,9 @@ public class SpawnerAttribute {
                 movementMultiple = 1.15;
                 damageMultiple = 1.2;
                 decideSpawnChance = 0.8;
-                weightMap.put(EntityType.ZOMBIE, 35);
-                weightMap.put(EntityType.HUSK, 35);
-                weightMap.put(EntityType.ZOMBIE_VILLAGER, 35);
+                weightMap.put(EntityType.ZOMBIE, 45);
+                weightMap.put(EntityType.HUSK, 45);
+                weightMap.put(EntityType.ZOMBIE_VILLAGER, 45);
                 weightMap.put(EntityType.SKELETON, 20);
                 weightMap.put(EntityType.STRAY, 20);
                 weightMap.put(EntityType.SILVERFISH, 20);
@@ -66,16 +66,16 @@ public class SpawnerAttribute {
                 weightMap.put(EntityType.CREEPER, 20);
                 weightMap.put(EntityType.VEX, 20);
                 weightMap.put(EntityType.VINDICATOR, 10);
-                weightMap.put(EntityType.WARDEN, 3);
+                weightMap.put(EntityType.WARDEN, 1);
             }
             case 4 -> { // 专家
                 healthMultiple = 2.0;
                 movementMultiple = 1.3;
                 damageMultiple = 1.5;
                 decideSpawnChance = 0.9;
-                weightMap.put(EntityType.ZOMBIE, 30);
-                weightMap.put(EntityType.HUSK, 30);
-                weightMap.put(EntityType.ZOMBIE_VILLAGER, 30);
+                weightMap.put(EntityType.ZOMBIE, 40);
+                weightMap.put(EntityType.HUSK, 40);
+                weightMap.put(EntityType.ZOMBIE_VILLAGER, 40);
                 weightMap.put(EntityType.SKELETON, 20);
                 weightMap.put(EntityType.STRAY, 20);
                 weightMap.put(EntityType.SILVERFISH, 20);
@@ -83,7 +83,7 @@ public class SpawnerAttribute {
                 weightMap.put(EntityType.CREEPER, 20);
                 weightMap.put(EntityType.VEX, 20);
                 weightMap.put(EntityType.VINDICATOR, 10);
-                weightMap.put(EntityType.WARDEN, 5);
+                weightMap.put(EntityType.WARDEN, 1);
             }
             default -> {
                 healthMultiple = 1.0;
