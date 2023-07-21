@@ -10,6 +10,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.CompassMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.LocationCommandSender;
@@ -18,6 +19,7 @@ import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class EvacuationZone {
@@ -78,39 +80,38 @@ public class EvacuationZone {
 
     private EditSession editSession;
 
+    // TODO 目前没有考虑暂时离线的玩家的情况
     public void generateSchematic() {
         editSession = IOC.getBean(WorldEditAPI.class).pasteEvacuationUnit(locationCommandSender);
-        setPlayerCompass(task.getPlayers(), available);
+        setPlayerCompass(task.getPlayers(), true);
         Notifier.broadcastChat(task.getPlayers(), "飞艇已停留至坐标 X：" + center.getBlockX() + " Z：" + center.getBlockZ() + " 附近，如有需要请尽快前往撤离。");
     }
 
     public void undoSchematic() {
         Notifier.broadcastChat(task.getPlayers(), "坐标 X：" + center.getBlockX() + " Z：" + center.getBlockZ() + " 附近的飞艇已撤离，请等待下一艘飞艇接应。");
-        setPlayerCompass(task.getPlayers(), available);
+        setPlayerCompass(task.getPlayers(), false);
         IOC.getBean(WorldEditAPI.class).undoPaste(locationCommandSender, editSession);
     }
 
     public void setPlayerCompass(List<Player> playerList, boolean available) {
-        ItemMeta compassMeta = new ItemStack(Material.COMPASS).getItemMeta();
+        CompassMeta compassMeta = (CompassMeta) new ItemStack(Material.COMPASS).getItemMeta();
         if (compassMeta == null) {
             Notifier.warn("获取撤离指南针的itemMeta失败");
             return;
         }
-        compassMeta.setDisplayName("撤离指南针");
-        compassMeta.setLore(List.of("指向最近的撤离点"));
+        if(available) {
+            compassMeta.setDisplayName("§a飞艇指南针");
+            compassMeta.setLore(List.of("§f ","  §7指向最近的撤离飞艇","§f "));
+            compassMeta.setLodestone(center);
+            compassMeta.setLodestoneTracked(true);
+        } else {
+            compassMeta.setLodestone(Objects.requireNonNull(task.getTaskRegion()).getCenter());
+        }
 
         for (Player player : playerList) {
-            Inventory inv = player.getInventory();
-            for (ItemStack item : inv) {
+            for (ItemStack item : player.getInventory()) {
                 if (item != null && item.getType() == Material.COMPASS) {
-                    if (available) {
-                        item.setItemMeta(compassMeta);
-                        player.setCompassTarget(center);
-                    } else {
-                        item.setItemMeta(new ItemStack(Material.COMPASS).getItemMeta());
-                        // 虽然task.getTaskRegion()可能返回null，但我坚信米可不会让这个发生
-                        player.setCompassTarget(task.getTaskRegion().getCenter());
-                    }
+                    item.setItemMeta(compassMeta);
                 }
             }
         }
