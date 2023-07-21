@@ -53,6 +53,7 @@ public class EvacuationZone {
     public void setAvailable(boolean value) {
         if (available == value) return;
         available = value;
+        setPlayerCompass(task.getPlayers(), available);
         if (available) {
             generateSchematic();
         } else {
@@ -80,17 +81,17 @@ public class EvacuationZone {
 
     public void generateSchematic() {
         editSession = IOC.getBean(WorldEditAPI.class).pasteEvacuationUnit(locationCommandSender);
-        setPlayerCompass(task.getPlayers(), available);
         Notifier.broadcastChat(task.getPlayers(), "飞艇已停留至坐标 X：" + center.getBlockX() + " Z：" + center.getBlockZ() + " 附近，如有需要请尽快前往撤离。");
     }
 
     public void undoSchematic() {
         Notifier.broadcastChat(task.getPlayers(), "坐标 X：" + center.getBlockX() + " Z：" + center.getBlockZ() + " 附近的飞艇已撤离，请等待下一艘飞艇接应。");
-        setPlayerCompass(task.getPlayers(), available);
         IOC.getBean(WorldEditAPI.class).undoPaste(locationCommandSender, editSession);
     }
 
     public void setPlayerCompass(List<Player> playerList, boolean available) {
+        Notifier.broadcastChat(task.getPlayers(), "温馨提示：提前在物品栏准备好指南针，为你的撤离之旅雪中送炭。=w=");
+
         ItemMeta compassMeta = new ItemStack(Material.COMPASS).getItemMeta();
         if (compassMeta == null) {
             Notifier.warn("获取撤离指南针的itemMeta失败");
