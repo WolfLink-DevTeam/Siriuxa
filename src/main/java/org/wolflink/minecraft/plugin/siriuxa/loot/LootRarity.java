@@ -6,9 +6,9 @@ import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
 import java.util.Arrays;
 
 public enum LootRarity {
-    MISFORTUNE("§0不幸",100,-5), // 10%
-    COMMON("§a常见",600,0), // 60%
-    RARE("§b稀有",250,5), // 25%
+    MISFORTUNE("§0不幸",50,-5), // 5%
+    COMMON("§a常见",500,0), // 50%
+    RARE("§b稀有",400,5), // 40%
     EPIC("§d§l史诗",35,10), // 3.5%
     LEGENDARY("§6§l传说",15,15); // 1.5%
 
