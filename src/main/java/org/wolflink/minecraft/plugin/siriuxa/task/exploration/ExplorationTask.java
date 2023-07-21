@@ -76,11 +76,6 @@ public class ExplorationTask extends Task implements HurtCheckAvailable, OreChec
     }
 
     @Override
-    public boolean canJoin() {
-        return getStageHolder().getThisStage() instanceof WaitStage;
-    }
-
-    @Override
     public double getHurtWheatCost() {
         return difficulty.getHurtWheatCost();
     }

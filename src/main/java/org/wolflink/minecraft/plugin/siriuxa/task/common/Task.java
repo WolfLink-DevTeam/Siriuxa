@@ -150,11 +150,6 @@ public abstract class Task implements INameable {
         }
     }
 
-    public void takeWheat(double wheat, String reason) {
-        takeWheat(wheat);
-        Notifier.broadcastChat(getPlayers(), "本次任务损失了 " + wheat + " 麦穗，原因是" + reason);
-    }
-
     /**
      * 获取该任务中的所有在线玩家
      */
