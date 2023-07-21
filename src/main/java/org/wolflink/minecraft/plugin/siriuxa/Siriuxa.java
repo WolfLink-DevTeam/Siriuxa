@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.wolflink.common.ioc.IOC;
+import org.wolflink.minecraft.plugin.siriuxa.adaptivemarket.SellLog;
 import org.wolflink.minecraft.plugin.siriuxa.command.*;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.*;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
@@ -107,6 +108,7 @@ public final class Siriuxa extends WolfirdPlugin {
         add(InventoryDB.class);
         add(OreDB.class);
         add(TaskRecordDB.class);
+        add(AdaptiveMarketDB.class);
     }};
     /**
      * 注册全局监听器
@@ -126,6 +128,7 @@ public final class Siriuxa extends WolfirdPlugin {
        add(PlayerBackpack.class);
        add(PlayerTaskRecord.class);
        add(OfflinePlayerRecord.class);
+       add(SellLog.class);
     }};
 
 }
