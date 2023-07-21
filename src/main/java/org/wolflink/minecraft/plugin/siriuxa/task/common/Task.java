@@ -423,7 +423,7 @@ public abstract class Task implements INameable {
         String returnWheat = String.format("%.2f",taskDifficulty.getWheatCost() * 0.8);
         IOC.getBean(VaultAPI.class).addEconomy(player,Double.parseDouble(returnWheat));
         Notifier.chat("登记任务花费的麦穗已退还 80%，祝你在下次任务中好运！",player);
-        if(playerUuids.size() == 0) triggerFailed();
+        if(playerUuids.isEmpty()) triggerFailed();
     }
     /**
      * 玩家逃跑
