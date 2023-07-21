@@ -1,6 +1,7 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.common.region;
 
 import lombok.Getter;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -76,7 +77,8 @@ public abstract class TaskRegion {
                 String lineColor = "§a";
                 if (temp <= 15) lineColor = "§e";
                 if (temp <= 5) lineColor = "§c";
-                String progressBar = "§f边界 §8| " + lineColor + "§m" + " ".repeat(temp) + "§r§f你§7§m" + " ".repeat(50 - temp) + "§r §8| §f中心";
+                String progressBar = "§f:mc_border: " + lineColor + "§m" + " ".repeat(temp) + "§r§f:mc_leather_helmet:§7§m" + " ".repeat(50 - temp) + "§r §f:mc_beacon:";
+                progressBar = PlaceholderAPI.setPlaceholders(player,progressBar);
                 bossBar.setTitle(progressBar);
                 bossBar.addPlayer(player);
             }
