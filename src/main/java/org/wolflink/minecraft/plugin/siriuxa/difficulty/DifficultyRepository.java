@@ -26,7 +26,7 @@ public class DifficultyRepository extends MapRepository<DifficultyKey, TaskDiffi
                 .wheatLostAcceleratedSpeed(0.04)
                 .hurtWheatCost(2.0)
                 .hurtDamageMultiple(1.0)
-                .bringSlotAmount(6)
+                .bringSlotAmount(10)
                 .wheatGainPercent(0.1)
                 .expGainPercent(0.5)
                 .build());
@@ -41,7 +41,7 @@ public class DifficultyRepository extends MapRepository<DifficultyKey, TaskDiffi
                 .wheatLostAcceleratedSpeed(0.06)
                 .hurtWheatCost(3.0)
                 .hurtDamageMultiple(1.0)
-                .bringSlotAmount(9)
+                .bringSlotAmount(15)
                 .wheatGainPercent(0.16)
                 .expGainPercent(0.65)
                 .build());
@@ -56,7 +56,7 @@ public class DifficultyRepository extends MapRepository<DifficultyKey, TaskDiffi
                 .wheatLostAcceleratedSpeed(0.08)
                 .hurtWheatCost(3.0)
                 .hurtDamageMultiple(1.0)
-                .bringSlotAmount(12)
+                .bringSlotAmount(20)
                 .wheatGainPercent(0.24)
                 .expGainPercent(0.8)
                 .build());
@@ -71,7 +71,7 @@ public class DifficultyRepository extends MapRepository<DifficultyKey, TaskDiffi
                 .wheatLostAcceleratedSpeed(0.10)
                 .hurtWheatCost(4.0)
                 .hurtDamageMultiple(1.0)
-                .bringSlotAmount(15)
+                .bringSlotAmount(25)
                 .wheatGainPercent(0.35)
                 .expGainPercent(1.0)
                 .build());
