@@ -8,7 +8,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
 import org.wolflink.common.ioc.IOC;
@@ -99,14 +98,12 @@ public class EvacuationZone {
             Notifier.warn("获取撤离指南针的itemMeta失败");
             return;
         }
-        if(available) {
+        if (available) {
             compassMeta.setDisplayName("§a飞艇指南针");
-            compassMeta.setLore(List.of("§f ","  §7指向最近的撤离飞艇","§f "));
+            compassMeta.setLore(List.of("§f ", "  §7接收到了神奇的信号，指向最近的撤离飞艇", "§f "));
             compassMeta.setLodestone(center);
-            compassMeta.setLodestoneTracked(false);
-        } else {
-            compassMeta.setLodestone(Objects.requireNonNull(task.getTaskRegion()).getCenter());
-        }
+        } else compassMeta.setLodestone(Objects.requireNonNull(task.getTaskRegion()).getCenter());
+        compassMeta.setLodestoneTracked(false);
 
         for (Player player : playerList) {
             for (ItemStack item : player.getInventory()) {
