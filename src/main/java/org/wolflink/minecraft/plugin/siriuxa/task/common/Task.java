@@ -109,13 +109,19 @@ public abstract class Task implements INameable {
      */
     private int maxPlayerAmount;
 
-    public Task(TaskTeam taskTeam, TaskDifficulty taskDifficulty) {
+    /**
+     * 任务基础套装
+     */
+    private final PlayerBackpack defaultKit;
+
+    public Task(TaskTeam taskTeam, TaskDifficulty taskDifficulty,PlayerBackpack defaultKit) {
         this.teamUuid = taskTeam.getTeamUuid();
         this.playerUuids = taskTeam.getMemberUuids();
         this.taskDifficulty = taskDifficulty;
         this.taskMonsterSpawner = new TaskMonsterSpawner(this);
         this.wheatLostAcceleratedSpeed = taskDifficulty.getWheatLostAcceleratedSpeed();
         this.baseWheatLoss = taskDifficulty.getBaseWheatLoss();
+        this.defaultKit = defaultKit;
         stageHolder = initStageHolder();
     }
 

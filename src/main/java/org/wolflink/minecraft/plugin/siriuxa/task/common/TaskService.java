@@ -194,13 +194,13 @@ public class TaskService {
         InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
         // 保存玩家背包信息
         invBackupService.saveMainInv(player);
-        // 应用空背包信息
-        PlayerBackpack.getEmptyBackpack().apply(player);
+        // 应用任务背包信息
+        task.getDefaultKit().apply(player);
         // 传送到指定方块上
         List<Location> spawnLocations = task.getBeaconLocations();
         if(spawnLocations.isEmpty()) player.teleport(task.getTaskRegion().getCenter());
         else {
-            Location location = spawnLocations.get((int) (Math.random() * spawnLocations.size())).clone().add(0.5,0,0.5);
+            Location location = spawnLocations.get((int) (Math.random() * spawnLocations.size())).clone().add(0.5,1,0.5);
             location.getBlock().setType(Material.AIR);
             location.clone().add(0,1,0).getBlock().setType(Material.AIR);
             player.teleport(location);

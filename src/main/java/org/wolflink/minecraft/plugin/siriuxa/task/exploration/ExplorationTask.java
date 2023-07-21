@@ -2,10 +2,13 @@ package org.wolflink.minecraft.plugin.siriuxa.task.exploration;
 
 import lombok.Getter;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
+import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.interfaces.HurtCheckAvailable;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.interfaces.OreCheckAvailable;
@@ -20,6 +23,9 @@ import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.LinearStag
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 自由探索任务
  * 活动区域大
@@ -30,8 +36,20 @@ public class ExplorationTask extends Task implements HurtCheckAvailable, OreChec
     @Getter
     private final LinearStageHolder stageHolder = (LinearStageHolder) super.getStageHolder();
 
+    private static final PlayerBackpack defaultKit = new PlayerBackpack();
+    static {
+        defaultKit.setHelmet(new ItemStack(Material.LEATHER_HELMET));
+        defaultKit.setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE));
+        defaultKit.setLeggings(new ItemStack(Material.LEATHER_LEGGINGS));
+        defaultKit.setBoots(new ItemStack(Material.LEATHER_BOOTS));
+        List<ItemStack> items = new ArrayList<>();
+        items.add(new ItemStack(Material.WOODEN_SWORD));
+        items.add(new ItemStack(Material.WOODEN_PICKAXE));
+        items.add(new ItemStack(Material.BREAD,8));
+        defaultKit.setItems(items);
+    }
     public ExplorationTask(TaskTeam taskTeam, ExplorationDifficulty difficulty) {
-        super(taskTeam, difficulty);
+        super(taskTeam, difficulty,defaultKit);
         this.difficulty = difficulty;
     }
 
