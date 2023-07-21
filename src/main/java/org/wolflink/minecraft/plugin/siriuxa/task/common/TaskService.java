@@ -198,7 +198,7 @@ public class TaskService {
         PlayerBackpack.getEmptyBackpack().apply(player);
         // 传送到指定方块上
         List<Location> spawnLocations = task.getBeaconLocations();
-        if(spawnLocations.size() == 0) player.teleport(task.getTaskRegion().getCenter());
+        if(spawnLocations.isEmpty()) player.teleport(task.getTaskRegion().getCenter());
         else {
             Location location = spawnLocations.get((int) (Math.random() * spawnLocations.size())).clone().add(0.5,0,0.5);
             location.getBlock().setType(Material.AIR);

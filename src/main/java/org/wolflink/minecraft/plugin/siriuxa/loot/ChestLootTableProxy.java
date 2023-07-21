@@ -6,14 +6,16 @@ import org.bukkit.loot.LootTables;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
 
 @Singleton
 public class ChestLootTableProxy {
 
-    private final Map<LootRarity, List<LootTables>> lootMap = new HashMap<>(){{
+    private final EnumMap<LootRarity, List<LootTables>> lootMap = new EnumMap<>(LootRarity.class) {{
         // 垃圾
-        put(LootRarity.MISFORTUNE,new ArrayList<>(){{
+        put(LootRarity.MISFORTUNE, new ArrayList<>() {{
             add(LootTables.EMPTY);
             add(LootTables.JUNGLE_TEMPLE_DISPENSER);
             add(LootTables.VILLAGE_CARTOGRAPHER);
@@ -27,7 +29,7 @@ public class ChestLootTableProxy {
             add(LootTables.VILLAGE_TANNERY);
         }});
         // 普通
-        put(LootRarity.COMMON,new ArrayList<>(){{
+        put(LootRarity.COMMON, new ArrayList<>() {{
             add(LootTables.VILLAGE_TOOLSMITH);
             add(LootTables.VILLAGE_TEMPLE);
             add(LootTables.VILLAGE_TAIGA_HOUSE);
@@ -43,7 +45,7 @@ public class ChestLootTableProxy {
             add(LootTables.VILLAGE_PLAINS_HOUSE);
         }});
         // 稀有
-        put(LootRarity.RARE,new ArrayList<>(){{
+        put(LootRarity.RARE, new ArrayList<>() {{
             add(LootTables.WOODLAND_MANSION);
             add(LootTables.VILLAGE_WEAPONSMITH);
             add(LootTables.STRONGHOLD_CORRIDOR);
@@ -57,24 +59,25 @@ public class ChestLootTableProxy {
             add(LootTables.UNDERWATER_RUIN_SMALL);
         }});
         // 史诗 有较好的装备物资
-        put(LootRarity.EPIC,new ArrayList<>(){{
+        put(LootRarity.EPIC, new ArrayList<>() {{
             add(LootTables.SHIPWRECK_TREASURE);
             add(LootTables.BURIED_TREASURE);
             add(LootTables.SIMPLE_DUNGEON);
             add(LootTables.STRONGHOLD_LIBRARY);
         }});
         // 传说 有钻石物品和丰富物资
-        put(LootRarity.LEGENDARY,new ArrayList<>(){{
+        put(LootRarity.LEGENDARY, new ArrayList<>() {{
             add(LootTables.END_CITY_TREASURE);
             add(LootTables.BASTION_TREASURE);
             add(LootTables.ANCIENT_CITY);
         }});
     }};
+
     @NonNull
     public LootTable randomLootTable(LootRarity lootRarity) {
         List<LootTables> lootTablesList = lootMap.get(lootRarity);
-        if(lootTablesList == null) {
-            Notifier.error("不支持的战利品稀有度："+lootRarity.name());
+        if (lootTablesList == null) {
+            Notifier.error("不支持的战利品稀有度：" + lootRarity.name());
             return LootTables.EMPTY.getLootTable();
         }
         return lootTablesList.get((int) (lootTablesList.size() * Math.random())).getLootTable();
