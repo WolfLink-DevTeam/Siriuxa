@@ -36,7 +36,6 @@ public class HuntChecker extends WolfirdListener {
         if(player == null) return; // 与玩家无关
         Task task = taskRepository.findByPlayer(player);
         if (task == null) return; // 没有任务
-        if (!(task instanceof OreCheckAvailable)) return; // 任务模式不可用该检测
         if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 任务没在游戏阶段
         if (task.getTaskRegion() == null) return; // 任务区域未设定
         if (player.getWorld() != task.getTaskRegion().getCenter().getWorld()) return; // 不在任务世界

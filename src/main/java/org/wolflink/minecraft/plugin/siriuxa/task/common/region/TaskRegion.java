@@ -7,6 +7,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -30,6 +33,8 @@ public abstract class TaskRegion {
     protected final Task task;
     @Getter
     protected final Location center;
+    @Getter
+    private final BossBar bossBar = Bukkit.createBossBar("", BarColor.WHITE, BarStyle.SOLID);
 
     public TaskRegion(Task task, Location center, double radius) {
         this.center = center;
@@ -44,6 +49,7 @@ public abstract class TaskRegion {
     }
 
     public void stopCheck() {
+        bossBar.removeAll();
         if (taskId != -1) {
             Bukkit.getScheduler().cancelTask(taskId);
             taskId = -1;
@@ -71,7 +77,8 @@ public abstract class TaskRegion {
                 if (temp <= 15) lineColor = "§e";
                 if (temp <= 5) lineColor = "§c";
                 String progressBar = "§f边界 §8| " + lineColor + "§m" + " ".repeat(temp) + "§r§f你§7§m" + " ".repeat(50 - temp) + "§r §8| §f中心";
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(progressBar));
+                bossBar.setTitle(progressBar);
+                bossBar.addPlayer(player);
             }
         }
     }
