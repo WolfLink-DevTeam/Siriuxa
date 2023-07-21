@@ -100,11 +100,6 @@ public abstract class Task implements INameable {
     private final TaskMonsterSpawner taskMonsterSpawner;
 
     /**
-     * 任务是否已完成
-     */
-    private boolean isSuccess = false;
-
-    /**
      * 任务进行过程中最大玩家数量
      */
     private int maxPlayerAmount;
@@ -185,7 +180,7 @@ public abstract class Task implements INameable {
     }
 
     private void triggerFailed() {
-        getPlayers().forEach(this::fillRecord);
+        getPlayers().forEach(player -> fillRecord(player,false));
         stageHolder.next();
         stopCheck();
         finishRecord();
@@ -201,8 +196,7 @@ public abstract class Task implements INameable {
     }
 
     private void triggerFinish() {
-        isSuccess = true;
-        getPlayers().forEach(this::fillRecord);
+        getPlayers().forEach(player -> fillRecord(player,true));
         stageHolder.next();
         stopCheck();
         finishRecord();
@@ -343,11 +337,6 @@ public abstract class Task implements INameable {
     public abstract void failed();
 
     /**
-     * 是否允许其他玩家加入
-     */
-    public abstract boolean canJoin();
-
-    /**
      * 清理本次任务
      * 在任务完成/失败后调用
      */
@@ -375,16 +364,15 @@ public abstract class Task implements INameable {
 
     /**
      * 填充玩家任务快照
-     * TODO 在单个玩家撤离时调用
      */
-    private void fillRecord(OfflinePlayer offlinePlayer) {
+    private void fillRecord(OfflinePlayer offlinePlayer,boolean taskResult) {
         PlayerTaskRecord record = playerRecordMap.get(offlinePlayer.getUniqueId());
         if (record == null) {
             Notifier.error("在尝试补充任务记录数据时，未找到玩家" + offlinePlayer.getName() + "的任务记录类。");
             return;
         }
         record.setWheat(taskWheat / maxPlayerAmount); // 保存任务麦穗
-        record.setSuccess(isSuccess); // 设置任务状态
+        record.setSuccess(taskResult); // 设置任务状态
         PlayerBackpack playerBackpack;
         Player player = offlinePlayer.getPlayer();
         if (player == null || !player.isOnline()) {
@@ -418,13 +406,20 @@ public abstract class Task implements INameable {
      * (适用于只有部分玩家乘坐撤离飞艇的情况)
      */
     public void evacuate(Player player) {
+        fillRecord(player,true);
         playerUuids.remove(player.getUniqueId());
+        Notifier.debug("玩家" + player.getName() + "在任务中先一步撤离了。");
         Notifier.broadcastChat(playerUuids, "玩家" + player.getName() + "已乘坐飞艇撤离。");
         player.teleport(IOC.getBean(Config.class).getLobbyLocation());
+        Siriuxa.getInstance().getSubScheduler().runTaskLater(() -> {
+            player.sendTitle("§a任务完成", "§7等待任务完全结束后方可领取报酬", 10, 80, 10);
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f);
+            player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1f, 1f);
+        }, 20 * 3);
     }
 
     public void death(Player player) {
-        fillRecord(player);
+        fillRecord(player,false);
         playerUuids.remove(player.getUniqueId());
         player.setGameMode(GameMode.SPECTATOR);
         Notifier.debug("玩家" + player.getName() + "在任务中阵亡了。");
@@ -442,7 +437,7 @@ public abstract class Task implements INameable {
      * (适用于任务过程中玩家非正常离开任务的情况)
      */
     public void escape(OfflinePlayer offlinePlayer) {
-        fillRecord(offlinePlayer);
+        fillRecord(offlinePlayer,false);
         playerUuids.remove(offlinePlayer.getUniqueId());
         Notifier.debug("玩家" + offlinePlayer.getName() + "在任务过程中失踪了。");
         String returnWheat = String.format("%.2f", taskDifficulty.getWheatCost() * 0.8);

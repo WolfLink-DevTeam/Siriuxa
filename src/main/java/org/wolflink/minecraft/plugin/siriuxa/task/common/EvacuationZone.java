@@ -96,6 +96,7 @@ public class EvacuationZone {
     }
 
     public void undoSchematic() {
+        getPlayerInZone().forEach(task::escape);
         Notifier.broadcastChat(task.getPlayers(), "坐标 X：" + center.getBlockX() + " Z：" + center.getBlockZ() + " 附近的飞艇已撤离，请等待下一艘飞艇接应。");
         IOC.getBean(WorldEditAPI.class).undoPaste(locationCommandSender, editSession);
     }
