@@ -53,6 +53,7 @@ public class ExplorationBackpackItem extends Icon {
     @Override
     public void leftClick(Player player) {
         if(itemStack == null) return;
+        if(itemStack.getType() == Material.AIR) return;
         player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES,1f,1f);
         explorationBackpackMenu.selectSlot(index);
     }
@@ -60,6 +61,7 @@ public class ExplorationBackpackItem extends Icon {
     @Override
     public void rightClick(Player player) {
         if(itemStack == null) return;
+        if(itemStack.getType() == Material.AIR) return;
         player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO,1f,1f);
         explorationBackpackMenu.unselectSlot(index);
     }
