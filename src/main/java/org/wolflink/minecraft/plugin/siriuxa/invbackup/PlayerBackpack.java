@@ -66,7 +66,16 @@ public class PlayerBackpack implements ConfigurationSerializable {
         equipment.setLeggings(leggings);
         equipment.setBoots(boots);
         equipment.setItemInOffHand(offhand);
-        player.setTotalExperience(totalExp);
+
+        player.setTotalExperience(0);
+        player.setLevel(0);
+        player.setExp(0);
+        while (player.getExpToLevel() <= totalExp) {
+            totalExp -= player.getExpToLevel();
+            player.setLevel(player.getLevel() + 1);
+        }
+        player.setExp((float)totalExp / player.getExpToLevel());
+
         Inventory inventory = player.getInventory();
         if (items != null) for (int i = 0; i < 36; i++) {
             inventory.setItem(i, i < items.size() ? items.get(i) : null);
