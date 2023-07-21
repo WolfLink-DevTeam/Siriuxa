@@ -103,7 +103,7 @@ public class EvacuationZone {
             compassMeta.setDisplayName("§a飞艇指南针");
             compassMeta.setLore(List.of("§f ","  §7指向最近的撤离飞艇","§f "));
             compassMeta.setLodestone(center);
-            compassMeta.setLodestoneTracked(true);
+            compassMeta.setLodestoneTracked(false);
         } else {
             compassMeta.setLodestone(Objects.requireNonNull(task.getTaskRegion()).getCenter());
         }
