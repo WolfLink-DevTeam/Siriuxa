@@ -8,6 +8,7 @@ import org.wolflink.minecraft.plugin.siriuxa.command.*;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.*;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.*;
+import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.huntcheck.HuntChecker;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.huntcheck.HuntValues;
 import org.wolflink.minecraft.wolfird.framework.WolfirdPlugin;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
@@ -116,6 +117,7 @@ public final class Siriuxa extends WolfirdPlugin {
      */
     private static final List<Class<? extends WolfirdListener>> globalListenerClasses = new ArrayList<>() {{
         add(OreChecker.class);
+        add(HuntChecker.class);
         add(HurtChecker.class);
         add(FriendlyProtection.class);
         add(FunctionBan.class);

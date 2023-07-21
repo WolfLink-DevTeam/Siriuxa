@@ -70,7 +70,7 @@ public class HuntValues {
                     count += huntDB.getHuntCache(calendar, entityType);
                     calendar.add(Calendar.DATE, -1);
                 }
-                Notifier.debug("获取到矿物记录数据：" + entityType.name().toLowerCase() + "，数量总计：" + count);
+                Notifier.debug("获取到怪物记录数据：" + entityType.name().toLowerCase() + "，数量总计：" + count);
                 cacheMap.put(entityType, count);
                 totalCache += count;
             }
