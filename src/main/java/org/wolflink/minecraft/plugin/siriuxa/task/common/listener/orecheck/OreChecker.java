@@ -1,5 +1,7 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.common.listener.orecheck;
 
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -46,7 +48,8 @@ public class OreChecker extends WolfirdListener {
         for (Player teamPlayer : task.getPlayers()) {
             teamPlayer.playSound(teamPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1.5f);
             //TODO 改为 Hologram 提示
-            Notifier.chat("§f" + player.getName() + " §7刚刚出售了 " + lang.get("material." + material.name().toLowerCase(), "未知方块") + " §7换取 §f" + String.format("%.1f", wheatValue) + " §6麦穗", teamPlayer);
+            teamPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                    new TextComponent("§f" + player.getName() + " §7刚刚出售了 " + lang.get("material." + material.name().toLowerCase(), "未知方块") + " §7换取 §f" + String.format("%.1f", wheatValue) + " §6麦穗"));
         }
         renderBlockBorder(block.getLocation());
     }

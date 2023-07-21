@@ -8,6 +8,7 @@ import org.wolflink.minecraft.plugin.siriuxa.command.*;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.*;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.*;
+import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.huntcheck.HuntValues;
 import org.wolflink.minecraft.wolfird.framework.WolfirdPlugin;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 import org.wolflink.minecraft.wolfird.framework.command.CmdHelp;
@@ -78,6 +79,7 @@ public final class Siriuxa extends WolfirdPlugin {
     @Override
     public void beforeDisabled() {
         IOC.getBean(OreValues.class).doSave();
+        IOC.getBean(HuntValues.class).doSave();
 
         // 保存数据库
         for (Class<? extends FileDB> db : databases) {
@@ -106,6 +108,7 @@ public final class Siriuxa extends WolfirdPlugin {
     private static final List<Class<? extends FileDB>> databases = new ArrayList<>() {{
         add(InventoryDB.class);
         add(OreDB.class);
+        add(HuntDB.class);
         add(TaskRecordDB.class);
     }};
     /**
