@@ -10,15 +10,14 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
+import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.LocationCommandSender;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.WorldEditAPI;
 import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class EvacuationZone {
 
@@ -43,21 +42,31 @@ public class EvacuationZone {
      */
     private final Task task;
 
+    // 用于设置指南针的SubScheduler
+    private final SubScheduler subScheduler;
+
+    // 用于存贮指南针已经生效的玩家的列表
+    private final List<Player> compassPlayers;
+
     public EvacuationZone(Task task, World world, int x, int z, int safeRadius) {
         this.task = task;
         this.center = new Location(world, x, world.getHighestBlockYAt(x, z) + 25, z);
         this.safeRadius = safeRadius;
         this.locationCommandSender = new LocationCommandSender(center);
+        this.subScheduler = new SubScheduler();
+        this.compassPlayers = new ArrayList<>();
     }
 
     public void setAvailable(boolean value) {
         if (available == value) return;
         available = value;
-        setPlayerCompass(task.getPlayers(), available);
         if (available) {
             generateSchematic();
+            // TODO: how to judge player in compassPlayer ?
+            subScheduler.runTaskTimer(() -> setPlayerCompass(task.getPlayers(), true), 20 * 5L, 20 * 30L);
         } else {
             undoSchematic();
+            subScheduler.cancelAllTasks();
         }
     }
 
@@ -83,6 +92,7 @@ public class EvacuationZone {
     public void generateSchematic() {
         editSession = IOC.getBean(WorldEditAPI.class).pasteEvacuationUnit(locationCommandSender);
         Notifier.broadcastChat(task.getPlayers(), "飞艇已停留至坐标 X：" + center.getBlockX() + " Z：" + center.getBlockZ() + " 附近，如有需要请尽快前往撤离。");
+        Notifier.broadcastChat(task.getPlayers(), "温馨提示：提前在物品栏准备好指南针，为你的撤离之旅雪中送炭。=w=");
     }
 
     public void undoSchematic() {
@@ -90,13 +100,26 @@ public class EvacuationZone {
         IOC.getBean(WorldEditAPI.class).undoPaste(locationCommandSender, editSession);
     }
 
-    public void setPlayerCompass(List<Player> playerList, boolean available) {
-        Notifier.broadcastChat(task.getPlayers(), "温馨提示：提前在物品栏准备好指南针，为你的撤离之旅雪中送炭。=w=");
+    public void setPlayerCompass(List<Player> players, boolean available) {
+        CompassMeta compassMeta = prepareCompassMeta(available);
+        if (compassMeta == null) return;
+        for (Player player : players) {
+            if (compassPlayers.contains(player)) return;
+            for (ItemStack item : player.getInventory()) {
+                if (item != null && item.getType() == Material.COMPASS) {
+                    item.setItemMeta(compassMeta);
+                    compassPlayers.add(player);
+                }
+            }
+        }
+    }
 
+    @Nullable
+    private CompassMeta prepareCompassMeta(boolean available) {
         CompassMeta compassMeta = (CompassMeta) new ItemStack(Material.COMPASS).getItemMeta();
         if (compassMeta == null) {
             Notifier.warn("获取撤离指南针的itemMeta失败");
-            return;
+            return null;
         }
         if (available) {
             compassMeta.setDisplayName("§a飞艇指南针");
@@ -104,13 +127,7 @@ public class EvacuationZone {
             compassMeta.setLodestone(center);
         } else compassMeta.setLodestone(Objects.requireNonNull(task.getTaskRegion()).getCenter());
         compassMeta.setLodestoneTracked(false);
-
-        for (Player player : playerList) {
-            for (ItemStack item : player.getInventory()) {
-                if (item != null && item.getType() == Material.COMPASS) {
-                    item.setItemMeta(compassMeta);
-                }
-            }
-        }
+        return compassMeta;
     }
 }
+
