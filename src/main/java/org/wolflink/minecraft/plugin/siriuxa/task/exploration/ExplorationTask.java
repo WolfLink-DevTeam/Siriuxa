@@ -44,7 +44,7 @@ public class ExplorationTask extends Task implements HurtCheckAvailable, OreChec
         defaultKit.setItems(items);
     }
     public ExplorationTask(GlobalTeam globalTeam, ExplorationDifficulty difficulty) {
-        super(globalTeam, difficulty,defaultKit);
+            super(globalTeam, difficulty,defaultKit);
         this.difficulty = difficulty;
     }
 

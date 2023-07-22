@@ -22,7 +22,7 @@ public class HurtChecker extends WolfirdListener {
     public void on(EntityDamageEvent event) {
         if (event.getEntityType() != EntityType.PLAYER) return;
         Player player = (Player) event.getEntity();
-        Task task = taskRepository.findByPlayer(player);
+        Task task = taskRepository.findByTaskTeamPlayer(player);
         if (task == null) return; // 没有任务
         if (!(task instanceof HurtCheckAvailable)) return; // 任务模式不可用该检测
         if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 任务没在游戏阶段

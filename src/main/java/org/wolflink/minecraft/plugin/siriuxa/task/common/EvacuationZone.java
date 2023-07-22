@@ -63,7 +63,7 @@ public class EvacuationZone {
         if (available) {
             generateSchematic();
             subScheduler.runTaskTimer(() -> {
-                for (Player player : task.getPlayers()) {
+                for (Player player : task.getTaskPlayers()) {
                     if(!compassPlayers.contains(player)) {
                         setPlayerCompass(player, true);
                         compassPlayers.add(player);
@@ -99,13 +99,13 @@ public class EvacuationZone {
 
     public void generateSchematic() {
         editSession = IOC.getBean(WorldEditAPI.class).pasteEvacuationUnit(locationCommandSender);
-        Notifier.broadcastChat(task.getPlayers(), "飞艇已停留至坐标 X：" + center.getBlockX() + " Z：" + center.getBlockZ() + " 附近，如有需要请尽快前往撤离。");
-        Notifier.broadcastChat(task.getPlayers(), "温馨提示：提前在物品栏准备好指南针，为你的撤离之旅雪中送炭。=w=");
+        Notifier.broadcastChat(task.getTaskPlayers(), "飞艇已停留至坐标 X：" + center.getBlockX() + " Z：" + center.getBlockZ() + " 附近，如有需要请尽快前往撤离。");
+        Notifier.broadcastChat(task.getTaskPlayers(), "温馨提示：提前在物品栏准备好指南针，为你的撤离之旅雪中送炭。=w=");
     }
 
     public void undoSchematic() {
         getPlayerInZone().forEach(task::evacuate);
-        Notifier.broadcastChat(task.getPlayers(), "坐标 X：" + center.getBlockX() + " Z：" + center.getBlockZ() + " 附近的飞艇已撤离，请等待下一艘飞艇接应。");
+        Notifier.broadcastChat(task.getTaskPlayers(), "坐标 X：" + center.getBlockX() + " Z：" + center.getBlockZ() + " 附近的飞艇已撤离，请等待下一艘飞艇接应。");
         IOC.getBean(WorldEditAPI.class).undoPaste(locationCommandSender, editSession);
     }
 

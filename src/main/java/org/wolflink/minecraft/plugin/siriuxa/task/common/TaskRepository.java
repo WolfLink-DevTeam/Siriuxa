@@ -14,30 +14,52 @@ public class TaskRepository extends MapRepository<UUID, Task> {
         return explorationTask.getTaskUuid();
     }
 
-    @Nullable
-    public <T extends Task> T findByPlayer(Class<T> taskClass, Player player) {
-        return findByPlayerUuid(taskClass, player.getUniqueId());
+    public <T extends Task> T findByGlobalTeamPlayer(Class<T> taskClass,Player player) {
+        return findByGlobalTeamPlayerUuid(taskClass,player.getUniqueId());
     }
-
-    @Nullable
-    public Task findByPlayer(Player player) {
-        return findByPlayerUuid(player.getUniqueId());
-    }
-
-    public Task findByPlayerUuid(UUID uuid) {
+    public <T extends Task> T findByGlobalTeamPlayerUuid(Class<T> taskClass,UUID uuid) {
         for (Task task : findAll()) {
-            if (task.contains(uuid)) {
+            if (!task.getClass().equals(taskClass)) continue;
+            if (task.globalTeamContains(uuid)) {
+                return (T) task;
+            }
+        }
+        return null;
+    }
+    @Nullable
+    public Task findByGlobalTeamPlayer(Player player) {
+        return findByGlobalTeamPlayerUuid(player.getUniqueId());
+    }
+    public Task findByGlobalTeamPlayerUuid(UUID uuid) {
+        for (Task task : findAll()) {
+            if (task.globalTeamContains(uuid)) {
                 return task;
             }
         }
         return null;
     }
 
-    public <T extends Task> T findByPlayerUuid(Class<T> taskClass, UUID uuid) {
+    @Nullable
+    public <T extends Task> T findByTaskTeamPlayer(Class<T> taskClass, Player player) {
+        return findByTaskTeamPlayerUuid(taskClass, player.getUniqueId());
+    }
+    public <T extends Task> T findByTaskTeamPlayerUuid(Class<T> taskClass, UUID uuid) {
         for (Task task : findAll()) {
             if (!task.getClass().equals(taskClass)) continue;
-            if (task.contains(uuid)) {
+            if (task.taskTeamContains(uuid)) {
                 return (T) task;
+            }
+        }
+        return null;
+    }
+    @Nullable
+    public Task findByTaskTeamPlayer(Player player) {
+        return findByTaskTeamPlayerUuid(player.getUniqueId());
+    }
+    public Task findByTaskTeamPlayerUuid(UUID uuid) {
+        for (Task task : findAll()) {
+            if (task.taskTeamContains(uuid)) {
+                return task;
             }
         }
         return null;

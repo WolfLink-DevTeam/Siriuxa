@@ -62,7 +62,7 @@ public abstract class TaskRegion {
      * 是则造成伤害
      */
     private void check() {
-        for (Player player : task.getPlayers()) {
+        for (Player player : task.getTaskPlayers()) {
             if (isPlayerOutOfBorder(player)) {
                 player.damage(2.0);
                 player.playSound(player.getLocation(), Sound.ENTITY_SQUID_SQUIRT, 1f, 1f);
@@ -118,7 +118,7 @@ public abstract class TaskRegion {
      * 尽量离所有玩家都远
      */
     public Location getEvacuateLocation(int distance) {
-        if (task.getPlayers().size() == 0) return null;
+        if (task.getTaskPlayers().size() == 0) return null;
         Location averangeLocation = getPlayerAverangeLocation();
         List<Location> availableLocations = new ArrayList<>();
         for (int angle = 0; angle < 360; angle += 30) {
@@ -139,7 +139,7 @@ public abstract class TaskRegion {
      */
     public Location getPlayerAverangeLocation() {
         World world = null;
-        List<Player> playerList = task.getPlayers();
+        List<Player> playerList = task.getTaskPlayers();
         double totalX = 0;
         double totalZ = 0;
         for (Player player : playerList) {

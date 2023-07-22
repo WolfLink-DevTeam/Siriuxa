@@ -31,7 +31,7 @@ public class HuntChecker extends WolfirdListener {
         if(!(e.getEntity() instanceof Monster)) return; // 不是怪物被击杀
         Player player = e.getEntity().getKiller();
         if(player == null) return; // 与玩家无关
-        Task task = taskRepository.findByPlayer(player);
+        Task task = taskRepository.findByTaskTeamPlayer(player);
         if (task == null) return; // 没有任务
         if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 任务没在游戏阶段
         if (task.getTaskRegion() == null) return; // 任务区域未设定
@@ -41,10 +41,10 @@ public class HuntChecker extends WolfirdListener {
         huntValues.doRecord(entityType);
         double wheatValue = huntValues.getHuntValue(entityType);
         task.addWheat(wheatValue);
-        for (Player teamPlayer : task.getPlayers()) {
-            teamPlayer.playSound(teamPlayer.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_FALL, 1, 2f);
+        for (Player taskPlayer : task.getTaskPlayers()) {
+            taskPlayer.playSound(taskPlayer.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_FALL, 1, 2f);
             //TODO 改为 Hologram 提示
-            teamPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+            taskPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,
                     new TextComponent("§f" + player.getName() + " §7刚刚击杀了 " + lang.get("monster." + entityType.name().toLowerCase(), "未知怪物") + " §7获得 §f" + String.format("%.1f", wheatValue) + " §6麦穗"));
         }
     }

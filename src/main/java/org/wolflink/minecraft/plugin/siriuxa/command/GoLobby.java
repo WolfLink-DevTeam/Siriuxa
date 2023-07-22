@@ -21,7 +21,7 @@ public class GoLobby extends WolfirdCommand {
         Player player = (Player) commandSender;
         // 在任务世界
         if(player.getWorld().getName().equalsIgnoreCase("normal-exploration")) {
-            Task task = IOC.getBean(TaskRepository.class).findByPlayer(player);
+            Task task = IOC.getBean(TaskRepository.class).findByTaskTeamPlayer(player);
             if(task != null) {
                 Notifier.chat("你当前还处在任务中，无法离开任务世界。",player);
                 return;

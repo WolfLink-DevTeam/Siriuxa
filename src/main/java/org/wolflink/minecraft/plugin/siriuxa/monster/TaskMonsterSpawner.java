@@ -63,7 +63,7 @@ public class TaskMonsterSpawner {
     private @NonNull BukkitTask spawnMobTask(int minRadius, int maxRadius) {
         Plugin plugin = Siriuxa.getInstance();
         return Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-            task.getPlayers().forEach(p -> spawnMobAroundPlayer(minRadius, maxRadius, p));
+            task.getTaskPlayers().forEach(p -> spawnMobAroundPlayer(minRadius, maxRadius, p));
         }, 20 * 15L, 20 * 15L);
     }
 

@@ -96,9 +96,9 @@ public class TaskService {
 
     public Result ready(Task task) {
         if (task == null) return new Result(false, "不存在的任务。");
-        if (task.getPlayers().size() == 0) {
+        if (task.getGlobalTeam().getPlayers().size() == 0) {
             taskRepository.deleteByKey(task.getTaskUuid());
-            return new Result(false, "该任务没有任何在线玩家。");
+            return new Result(false, "该任务所属队伍没有任何在线玩家。");
         }
         if (task.getStageHolder().getThisStage() instanceof WaitStage) {
             task.getStageHolder().next();

@@ -22,7 +22,7 @@ public class DeathDuringTask extends WolfirdListener {
         Player player = (Player) event.getEntity();
         // 没有触发死亡
         if(player.getHealth() - event.getFinalDamage() > 0) return;
-        Task task = taskRepository.findByPlayer(player);
+        Task task = taskRepository.findByTaskTeamPlayer(player);
         // 没有开始任务
         if(task == null) return;
         // 任务不处在游戏阶段

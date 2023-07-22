@@ -24,7 +24,7 @@ public class ReadyStage extends TaskStage {
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
             int timeLeft = 15;
             while (timeLeft > 0) {
-                for (Player player : task.getPlayers()) {
+                for (Player player : task.getGlobalTeam().getPlayers()) {
                     player.sendTitle("§f§l" + timeLeft, "§7任务即将开始，请做好准备", 4, 12, 4);
                     player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1f, 1.2f);
                     player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR, 1f, 1.2f);
@@ -44,7 +44,7 @@ public class ReadyStage extends TaskStage {
                     throw new RuntimeException(e);
                 }
             }
-            for (Player player : task.getPlayers()) {
+            for (Player player : task.getGlobalTeam().getPlayers()) {
                 player.sendTitle("§a§l任务开始", "§7作业单元已准备就绪，开始投放", 10, 40, 10);
                 player.playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, 1f, 0.5f);
                 player.playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, 1f, 0.5f);

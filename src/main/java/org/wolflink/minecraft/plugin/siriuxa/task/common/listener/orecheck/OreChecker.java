@@ -31,7 +31,7 @@ public class OreChecker extends WolfirdListener {
     public void oreBlockCheck(PlayerToggleSneakEvent e) {
         Player player = e.getPlayer();
         Location checkLoc = player.getLocation().add(0, -1, 0);
-        Task task = taskRepository.findByPlayer(player);
+        Task task = taskRepository.findByTaskTeamPlayer(player);
         if (task == null) return; // 没有任务
         if (!(task instanceof OreCheckAvailable)) return; // 任务模式不可用该检测
         if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 任务没在游戏阶段
@@ -44,10 +44,10 @@ public class OreChecker extends WolfirdListener {
         block.setType(Material.AIR);
         double wheatValue = oreValues.getOreValue(material);
         task.addWheat(wheatValue);
-        for (Player teamPlayer : task.getPlayers()) {
-            teamPlayer.playSound(teamPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1.5f);
+        for (Player taskPlayer : task.getTaskPlayers()) {
+            taskPlayer.playSound(taskPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1.5f);
             //TODO 改为 Hologram 提示
-            teamPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+            taskPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,
                     new TextComponent("§f" + player.getName() + " §7刚刚出售了 " + lang.get("material." + material.name().toLowerCase(), "未知方块") + " §7换取 §f" + String.format("%.1f", wheatValue) + " §6麦穗"));
         }
         renderBlockBorder(block.getLocation());

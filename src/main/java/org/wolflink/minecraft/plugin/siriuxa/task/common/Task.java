@@ -73,9 +73,14 @@ public abstract class Task implements INameable {
      */
     private double taskWheat = 0;
     /**
-     * 任务队伍(不可加入)
+     * 任务队伍(不可加入) 在任务预加载阶段初始化
      */
-    private TaskTeam taskTeam;
+    private TaskTeam taskTeam = new TaskTeam(new GlobalTeam());
+    /**
+     * 玩家队伍
+     */
+    @Getter
+    private final GlobalTeam globalTeam;
     @Nullable
     private TaskRegion taskRegion = null;
 
@@ -90,16 +95,9 @@ public abstract class Task implements INameable {
     @Getter
     private final StageHolder stageHolder;
 
-    private UUID teamUuid = null;
-
     protected abstract StageHolder initStageHolder();
 
     private final TaskMonsterSpawner taskMonsterSpawner;
-
-    /**
-     * 任务进行过程中最大玩家数量
-     */
-    private int maxPlayerAmount;
 
     /**
      * 任务基础套装
@@ -107,7 +105,7 @@ public abstract class Task implements INameable {
     private final PlayerBackpack defaultKit;
 
     public Task(GlobalTeam globalTeam, TaskDifficulty taskDifficulty, PlayerBackpack defaultKit) {
-        this.teamUuid = globalTeam.getTeamUuid();
+        this.globalTeam = globalTeam;
         this.taskDifficulty = taskDifficulty;
         this.taskMonsterSpawner = new TaskMonsterSpawner(this);
         this.wheatLostAcceleratedSpeed = taskDifficulty.getWheatLostAcceleratedSpeed();
@@ -124,13 +122,14 @@ public abstract class Task implements INameable {
         return taskTeam.size();
     }
 
-    public boolean contains(UUID uuid) {
+    public boolean taskTeamContains(UUID uuid) {
         return taskTeam.contains(uuid);
     }
-
-    public boolean contains(Player player) {
-        return contains(player.getUniqueId());
+    public boolean taskTeamContains(Player player) {
+        return taskTeamContains(player.getUniqueId());
     }
+    public boolean globalTeamContains(UUID uuid) { return globalTeam.contains(uuid); }
+    public boolean globalTeamContains(Player player) { return globalTeamContains(player.getUniqueId()); }
 
     public void addWheat(double wheat) {
         taskWheat += wheat;
@@ -145,9 +144,9 @@ public abstract class Task implements INameable {
     }
 
     /**
-     * 获取该任务中的所有在线玩家
+     * 获取执行任务过程中的所有在线玩家
      */
-    public List<Player> getPlayers() {
+    public List<Player> getTaskPlayers() {
         return taskTeam.getPlayers();
     }
 
@@ -160,13 +159,8 @@ public abstract class Task implements INameable {
         else return availableEvacuationZone.getPlayerInZone();
     }
 
-    @NonNull
-    public GlobalTeam getGlobalTeam() {
-        return IOC.getBean(GlobalTeamRepository.class).find(teamUuid);
-    }
-
     private void triggerFailed() {
-        getPlayers().forEach(player -> fillRecord(player,false));
+        getTaskPlayers().forEach(player -> fillRecord(player,false));
         stageHolder.next();
         stopCheck();
         finishRecord();
@@ -182,7 +176,7 @@ public abstract class Task implements INameable {
     }
 
     private void triggerFinish() {
-        getPlayers().forEach(player -> fillRecord(player,true));
+        getTaskPlayers().forEach(player -> fillRecord(player,true));
         stageHolder.next();
         stopCheck();
         finishRecord();
@@ -218,6 +212,7 @@ public abstract class Task implements INameable {
     private List<Location> beaconLocations = new ArrayList<>();
 
     public void preLoad() {
+        this.taskTeam = new TaskTeam(getGlobalTeam());
         subScheduler.runTaskLaterAsync(() -> {
             String worldName = IOC.getBean(Config.class).get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME);
             World world = Bukkit.getWorld(worldName);
@@ -232,11 +227,9 @@ public abstract class Task implements INameable {
     }
 
     public void start() {
-        this.taskTeam = new TaskTeam(getGlobalTeam());
         initRecord();
         taskStat.start();
         this.taskWheat = size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
-        maxPlayerAmount = getGlobalTeam().size();
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
 
             beaconLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.END_PORTAL_FRAME, taskRegion.getCenter(), 30);
@@ -253,8 +246,7 @@ public abstract class Task implements INameable {
                     if (lootChestAmount >= size()) break; // 跟人数有关
                 }
 
-                List<Player> playerList = getPlayers();
-                for (Player player : playerList) {
+                for (Player player : getTaskPlayers()) {
                     IOC.getBean(TaskService.class).goTask(player, this);
                 }
                 startGameOverCheck();
@@ -292,7 +284,7 @@ public abstract class Task implements INameable {
      * 获取当前麦穗每秒流失量
      */
     public double getWheatLossPerSecNow() {
-        return baseWheatLoss * wheatLossMultiple * maxPlayerAmount;
+        return baseWheatLoss * wheatLossMultiple * taskTeam.getInitSize();
     }
 
     private void startTiming() {
@@ -327,9 +319,7 @@ public abstract class Task implements INameable {
      * 在任务完成/失败后调用
      */
     protected void deleteTask() {
-        GlobalTeam globalTeam = IOC.getBean(GlobalTeamRepository.class).find(teamUuid);
         if (globalTeam != null) globalTeam.setSelectedTask(null);
-        teamUuid = null;
         taskTeam.clear();
         IOC.getBean(TaskRepository.class).deleteByKey(taskUuid);
     }
@@ -356,7 +346,7 @@ public abstract class Task implements INameable {
             Notifier.error("在尝试补充任务记录数据时，未找到玩家" + offlinePlayer.getName() + "的任务记录类。");
             return;
         }
-        record.setWheat(taskWheat / maxPlayerAmount); // 保存任务麦穗
+        record.setWheat(taskWheat / taskTeam.getInitSize()); // 保存任务麦穗
         record.setSuccess(taskResult); // 设置任务状态
         PlayerBackpack playerBackpack;
         Player player = offlinePlayer.getPlayer();

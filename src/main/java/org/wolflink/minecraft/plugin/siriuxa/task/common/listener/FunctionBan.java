@@ -34,7 +34,8 @@ public class FunctionBan extends WolfirdListener {
     @EventHandler(priority = EventPriority.LOWEST)
     void banTaskEnderChest(InventoryOpenEvent event) {
         HumanEntity humanEntity = event.getPlayer();
-        Task task = taskRepository.findByPlayerUuid(humanEntity.getUniqueId());
+        if(!(humanEntity instanceof Player)) return; // 不是玩家
+        Task task = taskRepository.findByTaskTeamPlayer((Player) humanEntity);
         if (task == null) return; // 没在任务中
         if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 没在游戏阶段
         if (event.getInventory().getType().equals(InventoryType.ENDER_CHEST)) {
@@ -49,7 +50,7 @@ public class FunctionBan extends WolfirdListener {
     @EventHandler(priority = EventPriority.LOWEST)
     void banTaskVillager(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
-        Task task = taskRepository.findByPlayerUuid(player.getUniqueId());
+        Task task = taskRepository.findByTaskTeamPlayer(player);
         if (task == null) return; // 没在任务中
         if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 没在游戏阶段
         if (event.getRightClicked().getType().equals(EntityType.VILLAGER)) event.setCancelled(true);
@@ -58,7 +59,7 @@ public class FunctionBan extends WolfirdListener {
     void banTaskCommand(PlayerCommandPreprocessEvent event) {
         if(event.getPlayer().isOp()) return; // 不处理管理员
         Player player = event.getPlayer();
-        Task task = taskRepository.findByPlayerUuid(player.getUniqueId());
+        Task task = taskRepository.findByTaskTeamPlayer(player);
         if (task == null) return; // 没在任务中
         Stage stage = task.getStageHolder().getThisStage();
         if (!(stage instanceof GameStage) && !(stage instanceof ReadyStage)) return; // 没在游戏阶段/准备阶段

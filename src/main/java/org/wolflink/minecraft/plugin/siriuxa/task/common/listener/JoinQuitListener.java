@@ -28,7 +28,7 @@ public class JoinQuitListener extends WolfirdListener {
     void on(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         taskService.online(player);
-        Task task = taskRepository.findByPlayer(player);
+        Task task = taskRepository.findByTaskTeamPlayer(player);
         if(task == null && player.getWorld().getName().equalsIgnoreCase(config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME))) {
             Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance(),()->{
                 player.setGameMode(GameMode.SPECTATOR);
@@ -38,7 +38,7 @@ public class JoinQuitListener extends WolfirdListener {
     @EventHandler
     void on(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        Task task = taskRepository.findByPlayer(player);
+        Task task = taskRepository.findByTaskTeamPlayer(player);
         if(task != null) {
             taskService.offline(task,player);
         }
