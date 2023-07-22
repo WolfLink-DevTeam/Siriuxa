@@ -5,7 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.wolflink.common.ioc.Singleton;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
 @Singleton

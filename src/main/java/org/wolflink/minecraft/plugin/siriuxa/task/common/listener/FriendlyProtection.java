@@ -13,7 +13,7 @@ import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeamRepository;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 @Singleton
 public class FriendlyProtection extends WolfirdListener {

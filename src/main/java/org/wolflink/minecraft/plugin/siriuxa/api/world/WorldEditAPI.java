@@ -13,7 +13,7 @@ import com.sk89q.worldedit.session.ClipboardHolder;
 import org.bukkit.Location;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.Framework;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 import javax.annotation.Nullable;
 import java.io.File;

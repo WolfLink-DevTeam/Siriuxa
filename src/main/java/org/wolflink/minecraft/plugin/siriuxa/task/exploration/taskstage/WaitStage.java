@@ -13,7 +13,6 @@ import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskService;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.stage.TaskLinearStageHolder;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.stage.TaskStage;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
 
 import java.util.*;
 import java.util.stream.Collectors;

@@ -12,7 +12,7 @@ import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeamRepository;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeamService;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 import java.util.HashMap;
 import java.util.Map;

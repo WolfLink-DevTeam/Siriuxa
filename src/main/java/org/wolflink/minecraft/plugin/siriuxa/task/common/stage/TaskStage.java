@@ -2,7 +2,7 @@ package org.wolflink.minecraft.plugin.siriuxa.task.common.stage;
 
 import lombok.Getter;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 public abstract class TaskStage extends Stage {
 

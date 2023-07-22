@@ -3,14 +3,13 @@ package org.wolflink.minecraft.plugin.siriuxa.invbackup;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.wolfird.framework.config.Json;
 
 import java.util.ArrayList;

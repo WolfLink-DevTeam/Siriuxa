@@ -17,7 +17,6 @@ import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 import org.wolflink.minecraft.plugin.siriuxa.file.Lang;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskRepository;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.interfaces.OreCheckAvailable;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
 
 @Singleton
 public class OreChecker extends WolfirdListener {

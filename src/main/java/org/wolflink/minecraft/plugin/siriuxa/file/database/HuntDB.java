@@ -6,7 +6,7 @@ import org.bukkit.entity.EntityType;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.api.DateAPI;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 import java.io.File;
 import java.util.Calendar;

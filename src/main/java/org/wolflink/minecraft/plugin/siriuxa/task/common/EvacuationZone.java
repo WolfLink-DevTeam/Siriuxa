@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.LocationCommandSender;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.WorldEditAPI;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 
 import java.util.*;
@@ -97,7 +97,6 @@ public class EvacuationZone {
 
     private EditSession editSession;
 
-    // TODO 目前没有考虑暂时离线的玩家的情况
     public void generateSchematic() {
         editSession = IOC.getBean(WorldEditAPI.class).pasteEvacuationUnit(locationCommandSender);
         Notifier.broadcastChat(task.getPlayers(), "飞艇已停留至坐标 X：" + center.getBlockX() + " Z：" + center.getBlockZ() + " 附近，如有需要请尽快前往撤离。");

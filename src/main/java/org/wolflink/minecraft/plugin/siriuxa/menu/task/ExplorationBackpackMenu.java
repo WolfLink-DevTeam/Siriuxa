@@ -16,7 +16,7 @@ import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.ClaimTaskReward;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.ExplorationBackpackItem;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 import java.util.HashSet;
 import java.util.List;

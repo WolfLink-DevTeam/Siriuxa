@@ -1,7 +1,7 @@
 package org.wolflink.minecraft.plugin.siriuxa.loot;
 
 import lombok.Getter;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 import java.util.Arrays;
 

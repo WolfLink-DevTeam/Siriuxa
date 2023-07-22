@@ -7,7 +7,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
 
 @Singleton
 public class VaultAPI {

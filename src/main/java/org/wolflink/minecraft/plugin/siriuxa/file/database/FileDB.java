@@ -3,7 +3,7 @@ package org.wolflink.minecraft.plugin.siriuxa.file.database;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 import javax.annotation.Nullable;
 import java.io.File;

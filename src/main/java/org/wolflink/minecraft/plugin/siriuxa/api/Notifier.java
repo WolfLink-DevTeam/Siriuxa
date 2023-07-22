@@ -1,4 +1,4 @@
-package org.wolflink.minecraft.plugin.siriuxa.utils;
+package org.wolflink.minecraft.plugin.siriuxa.api;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

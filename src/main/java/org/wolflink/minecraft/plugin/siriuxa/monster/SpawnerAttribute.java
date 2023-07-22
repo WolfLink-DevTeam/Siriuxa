@@ -3,7 +3,7 @@ package org.wolflink.minecraft.plugin.siriuxa.monster;
 import lombok.Getter;
 import org.bukkit.entity.EntityType;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 import java.util.EnumMap;
 import java.util.Map;

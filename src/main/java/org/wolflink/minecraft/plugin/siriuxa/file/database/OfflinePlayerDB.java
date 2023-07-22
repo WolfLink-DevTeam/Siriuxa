@@ -2,9 +2,8 @@ package org.wolflink.minecraft.plugin.siriuxa.file.database;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Singleton;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 import javax.annotation.Nullable;
 import java.io.File;

@@ -4,7 +4,7 @@ import lombok.NonNull;
 import org.bukkit.loot.LootTable;
 import org.bukkit.loot.LootTables;
 import org.wolflink.common.ioc.Singleton;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 import java.util.ArrayList;
 import java.util.EnumMap;

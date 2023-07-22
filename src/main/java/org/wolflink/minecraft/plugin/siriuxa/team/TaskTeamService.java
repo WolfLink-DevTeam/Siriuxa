@@ -1,23 +1,15 @@
 package org.wolflink.minecraft.plugin.siriuxa.team;
 
 import lombok.NonNull;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.units.qual.N;
-import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.api.Result;
 import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskRepository;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskService;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.WaitStage;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
-
-import java.util.Objects;
 
 @Singleton
 public class TaskTeamService {

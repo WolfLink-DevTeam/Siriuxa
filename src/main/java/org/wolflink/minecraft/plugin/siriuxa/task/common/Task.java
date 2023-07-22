@@ -29,7 +29,7 @@ import org.wolflink.minecraft.plugin.siriuxa.task.common.region.SquareRegion;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.region.TaskRegion;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeamRepository;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 

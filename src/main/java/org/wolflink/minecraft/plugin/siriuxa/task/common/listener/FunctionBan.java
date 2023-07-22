@@ -8,7 +8,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerCommandSendEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
@@ -17,7 +16,7 @@ import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.GameStag
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.ReadyStage;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskRepository;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 
 /**

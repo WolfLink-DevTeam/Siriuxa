@@ -9,7 +9,7 @@ import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeamRepository;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 @Singleton
 public class TeamInfo extends WolfirdCommand {

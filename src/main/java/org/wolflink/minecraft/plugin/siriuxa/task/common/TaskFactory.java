@@ -6,7 +6,7 @@ import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.ExplorationTask;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 import javax.annotation.Nullable;
 

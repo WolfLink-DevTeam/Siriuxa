@@ -8,7 +8,7 @@ import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.DateAPI;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
-import org.wolflink.minecraft.plugin.siriuxa.utils.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 import javax.annotation.Nullable;
 import java.io.File;

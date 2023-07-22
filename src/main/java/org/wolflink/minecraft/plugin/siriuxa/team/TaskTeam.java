@@ -52,25 +52,25 @@ public class TaskTeam {
     /**
      * 加入该队伍
      */
-    public void join(Player player) {
+    void join(Player player) {
         join(player.getUniqueId());
     }
 
-    public void join(UUID uuid) {
+    void join(UUID uuid) {
         memberUuids.add(uuid);
     }
 
-    public void leave(UUID uuid) {
+    void leave(UUID uuid) {
         memberUuids.remove(uuid);
     }
 
-    public void clear() {
+    void clear() {
         for (UUID uuid : memberUuids) {
             leave(uuid);
         }
     }
 
-    public void leave(Player player) {
+    void leave(Player player) {
         leave(player.getUniqueId());
     }
 }
