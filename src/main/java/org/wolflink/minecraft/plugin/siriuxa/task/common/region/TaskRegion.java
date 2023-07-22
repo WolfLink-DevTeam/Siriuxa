@@ -77,7 +77,7 @@ public abstract class TaskRegion {
                 String lineColor = "§a";
                 if (temp <= 15) lineColor = "§e";
                 if (temp <= 5) lineColor = "§c";
-                String progressBar = "§f%img_mc_border% " + lineColor + "§m" + " ".repeat(temp) + "§r§f%img_mc_leather_helmet%§7§m" + " ".repeat(50 - temp) + "§r §f%img_mc_beacon%";
+                String progressBar = "§f%img_mc_barrier% " + lineColor + "§m" + " ".repeat(temp) + "§r§f%img_mc_totem_of_undying%§7§m" + " ".repeat(50 - temp) + "§r §f%img_end_crystal%";
                 progressBar = PlaceholderAPI.setPlaceholders(player,progressBar);
                 bossBar.setTitle(progressBar);
                 bossBar.addPlayer(player);
