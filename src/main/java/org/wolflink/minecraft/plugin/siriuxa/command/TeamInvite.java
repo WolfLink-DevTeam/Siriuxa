@@ -8,10 +8,10 @@ import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.Result;
-import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
-import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeamRepository;
+import org.wolflink.minecraft.plugin.siriuxa.team.Team;
+import org.wolflink.minecraft.plugin.siriuxa.team.TeamRepository;
+import org.wolflink.minecraft.plugin.siriuxa.team.TeamService;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
-import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeamService;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 import java.util.HashMap;
@@ -22,9 +22,9 @@ import java.util.UUID;
 public class TeamInvite extends WolfirdCommand {
 
     @Inject
-    TaskTeamRepository taskTeamRepository;
+    TeamRepository teamRepository;
     @Inject
-    TaskTeamService taskTeamService;
+    TeamService teamService;
     /**
      * 被邀请人 - 邀请人
      */
@@ -52,8 +52,8 @@ public class TeamInvite extends WolfirdCommand {
         if (invited == null || !invited.isOnline()) {
             Notifier.chat("§e邀请失败，未找到玩家：§f" + strings[0], player);
         } else {
-            TaskTeam taskTeam = taskTeamRepository.findByPlayer(player);
-            if (taskTeam == null) {
+            Team team = teamRepository.findByPlayer(player);
+            if (team == null) {
                 Notifier.chat("§e邀请失败，你没有处于队伍中。", player);
                 return;
             }
@@ -76,13 +76,13 @@ public class TeamInvite extends WolfirdCommand {
         } else {
             String senderName = inviteMap.get(invited.getUniqueId());
             OfflinePlayer offlinePlayer = Bukkit.getPlayer(senderName);
-            TaskTeam taskTeam;
-            if (offlinePlayer == null) taskTeam = null;
-            else taskTeam = taskTeamRepository.findByPlayerUuid(offlinePlayer.getUniqueId());
-            if (taskTeam == null) {
+            Team team;
+            if (offlinePlayer == null) team = null;
+            else team = teamRepository.findByPlayerUuid(offlinePlayer.getUniqueId());
+            if (team == null) {
                 Notifier.chat("§e该队伍已解散，无法加入。", invited);
             } else {
-                Result result = taskTeamService.join(invited, taskTeam);
+                Result result = teamService.join(invited, team);
                 result.show(invited);
                 Player player = offlinePlayer.getPlayer();
                 if (result.result()) {

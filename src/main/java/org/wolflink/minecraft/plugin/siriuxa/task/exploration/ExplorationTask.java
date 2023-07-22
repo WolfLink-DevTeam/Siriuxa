@@ -1,13 +1,8 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.exploration;
 
 import lombok.Getter;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.wolflink.common.ioc.IOC;
-import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.interfaces.HurtCheckAvailable;
@@ -17,7 +12,7 @@ import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.EndStage
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.ReadyStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.WaitStage;
-import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
+import org.wolflink.minecraft.plugin.siriuxa.team.Team;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.LinearStageHolder;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
@@ -48,8 +43,8 @@ public class ExplorationTask extends Task implements HurtCheckAvailable, OreChec
         items.add(new ItemStack(Material.BREAD,8));
         defaultKit.setItems(items);
     }
-    public ExplorationTask(TaskTeam taskTeam, ExplorationDifficulty difficulty) {
-        super(taskTeam, difficulty,defaultKit);
+    public ExplorationTask(Team team, ExplorationDifficulty difficulty) {
+        super(team, difficulty,defaultKit);
         this.difficulty = difficulty;
     }
 

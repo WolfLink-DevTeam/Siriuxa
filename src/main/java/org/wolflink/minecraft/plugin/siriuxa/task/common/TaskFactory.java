@@ -5,7 +5,7 @@ import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.ExplorationTask;
-import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
+import org.wolflink.minecraft.plugin.siriuxa.team.Team;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 import javax.annotation.Nullable;
@@ -14,12 +14,12 @@ import javax.annotation.Nullable;
 public class TaskFactory {
 
     @Nullable
-    public Task create(Class<? extends Task> taskClass, TaskTeam taskTeam, TaskDifficulty taskDifficulty) {
+    public Task create(Class<? extends Task> taskClass, Team team, TaskDifficulty taskDifficulty) {
         try {
             Task task = null;
             if(taskClass.equals(ExplorationTask.class)) {
                 ExplorationDifficulty difficulty = (ExplorationDifficulty) taskDifficulty;
-                task = IOC.getBean(taskClass,taskTeam, difficulty);
+                task = IOC.getBean(taskClass, team, difficulty);
             }
             if(task == null) throw new IllegalArgumentException("不支持的任务类型："+taskClass.getName());
             return task;

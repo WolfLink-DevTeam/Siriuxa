@@ -1,8 +1,6 @@
 package org.wolflink.minecraft.plugin.siriuxa.team;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -16,7 +14,7 @@ import java.util.UUID;
 
 
 @Data
-public class TaskTeam {
+public class Team {
     private UUID teamUuid = UUID.randomUUID();
     private Set<UUID> memberUuids = new HashSet<>();
     /**

@@ -27,8 +27,8 @@ import org.wolflink.minecraft.plugin.siriuxa.loot.ChestLoot;
 import org.wolflink.minecraft.plugin.siriuxa.monster.TaskMonsterSpawner;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.region.SquareRegion;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.region.TaskRegion;
-import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
-import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeamRepository;
+import org.wolflink.minecraft.plugin.siriuxa.team.Team;
+import org.wolflink.minecraft.plugin.siriuxa.team.TeamRepository;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
@@ -109,9 +109,9 @@ public abstract class Task implements INameable {
      */
     private final PlayerBackpack defaultKit;
 
-    public Task(TaskTeam taskTeam, TaskDifficulty taskDifficulty,PlayerBackpack defaultKit) {
-        this.teamUuid = taskTeam.getTeamUuid();
-        this.playerUuids = taskTeam.getMemberUuids();
+    public Task(Team team, TaskDifficulty taskDifficulty, PlayerBackpack defaultKit) {
+        this.teamUuid = team.getTeamUuid();
+        this.playerUuids = team.getMemberUuids();
         this.taskDifficulty = taskDifficulty;
         this.taskMonsterSpawner = new TaskMonsterSpawner(this);
         this.wheatLostAcceleratedSpeed = taskDifficulty.getWheatLostAcceleratedSpeed();
@@ -170,8 +170,8 @@ public abstract class Task implements INameable {
     }
 
     @NonNull
-    public TaskTeam getTeam() {
-        return IOC.getBean(TaskTeamRepository.class).find(teamUuid);
+    public Team getTeam() {
+        return IOC.getBean(TeamRepository.class).find(teamUuid);
     }
 
     private void triggerFailed() {
@@ -336,8 +336,8 @@ public abstract class Task implements INameable {
      * 在任务完成/失败后调用
      */
     protected void deleteTask() {
-        TaskTeam taskTeam = IOC.getBean(TaskTeamRepository.class).find(teamUuid);
-        if (taskTeam != null) taskTeam.setSelectedTask(null);
+        Team team = IOC.getBean(TeamRepository.class).find(teamUuid);
+        if (team != null) team.setSelectedTask(null);
         teamUuid = null;
         playerUuids.clear();
         IOC.getBean(TaskRepository.class).deleteByKey(taskUuid);

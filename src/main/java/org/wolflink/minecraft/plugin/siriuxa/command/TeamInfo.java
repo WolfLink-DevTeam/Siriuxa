@@ -6,8 +6,8 @@ import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
-import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
-import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeamRepository;
+import org.wolflink.minecraft.plugin.siriuxa.team.Team;
+import org.wolflink.minecraft.plugin.siriuxa.team.TeamRepository;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
@@ -18,7 +18,7 @@ public class TeamInfo extends WolfirdCommand {
     }
 
     @Inject
-    private TaskTeamRepository taskTeamRepository;
+    private TeamRepository teamRepository;
 
     /**
      * 当前任务：
@@ -30,13 +30,13 @@ public class TeamInfo extends WolfirdCommand {
     @Override
     protected void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
-        TaskTeam taskTeam = taskTeamRepository.findByPlayer(player);
-        if (taskTeam == null) {
+        Team team = teamRepository.findByPlayer(player);
+        if (team == null) {
             Notifier.chat("§e你没有处在队伍中。", player);
             return;
         }
         String taskInfo = "§r\n队伍任务：\n§r\n";
-        Task task = taskTeam.getSelectedTask();
+        Task task = team.getSelectedTask();
         if (task == null) taskInfo += "§7暂未选择\n§r\n";
         else {
             taskInfo += task.getColor() + task.getName()
@@ -45,7 +45,7 @@ public class TeamInfo extends WolfirdCommand {
                     + "\n§r\n";
         }
         StringBuilder msg = new StringBuilder("成员列表：\n§r\n");
-        for (OfflinePlayer offlinePlayer : taskTeam.getOfflinePlayers()) {
+        for (OfflinePlayer offlinePlayer : team.getOfflinePlayers()) {
             String color;
             if (offlinePlayer.isOnline()) color = "§a(在线) ";
             else color = "§c(离线) ";
