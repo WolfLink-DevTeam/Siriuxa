@@ -88,11 +88,12 @@ public class TaskMonsterSpawner {
         double y = loc.getY() + maxHeight;
         Location spawnLoc = new Location(world, x, y, z);
         Block spawnBlock = spawnLoc.getBlock();
-        while (spawnBlock.isLiquid() || !spawnBlock.isEmpty()) {
+        while (!spawnBlock.isEmpty()) {
             spawnBlock = spawnBlock.getRelative(0, -1, 0);
             if (spawnBlock.getY() < -60) return;
             if (spawnBlock.getY() < y + minHeight) return; // 没有找到合适的位置，放弃生成
             spawnLoc.setY(spawnBlock.getY());
+            spawnBlock = spawnLoc.getBlock();
         }
 
         EntityType entityType = spawnerAttribute.randomType();
