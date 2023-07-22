@@ -108,7 +108,6 @@ public abstract class Task implements INameable {
 
     public Task(GlobalTeam globalTeam, TaskDifficulty taskDifficulty, PlayerBackpack defaultKit) {
         this.teamUuid = globalTeam.getTeamUuid();
-        this.taskTeam = new TaskTeam(globalTeam);
         this.taskDifficulty = taskDifficulty;
         this.taskMonsterSpawner = new TaskMonsterSpawner(this);
         this.wheatLostAcceleratedSpeed = taskDifficulty.getWheatLostAcceleratedSpeed();
@@ -162,7 +161,7 @@ public abstract class Task implements INameable {
     }
 
     @NonNull
-    public GlobalTeam getTeam() {
+    public GlobalTeam getGlobalTeam() {
         return IOC.getBean(GlobalTeamRepository.class).find(teamUuid);
     }
 
@@ -172,7 +171,7 @@ public abstract class Task implements INameable {
         stopCheck();
         finishRecord();
         failed();
-        for (Player player : getTeam().getPlayers()) {
+        for (Player player : getGlobalTeam().getPlayers()) {
             IOC.getBean(TaskService.class).goLobby(player);
             Siriuxa.getInstance().getSubScheduler().runTaskLater(() -> {
                 player.sendTitle("§c任务失败", "§7嘿！别灰心丧气的，下次加油！", 10, 80, 10);
@@ -188,7 +187,7 @@ public abstract class Task implements INameable {
         stopCheck();
         finishRecord();
         finish();
-        for (Player player : getTeam().getPlayers()) {
+        for (Player player : getGlobalTeam().getPlayers()) {
             IOC.getBean(TaskService.class).goLobby(player);
             Siriuxa.getInstance().getSubScheduler().runTaskLater(() -> {
                 player.sendTitle("§a任务完成", "§7前往领取本次任务的报酬吧", 10, 80, 10);
@@ -233,10 +232,11 @@ public abstract class Task implements INameable {
     }
 
     public void start() {
+        this.taskTeam = new TaskTeam(getGlobalTeam());
         initRecord();
         taskStat.start();
         this.taskWheat = size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
-        maxPlayerAmount = getTeam().size();
+        maxPlayerAmount = getGlobalTeam().size();
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
 
             beaconLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.END_PORTAL_FRAME, taskRegion.getCenter(), 30);

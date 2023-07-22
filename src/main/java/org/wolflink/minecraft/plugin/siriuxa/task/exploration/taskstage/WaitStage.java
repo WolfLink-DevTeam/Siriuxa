@@ -33,13 +33,13 @@ public class WaitStage extends TaskStage {
             for (Player player : Objects.requireNonNull(readyLoc.getWorld())
                     .getNearbyEntities(readyLoc,radius,radius,radius, entity -> entity.getType() == EntityType.PLAYER)
                     .stream().map(entity -> (Player) entity).collect(Collectors.toSet())) {
-                if(task.getTeam().contains(player)) {
+                if(task.getGlobalTeam().contains(player)) {
                     if(player.getLocation().clone().getBlock().getType().equals(Material.END_PORTAL_FRAME)) {
                         readyPlayers.add(player.getUniqueId());
                     }
                 }
             }
-            if(readyPlayers.size() == task.getTeam().size()) {
+            if(readyPlayers.size() == task.getGlobalTeam().size()) {
                 Bukkit.getScheduler().runTask(Siriuxa.getInstance(),()->{
                     IOC.getBean(TaskService.class).ready(task);
                 });
