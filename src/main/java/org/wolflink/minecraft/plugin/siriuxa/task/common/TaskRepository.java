@@ -26,7 +26,7 @@ public class TaskRepository extends MapRepository<UUID, Task> {
 
     public Task findByPlayerUuid(UUID uuid) {
         for (Task task : findAll()) {
-            if (task.getPlayerUuids().contains(uuid)) {
+            if (task.contains(uuid)) {
                 return task;
             }
         }
@@ -36,7 +36,7 @@ public class TaskRepository extends MapRepository<UUID, Task> {
     public <T extends Task> T findByPlayerUuid(Class<T> taskClass, UUID uuid) {
         for (Task task : findAll()) {
             if (!task.getClass().equals(taskClass)) continue;
-            if (task.getPlayerUuids().contains(uuid)) {
+            if (task.contains(uuid)) {
                 return (T) task;
             }
         }

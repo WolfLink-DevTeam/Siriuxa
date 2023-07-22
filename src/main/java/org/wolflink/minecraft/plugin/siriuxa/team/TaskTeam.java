@@ -1,6 +1,7 @@
 package org.wolflink.minecraft.plugin.siriuxa.team;
 
 import lombok.Getter;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
@@ -28,4 +29,12 @@ public class TaskTeam extends Team {
     @Override
     @SuppressWarnings("TaskTeam 不允许加入玩家")
     void join(UUID uuid) {}
+
+    @Override
+    public void leave(Player player) {
+        leave(player.getUniqueId());
+    }
+    public void leave(OfflinePlayer offlinePlayer) {
+        leave(offlinePlayer.getUniqueId());
+    }
 }

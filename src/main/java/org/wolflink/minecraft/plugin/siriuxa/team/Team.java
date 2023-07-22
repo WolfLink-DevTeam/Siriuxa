@@ -37,10 +37,11 @@ public abstract class Team {
         memberUuids.remove(uuid);
     }
 
-    void clear() {
-        for (UUID uuid : memberUuids) {
-            leave(uuid);
-        }
+    public boolean isEmpty() {
+        return memberUuids.isEmpty();
+    }
+    public void clear() {
+        memberUuids.clear();
     }
 
     void leave(Player player) {

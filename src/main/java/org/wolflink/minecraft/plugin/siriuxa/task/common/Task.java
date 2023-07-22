@@ -30,6 +30,7 @@ import org.wolflink.minecraft.plugin.siriuxa.task.common.region.TaskRegion;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeamRepository;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 
@@ -47,10 +48,6 @@ public abstract class Task implements INameable {
      * 任务过程中的调度器，在任务结束后其中的所有任务都会销毁
      */
     private final SubScheduler subScheduler = new SubScheduler();
-    /**
-     * 任务开始时间
-     */
-    private Calendar startTime;
     /**
      * 任务数据统计类(纯异步)
      */
@@ -76,9 +73,9 @@ public abstract class Task implements INameable {
      */
     private double taskWheat = 0;
     /**
-     * 参与本次任务的玩家
+     * 任务队伍(不可加入)
      */
-    private Set<UUID> playerUuids;
+    private TaskTeam taskTeam;
     @Nullable
     private TaskRegion taskRegion = null;
 
@@ -111,7 +108,7 @@ public abstract class Task implements INameable {
 
     public Task(GlobalTeam globalTeam, TaskDifficulty taskDifficulty, PlayerBackpack defaultKit) {
         this.teamUuid = globalTeam.getTeamUuid();
-        this.playerUuids = globalTeam.getMemberUuids();
+        this.taskTeam = new TaskTeam(globalTeam);
         this.taskDifficulty = taskDifficulty;
         this.taskMonsterSpawner = new TaskMonsterSpawner(this);
         this.wheatLostAcceleratedSpeed = taskDifficulty.getWheatLostAcceleratedSpeed();
@@ -121,17 +118,15 @@ public abstract class Task implements INameable {
     }
 
     public List<OfflinePlayer> getOfflinePlayers() {
-        return playerUuids.stream()
-                .map(Bukkit::getOfflinePlayer)
-                .toList();
+        return taskTeam.getOfflinePlayers();
     }
 
     public int size() {
-        return playerUuids.size();
+        return taskTeam.size();
     }
 
     public boolean contains(UUID uuid) {
-        return playerUuids.contains(uuid);
+        return taskTeam.contains(uuid);
     }
 
     public boolean contains(Player player) {
@@ -154,10 +149,7 @@ public abstract class Task implements INameable {
      * 获取该任务中的所有在线玩家
      */
     public List<Player> getPlayers() {
-        return playerUuids.stream()
-                .map(Bukkit::getPlayer)
-                .filter(p -> p != null && p.isOnline())
-                .toList();
+        return taskTeam.getPlayers();
     }
 
     public void addWheatLossMultiple(double value) {
@@ -243,7 +235,6 @@ public abstract class Task implements INameable {
     public void start() {
         initRecord();
         taskStat.start();
-        startTime = Calendar.getInstance();
         this.taskWheat = size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
         maxPlayerAmount = getTeam().size();
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
@@ -339,9 +330,8 @@ public abstract class Task implements INameable {
         GlobalTeam globalTeam = IOC.getBean(GlobalTeamRepository.class).find(teamUuid);
         if (globalTeam != null) globalTeam.setSelectedTask(null);
         teamUuid = null;
-        playerUuids.clear();
+        taskTeam.clear();
         IOC.getBean(TaskRepository.class).deleteByKey(taskUuid);
-//        IOC.getBean(TaskService.class).delete(this);
     }
 
 
@@ -351,7 +341,7 @@ public abstract class Task implements INameable {
      * 初始化任务快照
      */
     private void initRecord() {
-        for (UUID uuid : playerUuids) {
+        for (UUID uuid : taskTeam.getMemberUuids()) {
             PlayerTaskRecord record = new PlayerTaskRecord(uuid, this);
             playerRecordMap.put(uuid, record);
         }
@@ -389,9 +379,8 @@ public abstract class Task implements INameable {
     private void finishRecord() {
         TaskRecordDB taskRecordDB = IOC.getBean(TaskRecordDB.class);
         for (PlayerTaskRecord playerTaskRecord : playerRecordMap.values()) {
-            long nowMills = Calendar.getInstance().getTimeInMillis();
-            playerTaskRecord.setUsingTimeInMills(nowMills - startTime.getTimeInMillis());
-            playerTaskRecord.setFinishedTimeInMills(nowMills);
+            playerTaskRecord.setUsingTimeInMills(taskStat.getUsingTimeInMills());
+            playerTaskRecord.setFinishedTimeInMills(taskStat.getEndTime().getTimeInMillis());
             taskRecordDB.saveRecord(playerTaskRecord);
         }
     }
@@ -402,9 +391,9 @@ public abstract class Task implements INameable {
      */
     public void evacuate(Player player) {
         fillRecord(player,true);
-        playerUuids.remove(player.getUniqueId());
+        taskTeam.leave(player);
         Notifier.debug("玩家" + player.getName() + "在任务中先一步撤离了。");
-        Notifier.broadcastChat(playerUuids, "玩家" + player.getName() + "已乘坐飞艇撤离。");
+        Notifier.broadcastChat(taskTeam.getPlayers(), "玩家" + player.getName() + "已乘坐飞艇撤离。");
         player.teleport(IOC.getBean(Config.class).getLobbyLocation());
         Siriuxa.getInstance().getSubScheduler().runTaskLater(() -> {
             player.sendTitle("§a任务完成", "§7等待任务完全结束后方可领取报酬", 10, 80, 10);
@@ -415,16 +404,16 @@ public abstract class Task implements INameable {
 
     public void death(Player player) {
         fillRecord(player,false);
-        playerUuids.remove(player.getUniqueId());
+        taskTeam.leave(player);
         player.setGameMode(GameMode.SPECTATOR);
         Notifier.debug("玩家" + player.getName() + "在任务中阵亡了。");
-        Notifier.broadcastChat(playerUuids, "玩家" + player.getName() + "在任务中阵亡了。");
+        Notifier.broadcastChat(taskTeam.getPlayers(), "玩家" + player.getName() + "在任务中阵亡了。");
         player.sendTitle("§c§l死", "§7嘿！别这么灰心丧气的嘛，下次加油！", 10, 80, 10);
         player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1f, 0.5f);
         String returnWheat = String.format("%.2f", taskDifficulty.getWheatCost() * 0.8);
         IOC.getBean(VaultAPI.class).addEconomy(player, Double.parseDouble(returnWheat));
         Notifier.chat("登记任务花费的麦穗已退还 80%，祝你在下次任务中好运！", player);
-        if (playerUuids.isEmpty()) triggerFailed();
+        if (taskTeam.isEmpty()) triggerFailed();
     }
 
     /**
@@ -433,10 +422,10 @@ public abstract class Task implements INameable {
      */
     public void escape(OfflinePlayer offlinePlayer) {
         fillRecord(offlinePlayer,false);
-        playerUuids.remove(offlinePlayer.getUniqueId());
+        taskTeam.leave(offlinePlayer);
         Notifier.debug("玩家" + offlinePlayer.getName() + "在任务过程中失踪了。");
         String returnWheat = String.format("%.2f", taskDifficulty.getWheatCost() * 0.8);
         IOC.getBean(VaultAPI.class).addEconomy(offlinePlayer, Double.parseDouble(returnWheat));
-        Notifier.broadcastChat(playerUuids, "玩家" + offlinePlayer.getName() + "在任务过程中失踪了。");
+        Notifier.broadcastChat(taskTeam.getPlayers(), "玩家" + offlinePlayer.getName() + "在任务过程中失踪了。");
     }
 }
