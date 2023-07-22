@@ -16,7 +16,7 @@ public class NextPage extends Icon {
 
     @Override
     protected @NonNull ItemStack createIcon() {
-        return fastCreateItemStack(Material.ENDER_PEARL,1,"下一页");
+        return fastCreateItemStack(Material.ENDER_EYE,1,"下一页");
     }
 
     @Override

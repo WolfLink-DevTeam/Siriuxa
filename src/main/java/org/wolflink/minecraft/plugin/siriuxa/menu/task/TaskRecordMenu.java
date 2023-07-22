@@ -42,7 +42,7 @@ public class TaskRecordMenu extends Menu {
         setIcon(53,new NextPage(this));
         int startIndex = 10;
         totalRecordList = IOC.getBean(TaskRecordDB.class).loadRecords(getOfflineOwner().getName());
-        totalRecordList.sort((r1,r2) -> ((int)(r1.getFinishedTimeInMills()-r2.getFinishedTimeInMills())/1000));
+        totalRecordList.sort((r1,r2) -> ((int)(r2.getFinishedTimeInMills()-r1.getFinishedTimeInMills())/1000));
         int recordSize = totalRecordList.size();
 
         // 闭区间 [pageFirstRecord,pageLastRecord]
