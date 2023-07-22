@@ -162,6 +162,7 @@ public abstract class Task implements INameable {
     private void triggerFailed() {
         getTaskPlayers().forEach(player -> fillRecord(player,false));
         stageHolder.next();
+        taskStat.setEnabled(false);
         stopCheck();
         finishRecord();
         failed();
@@ -178,6 +179,7 @@ public abstract class Task implements INameable {
     private void triggerFinish() {
         getTaskPlayers().forEach(player -> fillRecord(player,true));
         stageHolder.next();
+        taskStat.setEnabled(false);
         stopCheck();
         finishRecord();
         finish();
@@ -228,7 +230,7 @@ public abstract class Task implements INameable {
 
     public void start() {
         initRecord();
-        taskStat.start();
+        taskStat.setEnabled(true);
         this.taskWheat = size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
 
@@ -296,7 +298,6 @@ public abstract class Task implements INameable {
 
     private void stopCheck() {
         taskMonsterSpawner.setEnabled(false);
-        taskStat.stop();
         subScheduler.cancelAllTasks();
         if (taskRegion != null) {
             taskRegion.stopCheck();

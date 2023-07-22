@@ -27,18 +27,18 @@ public class TaskStat {
         this.task = task;
     }
 
-    public void start() {
-        if (enabled) return;
-        startTime = Calendar.getInstance();
-        subScheduler.runTaskTimerAsync(() -> {
-            lastWheat = nowWheat;
-            nowWheat = task.getTaskWheat();
-        }, 20, 20);
-    }
-
-    public void stop() {
-        if (!enabled) return;
-        endTime = Calendar.getInstance();
-        subScheduler.cancelAllTasks();
+    public void setEnabled(boolean value) {
+        if(enabled == value) return;
+        enabled = value;
+        if(enabled) {
+            startTime = Calendar.getInstance();
+            subScheduler.runTaskTimerAsync(() -> {
+                lastWheat = nowWheat;
+                nowWheat = task.getTaskWheat();
+            }, 20, 20);
+        } else {
+            endTime = Calendar.getInstance();
+            subScheduler.cancelAllTasks();
+        }
     }
 }
