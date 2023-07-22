@@ -33,7 +33,7 @@ public class TaskRecordMenu extends Menu {
 
     public void setPage(int value) {
         this.page = value;
-        overrideIcons();
+        super.refresh();
     }
 
     @Override
@@ -51,7 +51,7 @@ public class TaskRecordMenu extends Menu {
 
         if(pageFirstRecord >= recordSize) return;
 
-        List<PlayerTaskRecord> pageRecordList = totalRecordList.subList(pageFirstRecord,Math.min(pageLastRecord,recordSize-1));
+        List<PlayerTaskRecord> pageRecordList = totalRecordList.subList(pageFirstRecord,Math.min(pageLastRecord+1,recordSize));
         for (int i = 0; i < pageRecordList.size(); i++) {
             PlayerTaskRecord playerTaskRecord = pageRecordList.get(i);
             setIcon(startIndex+i,new TaskRecordIcon(playerTaskRecord));

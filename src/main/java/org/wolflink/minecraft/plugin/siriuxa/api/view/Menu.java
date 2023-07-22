@@ -77,7 +77,7 @@ public abstract class Menu {
     /**
      * 刷新整个菜单
      */
-    private void refresh() {
+    protected void refresh() {
         initIcons();
         overrideIcons();
         for (int i = 0; i < size; i++) {
