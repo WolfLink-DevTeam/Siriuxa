@@ -46,7 +46,7 @@ public class EvacuationZone {
     private final SubScheduler subScheduler;
 
     // 用于存贮指南针已经生效的玩家的列表
-    private final List<Player> compassPlayers;
+    private final Set<Player> compassPlayers;
 
     public EvacuationZone(Task task, World world, int x, int z, int safeRadius) {
         this.task = task;
@@ -54,7 +54,7 @@ public class EvacuationZone {
         this.safeRadius = safeRadius;
         this.locationCommandSender = new LocationCommandSender(center);
         this.subScheduler = new SubScheduler();
-        this.compassPlayers = new ArrayList<>();
+        this.compassPlayers = new HashSet<>();
     }
 
     public void setAvailable(boolean value) {
