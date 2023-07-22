@@ -6,6 +6,8 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -46,10 +48,12 @@ public class TaskMonsterSpawner {
 
     private final int MIN_RADIUS = 12;
     private final int MAX_RADIUS = 24;
+    private final int MIN_HEIGHT = -16;
+    private final int MAX_HEIGHT = 32;
 
     private void startSpawnMob() {
         if (spawnTaskId == -1) {
-            spawnTaskId = spawnMobTask(MIN_RADIUS, MAX_RADIUS).getTaskId();
+            spawnTaskId = spawnMobTask(MIN_RADIUS, MAX_RADIUS, MIN_HEIGHT, MAX_HEIGHT).getTaskId();
         }
     }
 
@@ -60,30 +64,38 @@ public class TaskMonsterSpawner {
         }
     }
 
-    private @NonNull BukkitTask spawnMobTask(int minRadius, int maxRadius) {
+    private @NonNull BukkitTask spawnMobTask(int minRadius, int maxRadius, int minHeight, int maxHeight) {
         Plugin plugin = Siriuxa.getInstance();
         return Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-            task.getTaskPlayers().forEach(p -> spawnMobAroundPlayer(minRadius, maxRadius, p));
+            task.getTaskPlayers().forEach(p -> spawnMobAroundPlayer(minRadius, maxRadius, minHeight, maxHeight, p));
         }, 20 * 15L, 20 * 15L);
     }
 
     /**
      * 在玩家周围生成一只怪物
      */
-    private void spawnMobAroundPlayer(int minRadius, int maxRadius, @NonNull Player player) {
+    private void spawnMobAroundPlayer(int minRadius, int maxRadius, int minHeight, int maxHeight, @NonNull Player player) {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         Location loc = player.getLocation();
         World world = loc.getWorld();
         assert world != null;
         if (!isDecidedToSpawn(spawnerAttribute.getDecideSpawnChance(), random)) return;
         if (isMobCountOverLimit(maxRadius, loc)) return;
+
+        double angle = random.nextDouble() * 2 * Math.PI;
         double r = random.nextInt(minRadius, maxRadius);
-        double x = loc.getX() + random.nextDouble() * r * 2 - r;
-        double z = loc.getZ() + random.nextDouble() * r * 2 - r;
-        double y = world.getHighestBlockYAt((int) x, (int) z);
-        // TODO: Spawn mob at any possible height
+        double x = loc.getX() + r * Math.cos(angle);
+        double z = loc.getZ() + r * Math.sin(angle);
+        double y = loc.getY() + maxHeight;
         Location spawnLoc = new Location(world, x, y, z);
-        if (spawnLoc.getBlock().isLiquid()) return;
+        Block spawnBlock = spawnLoc.getBlock();
+        while (spawnBlock.isLiquid() || !spawnBlock.isEmpty()) {
+            spawnBlock = spawnBlock.getRelative(0, -2, 0);
+            if (spawnBlock.getY() < -60) return;
+            if (spawnBlock.getY() < y + minHeight) return; // 没有找到合适的位置，放弃生成
+            spawnLoc.setY(spawnBlock.getY());
+        }
+
         EntityType entityType = spawnerAttribute.randomType();
         Monster monster = (Monster) world.spawnEntity(spawnLoc, entityType);
         AttributeInstance maxHealth = monster.getAttribute(Attribute.GENERIC_MAX_HEALTH);
@@ -98,6 +110,7 @@ public class TaskMonsterSpawner {
         if (attackDamage != null)
             attackDamage.setBaseValue(attackDamage.getBaseValue() * spawnerAttribute.getDamageMultiple());
     }
+
 
     // 必须同步计算
     private static boolean isMobCountOverLimit(double radius, @NonNull Location center) {
