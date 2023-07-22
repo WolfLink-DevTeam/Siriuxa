@@ -62,11 +62,20 @@ public class EvacuationZone {
         available = value;
         if (available) {
             generateSchematic();
-            // TODO: how to judge player in compassPlayer ?
-            subScheduler.runTaskTimer(() -> setPlayerCompass(task.getPlayers(), true), 20 * 5L, 20 * 30L);
+            subScheduler.runTaskTimer(() -> {
+                for (Player player : task.getPlayers()) {
+                    if(!compassPlayers.contains(player)) {
+                        setPlayerCompass(player, true);
+                        compassPlayers.add(player);
+                    }
+                }
+            }, 20L, 20L);
         } else {
             undoSchematic();
             subScheduler.cancelAllTasks();
+            for (Player player : compassPlayers) {
+                setPlayerCompass(player,false);
+            }
         }
     }
 
@@ -101,16 +110,12 @@ public class EvacuationZone {
         IOC.getBean(WorldEditAPI.class).undoPaste(locationCommandSender, editSession);
     }
 
-    public void setPlayerCompass(List<Player> players, boolean available) {
+    public void setPlayerCompass(Player player, boolean available) {
         CompassMeta compassMeta = prepareCompassMeta(available);
         if (compassMeta == null) return;
-        for (Player player : players) {
-            if (compassPlayers.contains(player)) return;
-            for (ItemStack item : player.getInventory()) {
-                if (item != null && item.getType() == Material.COMPASS) {
-                    item.setItemMeta(compassMeta);
-                    compassPlayers.add(player);
-                }
+        for (ItemStack item : player.getInventory()) {
+            if (item != null && item.getType() == Material.COMPASS) {
+                item.setItemMeta(compassMeta);
             }
         }
     }

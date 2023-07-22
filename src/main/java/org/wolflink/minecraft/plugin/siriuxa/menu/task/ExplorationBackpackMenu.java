@@ -62,6 +62,9 @@ public class ExplorationBackpackMenu extends Menu {
     }
 
     public void claimReward(Player player) {
+        // 背包格数检查
+
+
         player.closeInventory();
         player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH,1f,1f);
         player.playSound(player.getLocation(), Sound.ENTITY_PIGLIN_CELEBRATE,1f,1f);
@@ -73,9 +76,9 @@ public class ExplorationBackpackMenu extends Menu {
         assert difficulty != null;
         double wheat = playerTaskRecord.getWheat() * difficulty.getWheatGainPercent();
         int exp = (int) (playerBackpack.getTotalExp() * difficulty.getExpGainPercent());
-        Notifier.chat("你从本次任务中收获了 §a"+wheat+" §6麦穗。",player);
+        Notifier.chat("你从本次任务中收获了 §a"+String.format("%.0f",wheat)+" §6麦穗。",player);
         Notifier.chat("你从本次任务中获得了 §a"+exp+" §e经验值。",player);
-        Notifier.chat("你从本次任务中获得了 §a"+selectedSlots.size()+" §f格物品。",player);
+        Notifier.chat("你从本次任务中获得了 §a"+selectedSlots.size()+"格 §b物资。",player);
         IOC.getBean(VaultAPI.class).addEconomy(player,wheat);
         player.setTotalExperience(player.getTotalExperience() + exp);
         for (int index : selectedSlots) {
