@@ -168,15 +168,11 @@ public class TaskService {
      * 回到大厅(读取主背包后清理主背包数据)
      */
     public void goLobby(Player player) {
-        InventoryDB inventoryDB = IOC.getBean(InventoryDB.class);
-        PlayerBackpack mainInv = inventoryDB.loadMain(player);
-        if(mainInv == null) {
-            Notifier.error("未能找到玩家"+player.getName()+"的主背包数据。");
-            return;
-        }
-        PlayerBackpack.getEmptyBackpack().apply(player);
-        mainInv.apply(player);
-        inventoryDB.saveMain(player,PlayerBackpack.getEmptyBackpack());
+        InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
+        invBackupService.applyInv(player,PlayerBackpack.getEmptyBackpack());
+        Result r = invBackupService.applyMainInv(player);
+        if(!r.result()) return;
+        invBackupService.saveMainInv(player,PlayerBackpack.getEmptyBackpack());
         // 传送回城
         player.teleport(config.getLobbyLocation());
         if(!player.isOp()) player.setGameMode(GameMode.SURVIVAL);
@@ -195,7 +191,7 @@ public class TaskService {
         // 保存玩家背包信息
         invBackupService.saveMainInv(player);
         // 应用任务背包信息
-        task.getDefaultKit().apply(player);
+        invBackupService.applyInv(player,task.getDefaultKit());
         // 传送到指定方块上
         List<Location> spawnLocations = task.getBeaconLocations();
         if(spawnLocations.isEmpty()) player.teleport(task.getTaskRegion().getCenter());

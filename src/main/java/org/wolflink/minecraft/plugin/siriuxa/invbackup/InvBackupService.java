@@ -17,13 +17,20 @@ public class InvBackupService {
      * 玩家在主城，地皮世界等地方使用的都是主要背包
      */
     public Result saveMainInv(Player player) {
-        inventoryDB.saveMain(player, new PlayerBackpack(player));
+        return saveMainInv(player,new PlayerBackpack(player));
+    }
+    public Result saveMainInv(Player player,PlayerBackpack playerBackpack) {
+        inventoryDB.saveMain(player,playerBackpack);
         return new Result(true, "保存成功。");
     }
 
-    public Result loadMainInv(Player player) {
+    public Result applyMainInv(Player player) {
         PlayerBackpack playerBackpack = inventoryDB.loadMain(player);
         if (playerBackpack == null) return new Result(false, "未获取到玩家主背包数据。");
+        playerBackpack.apply(player);
+        return new Result(true, "背包数据已应用至玩家。");
+    }
+    public Result applyInv(Player player,PlayerBackpack playerBackpack) {
         playerBackpack.apply(player);
         return new Result(true, "背包数据已应用至玩家。");
     }

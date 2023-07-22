@@ -27,7 +27,7 @@ import java.util.Map;
 @Data
 @Json
 @NoArgsConstructor
-public class PlayerBackpack implements ConfigurationSerializable {
+public final class PlayerBackpack implements ConfigurationSerializable {
     private ItemStack helmet;
     private ItemStack chestplate;
     private ItemStack leggings;
@@ -55,7 +55,7 @@ public class PlayerBackpack implements ConfigurationSerializable {
         }
     }
 
-    public void apply(Player player) {
+    void apply(Player player) {
         EntityEquipment equipment = player.getEquipment();
         if (equipment == null) {
             Notifier.error("玩家" + player.getName() + "装备栏为空！");
