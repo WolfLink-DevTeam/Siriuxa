@@ -6,6 +6,7 @@ import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.TaskRecordIcon;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +26,7 @@ public class TaskRecordMenu extends Menu {
     protected void overrideIcons() {
         int startIndex = 10;
         List<PlayerTaskRecord> recordList = IOC.getBean(TaskRecordDB.class).loadRecords(getOfflineOwner().getName());
+        recordList.sort((r1,r2) -> ((int)(r1.getFinishedTimeInMills()-r2.getFinishedTimeInMills())/1000));
         int maxLen = Math.min(recordList.size(), 28);
         for (int i = 0; i < maxLen; i++) {
             PlayerTaskRecord playerTaskRecord = recordList.get(i);
