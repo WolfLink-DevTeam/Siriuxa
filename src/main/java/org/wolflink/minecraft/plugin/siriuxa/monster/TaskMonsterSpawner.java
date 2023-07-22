@@ -48,8 +48,8 @@ public class TaskMonsterSpawner {
 
     private final int MIN_RADIUS = 12;
     private final int MAX_RADIUS = 24;
-    private final int MIN_HEIGHT = -16;
-    private final int MAX_HEIGHT = 32;
+    private final int MIN_HEIGHT = -12;
+    private final int MAX_HEIGHT = 24;
 
     private void startSpawnMob() {
         if (spawnTaskId == -1) {
@@ -82,15 +82,14 @@ public class TaskMonsterSpawner {
         if (!isDecidedToSpawn(spawnerAttribute.getDecideSpawnChance(), random)) return;
         if (isMobCountOverLimit(maxRadius, loc)) return;
 
-        double angle = random.nextDouble() * 2 * Math.PI;
         double r = random.nextInt(minRadius, maxRadius);
-        double x = loc.getX() + r * Math.cos(angle);
-        double z = loc.getZ() + r * Math.sin(angle);
+        double x = loc.getX() + random.nextDouble() * r * 2 - r;
+        double z = loc.getZ() + random.nextDouble() * r * 2 - r;
         double y = loc.getY() + maxHeight;
         Location spawnLoc = new Location(world, x, y, z);
         Block spawnBlock = spawnLoc.getBlock();
         while (spawnBlock.isLiquid() || !spawnBlock.isEmpty()) {
-            spawnBlock = spawnBlock.getRelative(0, -2, 0);
+            spawnBlock = spawnBlock.getRelative(0, -1, 0);
             if (spawnBlock.getY() < -60) return;
             if (spawnBlock.getY() < y + minHeight) return; // 没有找到合适的位置，放弃生成
             spawnLoc.setY(spawnBlock.getY());
