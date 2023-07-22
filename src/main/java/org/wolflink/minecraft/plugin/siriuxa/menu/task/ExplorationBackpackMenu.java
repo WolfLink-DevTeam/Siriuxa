@@ -84,7 +84,11 @@ public class ExplorationBackpackMenu extends Menu {
             else if(index == 13) player.getInventory().addItem(playerBackpack.getLeggings());
             else if(index == 14) player.getInventory().addItem(playerBackpack.getBoots());
             else if(index == 15) player.getInventory().addItem(playerBackpack.getOffhand());
-            else player.getInventory().addItem(playerBackpack.getItems().get(index-18));
+            else {
+                ItemStack is = playerBackpack.getItems().get(index-18);
+                if(is == null) Notifier.warn("玩家 "+player.getName()+" 在领取物资时，背包 第"+(index-18)+"格 物品为空！");
+                else player.getInventory().addItem(is);
+            }
         }
     }
 
