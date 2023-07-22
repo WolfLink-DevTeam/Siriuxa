@@ -9,8 +9,8 @@ import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.GameStage;
-import org.wolflink.minecraft.plugin.siriuxa.team.Team;
-import org.wolflink.minecraft.plugin.siriuxa.team.TeamRepository;
+import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
+import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeamRepository;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
@@ -19,20 +19,20 @@ import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 public class FriendlyProtection extends WolfirdListener {
 
     @Inject
-    private TeamRepository teamRepository;
+    private GlobalTeamRepository globalTeamRepository;
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     void on(EntityDamageByEntityEvent event) {
         if (event.getEntityType() != EntityType.PLAYER) return; // 受伤的不是玩家
         if (event.getDamager().getType() != EntityType.PLAYER) return; //攻击者不是玩家
         Player a = (Player) event.getEntity();
-        Team aTeam = teamRepository.findByPlayer(a);
-        if (aTeam == null) return;
+        GlobalTeam aGlobalTeam = globalTeamRepository.findByPlayer(a);
+        if (aGlobalTeam == null) return;
         Player b = (Player) event.getDamager();
-        Team bTeam = teamRepository.findByPlayer(b);
-        if (bTeam == null) return;
-        if (aTeam != bTeam) return; // 不在同一个队伍
-        Task task = aTeam.getSelectedTask();
+        GlobalTeam bGlobalTeam = globalTeamRepository.findByPlayer(b);
+        if (bGlobalTeam == null) return;
+        if (aGlobalTeam != bGlobalTeam) return; // 不在同一个队伍
+        Task task = aGlobalTeam.getSelectedTask();
         if (task == null) return; // 没选择任务
         if(!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 没在游戏阶段
         TaskDifficulty taskDifficulty = task.getTaskDifficulty();

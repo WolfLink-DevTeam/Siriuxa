@@ -8,9 +8,9 @@ import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.Result;
-import org.wolflink.minecraft.plugin.siriuxa.team.Team;
-import org.wolflink.minecraft.plugin.siriuxa.team.TeamRepository;
-import org.wolflink.minecraft.plugin.siriuxa.team.TeamService;
+import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
+import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeamRepository;
+import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeamService;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
@@ -22,9 +22,9 @@ import java.util.UUID;
 public class TeamInvite extends WolfirdCommand {
 
     @Inject
-    TeamRepository teamRepository;
+    GlobalTeamRepository globalTeamRepository;
     @Inject
-    TeamService teamService;
+    GlobalTeamService globalTeamService;
     /**
      * 被邀请人 - 邀请人
      */
@@ -52,8 +52,8 @@ public class TeamInvite extends WolfirdCommand {
         if (invited == null || !invited.isOnline()) {
             Notifier.chat("§e邀请失败，未找到玩家：§f" + strings[0], player);
         } else {
-            Team team = teamRepository.findByPlayer(player);
-            if (team == null) {
+            GlobalTeam globalTeam = globalTeamRepository.findByPlayer(player);
+            if (globalTeam == null) {
                 Notifier.chat("§e邀请失败，你没有处于队伍中。", player);
                 return;
             }
@@ -65,7 +65,7 @@ public class TeamInvite extends WolfirdCommand {
                     Notifier.chat("§e来自 §f" + player.getName() + " §e的邀请已过期。", invited);
                 }
             }, 20 * 30);
-            Notifier.notify("§a" + player.getName() + " §f邀请你加入Ta的队伍，请在30秒内回应。\n§a\n§a同意 §f/sx team accept\n§c拒绝 §f/sx team deny\n", invited);
+            Notifier.notify("§a" + player.getName() + " §f邀请你加入Ta的队伍，请在30秒内回应。\n§a\n§a同意 §f/sx globalTeam accept\n§c拒绝 §f/sx globalTeam deny\n", invited);
             Notifier.chat("邀请成功，等待对方回应。", player);
         }
     }
@@ -76,13 +76,13 @@ public class TeamInvite extends WolfirdCommand {
         } else {
             String senderName = inviteMap.get(invited.getUniqueId());
             OfflinePlayer offlinePlayer = Bukkit.getPlayer(senderName);
-            Team team;
-            if (offlinePlayer == null) team = null;
-            else team = teamRepository.findByPlayerUuid(offlinePlayer.getUniqueId());
-            if (team == null) {
+            GlobalTeam globalTeam;
+            if (offlinePlayer == null) globalTeam = null;
+            else globalTeam = globalTeamRepository.findByPlayerUuid(offlinePlayer.getUniqueId());
+            if (globalTeam == null) {
                 Notifier.chat("§e该队伍已解散，无法加入。", invited);
             } else {
-                Result result = teamService.join(invited, team);
+                Result result = globalTeamService.join(invited, globalTeam);
                 result.show(invited);
                 Player player = offlinePlayer.getPlayer();
                 if (result.result()) {

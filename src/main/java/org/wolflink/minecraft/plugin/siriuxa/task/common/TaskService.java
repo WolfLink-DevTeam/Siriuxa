@@ -18,10 +18,10 @@ import org.wolflink.minecraft.plugin.siriuxa.task.common.region.TaskRegion;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.EndStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.WaitStage;
-import org.wolflink.minecraft.plugin.siriuxa.team.Team;
-import org.wolflink.minecraft.plugin.siriuxa.team.TeamRepository;
+import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
+import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeamRepository;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
-import org.wolflink.minecraft.plugin.siriuxa.team.TeamService;
+import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeamService;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 
@@ -35,7 +35,7 @@ public class TaskService {
     @Inject
     private TaskRepository taskRepository;
     @Inject
-    private TeamRepository teamRepository;
+    private GlobalTeamRepository globalTeamRepository;
     @Inject
     private VaultAPI vaultAPI;
     @Inject
@@ -51,25 +51,25 @@ public class TaskService {
      * 如果玩家不在队伍中，会创建一个队伍
      */
     public Result create(Player player, Class<? extends Task> taskClass, TaskDifficulty taskDifficulty) {
-        Team team = teamRepository.findByPlayer(player);
-        if (team == null) {
-            TeamService teamService = IOC.getBean(TeamService.class);
-            Result result = teamService.create(player);
+        GlobalTeam globalTeam = globalTeamRepository.findByPlayer(player);
+        if (globalTeam == null) {
+            GlobalTeamService globalTeamService = IOC.getBean(GlobalTeamService.class);
+            Result result = globalTeamService.create(player);
             if (!result.result()) return result; // 队伍创建失败
-            team = teamRepository.findByPlayer(player);
+            globalTeam = globalTeamRepository.findByPlayer(player);
         }
-        if (team == null) return new Result(false, "玩家创建了队伍但未找到所在队伍");
-        return create(team, taskClass, taskDifficulty);
+        if (globalTeam == null) return new Result(false, "玩家创建了队伍但未找到所在队伍");
+        return create(globalTeam, taskClass, taskDifficulty);
     }
 
     /**
      * 以队伍的身份创建指定类型的任务
      * 并绑定队伍与任务
      */
-    public Result create(Team team, Class<? extends Task> taskClass, TaskDifficulty taskDifficulty) {
-        if (team.getSelectedTask() != null) return new Result(false, "当前队伍已经选择了任务，无法再次创建。");
+    public Result create(GlobalTeam globalTeam, Class<? extends Task> taskClass, TaskDifficulty taskDifficulty) {
+        if (globalTeam.getSelectedTask() != null) return new Result(false, "当前队伍已经选择了任务，无法再次创建。");
         double cost = taskDifficulty.getWheatCost();
-        List<OfflinePlayer> offlinePlayers = team.getOfflinePlayers();
+        List<OfflinePlayer> offlinePlayers = globalTeam.getOfflinePlayers();
         for (OfflinePlayer offlinePlayer : offlinePlayers) {
             if (!offlinePlayer.isOnline()) return new Result(false, "队伍中有离线玩家，无法创建任务。");
         }
@@ -82,10 +82,10 @@ public class TaskService {
         for (OfflinePlayer offlinePlayer : offlinePlayers) {
             vaultAPI.takeEconomy(offlinePlayer, cost);
         }
-        Task task = taskFactory.create(taskClass, team, taskDifficulty);
+        Task task = taskFactory.create(taskClass, globalTeam, taskDifficulty);
         if(task != null) {
             // 与队伍绑定
-            team.setSelectedTask(task);
+            globalTeam.setSelectedTask(task);
             taskRepository.insert(task);
             return new Result(true,"任务创建成功。");
         } else {

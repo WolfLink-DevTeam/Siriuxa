@@ -12,7 +12,7 @@ import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.EndStage
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.ReadyStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.WaitStage;
-import org.wolflink.minecraft.plugin.siriuxa.team.Team;
+import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.LinearStageHolder;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
@@ -43,8 +43,8 @@ public class ExplorationTask extends Task implements HurtCheckAvailable, OreChec
         items.add(new ItemStack(Material.BREAD,8));
         defaultKit.setItems(items);
     }
-    public ExplorationTask(Team team, ExplorationDifficulty difficulty) {
-        super(team, difficulty,defaultKit);
+    public ExplorationTask(GlobalTeam globalTeam, ExplorationDifficulty difficulty) {
+        super(globalTeam, difficulty,defaultKit);
         this.difficulty = difficulty;
     }
 

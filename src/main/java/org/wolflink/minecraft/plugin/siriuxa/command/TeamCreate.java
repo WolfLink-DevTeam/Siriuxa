@@ -5,13 +5,13 @@ import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
-import org.wolflink.minecraft.plugin.siriuxa.team.TeamService;
+import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeamService;
 
 @Singleton
 public class TeamCreate extends WolfirdCommand {
 
     @Inject
-    private TeamService teamService;
+    private GlobalTeamService globalTeamService;
 
     public TeamCreate() {
         super(false, false, true, "sx team create", "创建一个小队");
@@ -20,6 +20,6 @@ public class TeamCreate extends WolfirdCommand {
     @Override
     protected void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
-        teamService.create(player).show(player);
+        globalTeamService.create(player).show(player);
     }
 }

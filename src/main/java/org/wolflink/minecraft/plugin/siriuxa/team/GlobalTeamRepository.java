@@ -8,22 +8,22 @@ import javax.annotation.Nullable;
 import java.util.UUID;
 
 @Singleton
-public class TeamRepository extends MapRepository<UUID, Team> {
+public class GlobalTeamRepository extends MapRepository<UUID, GlobalTeam> {
     @Override
-    public UUID getPrimaryKey(Team team) {
-        return team.getTeamUuid();
+    public UUID getPrimaryKey(GlobalTeam globalTeam) {
+        return globalTeam.getTeamUuid();
     }
 
     @Nullable
-    public Team findByPlayerUuid(UUID uuid) {
-        for (Team team : findAll()) {
-            if (team.contains(uuid)) return team;
+    public GlobalTeam findByPlayerUuid(UUID uuid) {
+        for (GlobalTeam globalTeam : findAll()) {
+            if (globalTeam.contains(uuid)) return globalTeam;
         }
         return null;
     }
 
     @Nullable
-    public Team findByPlayer(Player player) {
+    public GlobalTeam findByPlayer(Player player) {
         return findByPlayerUuid(player.getUniqueId());
     }
 }
