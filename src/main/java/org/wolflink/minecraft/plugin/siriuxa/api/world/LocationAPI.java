@@ -3,6 +3,7 @@ package org.wolflink.minecraft.plugin.siriuxa.api.world;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.wolflink.common.ioc.Singleton;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 @Singleton
 public class LocationAPI {
@@ -10,15 +11,15 @@ public class LocationAPI {
      * 获取以给定坐标为中心，水平角度为 yaw，距离为 distance 的目标坐标
      */
     public Location getLocationByAngle(Location center, double yaw, double distance) {
-        double angle = (yaw - 90) % 360;
+        double angle = (yaw + 90) % 360;
         if (angle < 0) {
             angle += 360;
         }
         // 将角度转换为弧度
         double radian = Math.toRadians(angle);
         // 计算新坐标的X和Z值
-        double deltaX = Math.sin(radian) * distance;
-        double deltaZ = Math.cos(radian) * distance;
+        double deltaX = Math.cos(radian) * distance;
+        double deltaZ = Math.sin(radian) * distance;
 
         // 获取中心坐标的世界、X、Y、Z值
         World world = center.getWorld();
@@ -33,7 +34,6 @@ public class LocationAPI {
 
         // 创建新的Location对象
         Location newLocation = new Location(world, newX, newY, newZ);
-
         return newLocation;
     }
 
@@ -43,25 +43,13 @@ public class LocationAPI {
      * 如果没能找到则返回null
      */
     public Location getNearestSurface(Location location,int deltaY) {
-        for (int i = 1; i <= deltaY; i++) {
-            Location upLoc0 = location.clone().add(0,-3 + i,0);
-            Location upLoc1 = location.clone().add(0,-2 + i,0);
-            Location upLoc2 = location.clone().add(0,-1 + i,0);
-            Location upLoc3 = location.clone().add(0,i,0);
-            if(upLoc0.getBlock().getType().isBlock()
-                    && upLoc3.getBlock().getType().isAir()
-                    && upLoc2.getBlock().getType().isAir()
-                    && upLoc1.getBlock().getType().isAir()
-            ) return upLoc1;
-            Location downLoc0 = location.clone().add(0,-1-i,0);
-            Location downLoc1 = location.clone().add(0,-i,0);
-            Location downLoc2 = location.clone().add(0,1-i,0);
-            Location downLoc3 = location.clone().add(0,2-i,0);
-            if(downLoc0.getBlock().getType().isBlock()
-                    && downLoc3.getBlock().getType().isAir()
-                    && downLoc2.getBlock().getType().isAir()
-                    && downLoc1.getBlock().getType().isAir()
-            ) return downLoc1;
+        MonsterSpawnBox upBox = new MonsterSpawnBox(location.clone().add(0,-1,0));
+        MonsterSpawnBox downBox = new MonsterSpawnBox(location.clone().add(0,-3,0));
+        for (int i = 0; i < deltaY; i++) {
+            if(upBox.isAvailable()) return upBox.getBottom().add(0,1,0);
+            if(downBox.isAvailable()) return downBox.getBottom().add(0,1,0);
+            upBox.up();
+            downBox.down();
         }
         return null;
     }

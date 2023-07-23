@@ -58,7 +58,9 @@ public class StrategyDecider implements ISwitchable {
     }
     private void updateStrategyMap() {
         playerStrategyMap.clear();
-        for (Player player : task.getTaskPlayers()) {
+        // 确保线程安全
+        List<Player> list = new ArrayList<>(task.getTaskPlayers());
+        for (Player player : list) {
             playerStrategyMap.put(player.getUniqueId(),decide(player));
         }
     }
