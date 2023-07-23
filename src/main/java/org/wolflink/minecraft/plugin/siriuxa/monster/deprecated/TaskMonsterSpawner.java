@@ -1,4 +1,4 @@
-package org.wolflink.minecraft.plugin.siriuxa.monster;
+package org.wolflink.minecraft.plugin.siriuxa.monster.deprecated;
 
 import lombok.NonNull;
 import org.bukkit.Bukkit;

@@ -13,7 +13,7 @@ import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
 @Singleton
-public class MonsterSpawnListener extends WolfirdListener {
+public class CreatureSpawnListener extends WolfirdListener {
     @Inject
     Config config;
 
