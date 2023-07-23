@@ -2,7 +2,6 @@ package org.wolflink.minecraft.plugin.siriuxa.api.world;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 import java.util.HashSet;
 import java.util.Set;

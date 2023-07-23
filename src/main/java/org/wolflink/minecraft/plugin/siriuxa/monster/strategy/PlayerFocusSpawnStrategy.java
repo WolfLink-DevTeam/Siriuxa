@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
-import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.LocationAPI;
 
 import java.util.ArrayList;
@@ -25,8 +24,8 @@ public class PlayerFocusSpawnStrategy extends SpawnStrategy{
         return true;
     }
 
-    private final int SAFE_RADIUS = 10;
-    private final int MAX_RADIUS = 30;
+    private final int SAFE_RADIUS = 15;
+    private final int MAX_RADIUS = 35;
 
     @Override
     public void spawn(Player player) {
