@@ -25,7 +25,6 @@ import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.loot.ChestLoot;
 import org.wolflink.minecraft.plugin.siriuxa.monster.StrategyDecider;
-import org.wolflink.minecraft.plugin.siriuxa.monster.deprecated.TaskMonsterSpawner;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.region.SquareRegion;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.region.TaskRegion;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
@@ -97,7 +96,6 @@ public abstract class Task implements INameable {
 
     protected abstract StageHolder initStageHolder();
 
-    private final TaskMonsterSpawner taskMonsterSpawner;
 
     /**
      * 任务基础套装
@@ -112,7 +110,6 @@ public abstract class Task implements INameable {
     public Task(GlobalTeam globalTeam, TaskDifficulty taskDifficulty, PlayerBackpack defaultKit) {
         this.globalTeam = globalTeam;
         this.taskDifficulty = taskDifficulty;
-        this.taskMonsterSpawner = new TaskMonsterSpawner(this);
         this.wheatLostAcceleratedSpeed = taskDifficulty.getWheatLostAcceleratedSpeed();
         this.baseWheatLoss = taskDifficulty.getBaseWheatLoss();
         this.defaultKit = defaultKit;
@@ -261,9 +258,6 @@ public abstract class Task implements INameable {
                 startTiming();
                 startEvacuateTask((int) (12 + 8 * Math.random()));
                 taskRegion.startCheck();
-                subScheduler.runTaskLater(() -> {
-                    taskMonsterSpawner.setEnabled(true);
-                }, 20 * 60 * 5);
             });
         });
     }
@@ -304,7 +298,6 @@ public abstract class Task implements INameable {
 
     private void stopCheck() {
         strategyDecider.setEnabled(false);
-        taskMonsterSpawner.setEnabled(false);
         subScheduler.cancelAllTasks();
         if (taskRegion != null) {
             taskRegion.stopCheck();
