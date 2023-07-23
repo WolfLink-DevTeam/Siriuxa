@@ -7,7 +7,6 @@ import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -82,9 +81,9 @@ public class TaskMonsterSpawner {
         if (!isDecidedToSpawn(spawnerAttribute.getDecideSpawnChance(), random)) return;
         if (isMobCountOverLimit(maxRadius, loc)) return;
 
-        double r = random.nextInt(minRadius, maxRadius);
-        double x = loc.getX() + random.nextDouble() * r * 2 - r;
-        double z = loc.getZ() + random.nextDouble() * r * 2 - r;
+        double r = random.nextInt(maxRadius - minRadius);
+        double x = loc.getX() + minRadius + r;
+        double z = loc.getZ() + minRadius + r;
         double y = loc.getY() + maxHeight;
         Location spawnLoc = new Location(world, x, y, z);
         Block spawnBlock = spawnLoc.getBlock();
