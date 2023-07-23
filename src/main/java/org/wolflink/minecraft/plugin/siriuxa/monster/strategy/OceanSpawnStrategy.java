@@ -1,11 +1,14 @@
 package org.wolflink.minecraft.plugin.siriuxa.monster.strategy;
 
 import org.bukkit.entity.Player;
-import org.wolflink.common.ioc.Singleton;
+import org.wolflink.minecraft.plugin.siriuxa.monster.SpawnerAttribute;
 
 
-@Singleton
 public class OceanSpawnStrategy extends SpawnStrategy{
+
+    public OceanSpawnStrategy(SpawnerAttribute spawnerAttribute) {
+        super(spawnerAttribute);
+    }
 
     @Override
     public boolean isApplicable(Player player) {

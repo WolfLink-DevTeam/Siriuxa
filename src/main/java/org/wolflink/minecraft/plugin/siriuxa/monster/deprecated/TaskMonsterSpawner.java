@@ -14,6 +14,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.ISwitchable;
+import org.wolflink.minecraft.plugin.siriuxa.monster.SpawnerAttribute;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 
 import java.util.Objects;

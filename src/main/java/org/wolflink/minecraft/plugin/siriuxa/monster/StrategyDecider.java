@@ -3,7 +3,6 @@ package org.wolflink.minecraft.plugin.siriuxa.monster;
 import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.ISwitchable;
 import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.OceanSpawnStrategy;
 import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.PlayerFocusSpawnStrategy;
@@ -20,11 +19,17 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class StrategyDecider implements ISwitchable {
 
+    private final SpawnerAttribute spawnerAttribute;
     private final Task task;
     private final int spawnPeriodSecs;
     public StrategyDecider(Task task,int spawnPeriodSecs) {
         this.task = task;
         this.spawnPeriodSecs = spawnPeriodSecs;
+        spawnerAttribute = new SpawnerAttribute(task.getTaskDifficulty());
+        strategyList = new ArrayList<>(){{
+            add(new OceanSpawnStrategy(spawnerAttribute));
+            add(new PlayerFocusSpawnStrategy(spawnerAttribute));
+        }};
     }
 
     private final SubScheduler subScheduler = new SubScheduler();
@@ -39,10 +44,7 @@ public class StrategyDecider implements ISwitchable {
     /**
      * 优先级从上往下，最上方的最优先进行决策
      */
-    private final List<SpawnStrategy> strategyList = new ArrayList<>(){{
-        add(IOC.getBean(OceanSpawnStrategy.class));
-        add(IOC.getBean(PlayerFocusSpawnStrategy.class));
-    }};
+    private final List<SpawnStrategy> strategyList;
     @Override
     public void enable() {
         subScheduler.runTaskTimerAsync(
