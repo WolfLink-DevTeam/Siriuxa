@@ -105,7 +105,7 @@ public abstract class Task implements INameable {
     /**
      * TODO 延迟初始化，刷怪决策者
      */
-    private final StrategyDecider strategyDecider = new StrategyDecider(this,1);
+    private final StrategyDecider strategyDecider;
 
     public Task(GlobalTeam globalTeam, TaskDifficulty taskDifficulty, PlayerBackpack defaultKit) {
         this.globalTeam = globalTeam;
@@ -114,6 +114,7 @@ public abstract class Task implements INameable {
         this.baseWheatLoss = taskDifficulty.getBaseWheatLoss();
         this.defaultKit = defaultKit;
         stageHolder = initStageHolder();
+        strategyDecider = new StrategyDecider(this);
     }
 
     public List<OfflinePlayer> getOfflinePlayers() {

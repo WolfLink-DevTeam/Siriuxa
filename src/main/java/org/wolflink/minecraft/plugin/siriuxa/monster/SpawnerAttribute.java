@@ -17,7 +17,7 @@ public class SpawnerAttribute {
     private final double healthMultiple;
     private final double movementMultiple;
     private final double damageMultiple;
-    private final double decideSpawnChance;
+    private final int spawnPeriodSecs;
     private final Map<EntityType, Integer> weightMap = new EnumMap<>(EntityType.class);
 
     public SpawnerAttribute(TaskDifficulty taskDifficulty) {
@@ -26,7 +26,7 @@ public class SpawnerAttribute {
                 healthMultiple = 0.5;
                 movementMultiple = 0.8;
                 damageMultiple = 0.5;
-                decideSpawnChance = 0.6;
+                spawnPeriodSecs = 25;
                 weightMap.put(EntityType.ZOMBIE, 50);
                 weightMap.put(EntityType.HUSK, 50);
                 weightMap.put(EntityType.ZOMBIE_VILLAGER, 50);
@@ -40,7 +40,7 @@ public class SpawnerAttribute {
                 healthMultiple = 0.8;
                 movementMultiple = 1.0;
                 damageMultiple = 0.8;
-                decideSpawnChance = 0.7;
+                spawnPeriodSecs = 20;
                 weightMap.put(EntityType.ZOMBIE, 50);
                 weightMap.put(EntityType.HUSK, 50);
                 weightMap.put(EntityType.ZOMBIE_VILLAGER, 50);
@@ -54,7 +54,7 @@ public class SpawnerAttribute {
                 healthMultiple = 1.2;
                 movementMultiple = 1.1;
                 damageMultiple = 1.0;
-                decideSpawnChance = 0.8;
+                spawnPeriodSecs = 15;
                 weightMap.put(EntityType.ZOMBIE, 45);
                 weightMap.put(EntityType.HUSK, 45);
                 weightMap.put(EntityType.ZOMBIE_VILLAGER, 45);
@@ -70,7 +70,7 @@ public class SpawnerAttribute {
                 healthMultiple = 2.0;
                 movementMultiple = 1.2;
                 damageMultiple = 1.5;
-                decideSpawnChance = 0.9;
+                spawnPeriodSecs = 15;
                 weightMap.put(EntityType.ZOMBIE, 40);
                 weightMap.put(EntityType.HUSK, 40);
                 weightMap.put(EntityType.ZOMBIE_VILLAGER, 40);
@@ -86,7 +86,7 @@ public class SpawnerAttribute {
                 healthMultiple = 1.0;
                 movementMultiple = 1.0;
                 damageMultiple = 1.0;
-                decideSpawnChance = 0;
+                spawnPeriodSecs = 30;
                 weightMap.put(EntityType.ZOMBIE, 100);
                 weightMap.put(EntityType.SKELETON, 40);
                 weightMap.put(EntityType.SPIDER, 40);

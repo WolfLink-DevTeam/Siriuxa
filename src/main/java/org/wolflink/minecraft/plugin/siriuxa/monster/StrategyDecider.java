@@ -22,10 +22,10 @@ public class StrategyDecider implements ISwitchable {
     private final SpawnerAttribute spawnerAttribute;
     private final Task task;
     private final int spawnPeriodSecs;
-    public StrategyDecider(Task task,int spawnPeriodSecs) {
+    public StrategyDecider(Task task) {
         this.task = task;
-        this.spawnPeriodSecs = spawnPeriodSecs;
         spawnerAttribute = new SpawnerAttribute(task.getTaskDifficulty());
+        this.spawnPeriodSecs = spawnerAttribute.getSpawnPeriodSecs();
         strategyList = new ArrayList<>(){{
             add(new OceanSpawnStrategy(spawnerAttribute));
             add(new PlayerFocusSpawnStrategy(spawnerAttribute));
