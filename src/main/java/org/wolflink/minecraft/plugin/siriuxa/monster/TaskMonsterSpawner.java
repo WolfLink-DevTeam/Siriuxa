@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
+import org.wolflink.minecraft.plugin.siriuxa.api.ISwitchable;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 
 import java.util.Objects;
@@ -21,23 +22,14 @@ import java.util.concurrent.ThreadLocalRandom;
  * 任务怪物生成器
  * 主要负责处理与任务相关的怪物生成
  */
-public class TaskMonsterSpawner {
+public class TaskMonsterSpawner implements ISwitchable {
 
     @NonNull
     private final Task task;
 
-    private boolean enabled = false;
-
     private final SpawnerAttribute spawnerAttribute;
 
     private int spawnTaskId = -1;
-
-    public void setEnabled(boolean value) {
-        if (enabled == value) return;
-        enabled = value;
-        if (enabled) startSpawnMob();
-        else stopSpawnMob();
-    }
 
     public TaskMonsterSpawner(@NonNull Task task) {
         this.task = task;
@@ -113,5 +105,15 @@ public class TaskMonsterSpawner {
 
     private static boolean isDecidedToSpawn(double spawnChance, @NonNull ThreadLocalRandom random) {
         return random.nextDouble() < spawnChance;
+    }
+
+    @Override
+    public void enable() {
+        startSpawnMob();
+    }
+
+    @Override
+    public void disable() {
+        stopSpawnMob();
     }
 }
