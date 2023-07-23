@@ -66,7 +66,8 @@ public class PlayerFocusSpawnStrategy extends SpawnStrategy{
             Location summonLocation = locationAPI.getNearestSurface(goalLocation,5);
             if(summonLocation == null) return;
             // TODO 测试怪物(小黑)
-            Objects.requireNonNull(firstLoc.getWorld()).spawnEntity(summonLocation, EntityType.ENDERMAN);
+            Bukkit.getScheduler().runTask(Siriuxa.getInstance(),
+                    ()->Objects.requireNonNull(firstLoc.getWorld()).spawnEntity(summonLocation, EntityType.ENDERMAN));
         },20 * 3);
     }
 }
