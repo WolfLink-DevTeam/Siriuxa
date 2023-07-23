@@ -36,4 +36,23 @@ public class LocationAPI {
 
         return newLocation;
     }
+
+    /**
+     * 在一定的Y轴误差内(建议至少>=3)，
+     * 获取离给定坐标最近的坐标地面(至少3格高度的空间)，不一定是地表(X和Z不改变)
+     * 如果没能找到则返回null
+     */
+    public Location getNearestSurface(Location location,int deltaY) {
+        for (int i = 1; i <= deltaY; i++) {
+            Location upLoc1 = location.clone().add(0,-2 + i,0);
+            Location upLoc2 = location.clone().add(0,-1 + i,0);
+            Location upLoc3 = location.clone().add(0,i,0);
+            if(upLoc3.getBlock().getType().isAir() && upLoc2.getBlock().getType().isAir() && upLoc1.getBlock().getType().isAir()) return upLoc1;
+            Location downLoc1 = location.clone().add(0,-i,0);
+            Location downLoc2 = location.clone().add(0,1-i,0);
+            Location downLoc3 = location.clone().add(0,2-i,0);
+            if(downLoc3.getBlock().getType().isAir() && downLoc2.getBlock().getType().isAir() && downLoc1.getBlock().getType().isAir()) return downLoc1;
+        }
+        return null;
+    }
 }
