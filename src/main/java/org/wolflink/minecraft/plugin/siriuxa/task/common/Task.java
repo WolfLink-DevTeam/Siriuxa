@@ -24,6 +24,7 @@ import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.loot.ChestLoot;
+import org.wolflink.minecraft.plugin.siriuxa.monster.StrategyDecider;
 import org.wolflink.minecraft.plugin.siriuxa.monster.deprecated.TaskMonsterSpawner;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.region.SquareRegion;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.region.TaskRegion;
@@ -102,6 +103,11 @@ public abstract class Task implements INameable {
      * 任务基础套装
      */
     private final PlayerBackpack defaultKit;
+
+    /**
+     * TODO 延迟初始化，刷怪决策者
+     */
+    private final StrategyDecider strategyDecider = new StrategyDecider(this,15);
 
     public Task(GlobalTeam globalTeam, TaskDifficulty taskDifficulty, PlayerBackpack defaultKit) {
         this.globalTeam = globalTeam;
@@ -231,6 +237,7 @@ public abstract class Task implements INameable {
         initRecord();
         taskStat.setEnabled(true);
         this.taskWheat = size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
+        strategyDecider.setEnabled(true);
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
 
             beaconLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.END_PORTAL_FRAME, taskRegion.getCenter(), 30);
@@ -296,6 +303,7 @@ public abstract class Task implements INameable {
     }
 
     private void stopCheck() {
+        strategyDecider.setEnabled(false);
         taskMonsterSpawner.setEnabled(false);
         subScheduler.cancelAllTasks();
         if (taskRegion != null) {
