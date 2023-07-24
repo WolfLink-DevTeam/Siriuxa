@@ -9,8 +9,11 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
+import org.wolflink.minecraft.plugin.siriuxa.file.Config;
+import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.ReadyStage;
@@ -59,10 +62,9 @@ public class FunctionBan extends WolfirdListener {
     void banTaskCommand(PlayerCommandPreprocessEvent event) {
         if(event.getPlayer().isOp()) return; // 不处理管理员
         Player player = event.getPlayer();
-        Task task = taskRepository.findByTaskTeamPlayer(player);
-        if (task == null) return; // 没在任务中
-        Stage stage = task.getStageHolder().getThisStage();
-        if (!(stage instanceof GameStage) && !(stage instanceof ReadyStage)) return; // 没在游戏阶段/准备阶段
-        event.setCancelled(true);
+        // 在任务世界
+        if(player.getWorld().getName().equals(IOC.getBean(Config.class).get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME))) {
+            event.setCancelled(true);
+        }
     }
 }
