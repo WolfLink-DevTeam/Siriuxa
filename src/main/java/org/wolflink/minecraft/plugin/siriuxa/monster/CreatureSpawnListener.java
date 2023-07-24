@@ -24,7 +24,7 @@ public class CreatureSpawnListener extends WolfirdListener {
         if (!world.getName().equals(config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME))) return;
         if (!(e.getEntity() instanceof Monster)) return;
 
-        if (e.getSpawnReason() == CreatureSpawnEvent.SpawnReason.NATURAL) {
+        if (e.getSpawnReason() == CreatureSpawnEvent.SpawnReason.NATURAL || e.getSpawnReason() == CreatureSpawnEvent.SpawnReason.DEFAULT) {
             e.setCancelled(true);
         }
 
