@@ -64,6 +64,8 @@ public class FunctionBan extends WolfirdListener {
         Player player = event.getPlayer();
         // 在任务世界
         if(player.getWorld().getName().equals(IOC.getBean(Config.class).get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME))) {
+            // 允许执行返回大厅的指令
+            if(event.getMessage().equalsIgnoreCase("sx lobby"))return;
             event.setCancelled(true);
         }
     }
