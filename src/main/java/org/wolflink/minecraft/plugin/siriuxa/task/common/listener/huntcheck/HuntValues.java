@@ -33,9 +33,9 @@ public class HuntValues {
         valueMap.put(EntityType.HUSK, 1.0);
         valueMap.put(EntityType.STRAY, 1.3);
         valueMap.put(EntityType.SILVERFISH, 0.5);
-        valueMap.put(EntityType.VEX, 5.0);
+        valueMap.put(EntityType.VEX, 10.0);
         valueMap.put(EntityType.ENDERMAN, 3.0);
-        valueMap.put(EntityType.VINDICATOR, 1.2);
+        valueMap.put(EntityType.VINDICATOR, 5.0);
         valueMap.put(EntityType.ENDERMITE,25.0);
         valueMap.put(EntityType.CAVE_SPIDER,1.5);
     }
@@ -54,7 +54,7 @@ public class HuntValues {
     /**
      * 整体价值倍率
      */
-    private static final double MULTIPLE = 4.0;
+    private static final double MULTIPLE = 6.0;
     /**
      * 最少记录池数量
      */
