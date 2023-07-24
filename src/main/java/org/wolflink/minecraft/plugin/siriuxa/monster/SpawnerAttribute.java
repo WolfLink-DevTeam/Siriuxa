@@ -52,7 +52,7 @@ public class SpawnerAttribute {
                 weightMap.put(EntityType.CREEPER, 20);
             }
             case 3 -> { // 困难
-                healthMultiple = 1.2;
+                healthMultiple = 1.0;
                 movementMultiple = 1.1;
                 damageMultiple = 1.0;
                 spawnPeriodSecs = 15;
@@ -64,13 +64,13 @@ public class SpawnerAttribute {
                 weightMap.put(EntityType.SILVERFISH, 20);
                 weightMap.put(EntityType.SPIDER, 40);
                 weightMap.put(EntityType.CREEPER, 20);
-                weightMap.put(EntityType.VEX, 10);
+                weightMap.put(EntityType.VEX, 5);
                 weightMap.put(EntityType.VINDICATOR, 10);
             }
             case 4 -> { // 专家
-                healthMultiple = 2.0;
+                healthMultiple = 1.2;
                 movementMultiple = 1.2;
-                damageMultiple = 1.5;
+                damageMultiple = 1.2;
                 spawnPeriodSecs = 15;
                 weightMap.put(EntityType.ZOMBIE, 40);
                 weightMap.put(EntityType.HUSK, 40);
@@ -80,7 +80,7 @@ public class SpawnerAttribute {
                 weightMap.put(EntityType.SILVERFISH, 20);
                 weightMap.put(EntityType.SPIDER, 40);
                 weightMap.put(EntityType.CREEPER, 20);
-                weightMap.put(EntityType.VEX, 20);
+                weightMap.put(EntityType.VEX, 5);
                 weightMap.put(EntityType.VINDICATOR, 10);
             }
             default -> {
