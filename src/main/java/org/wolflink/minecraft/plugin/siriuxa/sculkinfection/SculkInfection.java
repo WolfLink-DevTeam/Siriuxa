@@ -78,11 +78,12 @@ public class SculkInfection implements ISwitchable {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         double randDouble = random.nextDouble();
         subScheduler.runTaskLater(()->{
-            if(value >= 300) {
+            if(value >= 400) {
                 player.playSound(player.getLocation(), Sound.BLOCK_SCULK_CHARGE,1f,1f);
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent("§c§l你被幽匿方块严重感染了！"));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,40,0,false,false,false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,40,0,false,false,false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,40,1,false,false,false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,40,239,false,false,false));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,40,0,false,false,false));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,40,0,false,false,false));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,40,0,false,false,false));
@@ -93,10 +94,11 @@ public class SculkInfection implements ISwitchable {
                     player.getLocation().clone().add(0,-1,0).getBlock().setType(material);
                 }
             }
-            else if (value >= 200) {
+            else if (value >= 250) {
                 player.playSound(player.getLocation(), Sound.BLOCK_SCULK_CHARGE,1f,1f);
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent("§5§l你变得寸步难行..."));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,40,0,false,false,false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,40,239,false,false,false));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,40,0,false,false,false));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,40,0,false,false,false));
                 if(randDouble <= 0.2) {
@@ -135,7 +137,7 @@ public class SculkInfection implements ISwitchable {
         if(getInfectionValue(player.getUniqueId()) > 100) {
             milkCDSet.add(player.getUniqueId());
             subScheduler.runTaskLater(()->milkCDSet.remove(player.getUniqueId()),20 * 180);
-            addInfectionValue(player,-120);
+            addInfectionValue(player,-150);
             Notifier.chat("喝了牛奶之后你感觉好多了。",player);
         }
     }
