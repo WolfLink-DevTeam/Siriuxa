@@ -19,7 +19,7 @@ public class CreatureSpawnListener extends WolfirdListener {
     Config config;
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onMonsterSpawn(CreatureSpawnEvent e) {
+    public void onCreatureSpawn(CreatureSpawnEvent e) {
         World world = e.getEntity().getWorld();
         if (!world.getName().equals(config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME))) return;
         if (!(e.getEntity() instanceof Monster)) return;
