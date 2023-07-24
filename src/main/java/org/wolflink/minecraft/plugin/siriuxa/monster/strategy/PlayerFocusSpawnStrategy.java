@@ -81,6 +81,7 @@ public class PlayerFocusSpawnStrategy extends SpawnStrategy {
             Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> {
                 World world = firstLoc.getWorld();
                 assert world != null;
+                if(world.getNearbyEntities(summonLocation,8,4,8,entity -> entity.getType() == EntityType.PLAYER).size() > 0) return;
                 EntityType entityType = getSpawnerAttribute().randomType();
                 Monster monster = (Monster) world.spawnEntity(summonLocation, entityType);
                 AttributeInstance maxHealth = monster.getAttribute(Attribute.GENERIC_MAX_HEALTH);
