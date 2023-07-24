@@ -62,10 +62,11 @@ public class PlayerFocusSpawnStrategy extends SpawnStrategy {
             if (!available[0]) {
                 return; // 如果检测异常，则不生成怪物
             }
-            double averX = locList.stream().map(Location::getX).reduce(0.0, Double::sum) / locList.size();
-            double averY = locList.stream().map(Location::getY).reduce(0.0, Double::sum) / locList.size();
-            double averZ = locList.stream().map(Location::getZ).reduce(0.0, Double::sum) / locList.size();
-            float averYaw = locList.stream().map(Location::getYaw).reduce(0.0f, Float::sum) / locList.size();
+            List<Location> copyList = new ArrayList<>(locList);
+            double averX = copyList.stream().map(Location::getX).reduce(0.0, Double::sum) / copyList.size();
+            double averY = copyList.stream().map(Location::getY).reduce(0.0, Double::sum) / copyList.size();
+            double averZ = copyList.stream().map(Location::getZ).reduce(0.0, Double::sum) / copyList.size();
+            float averYaw = copyList.stream().map(Location::getYaw).reduce(0.0f, Float::sum) / copyList.size();
             // TODO 暂时忽略 pitch，未来可以考虑引入
             Location averLocation = new Location(firstLoc.getWorld(), averX, averY, averZ, averYaw, 0);
             float minYaw = averYaw - 45;
