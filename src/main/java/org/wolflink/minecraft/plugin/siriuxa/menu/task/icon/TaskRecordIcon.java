@@ -68,7 +68,7 @@ public class TaskRecordIcon extends Icon {
                 String returnWheat = String.format("%.2f", Objects.requireNonNull(IOC.getBean(DifficultyRepository.class)
                         .findByName(playerTaskRecord.getTaskDifficulty())).getWheatCost() * 0.6);
                 IOC.getBean(VaultAPI.class).addEconomy(player, Double.parseDouble(returnWheat));
-                int totalExp = (int) (playerTaskRecord.getPlayerBackpack().getTotalExp() * 0.8);
+                int totalExp = (int) (playerTaskRecord.getPlayerBackpack().getTotalExp() * 0.8) + player.getTotalExperience();
                 player.setTotalExperience(0);
                 player.setLevel(0);
                 player.setExp(0);

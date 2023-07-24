@@ -83,7 +83,7 @@ public class SculkInfection implements ISwitchable {
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent("§c§l你被幽匿方块严重感染了！"));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,40,0,false,false,false));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,40,1,false,false,false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,40,239,false,false,false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,40,249,false,false,false));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,40,0,false,false,false));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,40,0,false,false,false));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,40,0,false,false,false));
@@ -98,14 +98,15 @@ public class SculkInfection implements ISwitchable {
                 player.playSound(player.getLocation(), Sound.BLOCK_SCULK_CHARGE,1f,1f);
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent("§5§l你变得寸步难行..."));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,40,0,false,false,false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,40,239,false,false,false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,40,249,false,false,false));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,40,0,false,false,false));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,40,0,false,false,false));
                 if(randDouble <= 0.2) {
                     Material material;
                     if(random.nextDouble() <= 0.2) material = Material.SCULK_CATALYST;
                     else material = Material.SCULK;
-                    player.getLocation().clone().add(0,-1,0).getBlock().setType(material);
+                    Location location = player.getLocation().clone().add(0,-1,0);
+                    if(location.getBlock().getType().isSolid()) location.getBlock().setType(material);
                 }
             }
             else if (value >= 100) {

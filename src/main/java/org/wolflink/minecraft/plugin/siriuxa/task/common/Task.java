@@ -246,10 +246,13 @@ public abstract class Task implements INameable {
                 List<Location> chestLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.CHEST, taskRegion.getCenter(), 30);
                 for (Location location : chestLocations) {
                     if (location.getBlock().getType() != Material.CHEST) continue;
+                    if (lootChestAmount >= size()) {
+                        location.getBlock().setType(Material.AIR);
+                        continue;
+                    } // 跟人数有关
                     Chest chest = (Chest) location.getBlock().getState();
                     new ChestLoot(chest).applyLootTable();
                     lootChestAmount++;
-                    if (lootChestAmount >= size()) break; // 跟人数有关
                 }
 
                 for (Player player : getTaskPlayers()) {
