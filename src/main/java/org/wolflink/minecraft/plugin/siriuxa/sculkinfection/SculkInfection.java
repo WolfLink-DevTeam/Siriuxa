@@ -1,21 +1,21 @@
 package org.wolflink.minecraft.plugin.siriuxa.sculkinfection;
 
-import com.google.common.collect.ImmutableList;
 import lombok.AllArgsConstructor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Wolf;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.ISwitchable;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.BlockAPI;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
@@ -77,7 +77,7 @@ public class SculkInfection implements ISwitchable {
         int value = getInfectionValue(pUuid);
         ThreadLocalRandom random = ThreadLocalRandom.current();
         double randDouble = random.nextDouble();
-        Bukkit.getScheduler().runTask(Siriuxa.getInstance(),()->{
+        subScheduler.runTaskLater(()->{
             if(value >= 300) {
                 player.playSound(player.getLocation(), Sound.BLOCK_SCULK_CHARGE,1f,1f);
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent("§c§l你被幽匿方块严重感染了！"));
@@ -118,7 +118,7 @@ public class SculkInfection implements ISwitchable {
                     player.getLocation().clone().add(0,-1,0).getBlock().setType(material);
                 }
             }
-        });
+        },1);
     }
     public void breakSculk(Player player) {
         if(!(player.getWorld().getName().equals(config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME)))) return;
@@ -126,10 +126,23 @@ public class SculkInfection implements ISwitchable {
         if(player.getGameMode() != GameMode.SURVIVAL) return;
         addInfectionValue(player,10);
     }
-    private final SculkBreakListener sculkBreakListener = new SculkBreakListener(this);
+    private final Set<UUID> milkCDSet = new HashSet<>();
+    public void drinkMilk(Player player) {
+        if(!(player.getWorld().getName().equals(config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME)))) return;
+        // 不是生存模式
+        if(player.getGameMode() != GameMode.SURVIVAL) return;
+        if(milkCDSet.contains(player.getUniqueId())) return;
+        if(getInfectionValue(player.getUniqueId()) > 100) {
+            milkCDSet.add(player.getUniqueId());
+            subScheduler.runTaskLater(()->milkCDSet.remove(player.getUniqueId()),20 * 180);
+            addInfectionValue(player,-120);
+            Notifier.chat("喝了牛奶之后你感觉好多了。",player);
+        }
+    }
+    private final SculkInfectionListener sculkInfectionListener = new SculkInfectionListener(this);
     @Override
     public void enable() {
-        sculkBreakListener.setEnabled(true);
+        sculkInfectionListener.setEnabled(true);
         subScheduler.runTaskTimerAsync(()->{
             Bukkit.getOnlinePlayers().forEach(this::updateInfectionValue);
         },20,20);
@@ -137,12 +150,13 @@ public class SculkInfection implements ISwitchable {
 
     @Override
     public void disable() {
-        sculkBreakListener.setEnabled(false);
+        milkCDSet.clear();
+        sculkInfectionListener.setEnabled(false);
         subScheduler.cancelAllTasks();
     }
 }
 @AllArgsConstructor
-class SculkBreakListener extends WolfirdListener{
+class SculkInfectionListener extends WolfirdListener{
     private final SculkInfection sculkInfection;
     private static final Set<Material> sculkTypes = new HashSet<>(){{
         add(Material.SCULK);
@@ -153,5 +167,13 @@ class SculkBreakListener extends WolfirdListener{
         // 不是潜声方块
         if(!sculkTypes.contains(event.getBlock().getType())) return;
         sculkInfection.breakSculk(event.getPlayer());
+    }
+    @EventHandler
+    void on(PlayerItemConsumeEvent event) {
+        ItemStack item = event.getItem();
+        if (item.getType() == Material.MILK_BUCKET) {
+            // 玩家喝了牛奶
+            sculkInfection.drinkMilk(event.getPlayer());
+        }
     }
 }
