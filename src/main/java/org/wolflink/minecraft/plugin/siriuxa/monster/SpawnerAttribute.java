@@ -65,7 +65,8 @@ public class SpawnerAttribute {
                 weightMap.put(EntityType.SPIDER, 40);
                 weightMap.put(EntityType.CREEPER, 20);
                 weightMap.put(EntityType.VEX, 5);
-                weightMap.put(EntityType.VINDICATOR, 10);
+                weightMap.put(EntityType.VINDICATOR, 9);
+                weightMap.put(EntityType.RABBIT, 1);
             }
             case 4 -> { // 专家
                 healthMultiple = 1.2;
@@ -80,8 +81,8 @@ public class SpawnerAttribute {
                 weightMap.put(EntityType.SILVERFISH, 20);
                 weightMap.put(EntityType.SPIDER, 40);
                 weightMap.put(EntityType.CREEPER, 20);
-                weightMap.put(EntityType.VEX, 5);
-                weightMap.put(EntityType.VINDICATOR, 10);
+                weightMap.put(EntityType.VEX, 4);
+                weightMap.put(EntityType.RABBIT, 1);
             }
             default -> {
                 healthMultiple = 1.0;
