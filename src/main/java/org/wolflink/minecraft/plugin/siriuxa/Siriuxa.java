@@ -7,6 +7,7 @@ import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.command.*;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.*;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
+import org.wolflink.minecraft.plugin.siriuxa.sculkinfection.SculkInfection;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.*;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.huntcheck.HuntChecker;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.huntcheck.HuntValues;
@@ -75,10 +76,12 @@ public final class Siriuxa extends WolfirdPlugin {
         for (Class<? extends WolfirdListener> listenerClass : globalListenerClasses) {
             IOC.getBean(listenerClass).setEnabled(true);
         }
+        IOC.getBean(SculkInfection.class).setEnabled(true);
     }
 
     @Override
     public void beforeDisabled() {
+        IOC.getBean(SculkInfection.class).setEnabled(false);
         IOC.getBean(OreValues.class).doSave();
         IOC.getBean(HuntValues.class).doSave();
 
