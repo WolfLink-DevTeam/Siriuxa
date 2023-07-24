@@ -126,6 +126,7 @@ public final class Siriuxa extends WolfirdPlugin {
         add(PlayerRespawn.class);
         add(TPChecker.class);
         add(SpawnChecker.class);
+        add(SculkSpreader.class);
     }};
     private static final List<Class<? extends ConfigurationSerializable>> serializableClasses = new ArrayList<>(){{
        add(PlayerBackpack.class);
