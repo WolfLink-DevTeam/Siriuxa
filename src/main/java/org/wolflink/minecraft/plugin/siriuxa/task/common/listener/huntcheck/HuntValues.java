@@ -54,7 +54,7 @@ public class HuntValues {
     /**
      * 整体价值倍率
      */
-    private static final double MULTIPLE = 6.0;
+    private static final double MULTIPLE = 10.0;
     /**
      * 最少记录池数量
      */
