@@ -11,11 +11,7 @@ import java.util.List;
 public class ItemAPI {
 
     //设置物品的名字并且根据品质物品的颜色（颜色代码通过枚举类来获得）
-<<<<<<< HEAD
-    public ItemStack setItemName(ItemStack itemStack, Tier tier, String name) {
-=======
     public ItemStack setItemName(ItemStack itemStack,Tier tier, String name) {
->>>>>>> origin/master
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta != null) {
             itemMeta.setDisplayName(tier.getColor() + name);
@@ -24,19 +20,6 @@ public class ItemAPI {
         return itemStack;
     }
 
-<<<<<<< HEAD
-    //设置物品描述信息
-    public ItemStack setItemLore(ItemStack itemStack, List<String> lores) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        if (itemMeta == null) {
-            Notifier.warn("物品 " + itemStack.getType().name() + " 没有 ItemMeta 属性");
-            return itemStack;
-        }
-        List<String> finalLores = new ArrayList<>();
-        finalLores.add(" "); //第一行为空白（blank）
-        finalLores.addAll(lores.stream().map(str -> "§7" + str).toList()); //设置物品描述为默认颜色§7
-        finalLores.add(" ");//最后一行为空白（不是null）
-=======
     //设置
     public ItemStack setItemLore(ItemStack itemStack,List<String> lores) {
         ItemMeta itemMeta = itemStack.getItemMeta();
@@ -48,7 +31,6 @@ public class ItemAPI {
         finalLores.add(" "); // This is blank , not null
         finalLores.addAll(lores.stream().map(str -> "§7"+str).toList()); // add §7 color to all lines
         finalLores.add(" ");
->>>>>>> origin/master
         itemMeta.setLore(finalLores);
         itemStack.setItemMeta(itemMeta);
         return itemStack;

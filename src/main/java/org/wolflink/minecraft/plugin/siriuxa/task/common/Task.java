@@ -24,11 +24,10 @@ import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.loot.ChestLoot;
-import org.wolflink.minecraft.plugin.siriuxa.monster.TaskMonsterSpawner;
+import org.wolflink.minecraft.plugin.siriuxa.monster.StrategyDecider;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.region.SquareRegion;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.region.TaskRegion;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
-import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeamRepository;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
@@ -97,21 +96,25 @@ public abstract class Task implements INameable {
 
     protected abstract StageHolder initStageHolder();
 
-    private final TaskMonsterSpawner taskMonsterSpawner;
 
     /**
      * 任务基础套装
      */
     private final PlayerBackpack defaultKit;
 
+    /**
+     * TODO 延迟初始化，刷怪决策者
+     */
+    private final StrategyDecider strategyDecider;
+
     public Task(GlobalTeam globalTeam, TaskDifficulty taskDifficulty, PlayerBackpack defaultKit) {
         this.globalTeam = globalTeam;
         this.taskDifficulty = taskDifficulty;
-        this.taskMonsterSpawner = new TaskMonsterSpawner(this);
         this.wheatLostAcceleratedSpeed = taskDifficulty.getWheatLostAcceleratedSpeed();
         this.baseWheatLoss = taskDifficulty.getBaseWheatLoss();
         this.defaultKit = defaultKit;
         stageHolder = initStageHolder();
+        strategyDecider = new StrategyDecider(this);
     }
 
     public List<OfflinePlayer> getOfflinePlayers() {
@@ -232,6 +235,7 @@ public abstract class Task implements INameable {
         initRecord();
         taskStat.setEnabled(true);
         this.taskWheat = size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
+        strategyDecider.setEnabled(true);
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
 
             beaconLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.END_PORTAL_FRAME, taskRegion.getCenter(), 30);
@@ -242,10 +246,13 @@ public abstract class Task implements INameable {
                 List<Location> chestLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.CHEST, taskRegion.getCenter(), 30);
                 for (Location location : chestLocations) {
                     if (location.getBlock().getType() != Material.CHEST) continue;
+                    if (lootChestAmount >= size()) {
+                        location.getBlock().setType(Material.AIR);
+                        continue;
+                    } // 跟人数有关
                     Chest chest = (Chest) location.getBlock().getState();
                     new ChestLoot(chest).applyLootTable();
                     lootChestAmount++;
-                    if (lootChestAmount >= size()) break; // 跟人数有关
                 }
 
                 for (Player player : getTaskPlayers()) {
@@ -255,9 +262,6 @@ public abstract class Task implements INameable {
                 startTiming();
                 startEvacuateTask((int) (12 + 8 * Math.random()));
                 taskRegion.startCheck();
-                subScheduler.runTaskLater(() -> {
-                    taskMonsterSpawner.setEnabled(true);
-                }, 20 * 60 * 5);
             });
         });
     }
@@ -297,7 +301,7 @@ public abstract class Task implements INameable {
     }
 
     private void stopCheck() {
-        taskMonsterSpawner.setEnabled(false);
+        strategyDecider.setEnabled(false);
         subScheduler.cancelAllTasks();
         if (taskRegion != null) {
             taskRegion.stopCheck();
@@ -401,9 +405,10 @@ public abstract class Task implements INameable {
         Notifier.broadcastChat(taskTeam.getPlayers(), "玩家" + player.getName() + "在任务中阵亡了。");
         player.sendTitle("§c§l死", "§7嘿！别这么灰心丧气的嘛，下次加油！", 10, 80, 10);
         player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1f, 0.5f);
-        String returnWheat = String.format("%.2f", taskDifficulty.getWheatCost() * 0.8);
-        IOC.getBean(VaultAPI.class).addEconomy(player, Double.parseDouble(returnWheat));
-        Notifier.chat("登记任务花费的麦穗已退还 80%，祝你在下次任务中好运！", player);
+//        String returnWheat = String.format("%.2f", taskDifficulty.getWheatCost() * 0.8);
+//        IOC.getBean(VaultAPI.class).addEconomy(player, Double.parseDouble(returnWheat));
+//        IOC.getBean(TaskService.class).setFailedExp(player,player.getTotalExperience());
+//        Notifier.chat("登记任务花费的麦穗已退还 80%，等级保留了 85%，祝你在下次任务中好运！", player);
         if (taskTeam.isEmpty()) triggerFailed();
     }
 
@@ -415,8 +420,8 @@ public abstract class Task implements INameable {
         fillRecord(offlinePlayer,false);
         taskTeam.leave(offlinePlayer);
         Notifier.debug("玩家" + offlinePlayer.getName() + "在任务过程中失踪了。");
-        String returnWheat = String.format("%.2f", taskDifficulty.getWheatCost() * 0.8);
-        IOC.getBean(VaultAPI.class).addEconomy(offlinePlayer, Double.parseDouble(returnWheat));
+//        String returnWheat = String.format("%.2f", taskDifficulty.getWheatCost() * 0.8);
+//        IOC.getBean(VaultAPI.class).addEconomy(offlinePlayer, Double.parseDouble(returnWheat));
         Notifier.broadcastChat(taskTeam.getPlayers(), "玩家" + offlinePlayer.getName() + "在任务过程中失踪了。");
     }
 }

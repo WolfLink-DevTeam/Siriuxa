@@ -1,5 +1,6 @@
 package org.wolflink.minecraft.plugin.siriuxa.monster;
 
+import lombok.Data;
 import lombok.Getter;
 import org.bukkit.entity.EntityType;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
@@ -12,12 +13,12 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * 怪物生成器的属性类
  */
-@Getter
+@Data
 public class SpawnerAttribute {
-    private final double healthMultiple;
-    private final double movementMultiple;
-    private final double damageMultiple;
-    private final double decideSpawnChance;
+    private double healthMultiple;
+    private double movementMultiple;
+    private double damageMultiple;
+    private final int spawnPeriodSecs;
     private final Map<EntityType, Integer> weightMap = new EnumMap<>(EntityType.class);
 
     public SpawnerAttribute(TaskDifficulty taskDifficulty) {
@@ -26,7 +27,7 @@ public class SpawnerAttribute {
                 healthMultiple = 0.5;
                 movementMultiple = 0.8;
                 damageMultiple = 0.5;
-                decideSpawnChance = 0.6;
+                spawnPeriodSecs = 25;
                 weightMap.put(EntityType.ZOMBIE, 50);
                 weightMap.put(EntityType.HUSK, 50);
                 weightMap.put(EntityType.ZOMBIE_VILLAGER, 50);
@@ -40,7 +41,7 @@ public class SpawnerAttribute {
                 healthMultiple = 0.8;
                 movementMultiple = 1.0;
                 damageMultiple = 0.8;
-                decideSpawnChance = 0.7;
+                spawnPeriodSecs = 20;
                 weightMap.put(EntityType.ZOMBIE, 50);
                 weightMap.put(EntityType.HUSK, 50);
                 weightMap.put(EntityType.ZOMBIE_VILLAGER, 50);
@@ -51,10 +52,10 @@ public class SpawnerAttribute {
                 weightMap.put(EntityType.CREEPER, 20);
             }
             case 3 -> { // 困难
-                healthMultiple = 1.2;
+                healthMultiple = 1.0;
                 movementMultiple = 1.1;
                 damageMultiple = 1.0;
-                decideSpawnChance = 0.8;
+                spawnPeriodSecs = 15;
                 weightMap.put(EntityType.ZOMBIE, 45);
                 weightMap.put(EntityType.HUSK, 45);
                 weightMap.put(EntityType.ZOMBIE_VILLAGER, 45);
@@ -63,14 +64,15 @@ public class SpawnerAttribute {
                 weightMap.put(EntityType.SILVERFISH, 20);
                 weightMap.put(EntityType.SPIDER, 40);
                 weightMap.put(EntityType.CREEPER, 20);
-                weightMap.put(EntityType.VEX, 10);
-                weightMap.put(EntityType.VINDICATOR, 10);
+                weightMap.put(EntityType.VEX, 5);
+                weightMap.put(EntityType.VINDICATOR, 9);
+                weightMap.put(EntityType.RABBIT, 1);
             }
             case 4 -> { // 专家
-                healthMultiple = 2.0;
+                healthMultiple = 1.2;
                 movementMultiple = 1.2;
-                damageMultiple = 1.5;
-                decideSpawnChance = 0.9;
+                damageMultiple = 1.2;
+                spawnPeriodSecs = 15;
                 weightMap.put(EntityType.ZOMBIE, 40);
                 weightMap.put(EntityType.HUSK, 40);
                 weightMap.put(EntityType.ZOMBIE_VILLAGER, 40);
@@ -79,14 +81,14 @@ public class SpawnerAttribute {
                 weightMap.put(EntityType.SILVERFISH, 20);
                 weightMap.put(EntityType.SPIDER, 40);
                 weightMap.put(EntityType.CREEPER, 20);
-                weightMap.put(EntityType.VEX, 20);
-                weightMap.put(EntityType.VINDICATOR, 10);
+                weightMap.put(EntityType.VEX, 4);
+                weightMap.put(EntityType.RABBIT, 1);
             }
             default -> {
                 healthMultiple = 1.0;
                 movementMultiple = 1.0;
                 damageMultiple = 1.0;
-                decideSpawnChance = 0;
+                spawnPeriodSecs = 30;
                 weightMap.put(EntityType.ZOMBIE, 100);
                 weightMap.put(EntityType.SKELETON, 40);
                 weightMap.put(EntityType.SPIDER, 40);

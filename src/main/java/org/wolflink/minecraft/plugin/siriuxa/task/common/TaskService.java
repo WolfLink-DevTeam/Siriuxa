@@ -168,9 +168,9 @@ public class TaskService {
     public void goLobby(Player player) {
         InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
         invBackupService.applyInv(player,PlayerBackpack.getEmptyBackpack());
-        Result r = invBackupService.applyMainInv(player);
-        if(!r.result()) return;
-        invBackupService.saveMainInv(player,PlayerBackpack.getEmptyBackpack());
+//        Result r = invBackupService.applyMainInv(player);
+//        if(!r.result()) return;
+//        invBackupService.saveMainInv(player,PlayerBackpack.getEmptyBackpack());
         // 传送回城
         player.teleport(config.getLobbyLocation());
         if(!player.isOp()) player.setGameMode(GameMode.SURVIVAL);
@@ -185,11 +185,11 @@ public class TaskService {
             Notifier.error("任务区域为空，玩家无法进入任务区域！");
             return;
         }
-        InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
-        // 保存玩家背包信息
-        invBackupService.saveMainInv(player);
+//        InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
+//         保存玩家背包信息
+//        invBackupService.saveMainInv(player);
         // 应用任务背包信息
-        invBackupService.applyInv(player,task.getDefaultKit());
+//        invBackupService.applyInv(player,task.getDefaultKit());
         // 传送到指定方块上
         List<Location> spawnLocations = task.getBeaconLocations();
         if(spawnLocations.isEmpty()) player.teleport(task.getTaskRegion().getCenter());

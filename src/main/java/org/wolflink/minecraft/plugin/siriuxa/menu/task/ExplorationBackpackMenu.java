@@ -63,8 +63,6 @@ public class ExplorationBackpackMenu extends Menu {
 
     public void claimReward(Player player) {
         // 背包格数检查
-
-
         player.closeInventory();
         player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH,1f,1f);
         player.playSound(player.getLocation(), Sound.ENTITY_PIGLIN_CELEBRATE,1f,1f);
@@ -93,6 +91,7 @@ public class ExplorationBackpackMenu extends Menu {
                 else player.getInventory().addItem(is);
             }
         }
+        selectedSlots.clear();
     }
 
     @Override

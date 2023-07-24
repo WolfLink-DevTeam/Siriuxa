@@ -2,17 +2,23 @@ package org.wolflink.minecraft.plugin.siriuxa.menu.task.icon;
 
 import lombok.NonNull;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.wolflink.common.ioc.IOC;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.DifficultyRepository;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.ExplorationBackpackMenu;
 
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 public class TaskRecordIcon extends Icon {
     private final PlayerTaskRecord playerTaskRecord;
@@ -32,7 +38,7 @@ public class TaskRecordIcon extends Icon {
         String taskResult = playerTaskRecord.isSuccess() ? "§a完成" : "§c失败";
         int minutes = (int) (playerTaskRecord.getUsingTimeInMills() / 60000);
         String claimStatus;
-        if(!playerTaskRecord.isSuccess()) claimStatus = "§c物资已丢失";
+        if(!playerTaskRecord.isSuccess()) claimStatus = playerTaskRecord.isClaimed() ? "§7补偿已领取" : "§a可领取补偿";
         else claimStatus = playerTaskRecord.isClaimed() ? "§7物资已领取" : "§a可领取物资";
         return fastCreateItemStack(Material.PAPER,1,iconName,
                 " ",
@@ -50,11 +56,30 @@ public class TaskRecordIcon extends Icon {
 
     @Override
     public void leftClick(Player player) {
-        if(!playerTaskRecord.isClaimed() && playerTaskRecord.isSuccess()) {
-            MenuService menuService = IOC.getBean(MenuService.class);
-            ExplorationBackpackMenu menu = menuService.findMenu(player, ExplorationBackpackMenu.class);
-            menu.setPlayerTaskRecord(playerTaskRecord);
-            IOC.getBean(MenuService.class).display(menu,player);
+        if(!playerTaskRecord.isClaimed()) {
+            if(playerTaskRecord.isSuccess()) {
+                MenuService menuService = IOC.getBean(MenuService.class);
+                ExplorationBackpackMenu menu = menuService.findMenu(player, ExplorationBackpackMenu.class);
+                menu.setPlayerTaskRecord(playerTaskRecord);
+                IOC.getBean(MenuService.class).display(menu,player);
+            } else {
+                playerTaskRecord.setClaimed(true);
+                IOC.getBean(TaskRecordDB.class).saveRecord(playerTaskRecord);
+                String returnWheat = String.format("%.2f", Objects.requireNonNull(IOC.getBean(DifficultyRepository.class)
+                        .findByName(playerTaskRecord.getTaskDifficulty())).getWheatCost() * 0.6);
+                IOC.getBean(VaultAPI.class).addEconomy(player, Double.parseDouble(returnWheat));
+                int totalExp = (int) (playerTaskRecord.getPlayerBackpack().getTotalExp() * 0.8) + player.getTotalExperience();
+                player.setTotalExperience(0);
+                player.setLevel(0);
+                player.setExp(0);
+                while (player.getExpToLevel() <= totalExp) {
+                    totalExp -= player.getExpToLevel();
+                    player.setLevel(player.getLevel() + 1);
+                }
+                player.setExp((float)totalExp / player.getExpToLevel());
+                Notifier.chat("任务花费的麦穗已补偿 60%，经验保留了 80%，祝你下次好运！",player);
+                player.playSound(player.getLocation(), Sound.ENTITY_WOLF_HOWL,0.7f,1f);
+            }
         }
     }
 
