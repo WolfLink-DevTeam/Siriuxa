@@ -1,12 +1,17 @@
 package org.wolflink.minecraft.plugin.siriuxa.sculkinfection;
 
 import com.google.common.collect.ImmutableList;
+import lombok.AllArgsConstructor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Wolf;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
@@ -14,11 +19,10 @@ import org.wolflink.minecraft.plugin.siriuxa.api.ISwitchable;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.BlockAPI;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
+import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -116,9 +120,16 @@ public class SculkInfection implements ISwitchable {
             }
         });
     }
-
+    public void breakSculk(Player player) {
+        if(!(player.getWorld().getName().equals(config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME)))) return;
+        // 不是生存模式
+        if(player.getGameMode() != GameMode.SURVIVAL) return;
+        addInfectionValue(player,10);
+    }
+    private final SculkBreakListener sculkBreakListener = new SculkBreakListener(this);
     @Override
     public void enable() {
+        sculkBreakListener.setEnabled(true);
         subScheduler.runTaskTimerAsync(()->{
             Bukkit.getOnlinePlayers().forEach(this::updateInfectionValue);
         },20,20);
@@ -126,6 +137,21 @@ public class SculkInfection implements ISwitchable {
 
     @Override
     public void disable() {
+        sculkBreakListener.setEnabled(false);
         subScheduler.cancelAllTasks();
+    }
+}
+@AllArgsConstructor
+class SculkBreakListener extends WolfirdListener{
+    private final SculkInfection sculkInfection;
+    private static final Set<Material> sculkTypes = new HashSet<>(){{
+        add(Material.SCULK);
+        add(Material.SCULK_CATALYST);
+    }};
+    @EventHandler
+    void on(BlockBreakEvent event) {
+        // 不是潜声方块
+        if(!sculkTypes.contains(event.getBlock().getType())) return;
+        sculkInfection.breakSculk(event.getPlayer());
     }
 }
