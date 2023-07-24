@@ -1,5 +1,6 @@
 package org.wolflink.minecraft.plugin.siriuxa.monster;
 
+import lombok.Data;
 import lombok.Getter;
 import org.bukkit.entity.EntityType;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
@@ -12,11 +13,11 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * 怪物生成器的属性类
  */
-@Getter
+@Data
 public class SpawnerAttribute {
-    private final double healthMultiple;
-    private final double movementMultiple;
-    private final double damageMultiple;
+    private double healthMultiple;
+    private double movementMultiple;
+    private double damageMultiple;
     private final int spawnPeriodSecs;
     private final Map<EntityType, Integer> weightMap = new EnumMap<>(EntityType.class);
 

@@ -57,6 +57,8 @@ public class StrategyDecider implements ISwitchable {
                 20L * spawnPeriodSecs,
                 20L * spawnPeriodSecs
         );
+        subScheduler.runTaskTimerAsync(this::updateAttribute,
+                20L * 60,20L * 60);
     }
     private void updateStrategyMap() {
         playerStrategyMap.clear();
@@ -65,6 +67,15 @@ public class StrategyDecider implements ISwitchable {
         for (Player player : list) {
             playerStrategyMap.put(player.getUniqueId(),decide(player));
         }
+    }
+
+    /**
+     * 每1分钟 +0.8% 血量
+     * 每1分钟 +0.4% 攻击
+     */
+    private void updateAttribute() {
+        spawnerAttribute.setHealthMultiple(spawnerAttribute.getHealthMultiple() + 0.008);
+        spawnerAttribute.setDamageMultiple(spawnerAttribute.getDamageMultiple() + 0.004);
     }
     private void spawnTask() {
         for (Map.Entry<UUID,SpawnStrategy> entry : playerStrategyMap.entrySet()) {
