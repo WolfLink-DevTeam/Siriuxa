@@ -12,12 +12,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
 import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.LocationCommandSender;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.WorldEditAPI;
-import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public class EvacuationZone {
 
@@ -50,7 +53,7 @@ public class EvacuationZone {
 
     public EvacuationZone(Task task, World world, int x, int z, int safeRadius) {
         this.task = task;
-        this.center = new Location(world, x, world.getHighestBlockYAt(x, z) + 25, z);
+        this.center = new Location(world, x, world.getHighestBlockYAt(x, z) + 25D, z);
         this.safeRadius = safeRadius;
         this.locationCommandSender = new LocationCommandSender(center);
         this.subScheduler = new SubScheduler();
@@ -64,7 +67,7 @@ public class EvacuationZone {
             generateSchematic();
             subScheduler.runTaskTimer(() -> {
                 for (Player player : task.getTaskPlayers()) {
-                    if(!compassPlayers.contains(player)) {
+                    if (!compassPlayers.contains(player)) {
                         setPlayerCompass(player, true);
                         compassPlayers.add(player);
                     }
@@ -74,7 +77,7 @@ public class EvacuationZone {
             undoSchematic();
             subScheduler.cancelAllTasks();
             for (Player player : compassPlayers) {
-                setPlayerCompass(player,false);
+                setPlayerCompass(player, false);
             }
         }
     }

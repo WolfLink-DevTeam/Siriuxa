@@ -34,20 +34,21 @@ public class BlockAPI {
         return result;
     }
 
-    private final static int OCEAN_RADIUS = 8;
+    private static final int OCEAN_RADIUS = 8;
+
     /**
      * 检查给定坐标是否处于海洋中
      */
     public boolean checkIsOcean(Location center) {
-        if(center.getBlock().getType() != Material.WATER) return false;
+        if (center.getBlock().getType() != Material.WATER) return false;
         World world = center.getWorld();
         int centerX = center.getBlockX();
         int centerY = center.getBlockY();
         int centerZ = center.getBlockZ();
         for (int x = -OCEAN_RADIUS; x <= OCEAN_RADIUS; x++) {
             for (int z = -OCEAN_RADIUS; z <= OCEAN_RADIUS; z++) {
-                Location tempLoc = new Location(world,centerX+x,centerY,centerZ+z);
-                if(tempLoc.getBlock().getType() != Material.WATER) {
+                Location tempLoc = new Location(world, centerX + (double) x, centerY, centerZ + (double) z);
+                if (tempLoc.getBlock().getType() != Material.WATER) {
                     return true;
                 }
             }

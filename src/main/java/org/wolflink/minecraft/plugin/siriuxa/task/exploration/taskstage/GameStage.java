@@ -1,8 +1,8 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage;
 
 import org.wolflink.common.ioc.IOC;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
+import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.stage.TaskLinearStageHolder;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.stage.TaskStage;
 

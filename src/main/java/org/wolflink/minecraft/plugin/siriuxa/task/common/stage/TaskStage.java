@@ -1,15 +1,15 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.common.stage;
 
 import lombok.Getter;
-import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
+import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 
 public abstract class TaskStage extends Stage {
 
     @Getter
     private final TaskLinearStageHolder stageHolder;
 
-    public TaskStage(String displayName, TaskLinearStageHolder stageHolder) {
+    protected TaskStage(String displayName, TaskLinearStageHolder stageHolder) {
         super(displayName, stageHolder);
         this.stageHolder = stageHolder;
     }

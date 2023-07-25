@@ -14,13 +14,17 @@ import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskService;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.stage.TaskLinearStageHolder;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.stage.TaskStage;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class WaitStage extends TaskStage {
     public WaitStage(TaskLinearStageHolder stageHolder) {
         super("等待中", stageHolder);
     }
+
     @Override
     protected void onEnter() {
         super.onEnter();
@@ -28,22 +32,18 @@ public class WaitStage extends TaskStage {
         Location readyLoc = config.getReadyLocation();
         int radius = config.get(ConfigProjection.LOBBY_READY_RADIUS);
         Task task = getStageHolder().getTask();
-        runTaskTimer(()->{
+        runTaskTimer(() -> {
             Set<UUID> readyPlayers = new HashSet<>();
             for (Player player : Objects.requireNonNull(readyLoc.getWorld())
-                    .getNearbyEntities(readyLoc,radius,radius,radius, entity -> entity.getType() == EntityType.PLAYER)
-                    .stream().map(entity -> (Player) entity).collect(Collectors.toSet())) {
-                if(task.getGlobalTeam().contains(player)) {
-                    if(player.getLocation().clone().getBlock().getType().equals(Material.END_PORTAL_FRAME)) {
-                        readyPlayers.add(player.getUniqueId());
-                    }
+                    .getNearbyEntities(readyLoc, radius, radius, radius, entity -> entity.getType() == EntityType.PLAYER)
+                    .stream().map(Player.class::cast).collect(Collectors.toSet())) {
+                if (task.getGlobalTeam().contains(player) && (player.getLocation().clone().getBlock().getType().equals(Material.END_PORTAL_FRAME))) {
+                    readyPlayers.add(player.getUniqueId());
                 }
             }
-            if(readyPlayers.size() == task.getGlobalTeam().size()) {
-                Bukkit.getScheduler().runTask(Siriuxa.getInstance(),()->{
-                    IOC.getBean(TaskService.class).ready(task);
-                });
+            if (readyPlayers.size() == task.getGlobalTeam().size()) {
+                Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> IOC.getBean(TaskService.class).ready(task));
             }
-        },20,20);
+        }, 20, 20);
     }
 }

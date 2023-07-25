@@ -29,7 +29,7 @@ public class ReadyStage extends TaskStage {
                     player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1f, 1.2f);
                     player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR, 1f, 1.2f);
                     Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> {
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,10 * 20,4,false,false,false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 10 * 20, 4, false, false, false));
                         player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 10 * 20, 4, false, false, false));
                         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10 * 20, 0, false, false, false));
                         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10 * 20, 2, false, false, false));
@@ -40,8 +40,7 @@ public class ReadyStage extends TaskStage {
                 timeLeft--;
                 try {
                     Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                } catch (InterruptedException ignore) {
                 }
             }
             for (Player player : task.getGlobalTeam().getPlayers()) {
@@ -52,8 +51,7 @@ public class ReadyStage extends TaskStage {
             }
             try {
                 Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            } catch (InterruptedException ignore) {
             }
             Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> getStageHolder().next());
         });

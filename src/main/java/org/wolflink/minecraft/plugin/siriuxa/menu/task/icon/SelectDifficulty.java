@@ -30,7 +30,7 @@ public class SelectDifficulty extends Icon {
 
     @Override
     public void rightClick(Player player) {
-
+        // do nothing
     }
 
     @Override

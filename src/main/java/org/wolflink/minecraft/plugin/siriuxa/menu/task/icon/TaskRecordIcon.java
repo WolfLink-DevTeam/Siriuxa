@@ -22,6 +22,7 @@ import java.util.Objects;
 
 public class TaskRecordIcon extends Icon {
     private final PlayerTaskRecord playerTaskRecord;
+
     public TaskRecordIcon(@NonNull PlayerTaskRecord playerTaskRecord) {
         super(false);
         this.playerTaskRecord = playerTaskRecord;
@@ -34,34 +35,34 @@ public class TaskRecordIcon extends Icon {
         DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.MEDIUM, Locale.CHINA);
         String date = dateFormat.format(taskFinishedDate);
         String iconName = "§8[ §f任务记录 §8] §7%s";
-        iconName = String.format(iconName,date);
+        iconName = String.format(iconName, date);
         String taskResult = playerTaskRecord.isSuccess() ? "§a完成" : "§c失败";
         int minutes = (int) (playerTaskRecord.getUsingTimeInMills() / 60000);
         String claimStatus;
-        if(!playerTaskRecord.isSuccess()) claimStatus = playerTaskRecord.isClaimed() ? "§7补偿已领取" : "§a可领取补偿";
+        if (!playerTaskRecord.isSuccess()) claimStatus = playerTaskRecord.isClaimed() ? "§7补偿已领取" : "§a可领取补偿";
         else claimStatus = playerTaskRecord.isClaimed() ? "§7物资已领取" : "§a可领取物资";
-        return fastCreateItemStack(Material.PAPER,1,iconName,
+        return fastCreateItemStack(Material.PAPER, 1, iconName,
                 " ",
-                "  §7完成时间 §f"+timeFormat.format(taskFinishedDate),
+                "  §7完成时间 §f" + timeFormat.format(taskFinishedDate),
                 " ",
-                "  §7任务类型 §f"+playerTaskRecord.getTaskType(),
-                "  §7任务难度 §f"+playerTaskRecord.getTaskDifficulty(),
-                "  §7任务结果 §r"+taskResult,
-                "  §7任务用时 §f"+minutes+"分钟",
+                "  §7任务类型 §f" + playerTaskRecord.getTaskType(),
+                "  §7任务难度 §f" + playerTaskRecord.getTaskDifficulty(),
+                "  §7任务结果 §r" + taskResult,
+                "  §7任务用时 §f" + minutes + "分钟",
                 " ",
-                "  "+claimStatus,
+                "  " + claimStatus,
                 " "
-                );
+        );
     }
 
     @Override
     public void leftClick(Player player) {
-        if(!playerTaskRecord.isClaimed()) {
-            if(playerTaskRecord.isSuccess()) {
+        if (!playerTaskRecord.isClaimed()) {
+            if (playerTaskRecord.isSuccess()) {
                 MenuService menuService = IOC.getBean(MenuService.class);
                 ExplorationBackpackMenu menu = menuService.findMenu(player, ExplorationBackpackMenu.class);
                 menu.setPlayerTaskRecord(playerTaskRecord);
-                IOC.getBean(MenuService.class).display(menu,player);
+                IOC.getBean(MenuService.class).display(menu, player);
             } else {
                 playerTaskRecord.setClaimed(true);
                 IOC.getBean(TaskRecordDB.class).saveRecord(playerTaskRecord);
@@ -76,15 +77,15 @@ public class TaskRecordIcon extends Icon {
                     totalExp -= player.getExpToLevel();
                     player.setLevel(player.getLevel() + 1);
                 }
-                player.setExp((float)totalExp / player.getExpToLevel());
-                Notifier.chat("任务花费的麦穗已补偿 60%，经验保留了 80%，祝你下次好运！",player);
-                player.playSound(player.getLocation(), Sound.ENTITY_WOLF_HOWL,0.7f,1f);
+                player.setExp((float) totalExp / player.getExpToLevel());
+                Notifier.chat("任务花费的麦穗已补偿 60%，经验保留了 80%，祝你下次好运！", player);
+                player.playSound(player.getLocation(), Sound.ENTITY_WOLF_HOWL, 0.7f, 1f);
             }
         }
     }
 
     @Override
     public void rightClick(Player player) {
-
+        // do nothing
     }
 }

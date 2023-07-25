@@ -12,8 +12,8 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import org.bukkit.Location;
 import org.wolflink.common.ioc.Singleton;
-import org.wolflink.minecraft.wolfird.framework.Framework;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
+import org.wolflink.minecraft.wolfird.framework.Framework;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -21,10 +21,12 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 @Singleton
 public class WorldEditAPI {
     File schemFolder;
+    private final Random random = new Random();
 
     public WorldEditAPI() {
         schemFolder = new File(Framework.getInstance().getDataFolder(), "seriuxajourney_schematic");
@@ -58,22 +60,22 @@ public class WorldEditAPI {
      */
     public void pasteWorkingUnit(LocationCommandSender locationCommandSender) {
         List<File> workingUnitFiles = getWorkingUnitSchemFiles();
-        if (workingUnitFiles.size() == 0) {
+        if (workingUnitFiles.isEmpty()) {
             Notifier.error("没有找到可用的工作单元结构");
             return;
         }
-        File schem = workingUnitFiles.get((int) (workingUnitFiles.size() * Math.random()));
+        File schem = workingUnitFiles.get(random.nextInt(workingUnitFiles.size()));
         pasteSchem(schem, locationCommandSender, false);
     }
 
     @Nullable
     public EditSession pasteEvacuationUnit(LocationCommandSender locationCommandSender) {
         List<File> evacuationUnitFiles = getEvacuationUnitSchemFiles();
-        if (evacuationUnitFiles.size() == 0) {
+        if (evacuationUnitFiles.isEmpty()) {
             Notifier.error("没有找到可用的撤离单元结构");
             return null;
         }
-        File schem = evacuationUnitFiles.get((int) (evacuationUnitFiles.size() * Math.random()));
+        File schem = evacuationUnitFiles.get(random.nextInt(evacuationUnitFiles.size()));
         return pasteSchem(schem, locationCommandSender, true);
     }
 

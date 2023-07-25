@@ -26,6 +26,6 @@ public class PreviousPage extends Icon {
 
     @Override
     public void rightClick(Player player) {
-
+        // do nothing
     }
 }

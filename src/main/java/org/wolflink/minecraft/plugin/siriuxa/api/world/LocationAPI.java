@@ -3,7 +3,6 @@ package org.wolflink.minecraft.plugin.siriuxa.api.world;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.wolflink.common.ioc.Singleton;
-import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 @Singleton
 public class LocationAPI {
@@ -33,8 +32,7 @@ public class LocationAPI {
         double newZ = centerZ + deltaZ;
 
         // 创建新的Location对象
-        Location newLocation = new Location(world, newX, newY, newZ);
-        return newLocation;
+        return new Location(world, newX, newY, newZ);
     }
 
     /**
@@ -42,12 +40,12 @@ public class LocationAPI {
      * 获取离给定坐标最近的坐标地面(至少3格高度的空间)，不一定是地表(X和Z不改变)
      * 如果没能找到则返回null
      */
-    public Location getNearestSurface(Location location,int deltaY) {
-        MonsterSpawnBox upBox = new MonsterSpawnBox(location.clone().add(0,-1,0));
-        MonsterSpawnBox downBox = new MonsterSpawnBox(location.clone().add(0,-3,0));
+    public Location getNearestSurface(Location location, int deltaY) {
+        MonsterSpawnBox upBox = new MonsterSpawnBox(location.clone().add(0, -1, 0));
+        MonsterSpawnBox downBox = new MonsterSpawnBox(location.clone().add(0, -3, 0));
         for (int i = 0; i < deltaY; i++) {
-            if(upBox.isAvailable()) return upBox.getBottom().add(0,1,0);
-            if(downBox.isAvailable()) return downBox.getBottom().add(0,1,0);
+            if (upBox.isAvailable()) return upBox.getBottom().add(0, 1, 0);
+            if (downBox.isAvailable()) return downBox.getBottom().add(0, 1, 0);
             upBox.up();
             downBox.down();
         }

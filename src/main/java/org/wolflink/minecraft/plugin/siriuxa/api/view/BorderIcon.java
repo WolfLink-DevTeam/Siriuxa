@@ -15,10 +15,12 @@ public class BorderIcon extends Icon {
 
     @Override
     public void leftClick(Player player) {
+        // do nothing
     }
 
     @Override
     public void rightClick(Player player) {
+        // do nothing
     }
 
     @Override

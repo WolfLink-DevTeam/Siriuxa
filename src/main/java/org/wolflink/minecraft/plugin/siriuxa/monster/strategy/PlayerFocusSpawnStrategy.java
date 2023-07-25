@@ -8,6 +8,7 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Rabbit;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.LocationAPI;
@@ -30,8 +31,8 @@ public class PlayerFocusSpawnStrategy extends SpawnStrategy {
         return true;
     }
 
-    private final int SAFE_RADIUS = 15;
-    private final int MAX_RADIUS = 35;
+    private static final int SAFE_RADIUS = 15;
+    private static final int MAX_RADIUS = 35;
 
     @Override
     public void spawn(Player player) {
@@ -81,9 +82,14 @@ public class PlayerFocusSpawnStrategy extends SpawnStrategy {
             Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> {
                 World world = firstLoc.getWorld();
                 assert world != null;
-                if(world.getNearbyEntities(summonLocation,8,4,8,entity -> entity.getType() == EntityType.PLAYER).size() > 0) return;
+                if (!world.getNearbyEntities(summonLocation, 8, 4, 8, entity -> entity.getType() == EntityType.PLAYER).isEmpty())
+                    return;
                 EntityType entityType = getSpawnerAttribute().randomType();
                 Monster monster = (Monster) world.spawnEntity(summonLocation, entityType);
+                if (entityType.equals(EntityType.RABBIT)) {
+                    Rabbit rabbit = (Rabbit) monster;
+                    rabbit.setRabbitType(Rabbit.Type.THE_KILLER_BUNNY);
+                }
                 AttributeInstance maxHealth = monster.getAttribute(Attribute.GENERIC_MAX_HEALTH);
                 AttributeInstance movementSpeed = monster.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
                 AttributeInstance attackDamage = monster.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
@@ -96,6 +102,6 @@ public class PlayerFocusSpawnStrategy extends SpawnStrategy {
                 if (attackDamage != null)
                     attackDamage.setBaseValue(attackDamage.getBaseValue() * getSpawnerAttribute().getDamageMultiple());
             });
-        }, 20 * 3);
+        }, 20 * 3L);
     }
 }
