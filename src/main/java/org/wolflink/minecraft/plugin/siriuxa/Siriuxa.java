@@ -4,26 +4,28 @@ import lombok.Getter;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.wolflink.common.ioc.IOC;
+import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
+import org.wolflink.minecraft.plugin.siriuxa.api.view.MenuEventListener;
 import org.wolflink.minecraft.plugin.siriuxa.command.*;
+import org.wolflink.minecraft.plugin.siriuxa.file.Config;
+import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
+import org.wolflink.minecraft.plugin.siriuxa.file.Lang;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.*;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
+import org.wolflink.minecraft.plugin.siriuxa.monster.CreatureDeathListener;
+import org.wolflink.minecraft.plugin.siriuxa.monster.CreatureSpawnListener;
+import org.wolflink.minecraft.plugin.siriuxa.papi.TaskVariables;
 import org.wolflink.minecraft.plugin.siriuxa.sculkinfection.SculkInfection;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.*;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.huntcheck.HuntChecker;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.huntcheck.HuntValues;
+import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.orecheck.OreChecker;
+import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.orecheck.OreValues;
 import org.wolflink.minecraft.wolfird.framework.WolfirdPlugin;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 import org.wolflink.minecraft.wolfird.framework.command.CmdHelp;
 import org.wolflink.minecraft.wolfird.framework.command.WolfirdCommandAnalyser;
 import org.wolflink.minecraft.wolfird.framework.config.YamlConfig;
-import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
-import org.wolflink.minecraft.plugin.siriuxa.api.view.MenuEventListener;
-import org.wolflink.minecraft.plugin.siriuxa.file.Config;
-import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
-import org.wolflink.minecraft.plugin.siriuxa.file.Lang;
-import org.wolflink.minecraft.plugin.siriuxa.papi.TaskVariables;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.orecheck.OreChecker;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.orecheck.OreValues;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,36 +107,36 @@ public final class Siriuxa extends WolfirdPlugin {
     /**
      * 初始化配置文件
      */
-    private static final List<Class<? extends YamlConfig>> configs = new ArrayList<>() {{
-        add(Config.class);
-        add(Lang.class);
-    }};
-    private static final List<Class<? extends FileDB>> databases = new ArrayList<>() {{
-        add(InventoryDB.class);
-        add(OreDB.class);
-        add(HuntDB.class);
-        add(TaskRecordDB.class);
-    }};
-    /**
-     * 注册全局监听器
-     */
-    private static final List<Class<? extends WolfirdListener>> globalListenerClasses = new ArrayList<>() {{
-        add(OreChecker.class);
-        add(HuntChecker.class);
-        add(HurtChecker.class);
-        add(FriendlyProtection.class);
-        add(FunctionBan.class);
-        add(JoinQuitListener.class);
-        add(DeathDuringTask.class);
-        add(PlayerRespawn.class);
-        add(TPChecker.class);
-        add(SpawnChecker.class);
-        add(SculkSpreader.class);
-    }};
-    private static final List<Class<? extends ConfigurationSerializable>> serializableClasses = new ArrayList<>(){{
-       add(PlayerBackpack.class);
-       add(PlayerTaskRecord.class);
-       add(OfflinePlayerRecord.class);
-    }};
+    private static final List<Class<? extends YamlConfig>> configs = new ArrayList<>();
+    private static final List<Class<? extends FileDB>> databases = new ArrayList<>();
+    private static final List<Class<? extends WolfirdListener>> globalListenerClasses = new ArrayList<>();
+    private static final List<Class<? extends ConfigurationSerializable>> serializableClasses = new ArrayList<>();
 
+    static {
+        configs.add(Config.class);
+        configs.add(Lang.class);
+
+        databases.add(InventoryDB.class);
+        databases.add(OreDB.class);
+        databases.add(HuntDB.class);
+        databases.add(TaskRecordDB.class);
+
+        globalListenerClasses.add(OreChecker.class);
+        globalListenerClasses.add(HuntChecker.class);
+        globalListenerClasses.add(HurtChecker.class);
+        globalListenerClasses.add(FriendlyProtection.class);
+        globalListenerClasses.add(FunctionBan.class);
+        globalListenerClasses.add(JoinQuitListener.class);
+        globalListenerClasses.add(DeathDuringTask.class);
+        globalListenerClasses.add(PlayerRespawn.class);
+        globalListenerClasses.add(TPChecker.class);
+        globalListenerClasses.add(SpawnChecker.class);
+        globalListenerClasses.add(SculkSpreader.class);
+        globalListenerClasses.add(CreatureSpawnListener.class);
+        globalListenerClasses.add(CreatureDeathListener.class);
+
+        serializableClasses.add(PlayerBackpack.class);
+        serializableClasses.add(PlayerTaskRecord.class);
+        serializableClasses.add(OfflinePlayerRecord.class);
+    }
 }

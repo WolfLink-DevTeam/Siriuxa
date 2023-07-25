@@ -7,7 +7,6 @@ import org.wolflink.minecraft.wolfird.framework.database.repository.MapRepositor
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.stream.Collectors;
 
 /**
  * 任务难度等级 -> 任务难度记录类
@@ -81,10 +80,11 @@ public class DifficultyRepository extends MapRepository<DifficultyKey, TaskDiffi
     public DifficultyKey getPrimaryKey(TaskDifficulty taskDifficulty) {
         return new DifficultyKey(taskDifficulty.getClass(), taskDifficulty.getLevel());
     }
+
     @Nullable
     public ExplorationDifficulty findByName(String name) {
         for (ExplorationDifficulty explorationDifficulty : findByType(ExplorationDifficulty.class)) {
-            if(name.equals(explorationDifficulty.getName()))return explorationDifficulty;
+            if (name.equals(explorationDifficulty.getName())) return explorationDifficulty;
         }
         return null;
     }
@@ -95,6 +95,6 @@ public class DifficultyRepository extends MapRepository<DifficultyKey, TaskDiffi
                 .filter(taskDifficulty -> taskDifficulty.getClass().equals(clazz))
                 .map(taskDifficulty -> (T) taskDifficulty)
                 .sorted(Comparator.comparingInt(o -> o.level))
-                .collect(Collectors.toList());
+                .toList();
     }
 }

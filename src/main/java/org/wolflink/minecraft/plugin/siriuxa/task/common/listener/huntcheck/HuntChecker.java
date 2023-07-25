@@ -2,13 +2,12 @@ package org.wolflink.minecraft.plugin.siriuxa.task.common.listener.huntcheck;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.*;
+import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
@@ -29,10 +28,10 @@ public class HuntChecker extends WolfirdListener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onMonsterDeath(EntityDeathEvent e) {
-        if(!(e.getEntity() instanceof Monster)) return; // 不是怪物被击杀
+        if (!(e.getEntity() instanceof Monster)) return; // 不是怪物被击杀
         Player player = e.getEntity().getKiller();
-        if(player == null) return; // 与玩家无关
-        if(e.getEntity().hasMetadata("bySpawner")) return; // 来自刷怪笼
+        if (player == null) return; // 与玩家无关
+        if (e.getEntity().hasMetadata("bySpawner")) return; // 来自刷怪笼
         Task task = taskRepository.findByTaskTeamPlayer(player);
         if (task == null) return; // 没有任务
         if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 任务没在游戏阶段

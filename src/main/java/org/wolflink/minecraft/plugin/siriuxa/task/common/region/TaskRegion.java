@@ -19,6 +19,7 @@ import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * 任务活动区域
@@ -37,7 +38,9 @@ public abstract class TaskRegion {
     @Getter
     private final BossBar bossBar = Bukkit.createBossBar("", BarColor.WHITE, BarStyle.SOLID);
 
-    public TaskRegion(Task task, Location center, double radius) {
+    private final Random random = new Random();
+
+    protected TaskRegion(Task task, Location center, double radius) {
         this.center = center;
         this.radius = radius;
         this.task = task;
@@ -78,7 +81,7 @@ public abstract class TaskRegion {
                 if (temp <= 15) lineColor = "§e";
                 if (temp <= 5) lineColor = "§c";
                 String progressBar = "§f%img_mc_barrier% " + lineColor + "§m" + " ".repeat(temp) + "§r§f%img_mc_totem_of_undying%§7§m" + " ".repeat(50 - temp) + "§r §f%img_mc_end_crystal%";
-                progressBar = PlaceholderAPI.setPlaceholders(player,progressBar);
+                progressBar = PlaceholderAPI.setPlaceholders(player, progressBar);
                 bossBar.setTitle(progressBar);
                 bossBar.addPlayer(player);
             }
@@ -118,7 +121,7 @@ public abstract class TaskRegion {
      * 尽量离所有玩家都远
      */
     public Location getEvacuateLocation(int distance) {
-        if (task.getTaskPlayers().size() == 0) return null;
+        if (task.getTaskPlayers().isEmpty()) return null;
         Location averangeLocation = getPlayerAverangeLocation();
         List<Location> availableLocations = new ArrayList<>();
         for (int angle = 0; angle < 360; angle += 30) {
@@ -128,10 +131,10 @@ public abstract class TaskRegion {
             if (distanceToBorderPercent(temp) <= 0.05) continue;
             availableLocations.add(temp);
         }
-        if (availableLocations.size() == 0) {
+        if (availableLocations.isEmpty()) {
             throw new IllegalStateException("撤离点生成时出现问题：没有任何一个可用撤离点");
         }
-        return availableLocations.get((int) (Math.random() * availableLocations.size()));
+        return availableLocations.get(random.nextInt(availableLocations.size()));
     }
 
     /**

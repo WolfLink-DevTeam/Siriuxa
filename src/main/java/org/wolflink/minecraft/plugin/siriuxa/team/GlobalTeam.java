@@ -6,10 +6,11 @@ import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.UUID;
 
 
-public final class GlobalTeam extends Team{
+public final class GlobalTeam extends Team {
     @Getter
     private final UUID teamUuid = UUID.randomUUID();
     /**
@@ -23,4 +24,21 @@ public final class GlobalTeam extends Team{
     public GlobalTeam() {
         super(new HashSet<>());
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof GlobalTeam other)) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        return Objects.equals(teamUuid, other.teamUuid) && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(teamUuid) + 31 * super.hashCode();
+    }
+
 }

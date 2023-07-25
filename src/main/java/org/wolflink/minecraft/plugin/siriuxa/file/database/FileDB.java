@@ -25,7 +25,7 @@ public abstract class FileDB {
         return fileConfigurations.get(file.getAbsolutePath());
     }
 
-    public FileDB(String folderName) {
+    protected FileDB(String folderName) {
         folder = new File(Siriuxa.getInstance().getDataFolder(), folderName);
         if (!folder.exists()) folder.mkdirs();
     }

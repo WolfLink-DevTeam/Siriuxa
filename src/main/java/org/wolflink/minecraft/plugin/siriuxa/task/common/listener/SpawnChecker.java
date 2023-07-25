@@ -15,11 +15,10 @@ public class SpawnChecker extends WolfirdListener {
     @EventHandler
     void on(PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
-        if(player.getWorld().getName().equals("plot")) {
-            if(player.getLocation().add(0,-1,0).getBlock().getType().equals(Material.BEACON)) {
-                player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE,1f,1f);
-                player.teleport(IOC.getBean(Config.class).getLobbyLocation());
-            }
+        if (player.getWorld().getName().equals("plot") &&
+                (player.getLocation().add(0, -1, 0).getBlock().getType().equals(Material.BEACON))) {
+            player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1f, 1f);
+            player.teleport(IOC.getBean(Config.class).getLobbyLocation());
         }
     }
 }

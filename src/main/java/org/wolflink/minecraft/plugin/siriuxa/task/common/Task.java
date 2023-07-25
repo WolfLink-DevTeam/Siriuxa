@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.INameable;
-import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.BlockAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.LocationCommandSender;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.RegionAPI;
@@ -28,7 +28,6 @@ import org.wolflink.minecraft.plugin.siriuxa.monster.StrategyDecider;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.region.SquareRegion;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.region.TaskRegion;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
-import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
@@ -86,6 +85,7 @@ public abstract class Task implements INameable {
     @NonNull
     private final TaskDifficulty taskDifficulty;
 
+    private final Random random = new Random();
     /**
      * 当前可用的撤离点
      */
@@ -107,7 +107,7 @@ public abstract class Task implements INameable {
      */
     private final StrategyDecider strategyDecider;
 
-    public Task(GlobalTeam globalTeam, TaskDifficulty taskDifficulty, PlayerBackpack defaultKit) {
+    protected Task(GlobalTeam globalTeam, TaskDifficulty taskDifficulty, PlayerBackpack defaultKit) {
         this.globalTeam = globalTeam;
         this.taskDifficulty = taskDifficulty;
         this.wheatLostAcceleratedSpeed = taskDifficulty.getWheatLostAcceleratedSpeed();
@@ -128,11 +128,18 @@ public abstract class Task implements INameable {
     public boolean taskTeamContains(UUID uuid) {
         return taskTeam.contains(uuid);
     }
+
     public boolean taskTeamContains(Player player) {
         return taskTeamContains(player.getUniqueId());
     }
-    public boolean globalTeamContains(UUID uuid) { return globalTeam.contains(uuid); }
-    public boolean globalTeamContains(Player player) { return globalTeamContains(player.getUniqueId()); }
+
+    public boolean globalTeamContains(UUID uuid) {
+        return globalTeam.contains(uuid);
+    }
+
+    public boolean globalTeamContains(Player player) {
+        return globalTeamContains(player.getUniqueId());
+    }
 
     public void addWheat(double wheat) {
         taskWheat += wheat;
@@ -163,7 +170,7 @@ public abstract class Task implements INameable {
     }
 
     private void triggerFailed() {
-        getTaskPlayers().forEach(player -> fillRecord(player,false));
+        getTaskPlayers().forEach(player -> fillRecord(player, false));
         stageHolder.next();
         taskStat.setEnabled(false);
         stopCheck();
@@ -174,13 +181,13 @@ public abstract class Task implements INameable {
             Siriuxa.getInstance().getSubScheduler().runTaskLater(() -> {
                 player.sendTitle("§c任务失败", "§7嘿！别灰心丧气的，下次加油！", 10, 80, 10);
                 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 0.8f);
-            }, 20 * 3);
+            }, 20 * 3L);
         }
         deleteTask();
     }
 
     private void triggerFinish() {
-        getTaskPlayers().forEach(player -> fillRecord(player,true));
+        getTaskPlayers().forEach(player -> fillRecord(player, true));
         stageHolder.next();
         taskStat.setEnabled(false);
         stopCheck();
@@ -192,7 +199,7 @@ public abstract class Task implements INameable {
                 player.sendTitle("§a任务完成", "§7前往领取本次任务的报酬吧", 10, 80, 10);
                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f);
                 player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1f, 1f);
-            }, 20 * 3);
+            }, 20 * 3L);
         }
         deleteTask();
     }
@@ -234,7 +241,7 @@ public abstract class Task implements INameable {
     public void start() {
         initRecord();
         taskStat.setEnabled(true);
-        this.taskWheat = size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
+        this.taskWheat = (double) size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
         strategyDecider.setEnabled(true);
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
 
@@ -260,7 +267,7 @@ public abstract class Task implements INameable {
                 }
                 startGameOverCheck();
                 startTiming();
-                startEvacuateTask((int) (12 + 8 * Math.random()));
+                startEvacuateTask(random.nextInt(12, 20));
                 taskRegion.startCheck();
             });
         });
@@ -277,11 +284,11 @@ public abstract class Task implements INameable {
             if (availableEvacuationZone != null) {
                 availableEvacuationZone.setAvailable(false);
                 availableEvacuationZone = null;
-                startEvacuateTask((int) (12 + 8 * Math.random()));
+                startEvacuateTask(random.nextInt(12, 20));
             } else {
                 availableEvacuationZone = new EvacuationZone(this, evacuateLocation.getWorld(), evacuateLocation.getBlockX(), evacuateLocation.getBlockZ(), 30);
                 availableEvacuationZone.setAvailable(true);
-                startEvacuateTask((int) (12 + 8 * Math.random()));
+                startEvacuateTask(random.nextInt(12, 20));
             }
         }, 20L * 60 * minutes);
     }
@@ -297,7 +304,7 @@ public abstract class Task implements INameable {
         subScheduler.runTaskTimer(() -> takeWheat(getWheatLossPerSecNow())
                 , 20, 20);
         subScheduler.runTaskTimer(() -> addWheatLossMultiple(wheatLostAcceleratedSpeed)
-                , 20 * 60 * 5, 20 * 60 * 5);
+                , 20 * 60 * 5L, 20 * 60 * 5L);
     }
 
     private void stopCheck() {
@@ -345,7 +352,7 @@ public abstract class Task implements INameable {
     /**
      * 填充玩家任务快照
      */
-    private void fillRecord(OfflinePlayer offlinePlayer,boolean taskResult) {
+    private void fillRecord(OfflinePlayer offlinePlayer, boolean taskResult) {
         PlayerTaskRecord record = playerRecordMap.get(offlinePlayer.getUniqueId());
         if (record == null) {
             Notifier.error("在尝试补充任务记录数据时，未找到玩家" + offlinePlayer.getName() + "的任务记录类。");
@@ -385,7 +392,7 @@ public abstract class Task implements INameable {
      * (适用于只有部分玩家乘坐撤离飞艇的情况)
      */
     public void evacuate(Player player) {
-        fillRecord(player,true);
+        fillRecord(player, true);
         taskTeam.leave(player);
         Notifier.debug("玩家" + player.getName() + "在任务中先一步撤离了。");
         Notifier.broadcastChat(taskTeam.getPlayers(), "玩家" + player.getName() + "已乘坐飞艇撤离。");
@@ -394,11 +401,11 @@ public abstract class Task implements INameable {
             player.sendTitle("§a任务完成", "§7等待任务完全结束后方可领取报酬", 10, 80, 10);
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f);
             player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1f, 1f);
-        }, 20 * 3);
+        }, 20 * 3L);
     }
 
     public void death(Player player) {
-        fillRecord(player,false);
+        fillRecord(player, false);
         taskTeam.leave(player);
         player.setGameMode(GameMode.SPECTATOR);
         Notifier.debug("玩家" + player.getName() + "在任务中阵亡了。");
@@ -417,7 +424,7 @@ public abstract class Task implements INameable {
      * (适用于任务过程中玩家非正常离开任务的情况)
      */
     public void escape(OfflinePlayer offlinePlayer) {
-        fillRecord(offlinePlayer,false);
+        fillRecord(offlinePlayer, false);
         taskTeam.leave(offlinePlayer);
         Notifier.debug("玩家" + offlinePlayer.getName() + "在任务过程中失踪了。");
 //        String returnWheat = String.format("%.2f", taskDifficulty.getWheatCost() * 0.8);

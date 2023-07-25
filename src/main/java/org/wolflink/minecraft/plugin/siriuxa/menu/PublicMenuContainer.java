@@ -22,10 +22,7 @@ public class PublicMenuContainer {
     }
 
     public Object getMenu(Class<? extends Menu> menuClass) {
-        if (publicMenuMap.get(menuClass) == null) {
-            publicMenuMap.put(menuClass, IOC.getBean(menuClass));
-        }
-        return publicMenuMap.get(menuClass);
+        return publicMenuMap.computeIfAbsent(menuClass, IOC::getBean);
     }
 
     @Nullable

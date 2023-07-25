@@ -18,6 +18,7 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 
@@ -44,18 +45,22 @@ public class LocationCommandSender implements BlockCommandSender {
 
     @Override
     public void sendMessage(@NotNull String s) {
+        // do nothing
     }
 
     @Override
     public void sendMessage(@NotNull String... strings) {
+        // do nothing
     }
 
     @Override
     public void sendMessage(@Nullable UUID uuid, @NotNull String s) {
+        // do nothing
     }
 
     @Override
     public void sendMessage(@Nullable UUID uuid, @NotNull String... strings) {
+        // do nothing
     }
 
     @NotNull
@@ -96,13 +101,11 @@ public class LocationCommandSender implements BlockCommandSender {
         return true;
     }
 
-    @NotNull
     @Override
     public PermissionAttachment addAttachment(@NotNull Plugin plugin, @NotNull String s, boolean b) {
         return null;
     }
 
-    @NotNull
     @Override
     public PermissionAttachment addAttachment(@NotNull Plugin plugin) {
         return null;
@@ -122,16 +125,18 @@ public class LocationCommandSender implements BlockCommandSender {
 
     @Override
     public void removeAttachment(@NotNull PermissionAttachment permissionAttachment) {
+        // do nothing
     }
 
     @Override
     public void recalculatePermissions() {
+        // do nothing
     }
 
     @NotNull
     @Override
     public Set<PermissionAttachmentInfo> getEffectivePermissions() {
-        return null;
+        return Collections.emptySet();
     }
 
     @Override
@@ -141,5 +146,6 @@ public class LocationCommandSender implements BlockCommandSender {
 
     @Override
     public void setOp(boolean b) {
+        // do nothing
     }
 }
