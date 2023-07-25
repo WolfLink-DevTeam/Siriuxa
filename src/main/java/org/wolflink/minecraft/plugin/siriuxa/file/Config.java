@@ -36,6 +36,7 @@ public class Config extends YamlConfig {
         }
         throw new NullPointerException("配置文件中没有设置 LobbyLocation");
     }
+
     @NonNull
     public Location getReadyLocation() {
         String worldName = get(ConfigProjection.LOBBY_WORLD_NAME);

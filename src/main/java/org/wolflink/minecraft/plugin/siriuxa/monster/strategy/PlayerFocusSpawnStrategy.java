@@ -31,8 +31,8 @@ public class PlayerFocusSpawnStrategy extends SpawnStrategy {
         return true;
     }
 
-    private final int SAFE_RADIUS = 15;
-    private final int MAX_RADIUS = 35;
+    private static final int SAFE_RADIUS = 15;
+    private static final int MAX_RADIUS = 35;
 
     @Override
     public void spawn(Player player) {
