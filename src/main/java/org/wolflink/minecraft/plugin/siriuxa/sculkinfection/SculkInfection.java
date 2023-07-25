@@ -67,9 +67,15 @@ public class SculkInfection implements ISwitchable {
      */
     private void updateInfectionValue(Player player) {
         // 不在任务世界
-        if (!(player.getWorld().getName().equals(config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME)))) return;
+        if (!(player.getWorld().getName().equals(config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME)))) {
+            infectionMap.remove(player.getUniqueId());
+            return;
+        }
         // 不是生存模式
-        if (player.getGameMode() != GameMode.SURVIVAL) return;
+        if (player.getGameMode() != GameMode.SURVIVAL) {
+            infectionMap.remove(player.getUniqueId());
+            return;
+        }
         UUID pUuid = player.getUniqueId();
         List<Location> nearbySculks = blockAPI.searchBlock(Material.SCULK, player.getLocation(), 7);
         int sculkAmount = nearbySculks.size();
