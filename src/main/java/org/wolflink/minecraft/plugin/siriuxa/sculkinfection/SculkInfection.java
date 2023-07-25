@@ -78,7 +78,7 @@ public class SculkInfection implements ISwitchable {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         double randDouble = random.nextDouble();
         subScheduler.runTaskLater(() -> {
-            if (value >= 400) {
+            if (value >= 500) {
                 player.playSound(player.getLocation(), Sound.BLOCK_SCULK_CHARGE, 1f, 1f);
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§c§l你被幽匿方块严重感染了！"));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 40, 0, false, false, false));
@@ -92,7 +92,7 @@ public class SculkInfection implements ISwitchable {
                     else material = Material.SCULK;
                     player.getLocation().clone().add(0, -1, 0).getBlock().setType(material);
                 }
-            } else if (value >= 250) {
+            } else if (value >= 300) {
                 player.playSound(player.getLocation(), Sound.BLOCK_SCULK_CHARGE, 1f, 1f);
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§5§l你变得寸步难行..."));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 40, 0, false, false, false));
