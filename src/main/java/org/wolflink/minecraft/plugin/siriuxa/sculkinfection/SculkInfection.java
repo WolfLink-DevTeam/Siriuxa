@@ -71,8 +71,9 @@ public class SculkInfection implements ISwitchable {
         // 不是生存模式
         if (player.getGameMode() != GameMode.SURVIVAL) return;
         UUID pUuid = player.getUniqueId();
-        List<Location> nearbySculks = blockAPI.searchBlock(Material.SCULK, player.getLocation(), 8);
+        List<Location> nearbySculks = blockAPI.searchBlock(Material.SCULK, player.getLocation(), 7);
         int sculkAmount = nearbySculks.size();
+        if(sculkAmount >= 15) sculkAmount = 15;
         addInfectionValue(player, sculkAmount * 4 - 25);
         int value = getInfectionValue(pUuid);
         ThreadLocalRandom random = ThreadLocalRandom.current();
