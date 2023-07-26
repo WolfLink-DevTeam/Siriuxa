@@ -78,12 +78,12 @@ public final class Siriuxa extends WolfirdPlugin {
         for (Class<? extends WolfirdListener> listenerClass : globalListenerClasses) {
             IOC.getBean(listenerClass).setEnabled(true);
         }
-        IOC.getBean(SculkInfection.class).setEnabled(true);
+        IOC.getBean(SculkInfection.class).enable();
     }
 
     @Override
     public void beforeDisabled() {
-        IOC.getBean(SculkInfection.class).setEnabled(false);
+        IOC.getBean(SculkInfection.class).disable();
         IOC.getBean(OreValues.class).doSave();
         IOC.getBean(HuntValues.class).doSave();
 

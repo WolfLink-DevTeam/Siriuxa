@@ -80,7 +80,7 @@ public class ExplorationBackpackMenu extends Menu {
         Notifier.chat("你从本次任务中获得了 §a"+selectedSlots.size()+"格 §b物资。",player);
         IOC.getBean(VaultAPI.class).addEconomy(player,wheat);
         int totalExp = player.getTotalExperience() + exp;
-        IOC.getBean(PlayerAPI.class).setExp(player,totalExp);
+        IOC.getBean(PlayerAPI.class).addExp(player,totalExp);
         for (int index : selectedSlots) {
             if(index == 11) player.getInventory().addItem(playerBackpack.getHelmet());
             else if(index == 12) player.getInventory().addItem(playerBackpack.getChestplate());

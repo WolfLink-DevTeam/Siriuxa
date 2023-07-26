@@ -242,7 +242,8 @@ public abstract class Task implements INameable {
         initRecord();
         taskStat.setEnabled(true);
         this.taskWheat = (double) size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
-        strategyDecider.setEnabled(true);
+        Notifier.debug("你好");
+        strategyDecider.enable();
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
 
             beaconLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.END_PORTAL_FRAME, taskRegion.getCenter(), 30);
@@ -308,7 +309,7 @@ public abstract class Task implements INameable {
     }
 
     private void stopCheck() {
-        strategyDecider.setEnabled(false);
+        strategyDecider.disable();
         subScheduler.cancelAllTasks();
         if (taskRegion != null) {
             taskRegion.stopCheck();
