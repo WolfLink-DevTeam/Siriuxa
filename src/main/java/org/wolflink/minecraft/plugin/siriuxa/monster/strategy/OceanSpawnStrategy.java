@@ -69,7 +69,7 @@ public class OceanSpawnStrategy extends SpawnStrategy {
 
         if (!world.getNearbyEntities(summonLocation, 8, 4, 8, entity -> entity.getType() == EntityType.PLAYER).isEmpty())
             return;
-        EntityType entityType = random.nextDouble() < 0.75 ? EntityType.DROWNED : EntityType.GUARDIAN;
+        EntityType entityType = random.nextDouble() < 0.88 ? EntityType.DROWNED : EntityType.GUARDIAN;
         Monster monster = (Monster) world.spawnEntity(summonLocation, entityType);
         IOC.getBean(AttributeAPI.class).multiplyMonsterAttribute(monster, "o_health",
                 Attribute.GENERIC_MAX_HEALTH, getSpawnerAttribute().getHealthMultiple());
