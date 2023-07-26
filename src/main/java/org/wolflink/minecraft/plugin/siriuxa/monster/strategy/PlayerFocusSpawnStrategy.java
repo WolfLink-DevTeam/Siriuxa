@@ -4,13 +4,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Rabbit;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
+import org.wolflink.minecraft.plugin.siriuxa.api.AttributeAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.LocationAPI;
 import org.wolflink.minecraft.plugin.siriuxa.monster.SpawnerAttribute;
 
@@ -90,17 +90,12 @@ public class PlayerFocusSpawnStrategy extends SpawnStrategy {
                     Rabbit rabbit = (Rabbit) monster;
                     rabbit.setRabbitType(Rabbit.Type.THE_KILLER_BUNNY);
                 }
-                AttributeInstance maxHealth = monster.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-                AttributeInstance movementSpeed = monster.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
-                AttributeInstance attackDamage = monster.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
-                if (maxHealth != null) {
-                    maxHealth.setBaseValue(maxHealth.getBaseValue() * getSpawnerAttribute().getHealthMultiple());
-                    monster.setHealth(maxHealth.getBaseValue());
-                }
-                if (movementSpeed != null)
-                    movementSpeed.setBaseValue(movementSpeed.getBaseValue() * getSpawnerAttribute().getMovementMultiple());
-                if (attackDamage != null)
-                    attackDamage.setBaseValue(attackDamage.getBaseValue() * getSpawnerAttribute().getDamageMultiple());
+                IOC.getBean(AttributeAPI.class).multiplyMonsterAttribute(monster, "pf_health",
+                        Attribute.GENERIC_MAX_HEALTH, getSpawnerAttribute().getHealthMultiple());
+                IOC.getBean(AttributeAPI.class).multiplyMonsterAttribute(monster, "pf_speed",
+                        Attribute.GENERIC_MOVEMENT_SPEED, getSpawnerAttribute().getMovementMultiple());
+                IOC.getBean(AttributeAPI.class).multiplyMonsterAttribute(monster, "pf_attack",
+                        Attribute.GENERIC_ATTACK_DAMAGE, getSpawnerAttribute().getDamageMultiple());
             });
         }, 20 * 3L);
     }

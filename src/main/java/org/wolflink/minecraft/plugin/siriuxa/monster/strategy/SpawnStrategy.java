@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.wolflink.minecraft.plugin.siriuxa.monster.SpawnerAttribute;
+import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 
 /**
  * 怪物生成策略
@@ -13,10 +14,12 @@ import org.wolflink.minecraft.plugin.siriuxa.monster.SpawnerAttribute;
 @AllArgsConstructor
 public abstract class SpawnStrategy {
     private final SpawnerAttribute spawnerAttribute;
+
     /**
      * 判断玩家是否适合应用该刷怪策略
      */
     public abstract boolean isApplicable(Player player);
+
     /**
      * 具体的刷怪算法
      * 异步计算，同步生成
