@@ -69,6 +69,7 @@ public final class PlayerBackpack implements ConfigurationSerializable {
         player.setTotalExperience(0);
         player.setLevel(0);
         player.setExp(0);
+        int totalExp = this.totalExp;
         while (player.getExpToLevel() <= totalExp) {
             totalExp -= player.getExpToLevel();
             player.setLevel(player.getLevel() + 1);

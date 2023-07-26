@@ -21,13 +21,13 @@ public class OreValues {
     private static final EnumMap<Material, Double> valueMap = new EnumMap<>(Material.class);
 
     static {
-        valueMap.put(Material.COPPER_BLOCK, 1.0);
-        valueMap.put(Material.COAL_BLOCK, 1.15);
+        valueMap.put(Material.COPPER_BLOCK, 0.95);
+        valueMap.put(Material.COAL_BLOCK, 1.2);
         valueMap.put(Material.IRON_BLOCK, 2.25);
-        valueMap.put(Material.GOLD_BLOCK, 2.0);
+        valueMap.put(Material.GOLD_BLOCK, 2.5);
         valueMap.put(Material.LAPIS_BLOCK, 0.75);
         valueMap.put(Material.REDSTONE_BLOCK, 0.75);
-        valueMap.put(Material.DIAMOND_BLOCK, 6.65);
+        valueMap.put(Material.DIAMOND_BLOCK, 7.0);
         valueMap.put(Material.EMERALD_BLOCK, 5.0);
     }
 
