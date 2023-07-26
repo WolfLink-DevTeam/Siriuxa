@@ -17,15 +17,15 @@ import java.util.concurrent.ThreadLocalRandom;
 public class SculkSpreader extends WolfirdListener {
     @EventHandler
     void on(EntityDeathEvent event) {
-        Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(),()->{
+        Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
             // 在探索世界
-            if(event.getEntity().getWorld().getName()
+            if (event.getEntity().getWorld().getName()
                     .equals(IOC.getBean(Config.class).get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME))) {
                 ThreadLocalRandom random = ThreadLocalRandom.current();
                 // 20%几率预生成
-                if(random.nextDouble() <= 0.2) {
-                    SculkSpawnBox sculkSpawnBox = new SculkSpawnBox(event.getEntity().getLocation().clone().add(0,-2,0));
-                    if(sculkSpawnBox.isAvailable()) {
+                if (random.nextDouble() <= 0.2) {
+                    SculkSpawnBox sculkSpawnBox = new SculkSpawnBox(event.getEntity().getLocation().clone());
+                    if (sculkSpawnBox.isAvailable()) {
                         Bukkit.getScheduler().runTask(Siriuxa.getInstance(), sculkSpawnBox::spawn);
                     }
                 }
