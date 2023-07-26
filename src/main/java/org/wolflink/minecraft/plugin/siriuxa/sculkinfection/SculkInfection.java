@@ -27,6 +27,14 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Singleton
 public class SculkInfection implements ISwitchable {
+
+    private static final Set<Material> sculkTypes = new HashSet<>();
+
+    static {
+        sculkTypes.add(Material.SCULK);
+        sculkTypes.add(Material.SCULK_CATALYST);
+    }
+
     /**
      * 感染值
      */
@@ -56,14 +64,14 @@ public class SculkInfection implements ISwitchable {
 
     /**
      * 刷新玩家的感染值
-     * 玩家站在潜声方块上，每秒获得 40 点感染值
-     * 每秒获得 附近8格内潜声方块数量 x 4 点感染值
-     * 如果不处在附近，则每秒 -40 点感染值
-     * 牛奶可以减少 100 点感染值
+     * 玩家站在潜声方块上，每秒获得 20 点感染值
+     * 每秒获得 附近8格内潜声方块数量 - 20 点感染值，，最多检测80个方块
+     * 如果不处在附近，则每秒 -20 点感染值
+     * 牛奶可以减少 500 点感染值
      * <p>
-     * 轻度感染 达到 100 点 间歇性虚弱+间歇性挖掘疲劳+走过的方块有概率变成潜声方块
-     * 中度感染 达到 200 点 虚弱+挖掘疲劳+缓慢+走过的方块有概率变成潜声方块
-     * 重度感染 达到 300 点 虚弱+挖掘疲劳+走过的方块有概率变成潜声方块+凋零+缓慢+失明
+     * 轻度感染 达到 300 点 间歇性虚弱+间歇性挖掘疲劳+走过的方块有概率变成潜声方块
+     * 中度感染 达到 600 点 虚弱+挖掘疲劳+缓慢+走过的方块有概率变成潜声方块
+     * 重度感染 达到 1000 点 虚弱+挖掘疲劳+走过的方块有概率变成潜声方块+凋零+缓慢+失明
      */
     private void updateInfectionValue(Player player) {
         // 不在任务世界
@@ -79,13 +87,15 @@ public class SculkInfection implements ISwitchable {
         UUID pUuid = player.getUniqueId();
         List<Location> nearbySculks = blockAPI.searchBlock(Material.SCULK, player.getLocation(), 7);
         int sculkAmount = nearbySculks.size();
-        if(sculkAmount >= 15) sculkAmount = 15;
-        addInfectionValue(player, sculkAmount * 4 - 25);
+        if(sculkAmount >= 80) sculkAmount = 80;
+        addInfectionValue(player, sculkAmount - 20);
+        Material blockType = player.getLocation().add(0,-1,0).getBlock().getType();
+        if(sculkTypes.contains(blockType)) addInfectionValue(player,20);
         int value = getInfectionValue(pUuid);
         ThreadLocalRandom random = ThreadLocalRandom.current();
         double randDouble = random.nextDouble();
         subScheduler.runTaskLater(() -> {
-            if (value >= 500) {
+            if (value >= 1000) {
                 player.playSound(player.getLocation(), Sound.BLOCK_SCULK_CHARGE, 1f, 1f);
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§c§l你被幽匿方块严重感染了！"));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 40, 0, false, false, false));
@@ -93,33 +103,31 @@ public class SculkInfection implements ISwitchable {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 40, 0, false, false, false));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 40, 0, false, false, false));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 40, 0, false, false, false));
-                if (randDouble <= 0.4) {
-                    Material material;
-                    if (random.nextDouble() <= 0.2) material = Material.SCULK_CATALYST;
-                    else material = Material.SCULK;
-                    player.getLocation().clone().add(0, -1, 0).getBlock().setType(material);
-                }
-            } else if (value >= 300) {
+                Material material;
+                if (random.nextDouble() <= 0.2) material = Material.SCULK_CATALYST;
+                else material = Material.SCULK;
+                player.getLocation().clone().add(0, -1, 0).getBlock().setType(material);
+            } else if (value >= 600) {
                 player.playSound(player.getLocation(), Sound.BLOCK_SCULK_CHARGE, 1f, 1f);
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§5§l你变得寸步难行..."));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 40, 0, false, false, false));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 40, 0, false, false, false));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 40, 0, false, false, false));
-                if (randDouble <= 0.2) {
+                if (randDouble <= 0.6) {
                     Material material;
-                    if (random.nextDouble() <= 0.2) material = Material.SCULK_CATALYST;
+                    if (random.nextDouble() <= 0.15) material = Material.SCULK_CATALYST;
                     else material = Material.SCULK;
                     Location location = player.getLocation().clone().add(0, -1, 0);
                     if (location.getBlock().getType().isSolid()) location.getBlock().setType(material);
                 }
-            } else if (value >= 100) {
+            } else if (value >= 300) {
                 player.playSound(player.getLocation(), Sound.BLOCK_SCULK_CHARGE, 1f, 1f);
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§e§l你感到有些不适..."));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 10, 0, false, false, false));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 10, 0, false, false, false));
-                if (randDouble <= 0.1) {
+                if (randDouble <= 0.3) {
                     Material material;
-                    if (random.nextDouble() <= 0.2) material = Material.SCULK_CATALYST;
+                    if (random.nextDouble() <= 0.1) material = Material.SCULK_CATALYST;
                     else material = Material.SCULK;
                     player.getLocation().clone().add(0, -1, 0).getBlock().setType(material);
                 }
@@ -141,10 +149,13 @@ public class SculkInfection implements ISwitchable {
         // 不是生存模式
         if (player.getGameMode() != GameMode.SURVIVAL) return;
         if (milkCDSet.contains(player.getUniqueId())) return;
-        if (getInfectionValue(player.getUniqueId()) > 100) {
+        if (getInfectionValue(player.getUniqueId()) >= 300) {
             milkCDSet.add(player.getUniqueId());
-            subScheduler.runTaskLater(() -> milkCDSet.remove(player.getUniqueId()), 20 * 180L);
-            addInfectionValue(player, -150);
+            subScheduler.runTaskLater(() -> {
+                milkCDSet.remove(player.getUniqueId());
+                if(player.isOnline()) Notifier.chat("你可以再次饮用牛奶了。",player);
+            }, 20 * 180L);
+            addInfectionValue(player, -500);
             Notifier.chat("喝了牛奶之后你感觉好多了。", player);
         }
     }
@@ -169,12 +180,6 @@ public class SculkInfection implements ISwitchable {
 @AllArgsConstructor
 class SculkInfectionListener extends WolfirdListener {
     private final SculkInfection sculkInfection;
-    private static final Set<Material> sculkTypes = new HashSet<>();
-
-    static {
-        sculkTypes.add(Material.SCULK);
-        sculkTypes.add(Material.SCULK_CATALYST);
-    }
 
     @EventHandler
     void on(BlockBreakEvent event) {
