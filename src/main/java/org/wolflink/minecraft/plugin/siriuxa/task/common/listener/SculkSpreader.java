@@ -22,8 +22,8 @@ public class SculkSpreader extends WolfirdListener {
             if (event.getEntity().getWorld().getName()
                     .equals(IOC.getBean(Config.class).get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME))) {
                 ThreadLocalRandom random = ThreadLocalRandom.current();
-                // 20%几率预生成
-                if (random.nextDouble() <= 0.2) {
+                // 25%几率生成
+                if (random.nextDouble() <= 0.25) {
                     SculkSpawnBox sculkSpawnBox = new SculkSpawnBox(event.getEntity().getLocation().clone());
                     if (sculkSpawnBox.isAvailable()) {
                         Bukkit.getScheduler().runTask(Siriuxa.getInstance(), sculkSpawnBox::spawn);
