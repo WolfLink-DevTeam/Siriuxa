@@ -16,6 +16,7 @@ import org.wolflink.minecraft.plugin.siriuxa.monster.SpawnerAttribute;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -91,7 +92,8 @@ public class PlayerFocusSpawnStrategy extends SpawnStrategy {
                     rabbit.setRabbitType(Rabbit.Type.THE_KILLER_BUNNY);
                 }
                 IOC.getBean(AttributeAPI.class).multiplyMonsterAttribute(monster, "pf_health",
-                        Attribute.GENERIC_MAX_HEALTH, getSpawnerAttribute().getHealthMultiple());
+                        Attribute.GENERIC_MAX_HEALTH, getSpawnerAttribute().getMovementMultiple());
+                monster.setHealth(Objects.requireNonNull(monster.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
                 IOC.getBean(AttributeAPI.class).multiplyMonsterAttribute(monster, "pf_speed",
                         Attribute.GENERIC_MOVEMENT_SPEED, getSpawnerAttribute().getMovementMultiple());
                 IOC.getBean(AttributeAPI.class).multiplyMonsterAttribute(monster, "pf_attack",

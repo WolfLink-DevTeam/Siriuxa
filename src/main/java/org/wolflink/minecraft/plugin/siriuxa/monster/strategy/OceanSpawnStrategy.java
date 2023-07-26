@@ -12,6 +12,7 @@ import org.wolflink.minecraft.plugin.siriuxa.api.AttributeAPI;
 import org.wolflink.minecraft.plugin.siriuxa.monster.SpawnerAttribute;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 
@@ -73,6 +74,7 @@ public class OceanSpawnStrategy extends SpawnStrategy {
         Monster monster = (Monster) world.spawnEntity(summonLocation, entityType);
         IOC.getBean(AttributeAPI.class).multiplyMonsterAttribute(monster, "o_health",
                 Attribute.GENERIC_MAX_HEALTH, getSpawnerAttribute().getHealthMultiple());
+        monster.setHealth(Objects.requireNonNull(monster.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
         IOC.getBean(AttributeAPI.class).multiplyMonsterAttribute(monster, "o_speed",
                 Attribute.GENERIC_MOVEMENT_SPEED, getSpawnerAttribute().getMovementMultiple());
         IOC.getBean(AttributeAPI.class).multiplyMonsterAttribute(monster, "o_attack",
