@@ -20,11 +20,12 @@ public class SculkSpawnBox {
 
     public SculkSpawnBox(Location center) {
         locations[0] = center.clone();
-        locations[1] = center.clone().add(0,0,1);
-        locations[2] = center.clone().add(0,0,-1);
-        locations[3] = center.clone().add(-1,0,0);
-        locations[4] = center.clone().add(1,0,0);
+        locations[1] = center.clone().add(0, 0, 1);
+        locations[2] = center.clone().add(0, 0, -1);
+        locations[3] = center.clone().add(-1, 0, 0);
+        locations[4] = center.clone().add(1, 0, 0);
     }
+
     public void spawn() {
         locations[0].getBlock().setType(Material.SCULK_CATALYST);
         locations[1].getBlock().setType(Material.SCULK);
@@ -32,14 +33,29 @@ public class SculkSpawnBox {
         locations[3].getBlock().setType(Material.SCULK);
         locations[4].getBlock().setType(Material.SCULK);
     }
+
+    /**
+     * 向下移动一格
+     */
+    public void down() {
+        for (int i = 0; i <= 4; i++)
+            locations[i].add(0, -1, 0);
+    }
+
     /**
      * 只生成在固体中
      */
     public boolean isAvailable() {
-        for (Location location : locations) {
-            if(!(location.getBlock().getType().isSolid())) return false;
+        for (int i = 0; i <= 5; i++) {
+            for (Location location : locations) {
+                if (!(location.getBlock().getType().isSolid())) {
+                    if (i < 5) {
+                        down();
+                        break;
+                    } else return false;
+                }
+            }
         }
         return true;
     }
-
 }
