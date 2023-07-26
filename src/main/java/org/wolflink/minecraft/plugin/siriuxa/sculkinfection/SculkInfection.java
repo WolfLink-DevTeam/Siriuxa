@@ -1,6 +1,7 @@
 package org.wolflink.minecraft.plugin.siriuxa.sculkinfection;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -27,7 +28,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Singleton
 public class SculkInfection implements ISwitchable {
-
+    @Getter
     private static final Set<Material> sculkTypes = new HashSet<>();
 
     static {
@@ -184,7 +185,7 @@ class SculkInfectionListener extends WolfirdListener {
     @EventHandler
     void on(BlockBreakEvent event) {
         // 不是潜声方块
-        if (!sculkTypes.contains(event.getBlock().getType())) return;
+        if (!SculkInfection.getSculkTypes().contains(event.getBlock().getType())) return;
         sculkInfection.breakSculk(event.getPlayer());
     }
 
