@@ -40,6 +40,7 @@ public class HuntValues {
         valueMap.put(EntityType.CAVE_SPIDER, 1.5);
         valueMap.put(EntityType.WITCH, 4.0);
         valueMap.put(EntityType.GUARDIAN, 2.5);
+        valueMap.put(EntityType.PILLAGER, 1.25);
     }
 
     @Inject
