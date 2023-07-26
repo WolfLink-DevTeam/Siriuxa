@@ -5,6 +5,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.wolflink.common.ioc.IOC;
+import org.wolflink.minecraft.plugin.siriuxa.api.PlayerAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.BorderIcon;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.EmptyIcon;
@@ -72,13 +73,14 @@ public class ExplorationBackpackMenu extends Menu {
         PlayerBackpack playerBackpack = playerTaskRecord.getPlayerBackpack();
         ExplorationDifficulty difficulty = IOC.getBean(DifficultyRepository.class).findByName(playerTaskRecord.getTaskDifficulty());
         assert difficulty != null;
-        double wheat = playerTaskRecord.getWheat() * difficulty.getWheatGainPercent();
+        double wheat = playerTaskRecord.getWheat() * difficulty.getWheatGainPercent() + difficulty.getWheatCost();
         int exp = (int) (playerBackpack.getTotalExp() * difficulty.getExpGainPercent());
         Notifier.chat("你从本次任务中收获了 §a"+String.format("%.0f",wheat)+" §6麦穗。",player);
         Notifier.chat("你从本次任务中获得了 §a"+exp+" §e经验值。",player);
         Notifier.chat("你从本次任务中获得了 §a"+selectedSlots.size()+"格 §b物资。",player);
         IOC.getBean(VaultAPI.class).addEconomy(player,wheat);
-        player.setTotalExperience(player.getTotalExperience() + exp);
+        int totalExp = player.getTotalExperience() + exp;
+        IOC.getBean(PlayerAPI.class).setExp(player,totalExp);
         for (int index : selectedSlots) {
             if(index == 11) player.getInventory().addItem(playerBackpack.getHelmet());
             else if(index == 12) player.getInventory().addItem(playerBackpack.getChestplate());

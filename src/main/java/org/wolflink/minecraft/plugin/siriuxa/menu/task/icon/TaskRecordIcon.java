@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.PlayerAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.DifficultyRepository;
@@ -70,14 +71,7 @@ public class TaskRecordIcon extends Icon {
                         .findByName(playerTaskRecord.getTaskDifficulty())).getWheatCost() * 0.6);
                 IOC.getBean(VaultAPI.class).addEconomy(player, Double.parseDouble(returnWheat));
                 int totalExp = (int) (playerTaskRecord.getPlayerBackpack().getTotalExp() * 0.8) + player.getTotalExperience();
-                player.setTotalExperience(0);
-                player.setLevel(0);
-                player.setExp(0);
-                while (player.getExpToLevel() <= totalExp) {
-                    totalExp -= player.getExpToLevel();
-                    player.setLevel(player.getLevel() + 1);
-                }
-                player.setExp((float) totalExp / player.getExpToLevel());
+                IOC.getBean(PlayerAPI.class).setExp(player,totalExp);
                 Notifier.chat("任务花费的麦穗已补偿 60%，经验保留了 80%，祝你下次好运！", player);
                 player.playSound(player.getLocation(), Sound.ENTITY_WOLF_HOWL, 0.7f, 1f);
             }
