@@ -4,6 +4,7 @@ import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.wolflink.minecraft.plugin.siriuxa.api.ISwitchable;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.OceanSpawnStrategy;
 import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.PlayerFocusSpawnStrategy;
 import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.SpawnStrategy;
@@ -37,7 +38,7 @@ public class StrategyDecider implements ISwitchable {
     /**
      * 决策周期(秒)
      */
-    private static final int DECIDE_PERIOD_SECS = 60;
+    private static final int DECIDE_PERIOD_SECS = 10;
     /**
      * 玩家当前应用的决策
      */
@@ -68,7 +69,8 @@ public class StrategyDecider implements ISwitchable {
         // 确保线程安全
         List<Player> list = new ArrayList<>(task.getTaskPlayers());
         for (Player player : list) {
-            playerStrategyMap.put(player.getUniqueId(), decide(player));
+            SpawnStrategy strategy = decide(player);
+            playerStrategyMap.put(player.getUniqueId(), strategy);
         }
     }
 
