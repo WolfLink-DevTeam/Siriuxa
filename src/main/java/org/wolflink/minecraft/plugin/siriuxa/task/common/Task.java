@@ -242,7 +242,6 @@ public abstract class Task implements INameable {
         initRecord();
         taskStat.setEnabled(true);
         this.taskWheat = (double) size() * (taskDifficulty.getWheatCost() + taskDifficulty.getWheatSupply());
-        Notifier.debug("你好");
         strategyDecider.enable();
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
 
@@ -413,10 +412,6 @@ public abstract class Task implements INameable {
         Notifier.broadcastChat(taskTeam.getPlayers(), "玩家" + player.getName() + "在任务中阵亡了。");
         player.sendTitle("§c§l死", "§7嘿！别这么灰心丧气的嘛，下次加油！", 10, 80, 10);
         player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1f, 0.5f);
-//        String returnWheat = String.format("%.2f", taskDifficulty.getWheatCost() * 0.8);
-//        IOC.getBean(VaultAPI.class).addEconomy(player, Double.parseDouble(returnWheat));
-//        IOC.getBean(TaskService.class).setFailedExp(player,player.getTotalExperience());
-//        Notifier.chat("登记任务花费的麦穗已退还 80%，等级保留了 85%，祝你在下次任务中好运！", player);
         if (taskTeam.isEmpty()) triggerFailed();
     }
 
@@ -428,8 +423,6 @@ public abstract class Task implements INameable {
         fillRecord(offlinePlayer, false);
         taskTeam.leave(offlinePlayer);
         Notifier.debug("玩家" + offlinePlayer.getName() + "在任务过程中失踪了。");
-//        String returnWheat = String.format("%.2f", taskDifficulty.getWheatCost() * 0.8);
-//        IOC.getBean(VaultAPI.class).addEconomy(offlinePlayer, Double.parseDouble(returnWheat));
         Notifier.broadcastChat(taskTeam.getPlayers(), "玩家" + offlinePlayer.getName() + "在任务过程中失踪了。");
     }
 }

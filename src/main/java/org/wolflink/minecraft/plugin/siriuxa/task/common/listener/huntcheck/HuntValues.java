@@ -5,8 +5,8 @@ import org.bukkit.entity.EntityType;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
-import org.wolflink.minecraft.plugin.siriuxa.file.database.HuntDB;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.HuntDB;
 
 import java.util.Calendar;
 import java.util.EnumMap;
@@ -27,18 +27,18 @@ public class HuntValues {
         valueMap.put(EntityType.ZOMBIE, 1.0);
         valueMap.put(EntityType.SPIDER, 1.15);
         valueMap.put(EntityType.SKELETON, 1.25);
-        valueMap.put(EntityType.CREEPER, 2.0);
+        valueMap.put(EntityType.CREEPER, 1.8);
         valueMap.put(EntityType.DROWNED, 1.0);
         valueMap.put(EntityType.ZOMBIE_VILLAGER, 1.0);
         valueMap.put(EntityType.HUSK, 1.0);
         valueMap.put(EntityType.STRAY, 1.3);
         valueMap.put(EntityType.SILVERFISH, 0.5);
-        valueMap.put(EntityType.VEX, 10.0);
+        valueMap.put(EntityType.VEX, 9.0);
         valueMap.put(EntityType.ENDERMAN, 3.0);
-        valueMap.put(EntityType.VINDICATOR, 5.0);
-        valueMap.put(EntityType.ENDERMITE,25.0);
-        valueMap.put(EntityType.CAVE_SPIDER,1.5);
-        valueMap.put(EntityType.WITCH,10.0);
+        valueMap.put(EntityType.VINDICATOR, 9.0);
+        valueMap.put(EntityType.ENDERMITE, 25.0);
+        valueMap.put(EntityType.CAVE_SPIDER, 1.5);
+        valueMap.put(EntityType.WITCH, 6.0);
     }
 
     @Inject
