@@ -45,7 +45,7 @@ public class OreValues {
     /**
      * 整体价值倍率
      */
-    private static final double MULTIPLE = 14.0;
+    private static final double MULTIPLE = 16.0;
     /**
      * 最少记录池数量
      */

@@ -33,12 +33,12 @@ public class HuntValues {
         valueMap.put(EntityType.HUSK, 1.0);
         valueMap.put(EntityType.STRAY, 1.3);
         valueMap.put(EntityType.SILVERFISH, 0.5);
-        valueMap.put(EntityType.VEX, 9.0);
+        valueMap.put(EntityType.VEX, 7.5);
         valueMap.put(EntityType.ENDERMAN, 3.0);
-        valueMap.put(EntityType.VINDICATOR, 9.0);
+        valueMap.put(EntityType.VINDICATOR, 5.5);
         valueMap.put(EntityType.ENDERMITE, 25.0);
         valueMap.put(EntityType.CAVE_SPIDER, 1.5);
-        valueMap.put(EntityType.WITCH, 6.0);
+        valueMap.put(EntityType.WITCH, 4.0);
         valueMap.put(EntityType.GUARDIAN, 2.5);
     }
 
