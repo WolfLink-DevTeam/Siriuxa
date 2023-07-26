@@ -1,5 +1,6 @@
 package org.wolflink.minecraft.plugin.siriuxa.monster.strategy;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
@@ -56,11 +57,11 @@ public class OceanSpawnStrategy extends SpawnStrategy {
 
     @Override
     public void spawn(Player player) {
-        spawn(player,1);
+        spawn(player, 1);
     }
 
-    private void spawn(Player player,final int triedCount) {
-        if(triedCount > 3) return;
+    private void spawn(Player player, final int triedCount) {
+        if (triedCount > 3) return;
         World world = player.getWorld();
         int x = player.getLocation().getBlockX();
         int y = player.getLocation().getBlockY();
@@ -70,16 +71,16 @@ public class OceanSpawnStrategy extends SpawnStrategy {
         int newZ = z + random.nextInt(SAFE_RADIUS, SAFE_RADIUS + 10);
         int newY = y + random.nextInt(-4, 4);
         if (player.getWorld().getBlockAt(newX, newY, newZ).getType().isSolid()) {
-            spawn(player,triedCount+1);
+            spawn(player, triedCount + 1);
             return;
         }
         if (newY > player.getWorld().getHighestBlockYAt(newX, newZ))
             newY = player.getWorld().getHighestBlockYAt(newX, newZ);
         Location summonLocation = new Location(player.getWorld(), newX, newY, newZ);
 
-        Bukkit.getScheduler().runTask(Siriuxa.getInstance(),()->{
+        Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> {
             if (!world.getNearbyEntities(summonLocation, 8, 4, 8, entity -> entity.getType() == EntityType.PLAYER).isEmpty()) {
-                spawn(player,triedCount+1);
+                spawn(player, triedCount + 1);
                 return;
             }
             EntityType entityType = random.nextDouble() < 0.88 ? EntityType.DROWNED : EntityType.GUARDIAN;
