@@ -109,7 +109,12 @@ public class WorldEditAPI {
                 .build();
         pasteSchem(editSession, schem, center);
         if (needUndo) {
-            locationCommandSender.getLocalSession().remember(editSession);
+            try {
+                locationCommandSender.getLocalSession().remember(editSession);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Notifier.error("在尝试粘贴建筑结构时出现问题。");
+            }
             return editSession;
         } else {
             editSession.close();
