@@ -410,7 +410,7 @@ public abstract class Task implements INameable {
         player.setGameMode(GameMode.SPECTATOR);
         Notifier.debug("玩家" + player.getName() + "在任务中阵亡了。");
         Notifier.broadcastChat(taskTeam.getPlayers(), "玩家" + player.getName() + "在任务中阵亡了。");
-        player.sendTitle("§c§l死", "§7嘿！别这么灰心丧气的嘛，下次加油！", 10, 80, 10);
+        player.sendTitle("§c§l寄！", "§7胜败乃兵家常事，大侠请重新来过。", 10, 80, 10);
         player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1f, 0.5f);
         if (taskTeam.isEmpty()) triggerFailed();
     }
