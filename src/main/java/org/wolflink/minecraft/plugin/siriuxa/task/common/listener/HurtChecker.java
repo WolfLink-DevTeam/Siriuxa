@@ -18,7 +18,7 @@ public class HurtChecker extends WolfirdListener {
     @Inject
     private TaskRepository taskRepository;
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void on(EntityDamageEvent event) {
         if (event.getEntityType() != EntityType.PLAYER) return;
         Player player = (Player) event.getEntity();
