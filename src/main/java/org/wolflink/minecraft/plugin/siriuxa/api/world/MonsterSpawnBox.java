@@ -54,7 +54,16 @@ public class MonsterSpawnBox {
         blacklistType.add(Material.LAVA);
         blacklistType.add(Material.BEDROCK);
     }
-
+    private static final Set<Material> availableTypes = new HashSet<>();
+    static {
+        availableTypes.add(Material.AIR);
+        availableTypes.add(Material.CAVE_AIR);
+        availableTypes.add(Material.SNOW);
+        availableTypes.add(Material.GRASS);
+        availableTypes.add(Material.TALL_GRASS);
+        availableTypes.add(Material.TALL_SEAGRASS);
+        availableTypes.add(Material.SEAGRASS);
+    }
     public boolean isAvailable() {
         Material b0 = box[0].getBlock().getType();
         Material b1 = box[1].getBlock().getType();
@@ -63,7 +72,7 @@ public class MonsterSpawnBox {
         if (blacklistType.contains(b0) || blacklistType.contains(b1) || blacklistType.contains(b2) || blacklistType.contains(b3))
             return false;
         return box[0].getBlock().getType().isSolid()
-                && (!box[1].getBlock().getType().isSolid())
+                && (!box[1].getBlock().isPassable())
                 && (!box[2].getBlock().getType().isSolid())
                 && (!box[3].getBlock().getType().isSolid());
     }

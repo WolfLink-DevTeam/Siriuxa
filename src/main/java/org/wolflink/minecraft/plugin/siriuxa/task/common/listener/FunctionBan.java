@@ -20,6 +20,9 @@ import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskRepository;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * 功能禁用
  */
@@ -56,15 +59,23 @@ public class FunctionBan extends WolfirdListener {
         if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 没在游戏阶段
         if (event.getRightClicked().getType().equals(EntityType.VILLAGER)) event.setCancelled(true);
     }
-
+    private static final Set<String> availableCommandPrefixes = new HashSet<>();
+    static {
+        availableCommandPrefixes.add("/sx lobby");
+        availableCommandPrefixes.add("/em");
+        availableCommandPrefixes.add("/elitemobs");
+        availableCommandPrefixes.add("/ag");
+    }
     @EventHandler(priority = EventPriority.MONITOR)
     void banTaskCommand(PlayerCommandPreprocessEvent event) {
         if (event.getPlayer().isOp()) return; // 不处理管理员
         Player player = event.getPlayer();
         // 在任务世界
         if (player.getWorld().getName().equals(IOC.getBean(Config.class).get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME))) {
-            // 允许执行返回大厅的指令
-            if (event.getMessage().equalsIgnoreCase("/sx lobby")) return;
+            // 允许在任务过程中执行的白名单指令
+            for (String prefix : availableCommandPrefixes) {
+                if(event.getMessage().startsWith(prefix))return;
+            }
             event.setCancelled(true);
         }
     }
