@@ -57,7 +57,7 @@ public class Notifier {
     }
 
     private static final Map<UUID, BossBar> barMap = new ConcurrentHashMap<>();
-
+    private static final Map<UUID, Integer> barTaskMap = new ConcurrentHashMap<>();
     /**
      * 以 BossBar 的形式展示3秒
      */
@@ -70,7 +70,12 @@ public class Notifier {
         }
         bossBar.setTitle(msg);
         bossBar.addPlayer(player);
-        Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance()
-                ,()-> bossBar.removePlayer(player),20 * 3);
+        if(barTaskMap.containsKey(player.getUniqueId())) {
+            int taskId = barTaskMap.get(player.getUniqueId());
+            Bukkit.getScheduler().cancelTask(taskId);
+        }
+        barTaskMap.put(player.getUniqueId(),
+                Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance(),
+                        ()-> bossBar.removePlayer(player),20 * 3).getTaskId());
     }
 }

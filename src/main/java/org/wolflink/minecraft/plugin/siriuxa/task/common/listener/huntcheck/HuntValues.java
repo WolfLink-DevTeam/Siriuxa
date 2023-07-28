@@ -41,6 +41,7 @@ public class HuntValues {
         valueMap.put(EntityType.WITCH, 4.0);
         valueMap.put(EntityType.GUARDIAN, 2.5);
         valueMap.put(EntityType.PILLAGER, 1.25);
+        valueMap.put(EntityType.SLIME, 0.2);
     }
 
     @Inject

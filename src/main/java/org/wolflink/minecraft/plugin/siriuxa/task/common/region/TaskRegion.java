@@ -36,8 +36,6 @@ public abstract class TaskRegion {
     protected final Task task;
     @Getter
     protected final Location center;
-    @Getter
-    private final BossBar bossBar = Bukkit.createBossBar("", BarColor.WHITE, BarStyle.SOLID);
 
     private final Random random = new Random();
 
@@ -54,7 +52,6 @@ public abstract class TaskRegion {
     }
 
     public void stopCheck() {
-        bossBar.removeAll();
         if (taskId != -1) {
             Bukkit.getScheduler().cancelTask(taskId);
             taskId = -1;
