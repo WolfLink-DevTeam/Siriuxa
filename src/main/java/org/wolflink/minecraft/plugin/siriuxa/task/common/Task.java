@@ -59,13 +59,32 @@ public abstract class Task implements INameable {
      */
     private final double baseWheatLoss;
     /**
-     * 麦穗流失倍率
-     */
-    private double wheatLossMultiple = 1.0;
-    /**
      * 麦穗流失加速度
      */
     private final double wheatLostAcceleratedSpeed;
+    /**
+     * 玩家队伍
+     */
+    @Getter
+    private final GlobalTeam globalTeam;
+    @NonNull
+    private final TaskDifficulty taskDifficulty;
+    private final Random random = new Random();
+    @Getter
+    private final StageHolder stageHolder;
+    /**
+     * 任务基础套装
+     */
+    private final PlayerBackpack defaultKit;
+    /**
+     * TODO 延迟初始化，刷怪决策者
+     */
+    private final StrategyDecider strategyDecider;
+    private final Map<UUID, PlayerTaskRecord> playerRecordMap = new HashMap<>();
+    /**
+     * 麦穗流失倍率
+     */
+    private double wheatLossMultiple = 1.0;
     /**
      * 本次任务的麦穗余量
      */
@@ -74,38 +93,13 @@ public abstract class Task implements INameable {
      * 任务队伍(不可加入) 在任务预加载阶段初始化
      */
     private TaskTeam taskTeam = new TaskTeam(new GlobalTeam());
-    /**
-     * 玩家队伍
-     */
-    @Getter
-    private final GlobalTeam globalTeam;
     @Nullable
     private TaskRegion taskRegion = null;
-
-    @NonNull
-    private final TaskDifficulty taskDifficulty;
-
-    private final Random random = new Random();
     /**
      * 当前可用的撤离点
      */
     private EvacuationZone availableEvacuationZone = null;
-
-    @Getter
-    private final StageHolder stageHolder;
-
-    protected abstract StageHolder initStageHolder();
-
-
-    /**
-     * 任务基础套装
-     */
-    private final PlayerBackpack defaultKit;
-
-    /**
-     * TODO 延迟初始化，刷怪决策者
-     */
-    private final StrategyDecider strategyDecider;
+    private List<Location> beaconLocations = new ArrayList<>();
 
     protected Task(GlobalTeam globalTeam, TaskDifficulty taskDifficulty, PlayerBackpack defaultKit) {
         this.globalTeam = globalTeam;
@@ -116,6 +110,8 @@ public abstract class Task implements INameable {
         stageHolder = initStageHolder();
         strategyDecider = new StrategyDecider(this);
     }
+
+    protected abstract StageHolder initStageHolder();
 
     public List<OfflinePlayer> getOfflinePlayers() {
         return taskTeam.getOfflinePlayers();
@@ -220,8 +216,6 @@ public abstract class Task implements INameable {
             }
         }, 20, 20);
     }
-
-    private List<Location> beaconLocations = new ArrayList<>();
 
     public void preLoad() {
         this.taskTeam = new TaskTeam(getGlobalTeam());
@@ -335,9 +329,6 @@ public abstract class Task implements INameable {
         taskTeam.clear();
         IOC.getBean(TaskRepository.class).deleteByKey(taskUuid);
     }
-
-
-    private final Map<UUID, PlayerTaskRecord> playerRecordMap = new HashMap<>();
 
     /**
      * 初始化任务快照

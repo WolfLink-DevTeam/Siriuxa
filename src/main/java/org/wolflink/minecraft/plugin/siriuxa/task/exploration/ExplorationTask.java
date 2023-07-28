@@ -27,11 +27,6 @@ import java.util.Objects;
  * 活动区域大
  */
 public class ExplorationTask extends Task implements HurtCheckAvailable, OreCheckAvailable {
-    @Getter
-    private final ExplorationDifficulty difficulty;
-    @Getter
-    private final LinearStageHolder stageHolder = (LinearStageHolder) super.getStageHolder();
-
     private static final PlayerBackpack defaultKit = new PlayerBackpack();
 
     static {
@@ -45,6 +40,11 @@ public class ExplorationTask extends Task implements HurtCheckAvailable, OreChec
         items.add(new ItemStack(Material.BREAD, 8));
         defaultKit.setItems(items);
     }
+
+    @Getter
+    private final ExplorationDifficulty difficulty;
+    @Getter
+    private final LinearStageHolder stageHolder = (LinearStageHolder) super.getStageHolder();
 
     public ExplorationTask(GlobalTeam globalTeam, ExplorationDifficulty difficulty) {
         super(globalTeam, difficulty, defaultKit);

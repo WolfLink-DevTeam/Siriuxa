@@ -20,8 +20,8 @@ public class PlayerMenuContainer {
     public PlayerMenuContainer(UUID uuid) {
         menuMap.put(TaskMenu.class, new TaskMenu(uuid));
         menuMap.put(ExplorationDifficultyMenu.class, new ExplorationDifficultyMenu(uuid));
-        menuMap.put(TaskRecordMenu.class,new TaskRecordMenu(uuid));
-        menuMap.put(ExplorationBackpackMenu.class,new ExplorationBackpackMenu(uuid));
+        menuMap.put(TaskRecordMenu.class, new TaskRecordMenu(uuid));
+        menuMap.put(ExplorationBackpackMenu.class, new ExplorationBackpackMenu(uuid));
     }
 
     @Nullable

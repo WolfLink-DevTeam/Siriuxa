@@ -29,6 +29,21 @@ import java.util.Set;
 @Singleton
 public class FunctionBan extends WolfirdListener {
 
+    private static final Set<String> availableCommandPrefixes = new HashSet<>();
+
+    static {
+        availableCommandPrefixes.add("/sx lobby");
+        availableCommandPrefixes.add("/sx help");
+        availableCommandPrefixes.add("/em");
+        availableCommandPrefixes.add("/elitemobs");
+        availableCommandPrefixes.add("/ag");
+        availableCommandPrefixes.add("/tps");
+        availableCommandPrefixes.add("/music");
+        availableCommandPrefixes.add("/help");
+        availableCommandPrefixes.add("/money");
+        availableCommandPrefixes.add("/giveup");
+    }
+
     @Inject
     private TaskRepository taskRepository;
 
@@ -58,20 +73,6 @@ public class FunctionBan extends WolfirdListener {
         if (task == null) return; // 没在任务中
         if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 没在游戏阶段
         if (event.getRightClicked().getType().equals(EntityType.VILLAGER)) event.setCancelled(true);
-    }
-
-    private static final Set<String> availableCommandPrefixes = new HashSet<>();
-
-    static {
-        availableCommandPrefixes.add("/sx lobby");
-        availableCommandPrefixes.add("/sx help");
-        availableCommandPrefixes.add("/em");
-        availableCommandPrefixes.add("/elitemobs");
-        availableCommandPrefixes.add("/ag");
-        availableCommandPrefixes.add("/tps");
-        availableCommandPrefixes.add("/music");
-        availableCommandPrefixes.add("/help");
-        availableCommandPrefixes.add("/giveup");
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

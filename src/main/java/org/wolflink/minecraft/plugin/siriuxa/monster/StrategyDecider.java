@@ -4,7 +4,6 @@ import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.wolflink.minecraft.plugin.siriuxa.api.ISwitchable;
-import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.OceanSpawnStrategy;
 import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.PlayerFocusSpawnStrategy;
 import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.SpawnStrategy;
@@ -23,22 +22,14 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class StrategyDecider implements ISwitchable {
 
-    private final SpawnerAttribute spawnerAttribute;
-    private final Task task;
-    private final int spawnPeriodSecs;
-
-    public StrategyDecider(Task task) {
-        this.task = task;
-        spawnerAttribute = new SpawnerAttribute(task.getTaskDifficulty());
-        this.spawnPeriodSecs = spawnerAttribute.getSpawnPeriodSecs();
-        strategyList = List.of(new OceanSpawnStrategy(spawnerAttribute), new PlayerFocusSpawnStrategy(spawnerAttribute));
-    }
-
-    private final SubScheduler subScheduler = new SubScheduler();
     /**
      * 决策周期(秒)
      */
     private static final int DECIDE_PERIOD_SECS = 10;
+    private final SpawnerAttribute spawnerAttribute;
+    private final Task task;
+    private final int spawnPeriodSecs;
+    private final SubScheduler subScheduler = new SubScheduler();
     /**
      * 玩家当前应用的决策
      */
@@ -47,6 +38,12 @@ public class StrategyDecider implements ISwitchable {
      * 优先级从上往下，最上方的最优先进行决策
      */
     private final List<SpawnStrategy> strategyList;
+    public StrategyDecider(Task task) {
+        this.task = task;
+        spawnerAttribute = new SpawnerAttribute(task.getTaskDifficulty());
+        this.spawnPeriodSecs = spawnerAttribute.getSpawnPeriodSecs();
+        strategyList = List.of(new OceanSpawnStrategy(spawnerAttribute), new PlayerFocusSpawnStrategy(spawnerAttribute));
+    }
 
     @Override
     public void enable() {

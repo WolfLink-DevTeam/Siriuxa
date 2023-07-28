@@ -7,12 +7,12 @@ import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.Result;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeamRepository;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeamService;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
-import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,24 +21,24 @@ import java.util.UUID;
 @Singleton
 public class TeamInvite extends WolfirdCommand {
 
-    @Inject
-    GlobalTeamRepository globalTeamRepository;
-    @Inject
-    GlobalTeamService globalTeamService;
     /**
      * 被邀请人 - 邀请人
      */
     private final Map<UUID, String> inviteMap = new HashMap<>();
+    @Inject
+    GlobalTeamRepository globalTeamRepository;
+    @Inject
+    GlobalTeamService globalTeamService;
+
+    public TeamInvite() {
+        super(false, false, true, "sx team invite {player}", "邀请玩家加入队伍");
+    }
 
     /**
      * 玩家是否被邀请了
      */
     public boolean beenInvited(UUID uuid) {
         return inviteMap.containsKey(uuid);
-    }
-
-    public TeamInvite() {
-        super(false, false, true, "sx team invite {player}", "邀请玩家加入队伍");
     }
 
     @Override

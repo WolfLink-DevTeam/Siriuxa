@@ -22,6 +22,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class PlayerFocusSpawnStrategy extends SpawnStrategy {
 
+    private static final int SAFE_RADIUS = 15;
+    private static final int MAX_RADIUS = 25;
+
     public PlayerFocusSpawnStrategy(SpawnerAttribute spawnerAttribute) {
         super(spawnerAttribute);
     }
@@ -32,12 +35,9 @@ public class PlayerFocusSpawnStrategy extends SpawnStrategy {
         return true;
     }
 
-    private static final int SAFE_RADIUS = 15;
-    private static final int MAX_RADIUS = 25;
-
     @Override
-    void spawn(Player player,int triedCount) {
-        if(triedCount <= 0) return;
+    void spawn(Player player, int triedCount) {
+        if (triedCount <= 0) return;
         List<Location> locList = new ArrayList<>();
         Location firstLoc = player.getLocation();
         boolean[] available = new boolean[]{true};
@@ -81,7 +81,7 @@ public class PlayerFocusSpawnStrategy extends SpawnStrategy {
             Location goalLocation = locationAPI.getLocationByAngle(averLocation, randYaw, randDistance);
             Location summonLocation = locationAPI.getNearestSurface(goalLocation, 16);
             if (summonLocation == null) {
-                spawn(player,triedCount - 1);
+                spawn(player, triedCount - 1);
                 return;
             }
             Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> {
@@ -89,7 +89,7 @@ public class PlayerFocusSpawnStrategy extends SpawnStrategy {
                 assert world != null;
                 if (!world.getNearbyEntities(summonLocation, 8, 4, 8,
                         entity -> entity.getType() == EntityType.PLAYER).isEmpty()) {
-                    spawn(player,triedCount - 1);
+                    spawn(player, triedCount - 1);
                     return;
                 }
                 EntityType entityType = getSpawnerAttribute().randomType();
@@ -98,12 +98,12 @@ public class PlayerFocusSpawnStrategy extends SpawnStrategy {
                     Rabbit rabbit = (Rabbit) monster;
                     rabbit.setRabbitType(Rabbit.Type.THE_KILLER_BUNNY);
                 }
-                IOC.getBean(AttributeAPI.class).multiplyMonsterAttribute(monster, "pf_health",
+                IOC.getBean(AttributeAPI.class).multiplyAttribute(monster, "pf_health",
                         Attribute.GENERIC_MAX_HEALTH, getSpawnerAttribute().getMovementMultiple());
                 monster.setHealth(Objects.requireNonNull(monster.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
-                IOC.getBean(AttributeAPI.class).multiplyMonsterAttribute(monster, "pf_speed",
+                IOC.getBean(AttributeAPI.class).multiplyAttribute(monster, "pf_speed",
                         Attribute.GENERIC_MOVEMENT_SPEED, getSpawnerAttribute().getMovementMultiple());
-                IOC.getBean(AttributeAPI.class).multiplyMonsterAttribute(monster, "pf_attack",
+                IOC.getBean(AttributeAPI.class).multiplyAttribute(monster, "pf_attack",
                         Attribute.GENERIC_ATTACK_DAMAGE, getSpawnerAttribute().getDamageMultiple());
             });
         }, 20 * 3L);

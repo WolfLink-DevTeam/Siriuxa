@@ -22,6 +22,18 @@ public class HuntValues {
      * 怪物类型 - 相对于僵尸的价值
      */
     private static final EnumMap<EntityType, Double> valueMap = new EnumMap<>(EntityType.class);
+    /**
+     * 整体价值倍率
+     */
+    private static final double MULTIPLE = 9.0;
+    /**
+     * 最少记录池数量
+     */
+    private static final int MIN_POOL_SIZE = 300;
+    /**
+     * 最大记录天数
+     */
+    private static final int MAX_RECORD_DATE = 30;
 
     static {
         valueMap.put(EntityType.ZOMBIE, 1.0);
@@ -44,29 +56,17 @@ public class HuntValues {
         valueMap.put(EntityType.SLIME, 0.2);
     }
 
-    @Inject
-    private HuntDB huntDB;
     /**
      * 击杀怪物数量历史记录
      */
     private final EnumMap<EntityType, Integer> cacheMap = new EnumMap<>(EntityType.class);
-    private int totalCache = 0;
     /**
      * 今日击杀怪物数量记录
      */
     private final EnumMap<EntityType, Integer> todayMap = new EnumMap<>(EntityType.class);
-    /**
-     * 整体价值倍率
-     */
-    private static final double MULTIPLE = 9.0;
-    /**
-     * 最少记录池数量
-     */
-    private static final int MIN_POOL_SIZE = 300;
-    /**
-     * 最大记录天数
-     */
-    private static final int MAX_RECORD_DATE = 30;
+    @Inject
+    private HuntDB huntDB;
+    private int totalCache = 0;
 
     public HuntValues() {
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {

@@ -8,9 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -38,14 +35,13 @@ public abstract class TaskRegion {
     protected final Location center;
 
     private final Random random = new Random();
+    private int taskId = -1;
 
     protected TaskRegion(Task task, Location center, double radius) {
         this.center = center;
         this.radius = radius;
         this.task = task;
     }
-
-    private int taskId = -1;
 
     public void startCheck() {
         taskId = Bukkit.getScheduler().runTaskTimer(Siriuxa.getInstance(), this::check, 20, 20).getTaskId();
@@ -70,6 +66,7 @@ public abstract class TaskRegion {
         String progressBar = "§f%img_mc_barrier% " + lineColor + "§m" + " ".repeat(temp) + "§r§f%img_mc_totem_of_undying%§7§m" + " ".repeat(50 - temp) + "§r §f%img_mc_end_crystal%";
         return PlaceholderAPI.setPlaceholders(player, progressBar);
     }
+
     /**
      * 检测玩家是否在边界外
      * 是则造成伤害
@@ -86,7 +83,7 @@ public abstract class TaskRegion {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 5, 0));
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§8[ §e! §8] §c被严重感染的空气使你感到不适..."));
             }
-            Notifier.bossBar(player,getBorderBar(player));
+            Notifier.bossBar(player, getBorderBar(player));
         }
     }
 

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.wolflink.minecraft.plugin.siriuxa.monster.SpawnerAttribute;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 
 /**
  * 怪物生成策略
@@ -26,7 +25,8 @@ public abstract class SpawnStrategy {
      * 异常重试 5 次
      */
     public void spawn(Player player) {
-        spawn(player,5);
+        spawn(player, 5);
     }
-    abstract void spawn(Player player,int triedCount);
+
+    abstract void spawn(Player player, int triedCount);
 }

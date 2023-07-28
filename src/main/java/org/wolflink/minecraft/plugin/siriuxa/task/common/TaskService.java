@@ -29,6 +29,8 @@ import java.util.*;
 
 @Singleton
 public class TaskService {
+    private final Random random = new Random();
+    private final Map<UUID, Integer> escapeTaskMap = new HashMap<>();
     @Inject
     private TaskRepository taskRepository;
     @Inject
@@ -39,8 +41,6 @@ public class TaskService {
     private Config config;
     @Inject
     private TaskFactory taskFactory;
-
-    private final Random random = new Random();
 
     public TaskService() {
     }
@@ -105,8 +105,6 @@ public class TaskService {
         }
         return new Result(false, "任务当前不处于等待阶段，无法准备。");
     }
-
-    private final Map<UUID, Integer> escapeTaskMap = new HashMap<>();
 
     /**
      * 玩家离线触发

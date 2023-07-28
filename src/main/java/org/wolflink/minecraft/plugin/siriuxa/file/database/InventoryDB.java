@@ -7,8 +7,8 @@ import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.DateAPI;
-import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -19,10 +19,10 @@ import java.util.Calendar;
  */
 @Singleton
 public class InventoryDB extends FileDB {
-    @Inject
-    private DateAPI dateAPI;
     private final File mainDataFolder = new File(folder, "main");
     private final File cacheDataFolder = new File(folder, "cache");
+    @Inject
+    private DateAPI dateAPI;
 
     public InventoryDB() {
         super("inventory");

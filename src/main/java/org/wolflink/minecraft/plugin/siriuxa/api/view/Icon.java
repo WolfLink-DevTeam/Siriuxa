@@ -14,12 +14,11 @@ import java.util.List;
 public abstract class Icon {
     @Getter
     private final boolean needRefresh;
+    private ItemStack itemStackCache;
 
     protected Icon(boolean needRefresh) {
         this.needRefresh = needRefresh;
     }
-
-    private ItemStack itemStackCache;
 
     @NonNull
     public ItemStack getIcon() {
@@ -31,7 +30,7 @@ public abstract class Icon {
     @NonNull
     protected abstract ItemStack createIcon();
 
-    protected ItemStack fastCreateItemStack(Material material,int count,String displayName,List<String> lores) {
+    protected ItemStack fastCreateItemStack(Material material, int count, String displayName, List<String> lores) {
         ItemStack itemStack = new ItemStack(material, count);
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null) throw new NullPointerException("ItemMeta is null");
@@ -40,11 +39,12 @@ public abstract class Icon {
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
+
     protected ItemStack fastCreateItemStack(Material material, int count, String displayName, String... lores) {
         List<String> loreList;
         if (lores == null || lores.length == 0) loreList = new ArrayList<>();
         else loreList = Arrays.asList(lores);
-        return fastCreateItemStack(material,count,displayName,loreList);
+        return fastCreateItemStack(material, count, displayName, loreList);
     }
 
     public abstract void leftClick(Player player);

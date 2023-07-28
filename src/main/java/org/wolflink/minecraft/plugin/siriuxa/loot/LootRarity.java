@@ -13,13 +13,13 @@ public enum LootRarity {
     EPIC("§d§l史诗", 35, 10), // 3.5%
     LEGENDARY("§6§l传说", 15, 15); // 1.5%
 
+    private static final Random random = new Random();
     @Getter
     private final String displayName;
     @Getter
     private final int weight;
     @Getter
     private final int level;
-    private static final Random random = new Random();
 
     LootRarity(String displayName, int weight, int level) {
         this.displayName = displayName;

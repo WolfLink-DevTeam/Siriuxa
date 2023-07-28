@@ -8,10 +8,10 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
-import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.GameStage;
-import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskRepository;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.interfaces.HurtCheckAvailable;
+import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.GameStage;
+import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
 @Singleton
 public class HurtChecker extends WolfirdListener {
@@ -29,7 +29,7 @@ public class HurtChecker extends WolfirdListener {
         if (task.getTaskRegion() == null) return; // 任务区域未设定
         if (player.getWorld() != task.getTaskRegion().getCenter().getWorld()) return; // 不在任务世界
         // 下调大额伤害
-        if(event.getDamage() > 12) event.setDamage(12);
+        if (event.getDamage() > 12) event.setDamage(12);
         // 扣除麦穗
         double cost = ((HurtCheckAvailable) task).getHurtWheatCost() * event.getFinalDamage();
         task.takeWheat(cost);

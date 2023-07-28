@@ -12,6 +12,22 @@ import java.util.Set;
  */
 public class MonsterSpawnBox {
 
+    /**
+     * 符合生成怪物的条件
+     * 即：上三格不为方块，底部为方块
+     */
+    private static final Set<Material> availableTypes = new HashSet<>();
+
+    static {
+        availableTypes.add(Material.AIR);
+        availableTypes.add(Material.CAVE_AIR);
+        availableTypes.add(Material.SNOW);
+        availableTypes.add(Material.GRASS);
+        availableTypes.add(Material.TALL_GRASS);
+        availableTypes.add(Material.TALL_SEAGRASS);
+        availableTypes.add(Material.SEAGRASS);
+    }
+
     private final Location[] box = new Location[4];
 
     public MonsterSpawnBox(Location bottomLocation) {
@@ -43,20 +59,6 @@ public class MonsterSpawnBox {
         return box[0];
     }
 
-    /**
-     * 符合生成怪物的条件
-     * 即：上三格不为方块，底部为方块
-     */
-    private static final Set<Material> availableTypes = new HashSet<>();
-    static {
-        availableTypes.add(Material.AIR);
-        availableTypes.add(Material.CAVE_AIR);
-        availableTypes.add(Material.SNOW);
-        availableTypes.add(Material.GRASS);
-        availableTypes.add(Material.TALL_GRASS);
-        availableTypes.add(Material.TALL_SEAGRASS);
-        availableTypes.add(Material.SEAGRASS);
-    }
     public boolean isAvailable() {
         Material b0 = box[0].getBlock().getType();
         Material b1 = box[1].getBlock().getType();

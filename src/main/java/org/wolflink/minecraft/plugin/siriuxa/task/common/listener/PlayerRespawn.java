@@ -20,8 +20,8 @@ public class PlayerRespawn extends WolfirdListener {
     void on(PlayerRespawnEvent event) {
         World world = event.getPlayer().getWorld();
         Config config = IOC.getBean(Config.class);
-        if(world.getName().equalsIgnoreCase(config.get(ConfigProjection.LOBBY_WORLD_NAME))) {
+        if (world.getName().equalsIgnoreCase(config.get(ConfigProjection.LOBBY_WORLD_NAME))) {
             event.setRespawnLocation(config.getLobbyLocation());
-        } else event.setRespawnLocation(new Location(world,0,world.getHighestBlockYAt(0,0),0));
+        } else event.setRespawnLocation(new Location(world, 0, world.getHighestBlockYAt(0, 0), 0));
     }
 }

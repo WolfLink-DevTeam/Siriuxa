@@ -16,21 +16,23 @@ public class TaskStat {
     private double nowWheat = 0;
     private boolean enabled = false;
 
-    public double getWheatChange() {
-        return nowWheat - lastWheat;
-    }
-    public final long getUsingTimeInMills() {
-        if(endTime == null || startTime == null) return -1;
-        return endTime.getTimeInMillis() - startTime.getTimeInMillis();
-    }
     public TaskStat(Task task) {
         this.task = task;
     }
 
+    public double getWheatChange() {
+        return nowWheat - lastWheat;
+    }
+
+    public final long getUsingTimeInMills() {
+        if (endTime == null || startTime == null) return -1;
+        return endTime.getTimeInMillis() - startTime.getTimeInMillis();
+    }
+
     public void setEnabled(boolean value) {
-        if(enabled == value) return;
+        if (enabled == value) return;
         enabled = value;
-        if(enabled) {
+        if (enabled) {
             startTime = Calendar.getInstance();
             subScheduler.runTaskTimerAsync(() -> {
                 lastWheat = nowWheat;

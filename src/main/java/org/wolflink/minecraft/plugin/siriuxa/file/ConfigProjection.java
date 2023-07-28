@@ -9,8 +9,8 @@ public enum ConfigProjection {
     DEBUG("Debug", false),
     LOBBY_WORLD_NAME("Lobby.WorldName", "kg"), // 任务大厅世界
     LOBBY_LOCATION("Lobby.Location", "-140 91 10"), // 任务大厅坐标
-    LOBBY_READY_LOCATION("Lobby.ReadyLocation","-185 93 10"), // 任务准备区域的中心坐标
-    LOBBY_READY_RADIUS("Lobby.ReadyRadius",5), // 任务准备区域的半径
+    LOBBY_READY_LOCATION("Lobby.ReadyLocation", "-185 93 10"), // 任务准备区域的中心坐标
+    LOBBY_READY_RADIUS("Lobby.ReadyRadius", 5), // 任务准备区域的半径
     EXPLORATION_TASK_WORLD_NAME("Task.Exploration.WorldName", "normal-exploration"),
     EXPLORATION_REGION_TOTAL_LENGTH("Task.Exploration.Region.TotalLength", 50000),
     EXPLORATION_REGION_INDEX("Task.Exploration.Region.Index", 1),

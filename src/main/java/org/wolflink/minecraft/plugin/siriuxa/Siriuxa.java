@@ -32,8 +32,44 @@ import java.util.List;
 
 public final class Siriuxa extends WolfirdPlugin {
 
+    /**
+     * 初始化配置文件
+     */
+    private static final List<Class<? extends YamlConfig>> configs = new ArrayList<>();
+    private static final List<Class<? extends FileDB>> databases = new ArrayList<>();
+    private static final List<Class<? extends WolfirdListener>> globalListenerClasses = new ArrayList<>();
+    private static final List<Class<? extends ConfigurationSerializable>> serializableClasses = new ArrayList<>();
     @Getter
     private static Siriuxa instance;
+
+    static {
+        configs.add(Config.class);
+        configs.add(Lang.class);
+
+        databases.add(InventoryDB.class);
+        databases.add(OreDB.class);
+        databases.add(HuntDB.class);
+        databases.add(TaskRecordDB.class);
+
+        globalListenerClasses.add(OreChecker.class);
+        globalListenerClasses.add(HuntChecker.class);
+        globalListenerClasses.add(HurtChecker.class);
+        globalListenerClasses.add(FriendlyProtection.class);
+        globalListenerClasses.add(FunctionBan.class);
+        globalListenerClasses.add(JoinQuitListener.class);
+        globalListenerClasses.add(DeathDuringTask.class);
+        globalListenerClasses.add(PlayerRespawn.class);
+        globalListenerClasses.add(TPChecker.class);
+        globalListenerClasses.add(SpawnChecker.class);
+        globalListenerClasses.add(SculkSpreader.class);
+        globalListenerClasses.add(CreatureSpawnListener.class);
+        globalListenerClasses.add(CreatureDeathListener.class);
+        globalListenerClasses.add(AttributeChecker.class);
+
+        serializableClasses.add(PlayerBackpack.class);
+        serializableClasses.add(PlayerTaskRecord.class);
+        serializableClasses.add(OfflinePlayerRecord.class);
+    }
 
     @Override
     public void afterEnabled() {
@@ -102,42 +138,5 @@ public final class Siriuxa extends WolfirdPlugin {
         }
 
         serializableClasses.forEach(ConfigurationSerialization::unregisterClass);
-    }
-
-    /**
-     * 初始化配置文件
-     */
-    private static final List<Class<? extends YamlConfig>> configs = new ArrayList<>();
-    private static final List<Class<? extends FileDB>> databases = new ArrayList<>();
-    private static final List<Class<? extends WolfirdListener>> globalListenerClasses = new ArrayList<>();
-    private static final List<Class<? extends ConfigurationSerializable>> serializableClasses = new ArrayList<>();
-
-    static {
-        configs.add(Config.class);
-        configs.add(Lang.class);
-
-        databases.add(InventoryDB.class);
-        databases.add(OreDB.class);
-        databases.add(HuntDB.class);
-        databases.add(TaskRecordDB.class);
-
-        globalListenerClasses.add(OreChecker.class);
-        globalListenerClasses.add(HuntChecker.class);
-        globalListenerClasses.add(HurtChecker.class);
-        globalListenerClasses.add(FriendlyProtection.class);
-        globalListenerClasses.add(FunctionBan.class);
-        globalListenerClasses.add(JoinQuitListener.class);
-        globalListenerClasses.add(DeathDuringTask.class);
-        globalListenerClasses.add(PlayerRespawn.class);
-        globalListenerClasses.add(TPChecker.class);
-        globalListenerClasses.add(SpawnChecker.class);
-        globalListenerClasses.add(SculkSpreader.class);
-        globalListenerClasses.add(CreatureSpawnListener.class);
-        globalListenerClasses.add(CreatureDeathListener.class);
-        globalListenerClasses.add(AttributeChecker.class);
-
-        serializableClasses.add(PlayerBackpack.class);
-        serializableClasses.add(PlayerTaskRecord.class);
-        serializableClasses.add(OfflinePlayerRecord.class);
     }
 }

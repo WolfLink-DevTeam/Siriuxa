@@ -9,12 +9,12 @@ import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 
 @Singleton
 public class TeamLeave extends WolfirdCommand {
+    @Inject
+    private GlobalTeamService globalTeamService;
+
     public TeamLeave() {
         super(false, false, true, "sx team leave", "离开当前所在队伍。");
     }
-
-    @Inject
-    private GlobalTeamService globalTeamService;
 
     @Override
     protected void execute(CommandSender commandSender, String[] strings) {

@@ -9,12 +9,12 @@ import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 
 @Singleton
 public class TeamKick extends WolfirdCommand {
+    @Inject
+    private GlobalTeamService globalTeamService;
+
     public TeamKick() {
         super(false, false, true, "sx team kick {player}", "踢出指定玩家。");
     }
-
-    @Inject
-    private GlobalTeamService globalTeamService;
 
     @Override
     protected void execute(CommandSender commandSender, String[] strings) {

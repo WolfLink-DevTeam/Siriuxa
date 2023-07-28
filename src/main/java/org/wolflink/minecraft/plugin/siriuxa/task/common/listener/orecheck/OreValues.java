@@ -5,10 +5,13 @@ import org.bukkit.Material;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
-import org.wolflink.minecraft.plugin.siriuxa.file.database.OreDB;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.OreDB;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 矿物价值类
@@ -19,29 +22,6 @@ public class OreValues {
      * 材质 - 相对于铜块的价值
      */
     private static final EnumMap<Material, Double> valueMap = new EnumMap<>(Material.class);
-
-    static {
-        valueMap.put(Material.COPPER_BLOCK, 0.95);
-        valueMap.put(Material.COAL_BLOCK, 1.2);
-        valueMap.put(Material.IRON_BLOCK, 2.25);
-        valueMap.put(Material.GOLD_BLOCK, 2.5);
-        valueMap.put(Material.LAPIS_BLOCK, 0.75);
-        valueMap.put(Material.REDSTONE_BLOCK, 0.75);
-        valueMap.put(Material.DIAMOND_BLOCK, 7.0);
-        valueMap.put(Material.EMERALD_BLOCK, 5.0);
-    }
-
-    @Inject
-    private OreDB oreDB;
-    /**
-     * 矿物数量历史记录
-     */
-    private final EnumMap<Material, Integer> cacheMap = new EnumMap<>(Material.class);
-    private int totalCache = 0;
-    /**
-     * 今日矿物数量记录
-     */
-    private final EnumMap<Material, Integer> todayMap = new EnumMap<>(Material.class);
     /**
      * 整体价值倍率
      */
@@ -54,6 +34,29 @@ public class OreValues {
      * 最大记录天数
      */
     private static final int MAX_RECORD_DATE = 30;
+
+    static {
+        valueMap.put(Material.COPPER_BLOCK, 0.95);
+        valueMap.put(Material.COAL_BLOCK, 1.2);
+        valueMap.put(Material.IRON_BLOCK, 2.25);
+        valueMap.put(Material.GOLD_BLOCK, 2.5);
+        valueMap.put(Material.LAPIS_BLOCK, 0.75);
+        valueMap.put(Material.REDSTONE_BLOCK, 0.75);
+        valueMap.put(Material.DIAMOND_BLOCK, 7.0);
+        valueMap.put(Material.EMERALD_BLOCK, 5.0);
+    }
+
+    /**
+     * 矿物数量历史记录
+     */
+    private final EnumMap<Material, Integer> cacheMap = new EnumMap<>(Material.class);
+    /**
+     * 今日矿物数量记录
+     */
+    private final EnumMap<Material, Integer> todayMap = new EnumMap<>(Material.class);
+    @Inject
+    private OreDB oreDB;
+    private int totalCache = 0;
 
     public OreValues() {
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {

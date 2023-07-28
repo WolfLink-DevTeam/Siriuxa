@@ -17,6 +17,9 @@ import java.util.UUID;
  * 任务记录菜单
  */
 public class TaskRecordMenu extends Menu {
+    List<PlayerTaskRecord> totalRecordList = new ArrayList<>();
+    @Getter
+    private int page = 1;
     /**
      * 刷新周期设置小于0则为静态菜单
      * 静态菜单只会在打开时刷新一次
@@ -24,10 +27,6 @@ public class TaskRecordMenu extends Menu {
     public TaskRecordMenu(UUID ownerUuid) {
         super(ownerUuid, -1, "§0§l任务记录", 54);
     }
-
-    List<PlayerTaskRecord> totalRecordList = new ArrayList<>();
-    @Getter
-    private int page = 1;
 
     public void setPage(int value) {
         this.page = value;

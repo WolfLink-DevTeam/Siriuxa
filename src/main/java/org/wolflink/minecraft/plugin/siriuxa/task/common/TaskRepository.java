@@ -14,10 +14,11 @@ public class TaskRepository extends MapRepository<UUID, Task> {
         return explorationTask.getTaskUuid();
     }
 
-    public <T extends Task> T findByGlobalTeamPlayer(Class<T> taskClass,Player player) {
-        return findByGlobalTeamPlayerUuid(taskClass,player.getUniqueId());
+    public <T extends Task> T findByGlobalTeamPlayer(Class<T> taskClass, Player player) {
+        return findByGlobalTeamPlayerUuid(taskClass, player.getUniqueId());
     }
-    public <T extends Task> T findByGlobalTeamPlayerUuid(Class<T> taskClass,UUID uuid) {
+
+    public <T extends Task> T findByGlobalTeamPlayerUuid(Class<T> taskClass, UUID uuid) {
         for (Task task : findAll()) {
             if (!task.getClass().equals(taskClass)) continue;
             if (task.globalTeamContains(uuid)) {
@@ -26,10 +27,12 @@ public class TaskRepository extends MapRepository<UUID, Task> {
         }
         return null;
     }
+
     @Nullable
     public Task findByGlobalTeamPlayer(Player player) {
         return findByGlobalTeamPlayerUuid(player.getUniqueId());
     }
+
     public Task findByGlobalTeamPlayerUuid(UUID uuid) {
         for (Task task : findAll()) {
             if (task.globalTeamContains(uuid)) {
@@ -43,6 +46,7 @@ public class TaskRepository extends MapRepository<UUID, Task> {
     public <T extends Task> T findByTaskTeamPlayer(Class<T> taskClass, Player player) {
         return findByTaskTeamPlayerUuid(taskClass, player.getUniqueId());
     }
+
     public <T extends Task> T findByTaskTeamPlayerUuid(Class<T> taskClass, UUID uuid) {
         for (Task task : findAll()) {
             if (!task.getClass().equals(taskClass)) continue;
@@ -52,10 +56,12 @@ public class TaskRepository extends MapRepository<UUID, Task> {
         }
         return null;
     }
+
     @Nullable
     public Task findByTaskTeamPlayer(Player player) {
         return findByTaskTeamPlayerUuid(player.getUniqueId());
     }
+
     public Task findByTaskTeamPlayerUuid(UUID uuid) {
         for (Task task : findAll()) {
             if (task.taskTeamContains(uuid)) {

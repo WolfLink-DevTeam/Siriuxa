@@ -3,11 +3,11 @@ package org.wolflink.minecraft.plugin.siriuxa.menu.task;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.BorderIcon;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Menu;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
 import org.wolflink.minecraft.plugin.siriuxa.menu.difficulty.ExplorationDifficultyMenu;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.CreateTask;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.SelectDifficulty;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 
 import java.util.UUID;
 

@@ -5,20 +5,20 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeamRepository;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
-import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 @Singleton
 public class TeamInfo extends WolfirdCommand {
+    @Inject
+    private GlobalTeamRepository globalTeamRepository;
+
     public TeamInfo() {
         super(false, false, true, "sx team", "查看队伍详细信息");
     }
-
-    @Inject
-    private GlobalTeamRepository globalTeamRepository;
 
     /**
      * 当前任务：

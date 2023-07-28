@@ -12,14 +12,14 @@ import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 public class TPChecker extends WolfirdListener {
     @EventHandler(priority = EventPriority.LOWEST)
     void on(PlayerTeleportEvent event) {
-        if(event.getCause().equals(PlayerTeleportEvent.TeleportCause.SPECTATE)) {
+        if (event.getCause().equals(PlayerTeleportEvent.TeleportCause.SPECTATE)) {
             World fromWorld = event.getFrom().getWorld();
-            if(fromWorld == null) return;
-            if(event.getTo() == null) return;
+            if (fromWorld == null) return;
+            if (event.getTo() == null) return;
             World toWorld = event.getTo().getWorld();
-            if(toWorld == null) return;
-            if(fromWorld.equals(toWorld)) return;
-            Notifier.chat("你不能在观察者模式下跨世界传送！",event.getPlayer());
+            if (toWorld == null) return;
+            if (fromWorld.equals(toWorld)) return;
+            Notifier.chat("你不能在观察者模式下跨世界传送！", event.getPlayer());
             event.setCancelled(true);
         }
     }

@@ -30,26 +30,23 @@ public class EvacuationZone {
      */
     @Getter
     private final Location center;
-
-    /**
-     * 是否可用
-     */
-    private boolean available = false;
     /**
      * 撤离的安全区域半径
      */
     private final int safeRadius;
-
     /**
      * 归属的任务
      */
     private final Task task;
-
     // 用于设置指南针的SubScheduler
     private final SubScheduler subScheduler;
-
     // 用于存贮指南针已经生效的玩家的列表
     private final Set<Player> compassPlayers;
+    /**
+     * 是否可用
+     */
+    private boolean available = false;
+    private EditSession editSession;
 
     public EvacuationZone(Task task, World world, int x, int z, int safeRadius) {
         this.task = task;
@@ -97,8 +94,6 @@ public class EvacuationZone {
         }
         return playerSet;
     }
-
-    private EditSession editSession;
 
     public void generateSchematic() {
         editSession = IOC.getBean(WorldEditAPI.class).pasteEvacuationUnit(locationCommandSender);

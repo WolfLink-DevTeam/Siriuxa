@@ -18,6 +18,6 @@ public class DateAPI {
      * 年月日-时分秒毫秒
      */
     public String getTime(Calendar calendar) {
-        return getDate(calendar) + "-" + String.format("%2d%2d%2d%3d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND), calendar.get(Calendar.MILLISECOND)).replace(" ","0");
+        return getDate(calendar) + "-" + String.format("%2d%2d%2d%3d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND), calendar.get(Calendar.MILLISECOND)).replace(" ", "0");
     }
 }

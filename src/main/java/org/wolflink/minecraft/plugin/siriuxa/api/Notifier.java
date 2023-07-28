@@ -8,15 +8,20 @@ import org.bukkit.entity.Player;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.wolfird.framework.notifier.BaseNotifier;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Notifier {
+    private static final BaseNotifier notifier = Siriuxa.getInstance().getNotifier();
+    private static final Map<UUID, BossBar> barMap = new ConcurrentHashMap<>();
+    private static final Map<UUID, Integer> barTaskMap = new ConcurrentHashMap<>();
+
     private Notifier() {
         throw new UnsupportedOperationException("Utility class cannot be instantiated.");
     }
-
-    private static final BaseNotifier notifier = Siriuxa.getInstance().getNotifier();
 
     public static void info(String msg) {
         notifier.info(msg);
@@ -56,26 +61,24 @@ public class Notifier {
         });
     }
 
-    private static final Map<UUID, BossBar> barMap = new ConcurrentHashMap<>();
-    private static final Map<UUID, Integer> barTaskMap = new ConcurrentHashMap<>();
     /**
      * 以 BossBar 的形式展示3秒
      */
-    public static void bossBar(Player player,String msg) {
+    public static void bossBar(Player player, String msg) {
         BossBar bossBar;
-        if(barMap.containsKey(player.getUniqueId())) bossBar = barMap.get(player.getUniqueId());
+        if (barMap.containsKey(player.getUniqueId())) bossBar = barMap.get(player.getUniqueId());
         else {
             bossBar = Bukkit.createBossBar("", BarColor.WHITE, BarStyle.SOLID);
-            barMap.put(player.getUniqueId(),bossBar);
+            barMap.put(player.getUniqueId(), bossBar);
         }
         bossBar.setTitle(msg);
         bossBar.addPlayer(player);
-        if(barTaskMap.containsKey(player.getUniqueId())) {
+        if (barTaskMap.containsKey(player.getUniqueId())) {
             int taskId = barTaskMap.get(player.getUniqueId());
             Bukkit.getScheduler().cancelTask(taskId);
         }
         barTaskMap.put(player.getUniqueId(),
                 Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance(),
-                        ()-> bossBar.removePlayer(player),20 * 3).getTaskId());
+                        () -> bossBar.removePlayer(player), 20 * 3).getTaskId());
     }
 }

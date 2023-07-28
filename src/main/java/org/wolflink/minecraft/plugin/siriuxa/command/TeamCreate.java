@@ -4,8 +4,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
-import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeamService;
+import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 
 @Singleton
 public class TeamCreate extends WolfirdCommand {

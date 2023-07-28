@@ -14,11 +14,11 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 @Data
 public class SpawnerAttribute {
+    private final int spawnPeriodSecs;
+    private final Map<EntityType, Integer> weightMap = new EnumMap<>(EntityType.class);
     private double healthMultiple;
     private double movementMultiple;
     private double damageMultiple;
-    private final int spawnPeriodSecs;
-    private final Map<EntityType, Integer> weightMap = new EnumMap<>(EntityType.class);
 
     public SpawnerAttribute(TaskDifficulty taskDifficulty) {
         switch (taskDifficulty.getLevel()) {

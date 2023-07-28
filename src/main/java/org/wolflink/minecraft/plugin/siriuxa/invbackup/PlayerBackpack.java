@@ -27,6 +27,8 @@ import java.util.Map;
 @Json
 @NoArgsConstructor
 public final class PlayerBackpack implements ConfigurationSerializable {
+    @Getter
+    private static PlayerBackpack emptyBackpack = new PlayerBackpack();
     private ItemStack helmet;
     private ItemStack chestplate;
     private ItemStack leggings;
@@ -54,6 +56,20 @@ public final class PlayerBackpack implements ConfigurationSerializable {
         }
     }
 
+    public PlayerBackpack(Map<String, Object> map) {
+        helmet = (ItemStack) map.get("helmet");
+        chestplate = (ItemStack) map.get("chestplate");
+        leggings = (ItemStack) map.get("leggings");
+        boots = (ItemStack) map.get("boots");
+        offhand = (ItemStack) map.get("offhand");
+        totalExp = (int) map.get("totalExp");
+        items = (List<ItemStack>) map.get("items");
+    }
+
+    public static PlayerBackpack deserialize(Map<String, Object> map) {
+        return new PlayerBackpack(map);
+    }
+
     void apply(Player player) {
         EntityEquipment equipment = player.getEquipment();
         if (equipment == null) {
@@ -74,7 +90,7 @@ public final class PlayerBackpack implements ConfigurationSerializable {
             totalExp -= player.getExpToLevel();
             player.setLevel(player.getLevel() + 1);
         }
-        player.setExp((float)totalExp / player.getExpToLevel());
+        player.setExp((float) totalExp / player.getExpToLevel());
 
         Inventory inventory = player.getInventory();
         if (items != null) for (int i = 0; i < 36; i++) {
@@ -82,19 +98,6 @@ public final class PlayerBackpack implements ConfigurationSerializable {
         }
         else player.getInventory().clear();
         Notifier.debug("背包信息已应用至" + player.getName());
-    }
-
-    @Getter
-    private static PlayerBackpack emptyBackpack = new PlayerBackpack();
-
-    public PlayerBackpack(Map<String, Object> map) {
-        helmet = (ItemStack) map.get("helmet");
-        chestplate = (ItemStack) map.get("chestplate");
-        leggings = (ItemStack) map.get("leggings");
-        boots = (ItemStack) map.get("boots");
-        offhand = (ItemStack) map.get("offhand");
-        totalExp = (int) map.get("totalExp");
-        items = (List<ItemStack>) map.get("items");
     }
 
     @NotNull
@@ -109,9 +112,5 @@ public final class PlayerBackpack implements ConfigurationSerializable {
         map.put("totalExp", totalExp);
         map.put("items", items);
         return map;
-    }
-
-    public static PlayerBackpack deserialize(Map<String, Object> map) {
-        return new PlayerBackpack(map);
     }
 }

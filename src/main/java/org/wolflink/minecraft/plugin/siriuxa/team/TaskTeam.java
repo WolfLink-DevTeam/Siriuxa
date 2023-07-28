@@ -18,22 +18,28 @@ public class TaskTeam extends Team {
      */
     @Getter
     private final int initSize;
+
     public TaskTeam(GlobalTeam globalTeam) {
         super(new HashSet<>(globalTeam.getMemberUuids()));
         sourceTeamUuid = globalTeam.getTeamUuid();
         initSize = globalTeam.getMemberUuids().size();
     }
+
     @Override
     @SuppressWarnings("TaskTeam 不允许加入玩家")
-    void join(Player player){}
+    void join(Player player) {
+    }
+
     @Override
     @SuppressWarnings("TaskTeam 不允许加入玩家")
-    void join(UUID uuid) {}
+    void join(UUID uuid) {
+    }
 
     @Override
     public void leave(Player player) {
         leave(player.getUniqueId());
     }
+
     public void leave(OfflinePlayer offlinePlayer) {
         leave(offlinePlayer.getUniqueId());
     }

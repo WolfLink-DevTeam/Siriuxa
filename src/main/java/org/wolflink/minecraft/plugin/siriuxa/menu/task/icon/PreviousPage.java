@@ -9,6 +9,7 @@ import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskRecordMenu;
 
 public class PreviousPage extends Icon {
     private final TaskRecordMenu taskRecordMenu;
+
     public PreviousPage(TaskRecordMenu taskRecordMenu) {
         super(false);
         this.taskRecordMenu = taskRecordMenu;
@@ -16,12 +17,12 @@ public class PreviousPage extends Icon {
 
     @Override
     protected @NonNull ItemStack createIcon() {
-        return fastCreateItemStack(Material.ENDER_PEARL,1,"上一页");
+        return fastCreateItemStack(Material.ENDER_PEARL, 1, "上一页");
     }
 
     @Override
     public void leftClick(Player player) {
-        if(taskRecordMenu.hasPreviousPage()) taskRecordMenu.setPage(taskRecordMenu.getPage()-1);
+        if (taskRecordMenu.hasPreviousPage()) taskRecordMenu.setPage(taskRecordMenu.getPage() - 1);
     }
 
     @Override

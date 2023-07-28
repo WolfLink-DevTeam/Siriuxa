@@ -2,10 +2,10 @@ package org.wolflink.minecraft.plugin.siriuxa.task.common.region;
 
 import org.bukkit.Location;
 import org.wolflink.common.ioc.IOC;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
-import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 
 import java.util.Objects;
 

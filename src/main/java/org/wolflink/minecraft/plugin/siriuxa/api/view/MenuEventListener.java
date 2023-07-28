@@ -8,8 +8,8 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
-import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
+import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
 @Singleton
 public class MenuEventListener extends WolfirdListener {

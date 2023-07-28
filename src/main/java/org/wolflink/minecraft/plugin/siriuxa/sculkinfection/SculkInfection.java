@@ -42,7 +42,8 @@ public class SculkInfection implements ISwitchable {
     private final Map<UUID, Integer> infectionMap = new ConcurrentHashMap<>();
 
     private final SubScheduler subScheduler = new SubScheduler();
-
+    private final Set<UUID> milkCDSet = new HashSet<>();
+    private final SculkInfectionListener sculkInfectionListener = new SculkInfectionListener(this);
     @Inject
     private BlockAPI blockAPI;
     @Inject
@@ -88,10 +89,10 @@ public class SculkInfection implements ISwitchable {
         UUID pUuid = player.getUniqueId();
         List<Location> nearbySculks = blockAPI.searchBlock(Material.SCULK, player.getLocation(), 7);
         int sculkAmount = (int) (nearbySculks.size() * 1.25);
-        if(sculkAmount >= 64) sculkAmount = 64;
+        if (sculkAmount >= 64) sculkAmount = 64;
         addInfectionValue(player, sculkAmount - 20);
-        Material blockType = player.getLocation().add(0,-1,0).getBlock().getType();
-        if(sculkTypes.contains(blockType)) addInfectionValue(player,20);
+        Material blockType = player.getLocation().add(0, -1, 0).getBlock().getType();
+        if (sculkTypes.contains(blockType)) addInfectionValue(player, 20);
         int value = getInfectionValue(pUuid);
         ThreadLocalRandom random = ThreadLocalRandom.current();
         double randDouble = random.nextDouble();
@@ -143,8 +144,6 @@ public class SculkInfection implements ISwitchable {
         addInfectionValue(player, 10);
     }
 
-    private final Set<UUID> milkCDSet = new HashSet<>();
-
     public void drinkMilk(Player player) {
         if (!(player.getWorld().getName().equals(config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME)))) return;
         // 不是生存模式
@@ -154,14 +153,12 @@ public class SculkInfection implements ISwitchable {
             milkCDSet.add(player.getUniqueId());
             subScheduler.runTaskLater(() -> {
                 milkCDSet.remove(player.getUniqueId());
-                if(player.isOnline()) Notifier.chat("你可以再次饮用牛奶了。",player);
+                if (player.isOnline()) Notifier.chat("你可以再次饮用牛奶了。", player);
             }, 20 * 180L);
             addInfectionValue(player, -500);
             Notifier.chat("喝了牛奶之后你感觉好多了。", player);
         }
     }
-
-    private final SculkInfectionListener sculkInfectionListener = new SculkInfectionListener(this);
 
     @Override
     public void enable() {

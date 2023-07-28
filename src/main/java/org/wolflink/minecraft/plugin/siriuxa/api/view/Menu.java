@@ -16,24 +16,13 @@ import java.util.stream.Stream;
 public abstract class Menu {
     private final Inventory inventory;
     private final long refreshTicks;
-    private Icon[] icons;
     @Getter
     private final String title;
     @Getter
     private final int size;
     @Getter
     private final UUID ownerUuid;
-
-    @Nullable
-    public Player getOwner() {
-        Player player = Bukkit.getPlayer(ownerUuid);
-        if (player == null || !player.isOnline()) return null;
-        return player;
-    }
-    @NonNull
-    public OfflinePlayer getOfflineOwner() {
-        return Bukkit.getOfflinePlayer(ownerUuid);
-    }
+    private Icon[] icons;
 
     /**
      * 刷新周期设置小于0则为静态菜单
@@ -52,6 +41,18 @@ public abstract class Menu {
             if (refreshTicks <= 0) return;
             Siriuxa.getInstance().getSubScheduler().runTaskTimer(this::refresh, refreshTicks, refreshTicks);
         }, 1);
+    }
+
+    @Nullable
+    public Player getOwner() {
+        Player player = Bukkit.getPlayer(ownerUuid);
+        if (player == null || !player.isOnline()) return null;
+        return player;
+    }
+
+    @NonNull
+    public OfflinePlayer getOfflineOwner() {
+        return Bukkit.getOfflinePlayer(ownerUuid);
     }
 
     /**

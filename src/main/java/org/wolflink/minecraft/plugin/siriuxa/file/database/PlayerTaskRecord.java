@@ -16,25 +16,24 @@ import java.util.UUID;
  */
 @Data
 public class PlayerTaskRecord implements ConfigurationSerializable {
-    public PlayerTaskRecord(@NonNull UUID playerUuid,@NonNull Task task) {
-        this.playerUuid = playerUuid;
-        taskUuid = task.getTaskUuid();
-        isSuccess = false;
-        teamSize = task.size();
-        taskType = task.getName();
-        taskDifficulty = task.getTaskDifficulty().getName();
-        isEscape = false;
-        isClaimed = false;
-        wheat = task.getTaskWheat();
-    }
     private final UUID playerUuid;
     private final UUID taskUuid;
-
+    /**
+     * 团队规模
+     */
+    private final int teamSize;
+    /**
+     * 任务难度
+     */
+    private final String taskDifficulty;
+    /**
+     * 任务类型
+     */
+    private final String taskType;
     /**
      * 任务奖励是否已被领取
      */
     private boolean isClaimed;
-
     /**
      * 玩家是否逃跑
      */
@@ -56,41 +55,22 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
      */
     private long finishedTimeInMills;
     /**
-     * 团队规模
-     */
-    private final int teamSize;
-    /**
-     * 任务难度
-     */
-    private final String taskDifficulty;
-    /**
-     * 任务类型
-     */
-    private final String taskType;
-    /**
      * 剩余麦穗
      */
     private double wheat;
-
-    @NotNull
-    @Override
-    public Map<String, Object> serialize() {
-        Map<String,Object> map = new HashMap<>();
-        map.put("playerUuid",playerUuid.toString());
-        map.put("taskUuid",taskUuid.toString());
-        map.put("isSuccess",isSuccess);
-        map.put("playerBackpack",playerBackpack);
-        map.put("usingTimeInMills",Long.toString(usingTimeInMills));
-        map.put("finishedTimeInMills",Long.toString(finishedTimeInMills));
-        map.put("teamSize",teamSize);
-        map.put("taskDifficulty",taskDifficulty);
-        map.put("taskType",taskType);
-        map.put("isEscape",isEscape);
-        map.put("isClaimed",isClaimed);
-        map.put("wheat",wheat);
-        return map;
+    public PlayerTaskRecord(@NonNull UUID playerUuid, @NonNull Task task) {
+        this.playerUuid = playerUuid;
+        taskUuid = task.getTaskUuid();
+        isSuccess = false;
+        teamSize = task.size();
+        taskType = task.getName();
+        taskDifficulty = task.getTaskDifficulty().getName();
+        isEscape = false;
+        isClaimed = false;
+        wheat = task.getTaskWheat();
     }
-    public PlayerTaskRecord(Map<String,Object> map) {
+
+    public PlayerTaskRecord(Map<String, Object> map) {
         playerUuid = UUID.fromString((String) map.get("playerUuid"));
         taskUuid = UUID.fromString((String) map.get("taskUuid"));
         isSuccess = (boolean) map.get("isSuccess");
@@ -104,7 +84,27 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
         isEscape = (boolean) map.get("isEscape");
         wheat = (double) map.get("wheat");
     }
-    public static PlayerTaskRecord deserialize(Map<String,Object> map) {
+
+    public static PlayerTaskRecord deserialize(Map<String, Object> map) {
         return new PlayerTaskRecord(map);
+    }
+
+    @NotNull
+    @Override
+    public Map<String, Object> serialize() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("playerUuid", playerUuid.toString());
+        map.put("taskUuid", taskUuid.toString());
+        map.put("isSuccess", isSuccess);
+        map.put("playerBackpack", playerBackpack);
+        map.put("usingTimeInMills", Long.toString(usingTimeInMills));
+        map.put("finishedTimeInMills", Long.toString(finishedTimeInMills));
+        map.put("teamSize", teamSize);
+        map.put("taskDifficulty", taskDifficulty);
+        map.put("taskType", taskType);
+        map.put("isEscape", isEscape);
+        map.put("isClaimed", isClaimed);
+        map.put("wheat", wheat);
+        return map;
     }
 }

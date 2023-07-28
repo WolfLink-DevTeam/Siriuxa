@@ -19,9 +19,8 @@ import java.util.Random;
 
 public class OceanSpawnStrategy extends SpawnStrategy {
 
-    private final Random random = new Random();
-
     private static final int SAFE_RADIUS = 8;
+    private final Random random = new Random();
 
     public OceanSpawnStrategy(SpawnerAttribute spawnerAttribute) {
         super(spawnerAttribute);
@@ -31,6 +30,7 @@ public class OceanSpawnStrategy extends SpawnStrategy {
     public boolean isApplicable(Player player) {
         return IOC.getBean(BlockAPI.class).checkIsOcean(player.getLocation());
     }
+
     @Override
     void spawn(Player player, final int triedCount) {
         if (triedCount <= 0) return;
@@ -57,12 +57,12 @@ public class OceanSpawnStrategy extends SpawnStrategy {
             }
             EntityType entityType = random.nextDouble() < 0.85 ? EntityType.DROWNED : EntityType.GUARDIAN;
             Monster monster = (Monster) world.spawnEntity(summonLocation, entityType);
-            IOC.getBean(AttributeAPI.class).multiplyMonsterAttribute(monster, "o_health",
+            IOC.getBean(AttributeAPI.class).multiplyAttribute(monster, "o_health",
                     Attribute.GENERIC_MAX_HEALTH, getSpawnerAttribute().getHealthMultiple());
             monster.setHealth(Objects.requireNonNull(monster.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
-            IOC.getBean(AttributeAPI.class).multiplyMonsterAttribute(monster, "o_speed",
+            IOC.getBean(AttributeAPI.class).multiplyAttribute(monster, "o_speed",
                     Attribute.GENERIC_MOVEMENT_SPEED, getSpawnerAttribute().getMovementMultiple());
-            IOC.getBean(AttributeAPI.class).multiplyMonsterAttribute(monster, "o_attack",
+            IOC.getBean(AttributeAPI.class).multiplyAttribute(monster, "o_attack",
                     Attribute.GENERIC_ATTACK_DAMAGE, getSpawnerAttribute().getDamageMultiple());
         });
     }

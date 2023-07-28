@@ -16,18 +16,18 @@ public abstract class FileDB {
     protected final File folder;
     private final Map<String, FileConfiguration> fileConfigurations = new HashMap<>();
 
-    @Nullable
-    public FileConfiguration getFileConfiguration(File file) {
-        if(!fileConfigurations.containsKey(file.getAbsolutePath())) {
-            Notifier.debug("没能找到文件"+file.getAbsolutePath()+"的FileConfiguration对象");
-            return null;
-        }
-        return fileConfigurations.get(file.getAbsolutePath());
-    }
-
     protected FileDB(String folderName) {
         folder = new File(Siriuxa.getInstance().getDataFolder(), folderName);
         if (!folder.exists()) folder.mkdirs();
+    }
+
+    @Nullable
+    public FileConfiguration getFileConfiguration(File file) {
+        if (!fileConfigurations.containsKey(file.getAbsolutePath())) {
+            Notifier.debug("没能找到文件" + file.getAbsolutePath() + "的FileConfiguration对象");
+            return null;
+        }
+        return fileConfigurations.get(file.getAbsolutePath());
     }
 
     private void load(File folder) {

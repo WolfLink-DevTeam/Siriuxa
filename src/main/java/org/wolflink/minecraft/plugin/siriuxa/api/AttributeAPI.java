@@ -11,7 +11,7 @@ public class AttributeAPI {
     /**
      * 给指定attribute直接增加给定值
      */
-    public void addMonsterAttribute(Attributable attributable, String modifierName, Attribute attribute, double value) {
+    public void addAttribute(Attributable attributable, String modifierName, Attribute attribute, double value) {
         AttributeInstance attributeInstance = attributable.getAttribute(attribute);
         if (attributeInstance != null) {
             attributeInstance.addModifier(new AttributeModifier(modifierName, value, AttributeModifier.Operation.ADD_NUMBER));
@@ -21,7 +21,7 @@ public class AttributeAPI {
     /**
      * 给指定attribute的值乘以value
      */
-    public void multiplyMonsterAttribute(Attributable attributable, String modifierName, Attribute attribute, double value) {
+    public void multiplyAttribute(Attributable attributable, String modifierName, Attribute attribute, double value) {
         AttributeInstance attributeInstance = attributable.getAttribute(attribute);
         if (attributeInstance != null) {
             attributeInstance.addModifier(new AttributeModifier(modifierName, value - 1, AttributeModifier.Operation.MULTIPLY_SCALAR_1));

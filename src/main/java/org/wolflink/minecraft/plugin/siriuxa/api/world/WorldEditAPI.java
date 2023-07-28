@@ -25,8 +25,8 @@ import java.util.Random;
 
 @Singleton
 public class WorldEditAPI {
-    File schemFolder;
     private final Random random = new Random();
+    File schemFolder;
 
     public WorldEditAPI() {
         schemFolder = new File(Framework.getInstance().getDataFolder(), "seriuxajourney_schematic");

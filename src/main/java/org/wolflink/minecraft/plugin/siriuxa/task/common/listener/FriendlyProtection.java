@@ -7,13 +7,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeamRepository;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
-import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 @Singleton
 public class FriendlyProtection extends WolfirdListener {
@@ -34,7 +34,7 @@ public class FriendlyProtection extends WolfirdListener {
         if (aGlobalTeam != bGlobalTeam) return; // 不在同一个队伍
         Task task = aGlobalTeam.getSelectedTask();
         if (task == null) return; // 没选择任务
-        if(!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 没在游戏阶段
+        if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 没在游戏阶段
         TaskDifficulty taskDifficulty = task.getTaskDifficulty();
         int level = taskDifficulty.getLevel();
         if (level <= 2) {

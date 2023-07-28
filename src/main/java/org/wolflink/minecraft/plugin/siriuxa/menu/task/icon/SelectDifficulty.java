@@ -7,9 +7,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
 import org.wolflink.minecraft.plugin.siriuxa.menu.difficulty.ExplorationDifficultyMenu;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskMenu;
 
 public class SelectDifficulty extends Icon {
