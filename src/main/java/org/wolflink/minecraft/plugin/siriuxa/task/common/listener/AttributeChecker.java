@@ -22,7 +22,6 @@ public class AttributeChecker extends WolfirdListener {
         if (!player.isOnline()) return;
         AttributeInstance attributeInstance = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         if (attributeInstance == null) return;
-        if (attributeInstance.getValue() == 40.0) return;
         if (attributeInstance.getValue() == 20.0) {
             attributeInstance.addModifier(healthModifier);
             player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());

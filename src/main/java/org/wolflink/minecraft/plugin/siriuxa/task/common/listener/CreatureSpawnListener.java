@@ -1,4 +1,4 @@
-package org.wolflink.minecraft.plugin.siriuxa.monster;
+package org.wolflink.minecraft.plugin.siriuxa.task.common.listener;
 
 import org.bukkit.World;
 import org.bukkit.entity.Monster;
