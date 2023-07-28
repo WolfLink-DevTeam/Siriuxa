@@ -65,6 +65,7 @@ public class FunctionBan extends WolfirdListener {
         availableCommandPrefixes.add("/em");
         availableCommandPrefixes.add("/elitemobs");
         availableCommandPrefixes.add("/ag");
+        availableCommandPrefixes.add("/giveup");
     }
     @EventHandler(priority = EventPriority.MONITOR)
     void banTaskCommand(PlayerCommandPreprocessEvent event) {
