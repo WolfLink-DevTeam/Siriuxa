@@ -66,7 +66,7 @@ public class SculkInfection implements ISwitchable {
     /**
      * 刷新玩家的感染值
      * 玩家站在潜声方块上，每秒获得 20 点感染值
-     * 每秒获得 附近8格内潜声方块数量 - 20 点感染值，，最多检测80个方块
+     * 每秒获得 附近8格内潜声方块数量x1.25 - 20 点感染值，，最多检测64个方块
      * 如果不处在附近，则每秒 -20 点感染值
      * 牛奶可以减少 500 点感染值
      * <p>
@@ -87,8 +87,8 @@ public class SculkInfection implements ISwitchable {
         }
         UUID pUuid = player.getUniqueId();
         List<Location> nearbySculks = blockAPI.searchBlock(Material.SCULK, player.getLocation(), 7);
-        int sculkAmount = nearbySculks.size();
-        if(sculkAmount >= 80) sculkAmount = 80;
+        int sculkAmount = (int) (nearbySculks.size() * 1.25);
+        if(sculkAmount >= 64) sculkAmount = 64;
         addInfectionValue(player, sculkAmount - 20);
         Material blockType = player.getLocation().add(0,-1,0).getBlock().getType();
         if(sculkTypes.contains(blockType)) addInfectionValue(player,20);
