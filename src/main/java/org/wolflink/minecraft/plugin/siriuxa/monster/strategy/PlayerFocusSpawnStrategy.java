@@ -3,11 +3,9 @@ package org.wolflink.minecraft.plugin.siriuxa.monster.strategy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.attribute.Attributable;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Rabbit;
+import org.bukkit.entity.*;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.AttributeAPI;
@@ -93,18 +91,20 @@ public class PlayerFocusSpawnStrategy extends SpawnStrategy {
                     return;
                 }
                 EntityType entityType = getSpawnerAttribute().randomType();
-                Monster monster = (Monster) world.spawnEntity(summonLocation, entityType);
+                Entity entity = world.spawnEntity(summonLocation, entityType);
                 if (entityType.equals(EntityType.RABBIT)) {
-                    Rabbit rabbit = (Rabbit) monster;
+                    Rabbit rabbit = (Rabbit) entity;
                     rabbit.setRabbitType(Rabbit.Type.THE_KILLER_BUNNY);
                 }
-                IOC.getBean(AttributeAPI.class).multiplyAttribute(monster, "pf_health",
-                        Attribute.GENERIC_MAX_HEALTH, getSpawnerAttribute().getMovementMultiple());
-                monster.setHealth(Objects.requireNonNull(monster.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
-                IOC.getBean(AttributeAPI.class).multiplyAttribute(monster, "pf_speed",
-                        Attribute.GENERIC_MOVEMENT_SPEED, getSpawnerAttribute().getMovementMultiple());
-                IOC.getBean(AttributeAPI.class).multiplyAttribute(monster, "pf_attack",
-                        Attribute.GENERIC_ATTACK_DAMAGE, getSpawnerAttribute().getDamageMultiple());
+                else if(entity instanceof Monster monster) {
+                    IOC.getBean(AttributeAPI.class).multiplyAttribute(monster, "pf_health",
+                            Attribute.GENERIC_MAX_HEALTH, getSpawnerAttribute().getMovementMultiple());
+                    monster.setHealth(Objects.requireNonNull(monster.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
+                    IOC.getBean(AttributeAPI.class).multiplyAttribute(monster, "pf_speed",
+                            Attribute.GENERIC_MOVEMENT_SPEED, getSpawnerAttribute().getMovementMultiple());
+                    IOC.getBean(AttributeAPI.class).multiplyAttribute(monster, "pf_attack",
+                            Attribute.GENERIC_ATTACK_DAMAGE, getSpawnerAttribute().getDamageMultiple());
+                }
             });
         }, 20 * 3L);
     }
