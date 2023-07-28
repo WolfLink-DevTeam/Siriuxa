@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 
 import java.util.ArrayList;
@@ -61,6 +62,18 @@ public abstract class TaskRegion {
     }
 
     /**
+     * 获取边界进度条
+     */
+    private String getBorderBar(Player player) {
+        double percent = distanceToBorderPercent(player);
+        int temp = (int) (percent * 50);
+        String lineColor = "§a";
+        if (temp <= 15) lineColor = "§e";
+        if (temp <= 5) lineColor = "§c";
+        String progressBar = "§f%img_mc_barrier% " + lineColor + "§m" + " ".repeat(temp) + "§r§f%img_mc_totem_of_undying%§7§m" + " ".repeat(50 - temp) + "§r §f%img_mc_end_crystal%";
+        return PlaceholderAPI.setPlaceholders(player, progressBar);
+    }
+    /**
      * 检测玩家是否在边界外
      * 是则造成伤害
      */
@@ -75,18 +88,11 @@ public abstract class TaskRegion {
             if (percent <= 0.03) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 5, 0));
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§8[ §e! §8] §c被严重感染的空气使你感到不适..."));
-            } else {
-                int temp = (int) (percent * 50);
-                String lineColor = "§a";
-                if (temp <= 15) lineColor = "§e";
-                if (temp <= 5) lineColor = "§c";
-                String progressBar = "§f%img_mc_barrier% " + lineColor + "§m" + " ".repeat(temp) + "§r§f%img_mc_totem_of_undying%§7§m" + " ".repeat(50 - temp) + "§r §f%img_mc_end_crystal%";
-                progressBar = PlaceholderAPI.setPlaceholders(player, progressBar);
-                bossBar.setTitle(progressBar);
-                bossBar.addPlayer(player);
             }
+            Notifier.bossBar(player,getBorderBar(player));
         }
     }
+
 
     /**
      * 当前坐标距离最短边界距离 / 边界半径

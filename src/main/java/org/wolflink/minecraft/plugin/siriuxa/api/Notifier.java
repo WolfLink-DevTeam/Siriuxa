@@ -1,13 +1,15 @@
 package org.wolflink.minecraft.plugin.siriuxa.api;
 
 import org.bukkit.Bukkit;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.wolfird.framework.notifier.BaseNotifier;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Notifier {
     private Notifier() {
@@ -52,5 +54,23 @@ public class Notifier {
             if (!p.isOnline()) return;
             notifier.chat(msg, p);
         });
+    }
+
+    private static final Map<UUID, BossBar> barMap = new ConcurrentHashMap<>();
+
+    /**
+     * 以 BossBar 的形式展示3秒
+     */
+    public static void bossBar(Player player,String msg) {
+        BossBar bossBar;
+        if(barMap.containsKey(player.getUniqueId())) bossBar = barMap.get(player.getUniqueId());
+        else {
+            bossBar = Bukkit.createBossBar("", BarColor.WHITE, BarStyle.SOLID);
+            barMap.put(player.getUniqueId(),bossBar);
+        }
+        bossBar.setTitle(msg);
+        bossBar.addPlayer(player);
+        Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance()
+                ,()-> bossBar.removePlayer(player),20 * 3);
     }
 }
