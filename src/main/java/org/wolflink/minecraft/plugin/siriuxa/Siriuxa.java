@@ -134,6 +134,7 @@ public final class Siriuxa extends WolfirdPlugin {
         globalListenerClasses.add(SculkSpreader.class);
         globalListenerClasses.add(CreatureSpawnListener.class);
         globalListenerClasses.add(CreatureDeathListener.class);
+        globalListenerClasses.add(AttributeChecker.class);
 
         serializableClasses.add(PlayerBackpack.class);
         serializableClasses.add(PlayerTaskRecord.class);
