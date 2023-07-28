@@ -9,20 +9,23 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
+import java.util.Objects;
+
 @Singleton
 public class AttributeChecker extends WolfirdListener {
 
-    private static final AttributeModifier healthModifier = new AttributeModifier("40-health-modifier",20, AttributeModifier.Operation.ADD_NUMBER);
+    private static final AttributeModifier healthModifier = new AttributeModifier("40-health-modifier", 20, AttributeModifier.Operation.ADD_NUMBER);
 
     @EventHandler
     void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if(!player.isOnline()) return;
+        if (!player.isOnline()) return;
         AttributeInstance attributeInstance = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-        if(attributeInstance == null) return;
-        if(attributeInstance.getValue() == 20.0) {
+        if (attributeInstance == null) return;
+        if (attributeInstance.getValue() == 40.0) return;
+        if (attributeInstance.getValue() == 20.0) {
             attributeInstance.addModifier(healthModifier);
+            player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
         }
-
     }
 }
