@@ -47,13 +47,6 @@ public class MonsterSpawnBox {
      * 符合生成怪物的条件
      * 即：上三格不为方块，底部为方块
      */
-    private static final Set<Material> blacklistType = new HashSet<>();
-
-    static {
-        blacklistType.add(Material.WATER);
-        blacklistType.add(Material.LAVA);
-        blacklistType.add(Material.BEDROCK);
-    }
     private static final Set<Material> availableTypes = new HashSet<>();
     static {
         availableTypes.add(Material.AIR);
@@ -69,11 +62,9 @@ public class MonsterSpawnBox {
         Material b1 = box[1].getBlock().getType();
         Material b2 = box[2].getBlock().getType();
         Material b3 = box[3].getBlock().getType();
-        if (blacklistType.contains(b0) || blacklistType.contains(b1) || blacklistType.contains(b2) || blacklistType.contains(b3))
-            return false;
         return box[0].getBlock().getType().isSolid()
-                && (!box[1].getBlock().isPassable())
-                && (!box[2].getBlock().getType().isSolid())
-                && (!box[3].getBlock().getType().isSolid());
+                && availableTypes.contains(b1)
+                && availableTypes.contains(b2)
+                && availableTypes.contains(b3);
     }
 }

@@ -23,6 +23,10 @@ public abstract class SpawnStrategy {
     /**
      * 具体的刷怪算法
      * 异步计算，同步生成
+     * 异常重试 5 次
      */
-    public abstract void spawn(Player player);
+    public void spawn(Player player) {
+        spawn(player,5);
+    }
+    abstract void spawn(Player player,int triedCount);
 }

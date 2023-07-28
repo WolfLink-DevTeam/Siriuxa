@@ -33,10 +33,11 @@ public class PlayerFocusSpawnStrategy extends SpawnStrategy {
     }
 
     private static final int SAFE_RADIUS = 15;
-    private static final int MAX_RADIUS = 35;
+    private static final int MAX_RADIUS = 25;
 
     @Override
-    public void spawn(Player player) {
+    void spawn(Player player,int triedCount) {
+        if(triedCount <= 0) return;
         List<Location> locList = new ArrayList<>();
         Location firstLoc = player.getLocation();
         boolean[] available = new boolean[]{true};
@@ -79,12 +80,18 @@ public class PlayerFocusSpawnStrategy extends SpawnStrategy {
             LocationAPI locationAPI = IOC.getBean(LocationAPI.class);
             Location goalLocation = locationAPI.getLocationByAngle(averLocation, randYaw, randDistance);
             Location summonLocation = locationAPI.getNearestSurface(goalLocation, 16);
-            if (summonLocation == null) return;
+            if (summonLocation == null) {
+                spawn(player,triedCount - 1);
+                return;
+            }
             Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> {
                 World world = firstLoc.getWorld();
                 assert world != null;
-                if (!world.getNearbyEntities(summonLocation, 8, 4, 8, entity -> entity.getType() == EntityType.PLAYER).isEmpty())
+                if (!world.getNearbyEntities(summonLocation, 8, 4, 8,
+                        entity -> entity.getType() == EntityType.PLAYER).isEmpty()) {
+                    spawn(player,triedCount - 1);
                     return;
+                }
                 EntityType entityType = getSpawnerAttribute().randomType();
                 Monster monster = (Monster) world.spawnEntity(summonLocation, entityType);
                 if (entityType.equals(EntityType.RABBIT)) {

@@ -26,7 +26,7 @@ public class SpawnerAttribute {
                 healthMultiple = 0.5;
                 movementMultiple = 0.8;
                 damageMultiple = 0.5;
-                spawnPeriodSecs = 20;
+                spawnPeriodSecs = 15;
                 weightMap.put(EntityType.ZOMBIE, 50);
                 weightMap.put(EntityType.HUSK, 50);
                 weightMap.put(EntityType.ZOMBIE_VILLAGER, 50);
@@ -40,7 +40,7 @@ public class SpawnerAttribute {
                 healthMultiple = 0.8;
                 movementMultiple = 1.0;
                 damageMultiple = 0.8;
-                spawnPeriodSecs = 14;
+                spawnPeriodSecs = 12;
                 weightMap.put(EntityType.ZOMBIE, 50);
                 weightMap.put(EntityType.HUSK, 50);
                 weightMap.put(EntityType.ZOMBIE_VILLAGER, 50);
@@ -54,7 +54,7 @@ public class SpawnerAttribute {
                 healthMultiple = 1.0;
                 movementMultiple = 1.1;
                 damageMultiple = 1.0;
-                spawnPeriodSecs = 10;
+                spawnPeriodSecs = 9;
                 weightMap.put(EntityType.ZOMBIE, 45);
                 weightMap.put(EntityType.HUSK, 45);
                 weightMap.put(EntityType.ZOMBIE_VILLAGER, 45);
@@ -71,7 +71,7 @@ public class SpawnerAttribute {
                 healthMultiple = 1.2;
                 movementMultiple = 1.2;
                 damageMultiple = 1.2;
-                spawnPeriodSecs = 8;
+                spawnPeriodSecs = 7;
                 weightMap.put(EntityType.ZOMBIE, 40);
                 weightMap.put(EntityType.HUSK, 40);
                 weightMap.put(EntityType.ZOMBIE_VILLAGER, 40);
