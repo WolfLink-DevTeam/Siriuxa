@@ -17,7 +17,7 @@ import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskService;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
 @Singleton
-public class JoinQuitListener extends WolfirdListener {
+public class TaskJoinQuitListener extends WolfirdListener {
     @Inject
     private TaskRepository taskRepository;
     @Inject
