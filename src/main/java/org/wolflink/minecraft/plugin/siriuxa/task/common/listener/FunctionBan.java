@@ -59,14 +59,21 @@ public class FunctionBan extends WolfirdListener {
         if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 没在游戏阶段
         if (event.getRightClicked().getType().equals(EntityType.VILLAGER)) event.setCancelled(true);
     }
+
     private static final Set<String> availableCommandPrefixes = new HashSet<>();
+
     static {
         availableCommandPrefixes.add("/sx lobby");
+        availableCommandPrefixes.add("/sx help");
         availableCommandPrefixes.add("/em");
         availableCommandPrefixes.add("/elitemobs");
         availableCommandPrefixes.add("/ag");
+        availableCommandPrefixes.add("/tps");
+        availableCommandPrefixes.add("/music");
+        availableCommandPrefixes.add("/help");
         availableCommandPrefixes.add("/giveup");
     }
+
     @EventHandler(priority = EventPriority.MONITOR)
     void banTaskCommand(PlayerCommandPreprocessEvent event) {
         if (event.getPlayer().isOp()) return; // 不处理管理员
@@ -75,7 +82,7 @@ public class FunctionBan extends WolfirdListener {
         if (player.getWorld().getName().equals(IOC.getBean(Config.class).get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME))) {
             // 允许在任务过程中执行的白名单指令
             for (String prefix : availableCommandPrefixes) {
-                if(event.getMessage().startsWith(prefix))return;
+                if (event.getMessage().startsWith(prefix)) return;
             }
             event.setCancelled(true);
         }
