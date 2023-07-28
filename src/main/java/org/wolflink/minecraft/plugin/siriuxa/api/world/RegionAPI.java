@@ -16,7 +16,7 @@ public class RegionAPI {
 
 
     public Location autoGetRegionCenter(World world) {
-        return autoGetRegionCenter(world,3);
+        return autoGetRegionCenter(world,5);
     }
     /**
      * 根据区块索引指针划分区块区域
