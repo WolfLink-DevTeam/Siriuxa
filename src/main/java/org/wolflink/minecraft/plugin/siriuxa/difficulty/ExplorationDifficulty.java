@@ -1,43 +1,39 @@
 package org.wolflink.minecraft.plugin.siriuxa.difficulty;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.bukkit.Material;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 @EqualsAndHashCode(callSuper = true)
-@Data
-public class ExplorationDifficulty extends TaskDifficulty {
-    /**
-     * 受伤麦穗惩罚(每1点伤害)
-     */
-    private final double hurtWheatCost;
-    /**
-     * 伤害倍率
-     */
-    private final double hurtDamageMultiple;
-
+public class ExplorationDifficulty extends WheatTaskDifficulty implements ConfigurationSerializable {
     /**
      * 带回格数
      */
     private final int bringSlotAmount;
-
-    /**
-     * 麦穗转化率
-     */
-    private final double wheatGainPercent;
-    /**
-     * 经验转化率
-     */
-    private final double expGainPercent;
-
     @Builder
-    public ExplorationDifficulty(Material icon, String color, int level, String name, int wheatCost, int wheatSupply, double baseWheatLoss, double wheatLostAcceleratedSpeed, double hurtWheatCost, double hurtDamageMultiple, int bringSlotAmount, double wheatGainPercent, double expGainPercent) {
-        super(icon, color, level, name, wheatCost, wheatSupply, baseWheatLoss, wheatLostAcceleratedSpeed);
-        this.hurtWheatCost = hurtWheatCost;
-        this.hurtDamageMultiple = hurtDamageMultiple;
+    public ExplorationDifficulty(Material icon, String color, int level, String name, int wheatCost, int wheatSupply, double baseWheatLoss, double wheatLostAcceleratedSpeed, double hurtWheatCost, double hurtDamageMultiple, double rewardMultiple, int bringSlotAmount) {
+        super(icon, color, level, name, wheatCost, wheatSupply, baseWheatLoss, wheatLostAcceleratedSpeed, hurtWheatCost, hurtDamageMultiple, rewardMultiple);
         this.bringSlotAmount = bringSlotAmount;
-        this.wheatGainPercent = wheatGainPercent;
-        this.expGainPercent = expGainPercent;
+    }
+    protected ExplorationDifficulty(Map<String,Object> map) {
+        super(map);
+        this.bringSlotAmount = (int) map.get("bringSlotAmount");
+    }
+    @NotNull
+    @Override
+    public Map<String, Object> serialize() {
+        Map<String,Object> map = super.serialize();
+        map.put("bringSlotAmount",bringSlotAmount);
+        return map;
+    }
+    public static ExplorationDifficulty deserialize(Map<String,Object> map) {
+        return new ExplorationDifficulty(map);
     }
 }

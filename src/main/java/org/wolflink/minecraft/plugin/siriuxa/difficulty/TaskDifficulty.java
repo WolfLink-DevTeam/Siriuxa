@@ -1,45 +1,58 @@
 package org.wolflink.minecraft.plugin.siriuxa.difficulty;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.bukkit.Material;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.jetbrains.annotations.NotNull;
 import org.wolflink.minecraft.plugin.siriuxa.api.INameable;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class TaskDifficulty implements INameable {
+public class TaskDifficulty implements ConfigurationSerializable,INameable{
     /**
      * 难度图标
      */
-    protected Material icon;
+    protected final Material icon;
     /**
      * 难度颜色
      */
-    protected String color;
+    protected final String color;
     /**
      * 难度等级
      */
-    protected int level;
+    protected final int level;
     /**
      * 难度名称
      */
-    protected String name;
-    /**
-     * 麦穗成本
-     */
-    protected int wheatCost;
-    /**
-     * 麦穗补助
-     */
-    protected int wheatSupply;
-    /**
-     * 基础麦穗流失速度
-     */
-    protected double baseWheatLoss;
-    /**
-     * 麦穗流速加快倍率(每5分钟)
-     */
-    protected double wheatLostAcceleratedSpeed;
+    protected final String name;
+    @Builder
+    public TaskDifficulty(Material icon, String color, int level, String name) {
+        this.icon = icon;
+        this.color = color;
+        this.level = level;
+        this.name = name;
+    }
+    protected TaskDifficulty(Map<String,Object> map) {
+        this.icon = (Material) map.get("icon");
+        this.color = (String) map.get("color");
+        this.level = (int) map.get("level");
+        this.name = (String) map.get("name");
+    }
+
+    @NotNull
+    @Override
+    public Map<String, Object> serialize() {
+        Map<String,Object> map = new HashMap<>();
+        map.put("icon",icon);
+        map.put("color",color);
+        map.put("level",level);
+        map.put("name",name);
+        return map;
+    }
+    public static TaskDifficulty deserialize(Map<String,Object> map) {
+        return new TaskDifficulty(map);
+    }
 }

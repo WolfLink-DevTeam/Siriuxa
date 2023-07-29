@@ -25,9 +25,8 @@ public class DifficultyRepository extends MapRepository<DifficultyKey, TaskDiffi
                 .wheatLostAcceleratedSpeed(0.08)
                 .hurtWheatCost(2.0)
                 .hurtDamageMultiple(0.75)
+                .rewardMultiple(0.75)
                 .bringSlotAmount(10)
-                .wheatGainPercent(0.05)
-                .expGainPercent(1.0)
                 .build());
         insert(ExplorationDifficulty.builder()
                 .icon(Material.STONE_PICKAXE)
@@ -40,24 +39,21 @@ public class DifficultyRepository extends MapRepository<DifficultyKey, TaskDiffi
                 .wheatLostAcceleratedSpeed(0.12)
                 .hurtWheatCost(3.0)
                 .hurtDamageMultiple(1.0)
+                .rewardMultiple(1.0)
                 .bringSlotAmount(12)
-                .wheatGainPercent(0.12)
-                .expGainPercent(1.0)
                 .build());
         insert(ExplorationDifficulty.builder()
                 .icon(Material.IRON_PICKAXE)
                 .level(3)
                 .name("困难")
-                .color("§d")
-                .wheatCost(120)
+                .color("§d").wheatCost(120)
                 .wheatSupply(200)
                 .baseWheatLoss(0.1)
                 .wheatLostAcceleratedSpeed(0.16)
                 .hurtWheatCost(3.0)
                 .hurtDamageMultiple(1.1)
+                .rewardMultiple(1.25)
                 .bringSlotAmount(14)
-                .wheatGainPercent(0.2)
-                .expGainPercent(1.0)
                 .build());
         insert(ExplorationDifficulty.builder()
                 .icon(Material.DIAMOND_PICKAXE)
@@ -70,25 +66,30 @@ public class DifficultyRepository extends MapRepository<DifficultyKey, TaskDiffi
                 .wheatLostAcceleratedSpeed(0.2)
                 .hurtWheatCost(4.0)
                 .hurtDamageMultiple(1.2)
+                .rewardMultiple(1.5)
                 .bringSlotAmount(16)
-                .wheatGainPercent(0.25)
-                .expGainPercent(1.0)
                 .build());
     }
 
     @Override
-    public DifficultyKey getPrimaryKey(TaskDifficulty taskDifficulty) {
-        return new DifficultyKey(taskDifficulty.getClass(), taskDifficulty.getLevel());
+    public DifficultyKey getPrimaryKey(TaskDifficulty wheatTaskDifficulty) {
+        return new DifficultyKey(wheatTaskDifficulty.getClass(), wheatTaskDifficulty.getLevel());
     }
 
+    /**
+     * 根据难度类型和名字查找指定的难度
+     */
     @Nullable
-    public ExplorationDifficulty findByName(String name) {
-        for (ExplorationDifficulty explorationDifficulty : findByType(ExplorationDifficulty.class)) {
-            if (name.equals(explorationDifficulty.getName())) return explorationDifficulty;
+    public <T extends TaskDifficulty> T findByName(Class<T> clazz,String name) {
+        for (T difficulty : findByType(clazz)) {
+            if (name.equals(difficulty.getName())) return difficulty;
         }
         return null;
     }
 
+    /**
+     * 根据难度类型查找所有包含的难度
+     */
     public <T extends TaskDifficulty> Collection<T> findByType(Class<T> clazz) {
         return findAll()
                 .stream()
