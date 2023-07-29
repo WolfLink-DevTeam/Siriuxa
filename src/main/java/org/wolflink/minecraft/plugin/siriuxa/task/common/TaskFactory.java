@@ -5,7 +5,7 @@ import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
-import org.wolflink.minecraft.plugin.siriuxa.task.exploration.ExplorationTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.exploration.WheatTask;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 
 import javax.annotation.Nullable;
@@ -17,7 +17,7 @@ public class TaskFactory {
     public Task create(Class<? extends Task> taskClass, GlobalTeam globalTeam, TaskDifficulty taskDifficulty) {
         try {
             Task task = null;
-            if (taskClass.equals(ExplorationTask.class)) {
+            if (taskClass.equals(WheatTask.class)) {
                 ExplorationDifficulty difficulty = (ExplorationDifficulty) taskDifficulty;
                 task = IOC.getBean(taskClass, globalTeam, difficulty);
             }

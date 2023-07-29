@@ -1,46 +1,36 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.common;
 
 import lombok.Data;
+import org.wolflink.minecraft.plugin.siriuxa.api.IStatus;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 
 import java.util.Calendar;
 
+/**
+ * 通用任务统计
+ */
 @Data
-public class TaskStat {
+public abstract class TaskStat implements IStatus {
 
-    private final Task task;
-    private final SubScheduler subScheduler = new SubScheduler();
-    private Calendar startTime = null;
-    private Calendar endTime = null;
-    private double lastWheat = 0;
-    private double nowWheat = 0;
-    private boolean enabled = false;
+    protected final Task task;
+    protected final SubScheduler subScheduler = new SubScheduler();
+    protected Calendar startTime = null;
+    protected Calendar endTime = null;
 
     public TaskStat(Task task) {
         this.task = task;
     }
-
-    public double getWheatChange() {
-        return nowWheat - lastWheat;
-    }
-
     public final long getUsingTimeInMills() {
         if (endTime == null || startTime == null) return -1;
         return endTime.getTimeInMillis() - startTime.getTimeInMillis();
     }
-
-    public void setEnabled(boolean value) {
-        if (enabled == value) return;
-        enabled = value;
-        if (enabled) {
-            startTime = Calendar.getInstance();
-            subScheduler.runTaskTimerAsync(() -> {
-                lastWheat = nowWheat;
-                nowWheat = task.getTaskWheat();
-            }, 20, 20);
-        } else {
-            endTime = Calendar.getInstance();
-            subScheduler.cancelAllTasks();
-        }
+    @Override
+    public void enable() {
+        startTime = Calendar.getInstance();
+    }
+    @Override
+    public void disable() {
+        endTime = Calendar.getInstance();
+        subScheduler.cancelAllTasks();
     }
 }

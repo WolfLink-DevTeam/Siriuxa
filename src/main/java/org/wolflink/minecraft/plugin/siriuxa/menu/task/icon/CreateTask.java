@@ -10,7 +10,7 @@ import org.wolflink.minecraft.plugin.siriuxa.api.Result;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskMenu;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskService;
-import org.wolflink.minecraft.plugin.siriuxa.task.exploration.ExplorationTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.exploration.WheatTask;
 
 public class CreateTask extends Icon {
 
@@ -55,7 +55,7 @@ public class CreateTask extends Icon {
     @Override
     public void leftClick(Player player) {
         if (!canCreate()) return;
-        Result result = taskService.create(player, ExplorationTask.class, taskMenu.getSelectedDifficulty());
+        Result result = taskService.create(player, WheatTask.class, taskMenu.getSelectedDifficulty());
         result.show(player);
         player.closeInventory();
         if (result.result()) {

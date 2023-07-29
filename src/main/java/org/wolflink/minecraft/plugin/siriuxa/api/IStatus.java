@@ -1,6 +1,6 @@
 package org.wolflink.minecraft.plugin.siriuxa.api;
 
-public interface ISwitchable {
+public interface IStatus {
     void enable();
 
     void disable();

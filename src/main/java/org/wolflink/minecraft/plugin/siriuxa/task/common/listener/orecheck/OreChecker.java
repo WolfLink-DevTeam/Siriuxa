@@ -14,7 +14,7 @@ import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.file.Lang;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskRepository;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.interfaces.OreCheckAvailable;
+import org.wolflink.minecraft.plugin.siriuxa.task.exploration.WheatTask;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
@@ -33,7 +33,7 @@ public class OreChecker extends WolfirdListener {
         Location checkLoc = player.getLocation().add(0, -1, 0);
         Task task = taskRepository.findByTaskTeamPlayer(player);
         if (task == null) return; // 没有任务
-        if (!(task instanceof OreCheckAvailable)) return; // 任务模式不可用该检测
+        if (!(task instanceof WheatTask wheatTask)) return; // 任务模式不可用该检测
         if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 任务没在游戏阶段
         if (task.getTaskRegion() == null) return; // 任务区域未设定
         if (checkLoc.getWorld() != task.getTaskRegion().getCenter().getWorld()) return; // 不在任务世界
@@ -43,7 +43,7 @@ public class OreChecker extends WolfirdListener {
         oreValues.doRecord(material);
         block.setType(Material.AIR);
         double wheatValue = oreValues.getOreValue(material);
-        task.addWheat(wheatValue);
+        wheatTask.addWheat(wheatValue);
         for (Player taskPlayer : task.getTaskPlayers()) {
             taskPlayer.playSound(taskPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1.5f);
             //TODO 改为 Hologram 提示

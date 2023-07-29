@@ -189,7 +189,7 @@ public class TaskService {
         invBackupService.applyInv(player,task.getDefaultKit());
 
         // 传送玩家到任务地点
-        List<Location> spawnLocations = task.getBeaconLocations();
+        List<Location> spawnLocations = task.getSpawnLocations();
         if (spawnLocations.isEmpty()) player.teleport(task.getTaskRegion().getCenter());
         else {
             Location location = spawnLocations.get(random.nextInt(spawnLocations.size())).clone().add(0.5, 1, 0.5);

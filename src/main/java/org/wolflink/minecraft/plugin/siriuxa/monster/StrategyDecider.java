@@ -3,7 +3,7 @@ package org.wolflink.minecraft.plugin.siriuxa.monster;
 import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.wolflink.minecraft.plugin.siriuxa.api.ISwitchable;
+import org.wolflink.minecraft.plugin.siriuxa.api.IStatus;
 import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.OceanSpawnStrategy;
 import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.PlayerFocusSpawnStrategy;
 import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.SpawnStrategy;
@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 为每个任务分配一个决策者
  * 遍历并决策任务中玩家当前的刷怪机制
  */
-public class StrategyDecider implements ISwitchable {
+public class StrategyDecider implements IStatus {
 
     /**
      * 决策周期(秒)

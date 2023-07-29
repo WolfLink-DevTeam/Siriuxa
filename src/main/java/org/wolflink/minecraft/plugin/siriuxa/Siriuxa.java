@@ -14,7 +14,7 @@ import org.wolflink.minecraft.plugin.siriuxa.file.database.*;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.CreatureDeathListener;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.CreatureSpawnListener;
-import org.wolflink.minecraft.plugin.siriuxa.papi.TaskVariables;
+import org.wolflink.minecraft.plugin.siriuxa.papi.WheatTaskVariables;
 import org.wolflink.minecraft.plugin.siriuxa.sculkinfection.SculkInfection;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.*;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.huntcheck.HuntChecker;
@@ -67,7 +67,7 @@ public final class Siriuxa extends WolfirdPlugin {
         globalListenerClasses.add(AttributeChecker.class);
 
         serializableClasses.add(PlayerBackpack.class);
-        serializableClasses.add(PlayerTaskRecord.class);
+        serializableClasses.add(PlayerWheatTaskRecord.class);
         serializableClasses.add(OfflinePlayerRecord.class);
     }
 
@@ -108,7 +108,7 @@ public final class Siriuxa extends WolfirdPlugin {
         notifier.setDebugMode(IOC.getBean(Config.class).get(ConfigProjection.DEBUG));
 
         // 注册变量
-        IOC.getBean(TaskVariables.class).register();
+        IOC.getBean(WheatTaskVariables.class).register();
 
         // 注册全局监听器
         for (Class<? extends WolfirdListener> listenerClass : globalListenerClasses) {
