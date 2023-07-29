@@ -25,12 +25,12 @@ public class TaskRecordMenu extends Menu {
      * 静态菜单只会在打开时刷新一次
      */
     public TaskRecordMenu(UUID ownerUuid) {
-        super(ownerUuid, -1, "§0§l任务记录", 54);
+        super(ownerUuid, "§0§l任务记录", 54);
     }
 
     public void setPage(int value) {
         this.page = value;
-        super.refresh();
+        super.init();
     }
 
     @Override

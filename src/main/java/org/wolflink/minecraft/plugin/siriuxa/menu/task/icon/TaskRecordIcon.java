@@ -25,7 +25,7 @@ public class TaskRecordIcon extends Icon {
     private final PlayerTaskRecord playerTaskRecord;
 
     public TaskRecordIcon(@NonNull PlayerTaskRecord playerTaskRecord) {
-        super(false);
+        super(0);
         this.playerTaskRecord = playerTaskRecord;
     }
 

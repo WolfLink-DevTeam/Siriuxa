@@ -36,7 +36,7 @@ public class ExplorationBackpackMenu extends Menu {
      * 静态菜单只会在打开时刷新一次
      */
     public ExplorationBackpackMenu(UUID ownerUuid) {
-        super(ownerUuid, 5, "§0§l任务背包", 54);
+        super(ownerUuid, "§0§l任务背包", 54);
     }
 
     public boolean containSlot(int index) {

@@ -21,7 +21,7 @@ public class DifficultyIcon<T extends TaskDifficulty> extends Icon {
     private final DifficultyMenu<T> difficultyMenu;
 
     public DifficultyIcon(DifficultyMenu<T> difficultyMenu, T taskDifficulty) {
-        super(false);
+        super(0);
         this.taskDifficulty = taskDifficulty;
         this.menuService = IOC.getBean(MenuService.class);
         this.difficultyRepository = IOC.getBean(DifficultyRepository.class);

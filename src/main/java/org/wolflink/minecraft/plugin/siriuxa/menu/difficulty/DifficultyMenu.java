@@ -17,7 +17,7 @@ public abstract class DifficultyMenu<T extends TaskDifficulty> extends Menu {
     private T selectedDifficulty = null;
 
     protected DifficultyMenu(UUID ownerUuid, Class<T> difficultyClass) {
-        super(ownerUuid, -1, "§0§l难度选择", 27);
+        super(ownerUuid,  "§0§l难度选择", 27);
         this.difficultyClass = difficultyClass;
     }
 

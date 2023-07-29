@@ -11,7 +11,7 @@ public class ClaimTaskReward extends Icon {
     private final ExplorationBackpackMenu explorationBackpackMenu;
 
     public ClaimTaskReward(ExplorationBackpackMenu explorationBackpackMenu) {
-        super(false);
+        super(0);
         this.explorationBackpackMenu = explorationBackpackMenu;
     }
 

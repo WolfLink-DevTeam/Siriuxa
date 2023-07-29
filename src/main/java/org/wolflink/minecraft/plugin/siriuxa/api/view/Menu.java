@@ -7,7 +7,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.wolflink.common.ioc.IOC;
-import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
+import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -15,7 +15,6 @@ import java.util.stream.Stream;
 
 public abstract class Menu {
     private final Inventory inventory;
-    private final long refreshTicks;
     @Getter
     private final String title;
     @Getter
@@ -25,22 +24,14 @@ public abstract class Menu {
     private Icon[] icons;
 
     /**
-     * 刷新周期设置小于0则为静态菜单
-     * 静态菜单只会在打开时刷新一次
-     *
-     * @param refreshTicks 刷新周期(刻)
+     * 菜单只会在打开时刷新一次
      */
-    protected Menu(UUID ownerUuid, long refreshTicks, String title, int size) {
+    protected Menu(UUID ownerUuid, String title, int size) {
         this.ownerUuid = ownerUuid;
-        this.refreshTicks = refreshTicks;
         this.title = title;
         this.size = size;
         inventory = Bukkit.createInventory(null, size, title);
-        Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance(), () -> {
-            refresh();
-            if (refreshTicks <= 0) return;
-            Siriuxa.getInstance().getSubScheduler().runTaskTimer(this::refresh, refreshTicks, refreshTicks);
-        }, 1);
+        icons = null;
     }
 
     @Nullable
@@ -75,20 +66,29 @@ public abstract class Menu {
         }
     }
 
+    private final SubScheduler subScheduler = new SubScheduler();
     /**
-     * 刷新整个菜单
+     * 初始化整个菜单
+     * 动态 Icon 注册计时器
      */
-    protected void refresh() {
-        initIcons();
-        overrideIcons();
-        for (int i = 0; i < size; i++) {
-            Icon icon = getIcon(i);
-            inventory.setItem(i, icon.getIcon());
+    protected void init() {
+        if(icons == null) {
+            initIcons();
+            overrideIcons();
+            for (int i = 0; i < size; i++) {
+                Icon icon = getIcon(i);
+                inventory.setItem(i, icon.getIcon());
+                long refreshTick = icon.getRefreshTick();
+                if(refreshTick > 0) {
+                    final int finalI = i;
+                    subScheduler.runTaskTimerAsync(()->inventory.setItem(finalI,icon.getIcon()),refreshTick,refreshTick);
+                }
+            }
         }
     }
 
     /**
-     * 子类实现 ItemIcon(该方法中不能调用子类自身的成员变量)
+     * 子类实现 ItemIcon
      */
     protected abstract void overrideIcons();
 
@@ -106,7 +106,7 @@ public abstract class Menu {
      * 将菜单展示给玩家
      */
     public void display(Player player) {
-        refresh();
+        init();
         player.closeInventory();
         player.openInventory(inventory);
     }

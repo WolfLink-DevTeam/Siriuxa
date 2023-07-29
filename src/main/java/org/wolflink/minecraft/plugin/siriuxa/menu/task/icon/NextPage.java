@@ -11,7 +11,7 @@ public class NextPage extends Icon {
     private final TaskRecordMenu taskRecordMenu;
 
     public NextPage(TaskRecordMenu taskRecordMenu) {
-        super(false);
+        super(0);
         this.taskRecordMenu = taskRecordMenu;
     }
 

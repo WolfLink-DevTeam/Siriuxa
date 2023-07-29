@@ -19,7 +19,7 @@ public class ExplorationBackpackItem extends Icon {
     private final int index;
 
     public ExplorationBackpackItem(ExplorationBackpackMenu explorationBackpackMenu, int index, @Nullable ItemStack itemStack) {
-        super(true);
+        super(5);
         this.index = index;
         this.explorationBackpackMenu = explorationBackpackMenu;
         if (itemStack != null) {

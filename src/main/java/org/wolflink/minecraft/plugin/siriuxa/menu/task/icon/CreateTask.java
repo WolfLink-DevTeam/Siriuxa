@@ -18,7 +18,7 @@ public class CreateTask extends Icon {
     private final TaskMenu taskMenu;
 
     public CreateTask(TaskMenu taskMenu) {
-        super(false);
+        super(0);
         this.taskMenu = taskMenu;
         taskService = IOC.getBean(TaskService.class);
     }

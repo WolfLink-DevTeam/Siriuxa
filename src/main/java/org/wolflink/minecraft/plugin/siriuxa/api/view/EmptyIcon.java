@@ -9,7 +9,7 @@ import org.wolflink.common.ioc.Singleton;
 @Singleton
 public class EmptyIcon extends Icon {
     public EmptyIcon() {
-        super(false);
+        super(0);
     }
 
     @Override

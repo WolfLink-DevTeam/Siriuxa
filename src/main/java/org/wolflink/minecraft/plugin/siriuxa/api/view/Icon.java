@@ -13,17 +13,20 @@ import java.util.List;
 
 public abstract class Icon {
     @Getter
-    private final boolean needRefresh;
+    private final long refreshTick;
     private ItemStack itemStackCache;
 
-    protected Icon(boolean needRefresh) {
-        this.needRefresh = needRefresh;
+    /**
+     * 设置为 小于等于0 则该图标不需要刷新
+     */
+    protected Icon(long refreshTick) {
+        this.refreshTick = refreshTick;
     }
 
     @NonNull
     public ItemStack getIcon() {
-        if (needRefresh) return createIcon();
-        if (itemStackCache == null) itemStackCache = createIcon();
+        if (refreshTick > 0) return createIcon();
+        else if (itemStackCache == null) itemStackCache = createIcon();
         return itemStackCache;
     }
 

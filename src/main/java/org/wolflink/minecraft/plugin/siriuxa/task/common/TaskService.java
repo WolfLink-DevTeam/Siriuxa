@@ -182,12 +182,13 @@ public class TaskService {
             Notifier.error("任务区域为空，玩家无法进入任务区域！");
             return;
         }
-//        InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
+        InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
 //         保存玩家背包信息
-//        invBackupService.saveMainInv(player);
+        invBackupService.saveMainInv(player);
         // 应用任务背包信息
-//        invBackupService.applyInv(player,task.getDefaultKit());
-        // 传送到指定方块上
+        invBackupService.applyInv(player,task.getDefaultKit());
+
+        // 传送玩家到任务地点
         List<Location> spawnLocations = task.getBeaconLocations();
         if (spawnLocations.isEmpty()) player.teleport(task.getTaskRegion().getCenter());
         else {
@@ -196,6 +197,7 @@ public class TaskService {
             location.clone().add(0, 1, 0).getBlock().setType(Material.AIR);
             player.teleport(location);
         }
+        // 设置玩家游戏模式
         if (!player.isOp()) player.setGameMode(GameMode.SURVIVAL);
     }
 }

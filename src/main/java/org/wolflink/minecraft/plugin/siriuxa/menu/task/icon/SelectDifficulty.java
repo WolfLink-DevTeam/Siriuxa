@@ -17,7 +17,7 @@ public class SelectDifficulty extends Icon {
     private final MenuService menuService;
 
     public SelectDifficulty(TaskMenu taskMenu) {
-        super(false);
+        super(0);
         this.menuService = IOC.getBean(MenuService.class);
         this.taskMenu = taskMenu;
     }

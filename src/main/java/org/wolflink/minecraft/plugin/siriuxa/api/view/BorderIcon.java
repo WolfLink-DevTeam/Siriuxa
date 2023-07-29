@@ -10,7 +10,7 @@ import org.wolflink.common.ioc.Singleton;
 public class BorderIcon extends Icon {
 
     public BorderIcon() {
-        super(false);
+        super(0);
     }
 
     @Override
