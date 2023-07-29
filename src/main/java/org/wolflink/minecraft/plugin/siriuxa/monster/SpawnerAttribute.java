@@ -1,6 +1,7 @@
 package org.wolflink.minecraft.plugin.siriuxa.monster;
 
 import lombok.Data;
+import lombok.NonNull;
 import org.bukkit.entity.EntityType;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
@@ -21,8 +22,8 @@ public class SpawnerAttribute {
     private double movementMultiple;
     private double damageMultiple;
 
-    public SpawnerAttribute(TaskDifficulty taskDifficulty) {
-        switch (taskDifficulty.getLevel()) {
+    public SpawnerAttribute(@NonNull TaskDifficulty difficulty) {
+        switch (difficulty.getLevel()) {
             case 1 -> { // 轻松
                 healthMultiple = 0.5;
                 movementMultiple = 0.8;
@@ -93,7 +94,7 @@ public class SpawnerAttribute {
                 weightMap.put(EntityType.SKELETON, 40);
                 weightMap.put(EntityType.SPIDER, 40);
                 weightMap.put(EntityType.CREEPER, 20);
-                Notifier.error("不支持的难度等级：" + taskDifficulty.getLevel());
+                Notifier.error("不支持的难度等级：" + difficulty.getLevel());
             }
         }
     }

@@ -4,6 +4,8 @@ import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.wolflink.minecraft.plugin.siriuxa.api.IStatus;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.OceanSpawnStrategy;
 import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.PlayerFocusSpawnStrategy;
 import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.SpawnStrategy;
@@ -38,9 +40,9 @@ public class StrategyDecider implements IStatus {
      * 优先级从上往下，最上方的最优先进行决策
      */
     private final List<SpawnStrategy> strategyList;
-    public StrategyDecider(Task task) {
+    public StrategyDecider(Task task, TaskDifficulty difficulty) {
         this.task = task;
-        spawnerAttribute = new SpawnerAttribute(task.getDifficulty());
+        spawnerAttribute = new SpawnerAttribute(difficulty);
         this.spawnPeriodSecs = spawnerAttribute.getSpawnPeriodSecs();
         strategyList = List.of(new OceanSpawnStrategy(spawnerAttribute), new PlayerFocusSpawnStrategy(spawnerAttribute));
     }

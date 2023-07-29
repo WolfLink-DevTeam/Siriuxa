@@ -58,7 +58,7 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
         this.difficulty = difficulty;
         this.defaultKit = defaultKit;
         stageHolder = initStageHolder();
-        strategyDecider = new StrategyDecider(this);
+        strategyDecider = new StrategyDecider(this,difficulty);
     }
     protected abstract StageHolder initStageHolder();
     protected void triggerFailed() {
