@@ -6,6 +6,7 @@ import lombok.NonNull;
 import org.bukkit.*;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
@@ -55,14 +56,6 @@ public abstract class Task implements INameable {
      */
     private final UUID taskUuid = UUID.randomUUID();
     /**
-     * 基础麦穗流失量(每秒)
-     */
-    private final double baseWheatLoss;
-    /**
-     * 麦穗流失加速度
-     */
-    private final double wheatLostAcceleratedSpeed;
-    /**
      * 玩家队伍
      */
     @Getter
@@ -76,19 +69,8 @@ public abstract class Task implements INameable {
      * 任务基础套装
      */
     private final PlayerBackpack defaultKit;
-    /**
-     * TODO 延迟初始化，刷怪决策者
-     */
     private final StrategyDecider strategyDecider;
     private final Map<UUID, PlayerTaskRecord> playerRecordMap = new HashMap<>();
-    /**
-     * 麦穗流失倍率
-     */
-    private double wheatLossMultiple = 1.0;
-    /**
-     * 本次任务的麦穗余量
-     */
-    private double taskWheat = 0;
     /**
      * 任务队伍(不可加入) 在任务预加载阶段初始化
      */
@@ -101,11 +83,9 @@ public abstract class Task implements INameable {
     private EvacuationZone availableEvacuationZone = null;
     private List<Location> beaconLocations = new ArrayList<>();
 
-    protected Task(GlobalTeam globalTeam, TaskDifficulty taskDifficulty, PlayerBackpack defaultKit) {
+    protected Task(@NotNull GlobalTeam globalTeam, @NotNull TaskDifficulty taskDifficulty,@NotNull PlayerBackpack defaultKit) {
         this.globalTeam = globalTeam;
         this.taskDifficulty = taskDifficulty;
-        this.wheatLostAcceleratedSpeed = taskDifficulty.getWheatLostAcceleratedSpeed();
-        this.baseWheatLoss = taskDifficulty.getBaseWheatLoss();
         this.defaultKit = defaultKit;
         stageHolder = initStageHolder();
         strategyDecider = new StrategyDecider(this);
@@ -135,18 +115,6 @@ public abstract class Task implements INameable {
 
     public boolean globalTeamContains(Player player) {
         return globalTeamContains(player.getUniqueId());
-    }
-
-    public void addWheat(double wheat) {
-        taskWheat += wheat;
-    }
-
-    public void takeWheat(double wheat) {
-        taskWheat -= wheat;
-        if (taskWheat <= 0) {
-            taskWheat = 0;
-            triggerFailed();
-        }
     }
 
     /**

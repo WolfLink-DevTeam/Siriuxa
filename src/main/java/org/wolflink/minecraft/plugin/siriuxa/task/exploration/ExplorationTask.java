@@ -41,6 +41,23 @@ public class ExplorationTask extends Task implements HurtCheckAvailable, OreChec
         defaultKit.setItems(items);
     }
 
+    /**
+     * 基础麦穗流失量(每秒)
+     */
+    private final double baseWheatLoss;
+    /**
+     * 麦穗流失加速度
+     */
+    private final double wheatLostAcceleratedSpeed;
+    /**
+     * 麦穗流失倍率
+     */
+    private double wheatLossMultiple = 1.0;
+    /**
+     * 本次任务的麦穗余量
+     */
+    private double taskWheat = 0;
+
     @Getter
     private final ExplorationDifficulty difficulty;
     @Getter
@@ -49,6 +66,8 @@ public class ExplorationTask extends Task implements HurtCheckAvailable, OreChec
     public ExplorationTask(GlobalTeam globalTeam, ExplorationDifficulty difficulty) {
         super(globalTeam, difficulty, defaultKit);
         this.difficulty = difficulty;
+        this.wheatLostAcceleratedSpeed = difficulty.getWheatLostAcceleratedSpeed();
+        this.baseWheatLoss = difficulty.getBaseWheatLoss();
     }
 
     @Override
@@ -68,6 +87,17 @@ public class ExplorationTask extends Task implements HurtCheckAvailable, OreChec
     @Override
     public void failed() {
         // do nothing
+    }
+    public void addWheat(double wheat) {
+        taskWheat += wheat;
+    }
+
+    public void takeWheat(double wheat) {
+        taskWheat -= wheat;
+        if (taskWheat <= 0) {
+            taskWheat = 0;
+            triggerFailed();
+        }
     }
 
     @Override
