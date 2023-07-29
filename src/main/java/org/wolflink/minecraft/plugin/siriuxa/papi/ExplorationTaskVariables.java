@@ -7,16 +7,17 @@ import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskRepository;
-import org.wolflink.minecraft.plugin.siriuxa.task.exploration.WheatTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.exploration.ExplorationTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.wheat.WheatTask;
 
 @Singleton
-public class WheatTaskVariables extends PlaceholderExpansion {
+public class ExplorationTaskVariables extends PlaceholderExpansion {
     @Inject
     private TaskRepository taskRepository;
 
     @Override
     public @NotNull String getIdentifier() {
-        return "WheatTask";
+        return "ExplorationTask";
     }
 
     @Override
@@ -32,32 +33,33 @@ public class WheatTaskVariables extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer offlinePlayer, @NotNull String params) {
         if (offlinePlayer == null) return "不存在的玩家";
-        WheatTask wheatTask = (WheatTask) taskRepository.findByTaskTeamPlayerUuid(offlinePlayer.getUniqueId());
-        if (wheatTask == null) return "暂无任务";
+        Task task = taskRepository.findByTaskTeamPlayerUuid(offlinePlayer.getUniqueId());
+        if(task == null) return "暂无任务";
+        if(!(task instanceof ExplorationTask explorationTask)) return "暂无该类型任务";
         switch (params.toLowerCase()) {
             case "wheat" -> {
-                return String.format("%.1f", wheatTask.getTaskWheat());
+                return String.format("%.1f", explorationTask.getTaskWheat());
             }
             case "wheat_loss_per_sec" -> {
-                return String.format("%.1f", wheatTask.getWheatLossPerSecNow());
+                return String.format("%.1f", explorationTask.getWheatLossPerSecNow());
             }
             case "team_size" -> {
-                return wheatTask.getTaskTeamSize() + "人";
+                return explorationTask.getTaskTeamSize() + "人";
             }
             case "detail_wheat" -> {
-                double value = wheatTask.getTaskStat().getWheatChange();
-                if (value > 0) return "§f%.1f§a(+%.1f)".formatted(wheatTask.getTaskWheat(), value);
-                else if (value < 0) return "§f%.1f§c(%.1f)".formatted(wheatTask.getTaskWheat(), value);
-                else return "§f%.1f".formatted(wheatTask.getTaskWheat());
+                double value = explorationTask.getTaskStat().getWheatChange();
+                if (value > 0) return "§f%.1f§a(+%.1f)".formatted(explorationTask.getTaskWheat(), value);
+                else if (value < 0) return "§f%.1f§c(%.1f)".formatted(explorationTask.getTaskWheat(), value);
+                else return "§f%.1f".formatted(explorationTask.getTaskWheat());
             }
             case "stage" -> {
-                return wheatTask.getStageHolder().getThisStage().getDisplayName();
+                return explorationTask.getStageHolder().getThisStage().getDisplayName();
             }
             case "difficulty" -> {
-                return wheatTask.getTaskDifficulty().getColor() + wheatTask.getTaskDifficulty().getName();
+                return explorationTask.getDifficulty().getColor() + explorationTask.getDifficulty().getName();
             }
             case "evacuable" -> {
-                if (wheatTask.getAvailableEvacuationZone() != null) return "§a可撤离";
+                if (explorationTask.getAvailableEvacuationZone() != null) return "§a可撤离";
                 else return "§c无法撤离";
             }
             default -> {
