@@ -1,4 +1,4 @@
-package org.wolflink.minecraft.plugin.siriuxa.task.exploration;
+package org.wolflink.minecraft.plugin.siriuxa.task.wheat;
 
 import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskStat;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;

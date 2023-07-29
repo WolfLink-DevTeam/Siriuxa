@@ -33,8 +33,6 @@ import java.util.*;
 
 /**
  * 抽象任务类
- * 接受需要支付麦穗
- * 麦穗会流失
  */
 @Data
 public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameable {
@@ -42,7 +40,7 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
     protected final SubScheduler subScheduler = new SubScheduler();
     protected final UUID taskUuid = UUID.randomUUID();
     @Getter
-    private final TaskDifficulty taskDifficulty;
+    private final TaskDifficulty difficulty;
     protected final Random random = new Random();
     @Getter
     private final StageHolder stageHolder;
@@ -54,10 +52,10 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
     GlobalTeam globalTeam;
     TaskTeam taskTeam = new TaskTeam(new GlobalTeam());
     protected Task(@NotNull GlobalTeam globalTeam,
-                   @NotNull TaskDifficulty taskDifficulty,
+                   @NotNull TaskDifficulty difficulty,
                    @NotNull PlayerBackpack defaultKit) {
         this.globalTeam = globalTeam;
-        this.taskDifficulty = taskDifficulty;
+        this.difficulty = difficulty;
         this.defaultKit = defaultKit;
         stageHolder = initStageHolder();
         strategyDecider = new StrategyDecider(this);
@@ -97,7 +95,8 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
         }
         deleteTask();
     }
-    protected abstract void gameOverCheck();
+    protected abstract void failedCheck();
+    protected abstract void finishedCheck();
 
     public void preLoad() {
         this.taskTeam = new TaskTeam(getGlobalTeam());

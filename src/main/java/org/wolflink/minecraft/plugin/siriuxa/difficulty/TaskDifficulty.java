@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Data
-public class TaskDifficulty implements ConfigurationSerializable,INameable{
+public abstract class TaskDifficulty implements ConfigurationSerializable,INameable{
     /**
      * 难度图标
      */
@@ -28,7 +28,6 @@ public class TaskDifficulty implements ConfigurationSerializable,INameable{
      * 难度名称
      */
     protected final String name;
-    @Builder
     public TaskDifficulty(Material icon, String color, int level, String name) {
         this.icon = icon;
         this.color = color;
@@ -51,8 +50,5 @@ public class TaskDifficulty implements ConfigurationSerializable,INameable{
         map.put("level",level);
         map.put("name",name);
         return map;
-    }
-    public static TaskDifficulty deserialize(Map<String,Object> map) {
-        return new TaskDifficulty(map);
     }
 }

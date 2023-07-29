@@ -14,8 +14,7 @@ import java.util.Objects;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class WheatTaskDifficulty extends TaskDifficulty {
+public abstract class WheatTaskDifficulty extends TaskDifficulty {
     /**
      * 麦穗成本
      */
@@ -44,7 +43,6 @@ public class WheatTaskDifficulty extends TaskDifficulty {
      * 结算奖励倍率
      */
     protected final double rewardMultiple;
-    @Builder
     public WheatTaskDifficulty(Material icon, String color, int level, String name, int wheatCost, int wheatSupply, double baseWheatLoss, double wheatLostAcceleratedSpeed, double hurtWheatCost, double hurtDamageMultiple, double rewardMultiple) {
         super(icon,color,level,name);
         this.wheatCost = wheatCost;
@@ -77,8 +75,5 @@ public class WheatTaskDifficulty extends TaskDifficulty {
         map.put("hurtDamageMultiple",hurtDamageMultiple);
         map.put("rewardMultiple",rewardMultiple);
         return map;
-    }
-    public static WheatTaskDifficulty deserialize(Map<String,Object> map) {
-        return new WheatTaskDifficulty(map);
     }
 }

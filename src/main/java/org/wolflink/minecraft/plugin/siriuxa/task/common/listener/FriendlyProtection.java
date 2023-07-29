@@ -9,6 +9,7 @@ import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.WheatTaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
@@ -27,7 +28,7 @@ public class FriendlyProtection extends WolfirdListener {
         if (event.getDamager().getType() != EntityType.PLAYER) return; //攻击者不是玩家
         Player a = (Player) event.getEntity();
         GlobalTeam aGlobalTeam = globalTeamRepository.findByPlayer(a);
-        if (aGlobalTeam == null) return;
+        if (aGlobalTeam == null) return; // 没在队伍中
         Player b = (Player) event.getDamager();
         GlobalTeam bGlobalTeam = globalTeamRepository.findByPlayer(b);
         if (bGlobalTeam == null) return;
@@ -35,7 +36,7 @@ public class FriendlyProtection extends WolfirdListener {
         Task task = aGlobalTeam.getSelectedTask();
         if (task == null) return; // 没选择任务
         if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 没在游戏阶段
-        TaskDifficulty taskDifficulty = task.getTaskDifficulty();
+        TaskDifficulty taskDifficulty = task.getDifficulty();
         int level = taskDifficulty.getLevel();
         if (level <= 2) {
             Notifier.chat("§c你的队友受到了某种神秘力量的保护，你无法伤害Ta。", b);

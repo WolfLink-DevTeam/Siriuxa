@@ -5,15 +5,14 @@ import lombok.NonNull;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
-import org.wolflink.minecraft.plugin.siriuxa.task.exploration.WheatTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.wheat.WheatTask;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 /**
- * 可以被序列化的任务记录
+ * 可以被序列化的麦穗任务记录
  */
 @Data
 public class PlayerWheatTaskRecord implements ConfigurationSerializable {
@@ -65,7 +64,7 @@ public class PlayerWheatTaskRecord implements ConfigurationSerializable {
         isSuccess = false;
         teamSize = wheatTask.getTaskTeamSize();
         taskType = wheatTask.getName();
-        taskDifficulty = wheatTask.getTaskDifficulty().getName();
+        taskDifficulty = wheatTask.getDifficulty().getName();
         isEscape = false;
         isClaimed = false;
         wheat = wheatTask.getTaskWheat();

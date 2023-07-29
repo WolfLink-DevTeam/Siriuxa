@@ -7,6 +7,9 @@ import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.MenuEventListener;
 import org.wolflink.minecraft.plugin.siriuxa.command.*;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.WheatTaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
 import org.wolflink.minecraft.plugin.siriuxa.file.Lang;
@@ -14,7 +17,7 @@ import org.wolflink.minecraft.plugin.siriuxa.file.database.*;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.CreatureDeathListener;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.CreatureSpawnListener;
-import org.wolflink.minecraft.plugin.siriuxa.papi.WheatTaskVariables;
+import org.wolflink.minecraft.plugin.siriuxa.papi.ExplorationTaskVariables;
 import org.wolflink.minecraft.plugin.siriuxa.sculkinfection.SculkInfection;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.*;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.listener.huntcheck.HuntChecker;
@@ -69,6 +72,9 @@ public final class Siriuxa extends WolfirdPlugin {
         serializableClasses.add(PlayerBackpack.class);
         serializableClasses.add(PlayerWheatTaskRecord.class);
         serializableClasses.add(OfflinePlayerRecord.class);
+        serializableClasses.add(TaskDifficulty.class);
+        serializableClasses.add(WheatTaskDifficulty.class);
+        serializableClasses.add(ExplorationDifficulty.class);
     }
 
     @Override
@@ -108,7 +114,7 @@ public final class Siriuxa extends WolfirdPlugin {
         notifier.setDebugMode(IOC.getBean(Config.class).get(ConfigProjection.DEBUG));
 
         // 注册变量
-        IOC.getBean(WheatTaskVariables.class).register();
+        IOC.getBean(ExplorationTaskVariables.class).register();
 
         // 注册全局监听器
         for (Class<? extends WolfirdListener> listenerClass : globalListenerClasses) {

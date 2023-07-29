@@ -56,7 +56,7 @@ public class ExplorationBackpackMenu extends StaticMenu {
      * 允许的可带回物品最大数量
      */
     public int getBringSlotAmount() {
-        ExplorationDifficulty difficulty = IOC.getBean(DifficultyRepository.class).findByName(playerWheatTaskRecord.getTaskDifficulty());
+        ExplorationDifficulty difficulty = IOC.getBean(DifficultyRepository.class).findByName(ExplorationDifficulty.class,playerWheatTaskRecord.getTaskDifficulty());
         assert difficulty != null;
         return difficulty.getBringSlotAmount();
     }
@@ -74,10 +74,11 @@ public class ExplorationBackpackMenu extends StaticMenu {
         playerWheatTaskRecord.setClaimed(true);
         IOC.getBean(TaskRecordDB.class).saveRecord(playerWheatTaskRecord);
         PlayerBackpack playerBackpack = playerWheatTaskRecord.getPlayerBackpack();
-        ExplorationDifficulty difficulty = IOC.getBean(DifficultyRepository.class).findByName(playerWheatTaskRecord.getTaskDifficulty());
+        ExplorationDifficulty difficulty = IOC.getBean(DifficultyRepository.class).findByName(ExplorationDifficulty.class,playerWheatTaskRecord.getTaskDifficulty());
         assert difficulty != null;
-        double wheat = playerWheatTaskRecord.getWheat() * difficulty.getWheatGainPercent() + difficulty.getWheatCost();
-        int exp = (int) (playerBackpack.getTotalExp() * difficulty.getExpGainPercent());
+        // TODO 任务奖励结算
+        double wheat = 0;
+        int exp = 0;
         Notifier.chat("你从本次任务中收获了 §a" + String.format("%.0f", wheat) + " §6麦穗。", player);
         Notifier.chat("你从本次任务中获得了 §a" + exp + " §e经验值。", player);
         Notifier.chat("你从本次任务中获得了 §a" + selectedSlots.size() + "格 §b物资。", player);

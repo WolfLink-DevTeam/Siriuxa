@@ -40,7 +40,7 @@ public class StrategyDecider implements IStatus {
     private final List<SpawnStrategy> strategyList;
     public StrategyDecider(Task task) {
         this.task = task;
-        spawnerAttribute = new SpawnerAttribute(task.getTaskDifficulty());
+        spawnerAttribute = new SpawnerAttribute(task.getDifficulty());
         this.spawnPeriodSecs = spawnerAttribute.getSpawnPeriodSecs();
         strategyList = List.of(new OceanSpawnStrategy(spawnerAttribute), new PlayerFocusSpawnStrategy(spawnerAttribute));
     }

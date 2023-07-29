@@ -11,11 +11,13 @@ import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.Result;
 import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.WheatTaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.OfflinePlayerDB;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.OfflinePlayerRecord;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.InvBackupService;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
+import org.wolflink.minecraft.plugin.siriuxa.task.common.interfaces.ITaskService;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.region.TaskRegion;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.EndStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.GameStage;
@@ -28,7 +30,7 @@ import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 import java.util.*;
 
 @Singleton
-public class TaskService {
+public class TaskService implements ITaskService {
     private final Random random = new Random();
     private final Map<UUID, Integer> escapeTaskMap = new HashMap<>();
     @Inject
@@ -41,14 +43,24 @@ public class TaskService {
     private Config config;
     @Inject
     private TaskFactory taskFactory;
+    @Inject
+    private TaskRelationProxy taskRelationProxy;
 
-    public TaskService() {
+    @Override
+    public void goLobby(Player player) {
+
+    }
+
+    @Override
+    public void goTask(Player player, Task task) {
+
     }
 
     /**
      * 以单个玩家的身份创建任务
      * 如果玩家不在队伍中，会创建一个队伍
      */
+    @Override
     public Result create(Player player, Class<? extends Task> taskClass, TaskDifficulty taskDifficulty) {
         GlobalTeam globalTeam = globalTeamRepository.findByPlayer(player);
         if (globalTeam == null) {
@@ -65,21 +77,22 @@ public class TaskService {
      * 以队伍的身份创建指定类型的任务
      * 并绑定队伍与任务
      */
+    @Override
     public Result create(GlobalTeam globalTeam, Class<? extends Task> taskClass, TaskDifficulty taskDifficulty) {
         if (globalTeam.getSelectedTask() != null) return new Result(false, "当前队伍已经选择了任务，无法再次创建。");
-        double cost = taskDifficulty.getWheatCost();
+
         List<OfflinePlayer> offlinePlayers = globalTeam.getOfflinePlayers();
         for (OfflinePlayer offlinePlayer : offlinePlayers) {
             if (!offlinePlayer.isOnline()) return new Result(false, "队伍中有离线玩家，无法创建任务。");
         }
-        // 检查成员余额
+        // 检查成员能否接受任务
         for (OfflinePlayer offlinePlayer : offlinePlayers) {
-            if (vaultAPI.getEconomy(offlinePlayer) < cost)
-                return new Result(false, "队伍中至少有一名成员无法支付本次任务费用。");
+            if(!canAccept(taskClass,taskDifficulty,offlinePlayer))
+                return new Result(false, "队伍中至少有一名成员不满足接受任务的条件。");
         }
-        // 成员支付任务成本
+        // 成员接受任务
         for (OfflinePlayer offlinePlayer : offlinePlayers) {
-            vaultAPI.takeEconomy(offlinePlayer, cost);
+            accept(taskClass,taskDifficulty,offlinePlayer);
         }
         Task task = taskFactory.create(taskClass, globalTeam, taskDifficulty);
         if (task != null) {
@@ -93,6 +106,7 @@ public class TaskService {
 
     }
 
+    @Override
     public Result ready(Task task) {
         if (task == null) return new Result(false, "不存在的任务。");
         if (task.getGlobalTeam().getPlayers().isEmpty()) {
@@ -160,44 +174,19 @@ public class TaskService {
     }
 
     /**
-     * 回到大厅(读取主背包后清理主背包数据)
+     * 将请求转发给对应具体任务的业务类
      */
-    public void goLobby(Player player) {
-        InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
-        invBackupService.applyInv(player, PlayerBackpack.getEmptyBackpack());
-//        Result r = invBackupService.applyMainInv(player);
-//        if(!r.result()) return;
-//        invBackupService.saveMainInv(player,PlayerBackpack.getEmptyBackpack());
-        // 传送回城
-        player.teleport(config.getLobbyLocation());
-        if (!player.isOp()) player.setGameMode(GameMode.SURVIVAL);
+    @Override
+    public boolean canAccept(Class<? extends Task> taskClass, TaskDifficulty taskDifficulty, OfflinePlayer offlinePlayer) {
+        ITaskService taskService = taskRelationProxy.getTaskService(taskClass);
+        return taskService.canAccept(taskClass,taskDifficulty,offlinePlayer);
     }
-
     /**
-     * 前往任务地点
+     * 将请求转发给对应具体任务的业务类
      */
-    public void goTask(Player player, Task task) {
-        TaskRegion taskRegion = task.getTaskRegion();
-        if (taskRegion == null) {
-            Notifier.error("任务区域为空，玩家无法进入任务区域！");
-            return;
-        }
-        InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
-//         保存玩家背包信息
-        invBackupService.saveMainInv(player);
-        // 应用任务背包信息
-        invBackupService.applyInv(player,task.getDefaultKit());
-
-        // 传送玩家到任务地点
-        List<Location> spawnLocations = task.getSpawnLocations();
-        if (spawnLocations.isEmpty()) player.teleport(task.getTaskRegion().getCenter());
-        else {
-            Location location = spawnLocations.get(random.nextInt(spawnLocations.size())).clone().add(0.5, 1, 0.5);
-            location.getBlock().setType(Material.AIR);
-            location.clone().add(0, 1, 0).getBlock().setType(Material.AIR);
-            player.teleport(location);
-        }
-        // 设置玩家游戏模式
-        if (!player.isOp()) player.setGameMode(GameMode.SURVIVAL);
+    @Override
+    public void accept(Class<? extends Task> taskClass, TaskDifficulty taskDifficulty, OfflinePlayer offlinePlayer) {
+        ITaskService taskService = taskRelationProxy.getTaskService(taskClass);
+        taskService.accept(taskClass,taskDifficulty,offlinePlayer);
     }
 }

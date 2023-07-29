@@ -15,7 +15,8 @@ import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.LocationCommandSender;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.WorldEditAPI;
-import org.wolflink.minecraft.plugin.siriuxa.task.exploration.WheatTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.exploration.ExplorationTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.wheat.WheatTask;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 
 import java.util.HashSet;
@@ -36,9 +37,9 @@ public class EvacuationZone {
      */
     private final int safeRadius;
     /**
-     * 归属的任务(只能是麦穗任务类型)
+     * 归属的任务(只能是自由勘探任务类型)
      */
-    private final WheatTask wheatTask;
+    private final ExplorationTask explorationTask;
     // 用于设置指南针的SubScheduler
     private final SubScheduler subScheduler;
     // 用于存贮指南针已经生效的玩家的列表
@@ -49,8 +50,8 @@ public class EvacuationZone {
     private boolean available = false;
     private EditSession editSession;
 
-    public EvacuationZone(WheatTask wheatTask, World world, int x, int z, int safeRadius) {
-        this.wheatTask = wheatTask;
+    public EvacuationZone(ExplorationTask explorationTask, World world, int x, int z, int safeRadius) {
+        this.explorationTask = explorationTask;
         this.center = new Location(world, x, world.getHighestBlockYAt(x, z) + 25D, z);
         this.safeRadius = safeRadius;
         this.locationCommandSender = new LocationCommandSender(center);
@@ -64,7 +65,7 @@ public class EvacuationZone {
         if (available) {
             generateSchematic();
             subScheduler.runTaskTimer(() -> {
-                for (Player player : wheatTask.getTaskPlayers()) {
+                for (Player player : explorationTask.getTaskPlayers()) {
                     if (!compassPlayers.contains(player)) {
                         setPlayerCompass(player, true);
                         compassPlayers.add(player);
@@ -98,13 +99,13 @@ public class EvacuationZone {
 
     public void generateSchematic() {
         editSession = IOC.getBean(WorldEditAPI.class).pasteEvacuationUnit(locationCommandSender);
-        Notifier.broadcastChat(wheatTask.getTaskPlayers(), "飞艇已停留至坐标 X：" + center.getBlockX() + " Z：" + center.getBlockZ() + " 附近，如有需要请尽快前往撤离。");
-        Notifier.broadcastChat(wheatTask.getTaskPlayers(), "温馨提示：提前在物品栏准备好指南针，为你的撤离之旅雪中送炭。=w=");
+        Notifier.broadcastChat(explorationTask.getTaskPlayers(), "飞艇已停留至坐标 X：" + center.getBlockX() + " Z：" + center.getBlockZ() + " 附近，如有需要请尽快前往撤离。");
+        Notifier.broadcastChat(explorationTask.getTaskPlayers(), "温馨提示：提前在物品栏准备好指南针，为你的撤离之旅雪中送炭。=w=");
     }
 
     public void undoSchematic() {
-        getPlayerInZone().forEach(wheatTask::evacuate);
-        Notifier.broadcastChat(wheatTask.getTaskPlayers(), "坐标 X：" + center.getBlockX() + " Z：" + center.getBlockZ() + " 附近的飞艇已撤离，请等待下一艘飞艇接应。");
+        getPlayerInZone().forEach(explorationTask::evacuate);
+        Notifier.broadcastChat(explorationTask.getTaskPlayers(), "坐标 X：" + center.getBlockX() + " Z：" + center.getBlockZ() + " 附近的飞艇已撤离，请等待下一艘飞艇接应。");
         IOC.getBean(WorldEditAPI.class).undoPaste(locationCommandSender, editSession);
     }
 
@@ -129,7 +130,7 @@ public class EvacuationZone {
             compassMeta.setDisplayName("§a飞艇指南针");
             compassMeta.setLore(List.of("§f ", "  §7接收到了神奇的信号，指向最近的撤离飞艇", "§f "));
             compassMeta.setLodestone(center);
-        } else compassMeta.setLodestone(Objects.requireNonNull(wheatTask.getTaskRegion()).getCenter());
+        } else compassMeta.setLodestone(Objects.requireNonNull(explorationTask.getTaskRegion()).getCenter());
         compassMeta.setLodestoneTracked(false);
         return compassMeta;
     }

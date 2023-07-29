@@ -9,11 +9,11 @@ import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.DifficultyRepository;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.WheatTaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskMenu;
 
-public class DifficultyIcon<T extends TaskDifficulty> extends Icon {
+public class DifficultyIcon<T extends WheatTaskDifficulty> extends Icon {
 
     private final T taskDifficulty;
     private final DifficultyRepository difficultyRepository;
@@ -56,8 +56,7 @@ public class DifficultyIcon<T extends TaskDifficulty> extends Icon {
                     "§7受伤惩罚 §f-" + String.format("%.2f", explorationDifficulty.getHurtWheatCost()) + " §6麦穗 §8/ §71点伤害",
                     "§7受伤倍率 §fx" + String.format("%.2f", explorationDifficulty.getHurtDamageMultiple() * 100) + "§7%",
                     "§7带回物资 §f" + explorationDifficulty.getBringSlotAmount() + "§7格",
-                    "§7麦穗转化 §f" + String.format("%.2f", explorationDifficulty.getWheatGainPercent() * 100) + "§7%",
-                    "§7经验转化 §f" + String.format("%.2f", explorationDifficulty.getExpGainPercent() * 100) + "§7%",
+                    "§7奖励倍率 §f" + String.format("%.0f", explorationDifficulty.getRewardMultiple() * 100) + "§7%",
                     " "
             );
         }

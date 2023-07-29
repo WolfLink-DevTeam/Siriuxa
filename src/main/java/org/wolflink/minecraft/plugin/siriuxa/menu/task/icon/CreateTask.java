@@ -10,7 +10,7 @@ import org.wolflink.minecraft.plugin.siriuxa.api.Result;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskMenu;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskService;
-import org.wolflink.minecraft.plugin.siriuxa.task.exploration.WheatTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.wheat.WheatTask;
 
 public class CreateTask extends Icon {
 

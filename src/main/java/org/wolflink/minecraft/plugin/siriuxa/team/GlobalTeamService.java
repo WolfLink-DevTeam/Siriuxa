@@ -8,6 +8,8 @@ import org.wolflink.minecraft.plugin.siriuxa.api.Result;
 import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
+import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskRelationProxy;
+import org.wolflink.minecraft.plugin.siriuxa.task.common.interfaces.ITaskService;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.WaitStage;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 
@@ -22,6 +24,9 @@ public class GlobalTeamService {
 
     @Inject
     private VaultAPI vaultAPI;
+
+    @Inject
+    private TaskRelationProxy taskRelationProxy;
 
     /**
      * 创建一个队伍
@@ -48,11 +53,11 @@ public class GlobalTeamService {
             if (!(stage instanceof WaitStage)) {
                 return new Result(false, "当前队伍的任务状态为：" + stage.getDisplayName() + "，不允许加入。");
             }
-            int wheatCost = task.getTaskDifficulty().getWheatCost();
-            if (vaultAPI.getEconomy().getBalance(player) < wheatCost) {
-                return new Result(false, "当前队伍已经选择了任务，你需要支付 " + wheatCost + " 才能加入这次任务，显然你还没有足够的麦穗。");
+            ITaskService taskService = taskRelationProxy.getTaskService(task);
+            if (!taskService.canAccept(task.getClass(),task.getDifficulty(),player)) {
+                return new Result(false, "当前队伍已经选择了任务，而你不满足加入任务所需条件。");
             }
-            if (!vaultAPI.takeEconomy(player, wheatCost)) return new Result(false, "在尝试支付任务费用时出现问题。");
+            taskService.accept(task.getClass(),task.getDifficulty(),player);
             globalTeam.join(player);
             return new Result(true, "成功加入队伍，并接受了相应的任务。");
         } else {

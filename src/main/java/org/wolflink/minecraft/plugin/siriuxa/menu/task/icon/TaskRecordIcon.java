@@ -11,6 +11,7 @@ import org.wolflink.minecraft.plugin.siriuxa.api.PlayerAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.DifficultyRepository;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerWheatTaskRecord;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
@@ -68,7 +69,7 @@ public class TaskRecordIcon extends Icon {
                 playerWheatTaskRecord.setClaimed(true);
                 IOC.getBean(TaskRecordDB.class).saveRecord(playerWheatTaskRecord);
                 String returnWheat = String.format("%.2f", Objects.requireNonNull(IOC.getBean(DifficultyRepository.class)
-                        .findByName(playerWheatTaskRecord.getTaskDifficulty())).getWheatCost() * 0.6);
+                        .findByName(ExplorationDifficulty.class,playerWheatTaskRecord.getTaskDifficulty())).getWheatCost() * 0.6);
                 IOC.getBean(VaultAPI.class).addEconomy(player, Double.parseDouble(returnWheat));
                 int totalExp = (int) (playerWheatTaskRecord.getPlayerBackpack().getTotalExp() * 0.8);
                 IOC.getBean(PlayerAPI.class).addExp(player, totalExp);

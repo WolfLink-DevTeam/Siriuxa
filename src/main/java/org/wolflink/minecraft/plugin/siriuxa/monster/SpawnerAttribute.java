@@ -4,6 +4,7 @@ import lombok.Data;
 import org.bukkit.entity.EntityType;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.WheatTaskDifficulty;
 
 import java.util.EnumMap;
 import java.util.Map;

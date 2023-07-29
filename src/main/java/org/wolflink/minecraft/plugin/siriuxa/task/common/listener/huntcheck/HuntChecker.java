@@ -14,7 +14,7 @@ import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.file.Lang;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskRepository;
-import org.wolflink.minecraft.plugin.siriuxa.task.exploration.WheatTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.wheat.WheatTask;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
