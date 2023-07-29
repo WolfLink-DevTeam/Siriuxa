@@ -48,12 +48,18 @@ public class TaskService implements ITaskService {
 
     @Override
     public void goLobby(Player player) {
-
+        ITaskService taskService = taskRelationProxy.getTaskService(player.getWorld().getName());
+        if(taskService == null) {
+            Notifier.chat("你当前所处的世界不支持返回大厅！",player);
+            return;
+        }
+        taskService.goLobby(player);
     }
 
     @Override
     public void goTask(Player player, Task task) {
-
+        ITaskService taskService = taskRelationProxy.getTaskService(task);
+        taskService.goTask(player,task);
     }
 
     /**
