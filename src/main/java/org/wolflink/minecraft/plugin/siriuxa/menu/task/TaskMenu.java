@@ -1,5 +1,6 @@
 package org.wolflink.minecraft.plugin.siriuxa.menu.task;
 
+import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.BorderIcon;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.StaticMenu;
@@ -30,7 +31,9 @@ public class TaskMenu extends StaticMenu {
         setIcon(16, new CreateTask(this));
     }
 
+    @Nullable
     public ExplorationDifficulty getSelectedDifficulty() {
+        if (getOwner() == null || !getOwner().isOnline()) return null;
         ExplorationDifficultyMenu explorationDifficultyMenu = menuService.findMenu(getOwner(), ExplorationDifficultyMenu.class);
         return explorationDifficultyMenu.getSelectedDifficulty();
     }
