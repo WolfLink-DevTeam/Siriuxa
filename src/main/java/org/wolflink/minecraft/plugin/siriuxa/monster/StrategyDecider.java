@@ -40,9 +40,9 @@ public class StrategyDecider implements IStatus {
      * 优先级从上往下，最上方的最优先进行决策
      */
     private final List<SpawnStrategy> strategyList;
-    public StrategyDecider(Task task, TaskDifficulty difficulty) {
+    public StrategyDecider(Task task) {
         this.task = task;
-        spawnerAttribute = new SpawnerAttribute(difficulty);
+        spawnerAttribute = new SpawnerAttribute(task.getTaskDifficulty());
         this.spawnPeriodSecs = spawnerAttribute.getSpawnPeriodSecs();
         strategyList = List.of(new OceanSpawnStrategy(spawnerAttribute), new PlayerFocusSpawnStrategy(spawnerAttribute));
     }

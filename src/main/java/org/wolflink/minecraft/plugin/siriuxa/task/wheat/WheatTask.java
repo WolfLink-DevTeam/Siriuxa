@@ -46,7 +46,7 @@ public abstract class WheatTask extends Task {
     @Getter
     private final LinearStageHolder stageHolder = (LinearStageHolder) super.getStageHolder();
     @Getter
-    private final WheatTaskDifficulty difficulty = (WheatTaskDifficulty) super.getDifficulty();
+    private final WheatTaskDifficulty difficulty = (WheatTaskDifficulty) super.getTaskDifficulty();
     public WheatTask(GlobalTeam globalTeam, WheatTaskDifficulty difficulty, PlayerBackpack defaultKit) {
         super(globalTeam, difficulty, defaultKit);
     }

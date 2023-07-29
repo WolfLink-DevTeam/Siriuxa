@@ -51,7 +51,7 @@ public class ExplorationTask extends WheatTask {
     @Getter
     private EvacuationZone availableEvacuationZone = null;
     @Getter
-    private final ExplorationDifficulty difficulty;
+    private final ExplorationDifficulty explorationDifficulty;
     public Set<Player> waitForEvacuatePlayers() {
         if (availableEvacuationZone == null) return new HashSet<>();
         else return availableEvacuationZone.getPlayerInZone();
@@ -75,9 +75,9 @@ public class ExplorationTask extends WheatTask {
             }
         }, 20L * 60 * minutes);
     }
-    public ExplorationTask(GlobalTeam globalTeam, ExplorationDifficulty difficulty) {
-        super(globalTeam, difficulty,defaultKit);
-        this.difficulty = difficulty;
+    public ExplorationTask(GlobalTeam globalTeam, ExplorationDifficulty explorationDifficulty) {
+        super(globalTeam, explorationDifficulty,defaultKit);
+        this.explorationDifficulty = explorationDifficulty;
     }
     /**
      * 撤离玩家
@@ -112,7 +112,7 @@ public class ExplorationTask extends WheatTask {
         }
         initRecord();
         getTaskStat().enable();
-        this.taskWheat = (double) getTaskTeamSize() * (getDifficulty().getWheatCost() + getDifficulty().getWheatSupply());
+        this.taskWheat = (double) getTaskTeamSize() * (getExplorationDifficulty().getWheatCost() + getExplorationDifficulty().getWheatSupply());
         getStrategyDecider().enable();
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
             List<Location> portalLocations = IOC.getBean(BlockAPI.class)

@@ -64,7 +64,7 @@ public class PlayerWheatTaskRecord implements ConfigurationSerializable {
         isSuccess = false;
         teamSize = wheatTask.getTaskTeamSize();
         taskType = wheatTask.getName();
-        taskDifficulty = wheatTask.getDifficulty().getName();
+        taskDifficulty = wheatTask.getTaskDifficulty().getName();
         isEscape = false;
         isClaimed = false;
         wheat = wheatTask.getTaskWheat();

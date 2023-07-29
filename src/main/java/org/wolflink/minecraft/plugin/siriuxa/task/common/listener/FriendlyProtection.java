@@ -9,7 +9,6 @@ import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.WheatTaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
@@ -36,7 +35,7 @@ public class FriendlyProtection extends WolfirdListener {
         Task task = aGlobalTeam.getSelectedTask();
         if (task == null) return; // 没选择任务
         if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 没在游戏阶段
-        TaskDifficulty taskDifficulty = task.getDifficulty();
+        TaskDifficulty taskDifficulty = task.getTaskDifficulty();
         int level = taskDifficulty.getLevel();
         if (level <= 2) {
             Notifier.chat("§c你的队友受到了某种神秘力量的保护，你无法伤害Ta。", b);

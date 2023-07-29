@@ -40,7 +40,7 @@ public class TeamInfo extends WolfirdCommand {
         if (task == null) taskInfo += "§7暂未选择\n§r\n";
         else {
             taskInfo += task.getColor() + task.getName()
-                    + " " + task.getDifficulty().getColor() + task.getDifficulty().getName()
+                    + " " + task.getTaskDifficulty().getColor() + task.getTaskDifficulty().getName()
                     + " §f" + task.getStageHolder().getThisStage().getDisplayName()
                     + "\n§r\n";
         }

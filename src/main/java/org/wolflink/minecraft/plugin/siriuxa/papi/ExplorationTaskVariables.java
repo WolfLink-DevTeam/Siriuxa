@@ -8,7 +8,6 @@ import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskRepository;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.ExplorationTask;
-import org.wolflink.minecraft.plugin.siriuxa.task.wheat.WheatTask;
 
 @Singleton
 public class ExplorationTaskVariables extends PlaceholderExpansion {
@@ -56,7 +55,7 @@ public class ExplorationTaskVariables extends PlaceholderExpansion {
                 return explorationTask.getStageHolder().getThisStage().getDisplayName();
             }
             case "difficulty" -> {
-                return explorationTask.getDifficulty().getColor() + explorationTask.getDifficulty().getName();
+                return explorationTask.getTaskDifficulty().getColor() + explorationTask.getTaskDifficulty().getName();
             }
             case "evacuable" -> {
                 if (explorationTask.getAvailableEvacuationZone() != null) return "§a可撤离";

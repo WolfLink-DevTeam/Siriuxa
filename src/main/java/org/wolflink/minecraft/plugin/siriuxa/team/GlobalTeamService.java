@@ -54,10 +54,10 @@ public class GlobalTeamService {
                 return new Result(false, "当前队伍的任务状态为：" + stage.getDisplayName() + "，不允许加入。");
             }
             ITaskService taskService = taskRelationProxy.getTaskService(task);
-            if (!taskService.canAccept(task.getClass(),task.getDifficulty(),player)) {
+            if (!taskService.canAccept(task.getClass(),task.getTaskDifficulty(),player)) {
                 return new Result(false, "当前队伍已经选择了任务，而你不满足加入任务所需条件。");
             }
-            taskService.accept(task.getClass(),task.getDifficulty(),player);
+            taskService.accept(task.getClass(),task.getTaskDifficulty(),player);
             globalTeam.join(player);
             return new Result(true, "成功加入队伍，并接受了相应的任务。");
         } else {

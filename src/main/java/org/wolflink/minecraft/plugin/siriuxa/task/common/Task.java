@@ -40,7 +40,7 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
     protected final SubScheduler subScheduler = new SubScheduler();
     protected final UUID taskUuid = UUID.randomUUID();
     @Getter
-    private final TaskDifficulty difficulty;
+    private final TaskDifficulty taskDifficulty;
     protected final Random random = new Random();
     @Getter
     private final StageHolder stageHolder;
@@ -52,13 +52,13 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
     GlobalTeam globalTeam;
     TaskTeam taskTeam = new TaskTeam(new GlobalTeam());
     protected Task(@NotNull GlobalTeam globalTeam,
-                   @NotNull TaskDifficulty difficulty,
+                   @NotNull TaskDifficulty taskDifficulty,
                    @NotNull PlayerBackpack defaultKit) {
         this.globalTeam = globalTeam;
-        this.difficulty = difficulty;
+        this.taskDifficulty = taskDifficulty;
         this.defaultKit = defaultKit;
         stageHolder = initStageHolder();
-        strategyDecider = new StrategyDecider(this,difficulty);
+        strategyDecider = new StrategyDecider(this);
     }
     protected abstract StageHolder initStageHolder();
     protected void triggerFailed() {
