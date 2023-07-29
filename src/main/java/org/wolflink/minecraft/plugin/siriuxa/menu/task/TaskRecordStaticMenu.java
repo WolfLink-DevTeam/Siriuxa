@@ -2,7 +2,7 @@ package org.wolflink.minecraft.plugin.siriuxa.menu.task;
 
 import lombok.Getter;
 import org.wolflink.common.ioc.IOC;
-import org.wolflink.minecraft.plugin.siriuxa.api.view.Menu;
+import org.wolflink.minecraft.plugin.siriuxa.api.view.StaticMenu;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.NextPage;
@@ -16,21 +16,17 @@ import java.util.UUID;
 /**
  * 任务记录菜单
  */
-public class TaskRecordMenu extends Menu {
+public class TaskRecordStaticMenu extends StaticMenu {
     List<PlayerTaskRecord> totalRecordList = new ArrayList<>();
     @Getter
     private int page = 1;
-    /**
-     * 刷新周期设置小于0则为静态菜单
-     * 静态菜单只会在打开时刷新一次
-     */
-    public TaskRecordMenu(UUID ownerUuid) {
+    public TaskRecordStaticMenu(UUID ownerUuid) {
         super(ownerUuid, "§0§l任务记录", 54);
     }
 
     public void setPage(int value) {
         this.page = value;
-        super.init();
+        super.refreshLayout();
     }
 
     @Override

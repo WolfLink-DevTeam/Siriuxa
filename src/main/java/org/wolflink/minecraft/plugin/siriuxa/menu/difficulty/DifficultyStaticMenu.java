@@ -3,20 +3,20 @@ package org.wolflink.minecraft.plugin.siriuxa.menu.difficulty;
 import lombok.Getter;
 import lombok.Setter;
 import org.wolflink.common.ioc.IOC;
-import org.wolflink.minecraft.plugin.siriuxa.api.view.Menu;
+import org.wolflink.minecraft.plugin.siriuxa.api.view.StaticMenu;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.DifficultyRepository;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 
 import java.util.UUID;
 
-public abstract class DifficultyMenu<T extends TaskDifficulty> extends Menu {
+public abstract class DifficultyStaticMenu<T extends TaskDifficulty> extends StaticMenu {
 
     private final Class<T> difficultyClass;
     @Setter
     @Getter
     private T selectedDifficulty = null;
 
-    protected DifficultyMenu(UUID ownerUuid, Class<T> difficultyClass) {
+    protected DifficultyStaticMenu(UUID ownerUuid, Class<T> difficultyClass) {
         super(ownerUuid,  "§0§l难度选择", 27);
         this.difficultyClass = difficultyClass;
     }

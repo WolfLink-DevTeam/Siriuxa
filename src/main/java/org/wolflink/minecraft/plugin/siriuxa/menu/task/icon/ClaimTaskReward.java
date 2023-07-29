@@ -5,12 +5,12 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
-import org.wolflink.minecraft.plugin.siriuxa.menu.task.ExplorationBackpackMenu;
+import org.wolflink.minecraft.plugin.siriuxa.menu.task.ExplorationBackpackStaticMenu;
 
 public class ClaimTaskReward extends Icon {
-    private final ExplorationBackpackMenu explorationBackpackMenu;
+    private final ExplorationBackpackStaticMenu explorationBackpackMenu;
 
-    public ClaimTaskReward(ExplorationBackpackMenu explorationBackpackMenu) {
+    public ClaimTaskReward(ExplorationBackpackStaticMenu explorationBackpackMenu) {
         super(0);
         this.explorationBackpackMenu = explorationBackpackMenu;
     }

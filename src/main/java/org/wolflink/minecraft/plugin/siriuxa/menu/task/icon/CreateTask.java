@@ -8,17 +8,17 @@ import org.bukkit.inventory.ItemStack;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.Result;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
-import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskMenu;
+import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskStaticMenu;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskService;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.ExplorationTask;
 
 public class CreateTask extends Icon {
 
     private final TaskService taskService;
-    private final TaskMenu taskMenu;
+    private final TaskStaticMenu taskMenu;
 
-    public CreateTask(TaskMenu taskMenu) {
-        super(0);
+    public CreateTask(TaskStaticMenu taskMenu) {
+        super(20);
         this.taskMenu = taskMenu;
         taskService = IOC.getBean(TaskService.class);
     }

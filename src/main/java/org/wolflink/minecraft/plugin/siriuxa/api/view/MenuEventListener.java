@@ -20,9 +20,9 @@ public class MenuEventListener extends WolfirdListener {
     void onService(InventoryClickEvent e) {
         if (!(e.getWhoClicked() instanceof Player p)) return;
         String title = e.getView().getTitle();
-        Menu menu = menuService.findMenu(p, title);
-        if (menu == null) return;
-        Icon icon = menu.getIcon(e.getSlot());
+        StaticMenu staticMenu = menuService.findMenu(p, title);
+        if (staticMenu == null) return;
+        Icon icon = staticMenu.getIcon(e.getSlot());
         if (icon == null) return;
         invokeViewClick(p, icon, e.getClick());
     }
@@ -34,8 +34,8 @@ public class MenuEventListener extends WolfirdListener {
             return;
         }
         String title = e.getWhoClicked().getOpenInventory().getTitle();
-        Menu menu = menuService.findMenu((Player) e.getWhoClicked(), title);
-        if (menu != null) e.setCancelled(true);
+        StaticMenu staticMenu = menuService.findMenu((Player) e.getWhoClicked(), title);
+        if (staticMenu != null) e.setCancelled(true);
     }
 
     private void invokeViewClick(Player player, Icon icon, ClickType clickType) {

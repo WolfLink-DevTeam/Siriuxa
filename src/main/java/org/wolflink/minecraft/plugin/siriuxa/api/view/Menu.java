@@ -13,19 +13,20 @@ import javax.annotation.Nullable;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+/**
+ * 菜单父类
+ * 可能是静态菜单，也可能是动态菜单
+ */
 public abstract class Menu {
-    private final Inventory inventory;
+    protected final SubScheduler subScheduler = new SubScheduler();
+    protected final Inventory inventory;
     @Getter
-    private final String title;
+    protected final String title;
     @Getter
-    private final int size;
+    protected final int size;
     @Getter
-    private final UUID ownerUuid;
-    private Icon[] icons;
-
-    /**
-     * 菜单只会在打开时刷新一次
-     */
+    protected final UUID ownerUuid;
+    protected Icon[] icons;
     protected Menu(UUID ownerUuid, String title, int size) {
         this.ownerUuid = ownerUuid;
         this.title = title;
@@ -33,23 +34,43 @@ public abstract class Menu {
         inventory = Bukkit.createInventory(null, size, title);
         icons = null;
     }
-
     @Nullable
     public Player getOwner() {
         Player player = Bukkit.getPlayer(ownerUuid);
         if (player == null || !player.isOnline()) return null;
         return player;
     }
-
     @NonNull
     public OfflinePlayer getOfflineOwner() {
         return Bukkit.getOfflinePlayer(ownerUuid);
     }
+    protected abstract void refreshLayout();
+    /**
+     * 将菜单展示给玩家
+     */
+    public void display(Player player) {
+        refreshLayout();
+        player.closeInventory();
+        player.openInventory(inventory);
+    }
+    /**
+     * 子类实现 ItemIcon
+     */
+    protected abstract void overrideIcons();
 
+    public void setIcon(int index, Icon icon) {
+        if (index >= icons.length || index < 0) return;
+        icons[index] = icon;
+    }
+
+    public Icon getIcon(int index) {
+        if (index >= icons.length || index < 0) return null;
+        return icons[index];
+    }
     /**
      * 格式化背包菜单，填充边界，空气等
      */
-    private void initIcons() {
+    protected void initIcons() {
         icons = new Icon[size];
         EmptyIcon emptyItemIcon = IOC.getBean(EmptyIcon.class);
         for (int i = 0; i < size; i++) {
@@ -66,48 +87,19 @@ public abstract class Menu {
         }
     }
 
-    private final SubScheduler subScheduler = new SubScheduler();
     /**
-     * 初始化整个菜单
-     * 动态 Icon 注册计时器
+     * 将图标的物品绑定到菜单中
      */
-    protected void init() {
-        if(icons == null) {
-            initIcons();
-            overrideIcons();
-            for (int i = 0; i < size; i++) {
-                Icon icon = getIcon(i);
-                inventory.setItem(i, icon.getIcon());
-                long refreshTick = icon.getRefreshTick();
-                if(refreshTick > 0) {
-                    final int finalI = i;
-                    subScheduler.runTaskTimerAsync(()->inventory.setItem(finalI,icon.getIcon()),refreshTick,refreshTick);
-                }
+    protected void bindItems() {
+        subScheduler.cancelAllTasks();
+        for (int i = 0; i < size; i++) {
+            Icon icon = getIcon(i);
+            inventory.setItem(i, icon.getIcon());
+            long refreshTick = icon.getRefreshTick();
+            if(refreshTick > 0) {
+                final int finalI = i;
+                subScheduler.runTaskTimerAsync(()->inventory.setItem(finalI,icon.getIcon()),refreshTick,refreshTick);
             }
         }
-    }
-
-    /**
-     * 子类实现 ItemIcon
-     */
-    protected abstract void overrideIcons();
-
-    public void setIcon(int index, Icon icon) {
-        if (index >= icons.length || index < 0) return;
-        icons[index] = icon;
-    }
-
-    public Icon getIcon(int index) {
-        if (index >= icons.length || index < 0) return null;
-        return icons[index];
-    }
-
-    /**
-     * 将菜单展示给玩家
-     */
-    public void display(Player player) {
-        init();
-        player.closeInventory();
-        player.openInventory(inventory);
     }
 }
