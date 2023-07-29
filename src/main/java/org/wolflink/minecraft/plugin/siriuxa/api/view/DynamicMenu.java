@@ -24,6 +24,7 @@ public abstract class DynamicMenu extends Menu {
      */
     @Override
     protected void refreshLayout() {
+        if(getOwner() == null || !getOwner().isOnline()) return;
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(),()->{
             initIcons();
             overrideIcons();

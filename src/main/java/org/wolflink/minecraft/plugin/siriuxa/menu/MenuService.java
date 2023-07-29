@@ -27,11 +27,13 @@ public class MenuService {
     }
 
     public void display(Class<? extends Menu> menuClass, Player player) {
+        if(player == null || !player.isOnline()) return;
         Menu menu = findMenu(player, menuClass);
         display(menu, player);
     }
 
     public void display(Menu menu, Player player) {
+        if(player == null || !player.isOnline()) return;
         menu.display(player);
     }
 }

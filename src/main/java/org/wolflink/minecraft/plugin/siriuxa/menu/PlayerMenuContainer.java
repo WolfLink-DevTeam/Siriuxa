@@ -1,5 +1,6 @@
 package org.wolflink.minecraft.plugin.siriuxa.menu;
 
+import lombok.NonNull;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Menu;
@@ -25,7 +26,7 @@ public class PlayerMenuContainer {
     }
 
     @Nullable
-    public static Menu findMenu(Player player, Class<? extends Menu> menuClass) {
+    public static Menu findMenu(@NonNull Player player, Class<? extends Menu> menuClass) {
         PlayerMenuContainer container = instanceMap.get(player.getUniqueId());
         if (container == null) {
             instanceMap.put(player.getUniqueId(), new PlayerMenuContainer(player.getUniqueId()));
@@ -35,7 +36,7 @@ public class PlayerMenuContainer {
     }
 
     @Nullable
-    public static Menu findMenu(Player player, String title) {
+    public static Menu findMenu(@NonNull Player player, String title) {
         PlayerMenuContainer container = instanceMap.get(player.getUniqueId());
         if (container == null) {
             instanceMap.put(player.getUniqueId(), new PlayerMenuContainer(player.getUniqueId()));

@@ -27,6 +27,7 @@ public abstract class StaticMenu extends Menu {
      */
     @Override
     protected void refreshLayout() {
+        if(getOwner() == null || !getOwner().isOnline()) return;
         if(icons == null) {
             initIcons();
             overrideIcons();
