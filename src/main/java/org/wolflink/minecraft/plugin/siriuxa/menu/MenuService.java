@@ -4,7 +4,7 @@ import lombok.NonNull;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
-import org.wolflink.minecraft.plugin.siriuxa.api.view.StaticMenu;
+import org.wolflink.minecraft.plugin.siriuxa.api.view.Menu;
 
 @Singleton
 public class MenuService {
@@ -13,25 +13,25 @@ public class MenuService {
     private PublicMenuContainer publicMenuContainer;
 
     @NonNull
-    public <T extends StaticMenu> T findMenu(Player player, Class<? extends StaticMenu> menuClass) {
+    public <T extends Menu> T findMenu(Player player, Class<? extends Menu> menuClass) {
         if (publicMenuContainer.containMenu(menuClass)) return (T) publicMenuContainer.getMenu(menuClass);
-        StaticMenu result = PlayerMenuContainer.findMenu(player, menuClass);
+        Menu result = PlayerMenuContainer.findMenu(player, menuClass);
         if (result == null) throw new IllegalStateException("不存在的菜单类：" + menuClass.getName());
         return (T) result;
     }
 
-    public StaticMenu findMenu(Player player, String title) {
-        StaticMenu staticMenu = (StaticMenu) publicMenuContainer.getMenu(title);
+    public Menu findMenu(Player player, String title) {
+        Menu staticMenu = (Menu) publicMenuContainer.getMenu(title);
         if (staticMenu != null) return staticMenu;
         return PlayerMenuContainer.findMenu(player, title);
     }
 
-    public void display(Class<? extends StaticMenu> menuClass, Player player) {
-        StaticMenu staticMenu = findMenu(player, menuClass);
-        display(staticMenu, player);
+    public void display(Class<? extends Menu> menuClass, Player player) {
+        Menu menu = findMenu(player, menuClass);
+        display(menu, player);
     }
 
-    public void display(StaticMenu staticMenu, Player player) {
-        staticMenu.display(player);
+    public void display(Menu menu, Player player) {
+        menu.display(player);
     }
 }

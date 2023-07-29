@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
-import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskRecordStaticMenu;
+import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskRecordMenu;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 
 @Singleton
@@ -17,6 +17,6 @@ public class TaskHistory extends WolfirdCommand {
     @Override
     protected void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
-        IOC.getBean(MenuService.class).display(TaskRecordStaticMenu.class, player);
+        IOC.getBean(MenuService.class).display(TaskRecordMenu.class, player);
     }
 }

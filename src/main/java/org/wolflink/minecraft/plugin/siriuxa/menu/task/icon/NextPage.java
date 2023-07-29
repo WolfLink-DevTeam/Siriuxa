@@ -5,12 +5,12 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
-import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskRecordStaticMenu;
+import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskRecordMenu;
 
 public class NextPage extends Icon {
-    private final TaskRecordStaticMenu taskRecordMenu;
+    private final TaskRecordMenu taskRecordMenu;
 
-    public NextPage(TaskRecordStaticMenu taskRecordMenu) {
+    public NextPage(TaskRecordMenu taskRecordMenu) {
         super(0);
         this.taskRecordMenu = taskRecordMenu;
     }

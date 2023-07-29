@@ -25,7 +25,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-public class ExplorationBackpackStaticMenu extends StaticMenu {
+public class ExplorationBackpackMenu extends StaticMenu {
 
     private final Set<Integer> selectedSlots = new HashSet<>();
     @Setter
@@ -35,7 +35,7 @@ public class ExplorationBackpackStaticMenu extends StaticMenu {
      * 刷新周期设置小于0则为静态菜单
      * 静态菜单只会在打开时刷新一次
      */
-    public ExplorationBackpackStaticMenu(UUID ownerUuid) {
+    public ExplorationBackpackMenu(UUID ownerUuid) {
         super(ownerUuid, "§0§l任务背包", 54);
     }
 

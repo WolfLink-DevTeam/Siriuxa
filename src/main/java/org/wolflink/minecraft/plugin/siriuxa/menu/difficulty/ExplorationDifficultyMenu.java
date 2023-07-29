@@ -4,8 +4,8 @@ import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 
 import java.util.UUID;
 
-public class ExplorationDifficultyStaticMenu extends DifficultyStaticMenu<ExplorationDifficulty> {
-    public ExplorationDifficultyStaticMenu(UUID ownerUuid) {
+public class ExplorationDifficultyMenu extends DifficultyMenu<ExplorationDifficulty> {
+    public ExplorationDifficultyMenu(UUID ownerUuid) {
         super(ownerUuid, ExplorationDifficulty.class);
     }
 }

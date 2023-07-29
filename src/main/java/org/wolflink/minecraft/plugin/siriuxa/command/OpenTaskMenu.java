@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
-import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskStaticMenu;
+import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskMenu;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 
 @Singleton
@@ -20,6 +20,6 @@ public class OpenTaskMenu extends WolfirdCommand {
     @Override
     protected void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
-        menuService.display(TaskStaticMenu.class, player);
+        menuService.display(TaskMenu.class, player);
     }
 }

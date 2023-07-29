@@ -9,14 +9,14 @@ import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 
 import java.util.UUID;
 
-public abstract class DifficultyStaticMenu<T extends TaskDifficulty> extends StaticMenu {
+public abstract class DifficultyMenu<T extends TaskDifficulty> extends StaticMenu {
 
     private final Class<T> difficultyClass;
     @Setter
     @Getter
     private T selectedDifficulty = null;
 
-    protected DifficultyStaticMenu(UUID ownerUuid, Class<T> difficultyClass) {
+    protected DifficultyMenu(UUID ownerUuid, Class<T> difficultyClass) {
         super(ownerUuid,  "§0§l难度选择", 27);
         this.difficultyClass = difficultyClass;
     }

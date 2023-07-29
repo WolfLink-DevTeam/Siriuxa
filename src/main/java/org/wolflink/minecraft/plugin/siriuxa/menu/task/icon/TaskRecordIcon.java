@@ -14,7 +14,7 @@ import org.wolflink.minecraft.plugin.siriuxa.difficulty.DifficultyRepository;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
-import org.wolflink.minecraft.plugin.siriuxa.menu.task.ExplorationBackpackStaticMenu;
+import org.wolflink.minecraft.plugin.siriuxa.menu.task.ExplorationBackpackMenu;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -61,7 +61,7 @@ public class TaskRecordIcon extends Icon {
         if (!playerTaskRecord.isClaimed()) {
             if (playerTaskRecord.isSuccess()) {
                 MenuService menuService = IOC.getBean(MenuService.class);
-                ExplorationBackpackStaticMenu menu = menuService.findMenu(player, ExplorationBackpackStaticMenu.class);
+                ExplorationBackpackMenu menu = menuService.findMenu(player, ExplorationBackpackMenu.class);
                 menu.setPlayerTaskRecord(playerTaskRecord);
                 IOC.getBean(MenuService.class).display(menu, player);
             } else {

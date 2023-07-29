@@ -5,17 +5,17 @@ import org.wolflink.minecraft.plugin.siriuxa.api.view.BorderIcon;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.StaticMenu;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
-import org.wolflink.minecraft.plugin.siriuxa.menu.difficulty.ExplorationDifficultyStaticMenu;
+import org.wolflink.minecraft.plugin.siriuxa.menu.difficulty.ExplorationDifficultyMenu;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.CreateTask;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.SelectDifficulty;
 
 import java.util.UUID;
 
-public class TaskStaticMenu extends StaticMenu {
+public class TaskMenu extends StaticMenu {
 
     private final MenuService menuService;
 
-    public TaskStaticMenu(UUID uuid) {
+    public TaskMenu(UUID uuid) {
         super(uuid, "§0§l任务菜单", 27);
         menuService = IOC.getBean(MenuService.class);
     }
@@ -31,7 +31,7 @@ public class TaskStaticMenu extends StaticMenu {
     }
 
     public ExplorationDifficulty getSelectedDifficulty() {
-        ExplorationDifficultyStaticMenu explorationDifficultyMenu = menuService.findMenu(getOwner(), ExplorationDifficultyStaticMenu.class);
+        ExplorationDifficultyMenu explorationDifficultyMenu = menuService.findMenu(getOwner(), ExplorationDifficultyMenu.class);
         return explorationDifficultyMenu.getSelectedDifficulty();
     }
 }

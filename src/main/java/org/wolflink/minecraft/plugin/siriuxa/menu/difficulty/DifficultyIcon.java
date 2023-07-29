@@ -11,16 +11,16 @@ import org.wolflink.minecraft.plugin.siriuxa.difficulty.DifficultyRepository;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
-import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskStaticMenu;
+import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskMenu;
 
 public class DifficultyIcon<T extends TaskDifficulty> extends Icon {
 
     private final T taskDifficulty;
     private final DifficultyRepository difficultyRepository;
     private final MenuService menuService;
-    private final DifficultyStaticMenu<T> difficultyMenu;
+    private final DifficultyMenu<T> difficultyMenu;
 
-    public DifficultyIcon(DifficultyStaticMenu<T> difficultyMenu, T taskDifficulty) {
+    public DifficultyIcon(DifficultyMenu<T> difficultyMenu, T taskDifficulty) {
         super(0);
         this.taskDifficulty = taskDifficulty;
         this.menuService = IOC.getBean(MenuService.class);
@@ -34,7 +34,7 @@ public class DifficultyIcon<T extends TaskDifficulty> extends Icon {
         player.closeInventory();
         player.sendTitle(taskDifficulty.getColor() + taskDifficulty.getName(), "难度已选择", 4, 12, 4);
         player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1f, 2f);
-        Siriuxa.getInstance().getSubScheduler().runTaskLater(() -> menuService.display(TaskStaticMenu.class, player), 20);
+        Siriuxa.getInstance().getSubScheduler().runTaskLater(() -> menuService.display(TaskMenu.class, player), 20);
     }
 
     @Override

@@ -7,18 +7,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
-import org.wolflink.minecraft.plugin.siriuxa.menu.task.ExplorationBackpackStaticMenu;
+import org.wolflink.minecraft.plugin.siriuxa.menu.task.ExplorationBackpackMenu;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class ExplorationBackpackItem extends Icon {
 
-    private final ExplorationBackpackStaticMenu explorationBackpackMenu;
+    private final ExplorationBackpackMenu explorationBackpackMenu;
     private final ItemStack itemStack;
     private final int index;
 
-    public ExplorationBackpackItem(ExplorationBackpackStaticMenu explorationBackpackMenu, int index, @Nullable ItemStack itemStack) {
+    public ExplorationBackpackItem(ExplorationBackpackMenu explorationBackpackMenu, int index, @Nullable ItemStack itemStack) {
         super(5);
         this.index = index;
         this.explorationBackpackMenu = explorationBackpackMenu;
