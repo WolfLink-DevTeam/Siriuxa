@@ -36,7 +36,7 @@ public class EnderLock extends Icon {
                     "  §7源于末地的奇异力量能够保护你的贵重物品以防丢失，",
                     "  §7但显然目前这种技术仍无法被广泛应用，使用代价昂贵。",
                     " ",
-                    "  §f花费 §a"+fiveSlotBackpack.getLockPrice()+" §6麦穗 §f以购买 §d末影祝福",
+                    "  §f右键花费 §a"+fiveSlotBackpack.getLockPrice()+" §6麦穗 §f以购买 §d末影祝福",
                     " ");
             else return fastCreateItemStack(Material.BARRIER,1,"§8[ §d末影祝福 §8] §c不可购买",
                     " ",
@@ -48,6 +48,10 @@ public class EnderLock extends Icon {
 
     @Override
     public void leftClick(Player player) {
+    }
+
+    @Override
+    public void rightClick(Player player) {
         FiveSlotBackpack fiveSlotBackpack = menu.getFiveSlotBackpack();
         if(fiveSlotBackpack.getLockedSlots().get(index)) return;
         if(!fiveSlotBackpack.canLock()) return;
@@ -60,10 +64,5 @@ public class EnderLock extends Icon {
         Notifier.chat("§d远古的咒语在你耳边吟唱...末影祝福开始生效了！",player);
         player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE,1.2f,0.7f);
         player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES,1f,1f);
-    }
-
-    @Override
-    public void rightClick(Player player) {
-
     }
 }
