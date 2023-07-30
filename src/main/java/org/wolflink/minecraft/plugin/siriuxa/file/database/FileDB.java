@@ -47,6 +47,22 @@ public abstract class FileDB {
         }
     }
 
+    /**
+     * 保存单个文件到本地
+     */
+    protected void save(File file) {
+        FileConfiguration fileConfiguration = getFileConfiguration(file);
+        if(fileConfiguration == null) {
+            Notifier.warn("在尝试保存 "+file.getName()+" 时未找到其 FileConfiguration 对象");
+            return;
+        }
+        try {
+            fileConfiguration.save(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Notifier.error("在尝试保存文件 "+file.getName()+" 时出现问题");
+        }
+    }
     public FileConfiguration createAndLoad(File file) {
         File parent = file.getParentFile();
         if (!parent.exists()) parent.mkdirs();

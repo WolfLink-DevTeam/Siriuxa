@@ -52,6 +52,7 @@ public class InventoryDB extends FileDB {
         }
         fileConfiguration = createAndLoad(mainInvFile);
         fileConfiguration.set("data", playerBackpack);
+        save(mainInvFile);
         Notifier.debug("已保存玩家" + player.getName() + "的主要背包信息。");
     }
 
@@ -63,13 +64,7 @@ public class InventoryDB extends FileDB {
             File cacheFile = new File(cacheInvFolder, time + ".yml");
             FileConfiguration cache = createAndLoad(cacheFile);
             cache.set("data", playerBackpack);
-            try {
-                cache.save(cacheFile);
-                Notifier.debug("已保存玩家" + player.getName() + "在时间" + time + "的缓存背包信息。");
-            } catch (Exception e) {
-                e.printStackTrace();
-                Notifier.error("在尝试保存玩家" + player.getName() + "背包缓存信息时出现问题。");
-            }
+            save(cacheFile);
         });
     }
 }
