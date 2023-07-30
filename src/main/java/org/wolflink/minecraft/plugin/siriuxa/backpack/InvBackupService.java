@@ -30,8 +30,6 @@ public class InvBackupService {
     public Result giveFiveSlotBackpack(Player player) {
         FiveSlotBackpack fiveSlotBackpack = inventoryDB.loadFiveSlot(player);
         fiveSlotBackpack.give(player);
-        fiveSlotBackpack.clear();
-        saveFiveSlotBackpack(player,fiveSlotBackpack);
         return new Result(true,"发放成功。");
     }
 
@@ -59,6 +57,7 @@ public class InvBackupService {
     public Result clearFiveSlotBackpack(OfflinePlayer offlinePlayer) {
         FiveSlotBackpack fiveSlotBackpack = inventoryDB.loadFiveSlot(offlinePlayer);
         fiveSlotBackpack.clear();
+        fiveSlotBackpack.resetLockedSlots();
         saveFiveSlotBackpack(offlinePlayer,fiveSlotBackpack);
         return new Result(true,"清理成功。");
     }
