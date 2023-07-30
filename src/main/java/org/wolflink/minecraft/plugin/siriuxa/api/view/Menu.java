@@ -10,6 +10,8 @@ import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 
 import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -26,13 +28,18 @@ public abstract class Menu {
     protected final int size;
     @Getter
     protected final UUID ownerUuid;
+    protected final Set<Integer> containerSlots;
     protected Icon[] icons;
-    protected Menu(UUID ownerUuid, String title, int size) {
+    protected Menu(UUID ownerUuid,String title,int size) {
+        this(ownerUuid,title,size,new HashSet<>());
+    }
+    protected Menu(UUID ownerUuid, String title, int size,Set<Integer> containerSlots) {
         this.ownerUuid = ownerUuid;
         this.title = title;
         this.size = size;
         inventory = Bukkit.createInventory(null, size, title);
         icons = null;
+        this.containerSlots = containerSlots;
     }
     @Nullable
     public Player getOwner() {
@@ -102,4 +109,5 @@ public abstract class Menu {
             }
         }
     }
+    public void onClose(Player player) { }
 }

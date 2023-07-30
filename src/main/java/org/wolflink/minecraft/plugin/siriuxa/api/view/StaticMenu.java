@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -19,6 +20,9 @@ public abstract class StaticMenu extends Menu {
 
     protected StaticMenu(UUID ownerUuid, String title, int size) {
         super(ownerUuid,title,size);
+    }
+    protected StaticMenu(UUID ownerUuid, String title, int size, Set<Integer> containerSlots) {
+        super(ownerUuid,title,size,containerSlots);
     }
 
     /**
