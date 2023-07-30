@@ -10,6 +10,7 @@ import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.FiveSlotBackpackMenu;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.WaitStage;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 
 @Singleton
@@ -25,7 +26,7 @@ public class OpenFiveSlotBackpack extends WolfirdCommand {
     protected void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
         Task task = taskRepository.findByGlobalTeamPlayer(player);
-        if(task != null) {
+        if(task != null && !(task.getStageHolder().getThisStage() instanceof WaitStage)) {
             Notifier.chat("你的队伍还在任务中，请等待任务结束后查看安全背包。",player);
             return;
         }
