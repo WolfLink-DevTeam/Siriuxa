@@ -4,12 +4,10 @@ import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.wolflink.minecraft.plugin.siriuxa.api.IStatus;
-import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.OceanSpawnStrategy;
 import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.PlayerFocusSpawnStrategy;
 import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.SpawnStrategy;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 
 import java.util.ArrayList;

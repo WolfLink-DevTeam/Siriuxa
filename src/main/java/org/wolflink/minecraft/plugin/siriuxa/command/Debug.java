@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.loot.LootTables;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskRepository;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 
 @Singleton

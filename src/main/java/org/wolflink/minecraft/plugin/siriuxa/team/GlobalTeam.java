@@ -2,7 +2,7 @@ package org.wolflink.minecraft.plugin.siriuxa.team;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;

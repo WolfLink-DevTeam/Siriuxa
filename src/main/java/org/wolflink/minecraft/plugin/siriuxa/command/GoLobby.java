@@ -5,9 +5,9 @@ import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskRepository;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskService;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskService;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 
 @Singleton

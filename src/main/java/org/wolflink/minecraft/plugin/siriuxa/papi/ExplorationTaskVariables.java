@@ -5,9 +5,9 @@ import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskRepository;
-import org.wolflink.minecraft.plugin.siriuxa.task.exploration.ExplorationTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.ExplorationTask;
 
 @Singleton
 public class ExplorationTaskVariables extends PlaceholderExpansion {
@@ -51,7 +51,7 @@ public class ExplorationTaskVariables extends PlaceholderExpansion {
                 else if (value < 0) return "§f%.1f§c(%.1f)".formatted(explorationTask.getTaskWheat(), value);
                 else return "§f%.1f".formatted(explorationTask.getTaskWheat());
             }
-            case "stage" -> {
+            case "stages" -> {
                 return explorationTask.getStageHolder().getThisStage().getDisplayName();
             }
             case "difficulty" -> {

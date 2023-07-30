@@ -7,10 +7,10 @@ import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.api.Result;
 import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskRelationProxy;
-import org.wolflink.minecraft.plugin.siriuxa.task.common.interfaces.ITaskService;
-import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.WaitStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRelationProxy;
+import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.ITaskService;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.WaitStage;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 
 @Singleton
