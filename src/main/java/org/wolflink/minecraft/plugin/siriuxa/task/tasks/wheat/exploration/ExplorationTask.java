@@ -1,10 +1,7 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration;
 
 import lombok.Getter;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -12,6 +9,7 @@ import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.BlockAPI;
+import org.wolflink.minecraft.plugin.siriuxa.backpack.InvBackupService;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
@@ -147,11 +145,17 @@ public class ExplorationTask extends WheatTask {
 
     @Override
     protected void finish() {
-
+        InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
+        for (OfflinePlayer offlinePlayer : getGlobalTeam().getOfflinePlayers()) {
+            invBackupService.updateFiveSlotBackpack(offlinePlayer,true);
+        }
     }
 
     @Override
     public void failed() {
-
+        InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
+        for (OfflinePlayer offlinePlayer : getGlobalTeam().getOfflinePlayers()) {
+            invBackupService.updateFiveSlotBackpack(offlinePlayer,false);
+        }
     }
 }

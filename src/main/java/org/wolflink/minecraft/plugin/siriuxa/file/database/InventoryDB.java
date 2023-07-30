@@ -50,8 +50,8 @@ public class InventoryDB extends FileDB {
     /**
      * 会覆盖原来的5格背包信息
      */
-    public void saveFiveSlot(Player player, FiveSlotBackpack fiveSlotBackpack) {
-        File fiveSlotInvFile = new File(fiveSlotDataFolder,player.getName()+".yml");
+    public void saveFiveSlot(OfflinePlayer offlinePlayer, FiveSlotBackpack fiveSlotBackpack) {
+        File fiveSlotInvFile = new File(fiveSlotDataFolder,offlinePlayer.getName()+".yml");
         if(fiveSlotInvFile.exists()) delete(fiveSlotInvFile);
         FileConfiguration fileConfiguration = createAndLoad(fiveSlotInvFile);
         fileConfiguration.set("data",fiveSlotBackpack);

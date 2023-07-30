@@ -13,6 +13,7 @@ import org.wolflink.minecraft.plugin.siriuxa.api.view.StaticMenu;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.FiveSlotBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.InvBackupService;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.InventoryDB;
+import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.EnderLock;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -34,10 +35,19 @@ public class FiveSlotBackpackMenu extends DynamicMenu {
         super(ownerUuid, "§0§l安全背包", 27,0, Stream.of(20,21,22,23,24).collect(Collectors.toSet()));
     }
 
+    public FiveSlotBackpack getFiveSlotBackpack() {
+        return IOC.getBean(InventoryDB.class).loadFiveSlot(getOfflineOwner());
+    }
+    public void saveFiveSlotBackpack(FiveSlotBackpack fiveSlotBackpack) {
+        Player player = getOwner();
+        if(player == null || !player.isOnline())return;
+        IOC.getBean(InvBackupService.class).saveFiveSlotBackpack(getOwner(),fiveSlotBackpack);
+    }
+
     @Override
     protected void overrideIcons() {
         BorderIcon borderIcon = IOC.getBean(BorderIcon.class);
-        Stream.of(9,10,11,12,13,14,15,16,17).forEach(i -> setIcon(i,borderIcon));
+        Stream.of(9,10,16,17).forEach(i -> setIcon(i,borderIcon));
         Player player = getOwner();
         if(player == null || !player.isOnline())return;
         FiveSlotBackpack defaultBackpack = FiveSlotBackpack.getDefaultBackpack();
@@ -46,7 +56,14 @@ public class FiveSlotBackpackMenu extends DynamicMenu {
         setIcon(4,new ItemIcon(defaultBackpack.getLeggings()));
         setIcon(5,new ItemIcon(defaultBackpack.getBoots()));
         setIcon(6,new ItemIcon(anythingItemIcon));
-        FiveSlotBackpack fiveSlotBackpack = IOC.getBean(InventoryDB.class).loadFiveSlot(getOfflineOwner());
+
+        setIcon(11,new EnderLock(this,0));
+        setIcon(12,new EnderLock(this,1));
+        setIcon(13,new EnderLock(this,2));
+        setIcon(14,new EnderLock(this,3));
+        setIcon(15,new EnderLock(this,4));
+
+        FiveSlotBackpack fiveSlotBackpack = getFiveSlotBackpack();
         setIcon(20, new ItemIcon(fiveSlotBackpack.getHelmet()));
         setIcon(21, new ItemIcon(fiveSlotBackpack.getChestplate()));
         setIcon(22, new ItemIcon(fiveSlotBackpack.getLeggings()));
@@ -55,7 +72,7 @@ public class FiveSlotBackpackMenu extends DynamicMenu {
     }
     @Override
     public void onClose(Player player) {
-        FiveSlotBackpack fiveSlotBackpack = IOC.getBean(InventoryDB.class).loadFiveSlot(getOfflineOwner());
+        FiveSlotBackpack fiveSlotBackpack = getFiveSlotBackpack();
         ItemStack helmet = inventory.getItem(20);
         if(helmet != null && helmet.getType() != Material.AIR) {
             if(helmet.getType().name().endsWith("_HELMET")) fiveSlotBackpack.setHelmet(helmet);
@@ -99,6 +116,6 @@ public class FiveSlotBackpackMenu extends DynamicMenu {
         ItemStack item = inventory.getItem(24);
         if(item != null && item.getType() != Material.AIR) fiveSlotBackpack.setItem(item);
         else fiveSlotBackpack.setItem(null);
-        IOC.getBean(InvBackupService.class).saveFiveSlotBackpack(player,fiveSlotBackpack);
+        saveFiveSlotBackpack(fiveSlotBackpack);
     }
 }

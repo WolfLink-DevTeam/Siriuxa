@@ -1,5 +1,6 @@
 package org.wolflink.minecraft.plugin.siriuxa.backpack;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
@@ -37,13 +38,13 @@ public class InvBackupService {
     /**
      * 结束任务后更新背包状态
      */
-    public Result updateFiveSlotBackpack(Player player,boolean taskResult) {
-        if(taskResult) return clearFiveSlotBackpack(player);
+    public Result updateFiveSlotBackpack(OfflinePlayer offlinePlayer, boolean taskResult) {
+        if(taskResult) return clearFiveSlotBackpack(offlinePlayer);
         // 任务失败，清理未锁定物品
-        else return clearUnlockedFiveSlotBackpack(player);
+        else return clearUnlockedFiveSlotBackpack(offlinePlayer);
     }
-    public Result clearUnlockedFiveSlotBackpack(Player player) {
-        FiveSlotBackpack fiveSlotBackpack = inventoryDB.loadFiveSlot(player);
+    public Result clearUnlockedFiveSlotBackpack(OfflinePlayer offlinePlayer) {
+        FiveSlotBackpack fiveSlotBackpack = inventoryDB.loadFiveSlot(offlinePlayer);
         List<Boolean> lockedSlots = fiveSlotBackpack.getLockedSlots();
         if (!lockedSlots.get(0)) fiveSlotBackpack.setHelmet(null);
         if (!lockedSlots.get(1)) fiveSlotBackpack.setChestplate(null);
@@ -52,17 +53,17 @@ public class InvBackupService {
         if (!lockedSlots.get(4)) fiveSlotBackpack.setItem(null);
         // 清理格子锁定状态
         fiveSlotBackpack.resetLockedSlots();
-        saveFiveSlotBackpack(player,fiveSlotBackpack);
+        saveFiveSlotBackpack(offlinePlayer,fiveSlotBackpack);
         return new Result(true,"未锁定物品清理成功。");
     }
-    public Result clearFiveSlotBackpack(Player player) {
-        FiveSlotBackpack fiveSlotBackpack = inventoryDB.loadFiveSlot(player);
+    public Result clearFiveSlotBackpack(OfflinePlayer offlinePlayer) {
+        FiveSlotBackpack fiveSlotBackpack = inventoryDB.loadFiveSlot(offlinePlayer);
         fiveSlotBackpack.clear();
-        saveFiveSlotBackpack(player,fiveSlotBackpack);
+        saveFiveSlotBackpack(offlinePlayer,fiveSlotBackpack);
         return new Result(true,"清理成功。");
     }
-    public Result saveFiveSlotBackpack(Player player,FiveSlotBackpack fiveSlotBackpack) {
-        inventoryDB.saveFiveSlot(player,fiveSlotBackpack);
+    public Result saveFiveSlotBackpack(OfflinePlayer offlinePlayer,FiveSlotBackpack fiveSlotBackpack) {
+        inventoryDB.saveFiveSlot(offlinePlayer,fiveSlotBackpack);
         return new Result(true, "保存成功。");
     }
 

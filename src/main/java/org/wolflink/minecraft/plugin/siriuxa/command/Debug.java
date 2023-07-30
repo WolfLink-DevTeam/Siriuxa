@@ -25,7 +25,5 @@ public class Debug extends WolfirdCommand {
 
     @Override
     protected void execute(CommandSender commandSender, String[] strings) {
-        Player player = (Player) commandSender;
-        IOC.getBean(MenuService.class).display(FiveSlotBackpackMenu.class,player);
     }
 }
