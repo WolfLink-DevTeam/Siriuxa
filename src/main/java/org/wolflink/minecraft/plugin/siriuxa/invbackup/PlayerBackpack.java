@@ -9,7 +9,9 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.PlayerAPI;
 import org.wolflink.minecraft.wolfird.framework.config.Json;
 
 import java.util.ArrayList;
@@ -81,17 +83,7 @@ public final class PlayerBackpack implements ConfigurationSerializable {
         equipment.setLeggings(leggings);
         equipment.setBoots(boots);
         equipment.setItemInOffHand(offhand);
-
-        player.setTotalExperience(0);
-        player.setLevel(0);
-        player.setExp(0);
-        int totalExp = this.totalExp;
-        while (player.getExpToLevel() <= totalExp) {
-            totalExp -= player.getExpToLevel();
-            player.setLevel(player.getLevel() + 1);
-        }
-        player.setExp((float) totalExp / player.getExpToLevel());
-
+        IOC.getBean(PlayerAPI.class).setExp(player,totalExp);
         Inventory inventory = player.getInventory();
         if (items != null) for (int i = 0; i < 36; i++) {
             inventory.setItem(i, i < items.size() ? items.get(i) : null);

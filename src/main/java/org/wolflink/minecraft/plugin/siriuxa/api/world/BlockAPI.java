@@ -65,7 +65,6 @@ public class BlockAPI {
         World world = center.getWorld();
         int centerX = center.getBlockX();
         int centerY = getWaterLevelY(center);
-        Notifier.debug("水平面：" + centerY);
         if (centerY == -1) {
             Notifier.debug("未找到坐标所处的水平面：" + center.getBlockX() + "|" + center.getBlockY() + "|" + center.getBlockZ());
             return false;

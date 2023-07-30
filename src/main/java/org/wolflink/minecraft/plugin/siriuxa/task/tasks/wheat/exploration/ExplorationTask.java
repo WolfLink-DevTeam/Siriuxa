@@ -135,7 +135,7 @@ public class ExplorationTask extends WheatTask {
                 }
 
                 for (Player player : getTaskPlayers()) {
-                    IOC.getBean(TaskService.class).goTask(player, this);
+                    IOC.getBean(ExplorationTaskService.class).goTask(player, this);
                 }
                 failedCheck();
                 finishedCheck();
