@@ -1,11 +1,13 @@
 package org.wolflink.minecraft.plugin.siriuxa.api.view;
 
 
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
@@ -26,6 +28,16 @@ public class MenuEventListener extends WolfirdListener {
         if (icon == null) return;
         invokeViewClick(p, icon, e.getClick());
     }
+    @EventHandler
+    void onClose(InventoryCloseEvent event) {
+        String title = event.getView().getTitle();
+        HumanEntity humanEntity = event.getPlayer();
+        if(humanEntity instanceof Player player) {
+            Menu menu = menuService.findMenu(player,title);
+            if(menu == null) return;
+            menu.onClose(player);
+        }
+    }
 
     @EventHandler(priority = EventPriority.LOWEST)
     void onProtect(InventoryClickEvent e) {
@@ -35,7 +47,10 @@ public class MenuEventListener extends WolfirdListener {
         }
         String title = e.getWhoClicked().getOpenInventory().getTitle();
         Menu menu = menuService.findMenu((Player) e.getWhoClicked(), title);
-        if (menu != null) e.setCancelled(true);
+        if (menu != null) {
+            if(menu.containerSlots.contains(e.getSlot())) return;
+            e.setCancelled(true);
+        }
     }
 
     private void invokeViewClick(Player player, Icon icon, ClickType clickType) {
