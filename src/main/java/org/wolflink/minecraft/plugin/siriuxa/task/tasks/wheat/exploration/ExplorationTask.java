@@ -14,10 +14,9 @@ import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.BlockAPI;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
-import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
+import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.loot.ChestLoot;
 import org.wolflink.minecraft.plugin.siriuxa.task.regions.EvacuationZone;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskService;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.WheatTask;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 

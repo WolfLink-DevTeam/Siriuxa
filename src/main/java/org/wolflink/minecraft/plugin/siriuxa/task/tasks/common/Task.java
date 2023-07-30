@@ -17,7 +17,7 @@ import org.wolflink.minecraft.plugin.siriuxa.api.world.WorldEditAPI;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
-import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
+import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.monster.StrategyDecider;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.IGlobalTeam;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.IRecordable;

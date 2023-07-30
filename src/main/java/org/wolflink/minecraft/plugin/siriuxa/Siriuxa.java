@@ -14,7 +14,7 @@ import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
 import org.wolflink.minecraft.plugin.siriuxa.file.Lang;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.*;
-import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
+import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.CreatureDeathListener;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.CreatureSpawnListener;
 import org.wolflink.minecraft.plugin.siriuxa.papi.ExplorationTaskVariables;
