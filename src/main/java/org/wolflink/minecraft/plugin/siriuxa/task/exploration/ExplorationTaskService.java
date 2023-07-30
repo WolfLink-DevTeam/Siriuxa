@@ -1,29 +1,25 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.exploration;
 
-import lombok.NonNull;
-import org.bukkit.*;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
-import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.Result;
 import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
-import org.wolflink.minecraft.plugin.siriuxa.file.database.OfflinePlayerDB;
-import org.wolflink.minecraft.plugin.siriuxa.file.database.OfflinePlayerRecord;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.InvBackupService;
 import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.interfaces.ITaskService;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.region.TaskRegion;
-import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.EndStage;
-import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
-import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 
 import java.util.List;
 import java.util.Random;
@@ -44,9 +40,9 @@ public class ExplorationTaskService implements ITaskService {
     public void goLobby(Player player) {
         InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
         invBackupService.applyInv(player, PlayerBackpack.getEmptyBackpack());
-//        Result r = invBackupService.applyMainInv(player);
-//        if(!r.result()) return;
-//        invBackupService.saveMainInv(player,PlayerBackpack.getEmptyBackpack());
+        Result r = invBackupService.applyMainInv(player);
+        if(!r.result()) return;
+        invBackupService.saveMainInv(player,PlayerBackpack.getEmptyBackpack());
         // 传送回城
         player.teleport(config.getLobbyLocation());
         if (!player.isOp()) player.setGameMode(GameMode.SURVIVAL);

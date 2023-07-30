@@ -71,9 +71,7 @@ public class TaskRecordIcon extends Icon {
                 String returnWheat = String.format("%.2f", Objects.requireNonNull(IOC.getBean(DifficultyRepository.class)
                         .findByName(ExplorationDifficulty.class,playerWheatTaskRecord.getTaskDifficulty())).getWheatCost() * 0.6);
                 IOC.getBean(VaultAPI.class).addEconomy(player, Double.parseDouble(returnWheat));
-                int totalExp = (int) (playerWheatTaskRecord.getPlayerBackpack().getTotalExp() * 0.8);
-                IOC.getBean(PlayerAPI.class).addExp(player, totalExp);
-                Notifier.chat("任务花费的麦穗已补偿 60%，经验保留了 80%，祝你下次好运！", player);
+                Notifier.chat("任务花费的麦穗已补偿 60%，祝你下次好运！", player);
                 player.playSound(player.getLocation(), Sound.ENTITY_WOLF_HOWL, 0.7f, 1f);
             }
         }
