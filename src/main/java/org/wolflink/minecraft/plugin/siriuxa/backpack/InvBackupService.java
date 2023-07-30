@@ -6,6 +6,8 @@ import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.api.Result;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.InventoryDB;
 
+import java.util.List;
+
 @Singleton
 public class InvBackupService {
 
@@ -30,6 +32,34 @@ public class InvBackupService {
         fiveSlotBackpack.clear();
         saveFiveSlotBackpack(player,fiveSlotBackpack);
         return new Result(true,"发放成功。");
+    }
+
+    /**
+     * 结束任务后更新背包状态
+     */
+    public Result updateFiveSlotBackpack(Player player,boolean taskResult) {
+        if(taskResult) return clearFiveSlotBackpack(player);
+        // 任务失败，清理未锁定物品
+        else return clearUnlockedFiveSlotBackpack(player);
+    }
+    public Result clearUnlockedFiveSlotBackpack(Player player) {
+        FiveSlotBackpack fiveSlotBackpack = inventoryDB.loadFiveSlot(player);
+        List<Boolean> lockedSlots = fiveSlotBackpack.getLockedSlots();
+        if (!lockedSlots.get(0)) fiveSlotBackpack.setHelmet(null);
+        if (!lockedSlots.get(1)) fiveSlotBackpack.setChestplate(null);
+        if (!lockedSlots.get(2)) fiveSlotBackpack.setLeggings(null);
+        if (!lockedSlots.get(3)) fiveSlotBackpack.setBoots(null);
+        if (!lockedSlots.get(4)) fiveSlotBackpack.setItem(null);
+        // 清理格子锁定状态
+        fiveSlotBackpack.resetLockedSlots();
+        saveFiveSlotBackpack(player,fiveSlotBackpack);
+        return new Result(true,"未锁定物品清理成功。");
+    }
+    public Result clearFiveSlotBackpack(Player player) {
+        FiveSlotBackpack fiveSlotBackpack = inventoryDB.loadFiveSlot(player);
+        fiveSlotBackpack.clear();
+        saveFiveSlotBackpack(player,fiveSlotBackpack);
+        return new Result(true,"清理成功。");
     }
     public Result saveFiveSlotBackpack(Player player,FiveSlotBackpack fiveSlotBackpack) {
         inventoryDB.saveFiveSlot(player,fiveSlotBackpack);
