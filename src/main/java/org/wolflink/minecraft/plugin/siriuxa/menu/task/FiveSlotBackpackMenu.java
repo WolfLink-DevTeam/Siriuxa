@@ -54,32 +54,40 @@ public class FiveSlotBackpackMenu extends StaticMenu {
     @Override
     public void onClose(Player player) {
 
-        ItemStack helmet = getIcon(20).getIcon();
-        if(helmet.getType().name().endsWith("_HELMET")) fiveSlotBackpack.setHelmet(helmet);
-        else {
-            Notifier.chat("你在应该放置头盔的地方错误的放入了物品："+helmet.getType().name().toLowerCase()+"！物品已退回至背包。",player);
-            player.getInventory().addItem(helmet);
+        ItemStack helmet = inventory.getItem(20);
+        if(helmet != null) {
+            if(helmet.getType().name().endsWith("_HELMET")) fiveSlotBackpack.setHelmet(helmet);
+            else {
+                Notifier.chat("你在应该放置头盔的地方错误的放入了物品："+helmet.getType().name().toLowerCase()+"！物品已退回至背包。",player);
+                player.getInventory().addItem(helmet);
+            }
         }
 
-        ItemStack chestplate = getIcon(21).getIcon();
-        if(chestplate.getType().name().endsWith("_CHESTPLATE")) fiveSlotBackpack.setChestplate(chestplate);
-        else {
-            Notifier.chat("你在应该放置胸甲的地方错误的放入了物品："+chestplate.getType().name().toLowerCase()+"！物品已退回至背包。",player);
-            player.getInventory().addItem(chestplate);
+        ItemStack chestplate = inventory.getItem(21);
+        if(chestplate != null) {
+            if(chestplate.getType().name().endsWith("_CHESTPLATE")) fiveSlotBackpack.setChestplate(chestplate);
+            else {
+                Notifier.chat("你在应该放置胸甲的地方错误的放入了物品："+chestplate.getType().name().toLowerCase()+"！物品已退回至背包。",player);
+                player.getInventory().addItem(chestplate);
+            }
         }
 
-        ItemStack leggings = getIcon(22).getIcon();
-        if(leggings.getType().name().endsWith("_LEGGINGS")) fiveSlotBackpack.setLeggings(leggings);
-        else {
-            Notifier.chat("你在应该放置护腿的地方错误的放入了物品："+leggings.getType().name().toLowerCase()+"！物品已退回至背包。",player);
-            player.getInventory().addItem(leggings);
+        ItemStack leggings = inventory.getItem(22);
+        if(leggings != null) {
+            if(leggings.getType().name().endsWith("_LEGGINGS")) fiveSlotBackpack.setLeggings(leggings);
+            else {
+                Notifier.chat("你在应该放置护腿的地方错误的放入了物品："+leggings.getType().name().toLowerCase()+"！物品已退回至背包。",player);
+                player.getInventory().addItem(leggings);
+            }
         }
 
-        ItemStack boots = getIcon(23).getIcon();
-        if(boots.getType().name().endsWith("_BOOTS")) fiveSlotBackpack.setBoots(boots);
-        else {
-            Notifier.chat("你在应该放置鞋子的地方错误的放入了物品："+boots.getType().name().toLowerCase()+"！物品已退回至背包。",player);
-            player.getInventory().addItem(boots);
+        ItemStack boots = inventory.getItem(23);
+        if(boots != null) {
+            if(boots.getType().name().endsWith("_BOOTS")) fiveSlotBackpack.setBoots(boots);
+            else {
+                Notifier.chat("你在应该放置鞋子的地方错误的放入了物品："+boots.getType().name().toLowerCase()+"！物品已退回至背包。",player);
+                player.getInventory().addItem(boots);
+            }
         }
 
         ItemStack item = getIcon(24).getIcon();
