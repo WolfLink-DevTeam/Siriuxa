@@ -6,6 +6,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.MenuEventListener;
+import org.wolflink.minecraft.plugin.siriuxa.backpack.FiveSlotBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.command.*;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
@@ -76,6 +77,7 @@ public final class Siriuxa extends WolfirdPlugin {
         serializableClasses.add(TaskDifficulty.class);
         serializableClasses.add(WheatTaskDifficulty.class);
         serializableClasses.add(ExplorationDifficulty.class);
+        serializableClasses.add(FiveSlotBackpack.class);
     }
 
     @Override
