@@ -7,7 +7,6 @@ import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
  * 麦穗任务统计
  */
 public class WheatTaskStat extends TaskStat {
-    private final SubScheduler subScheduler = new SubScheduler();
     private double lastWheat = 0;
     private double nowWheat = 0;
 

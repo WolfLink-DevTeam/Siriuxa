@@ -32,7 +32,7 @@ public class WaitStage extends TaskStage {
         Location readyLoc = config.getReadyLocation();
         int radius = config.get(ConfigProjection.LOBBY_READY_RADIUS);
         Task task = getStageHolder().getTask();
-        runTaskTimer(() -> {
+        getSubScheduler().runTaskTimer(() -> {
             Set<UUID> readyPlayers = new HashSet<>();
             for (Player player : Objects.requireNonNull(readyLoc.getWorld())
                     .getNearbyEntities(readyLoc, radius, radius, radius, entity -> entity.getType() == EntityType.PLAYER)
