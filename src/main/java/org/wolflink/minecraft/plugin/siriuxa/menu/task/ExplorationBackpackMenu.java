@@ -56,7 +56,8 @@ public class ExplorationBackpackMenu extends StaticMenu {
      * 允许的可带回物品最大数量
      */
     public int getBringSlotAmount() {
-        ExplorationDifficulty difficulty = IOC.getBean(DifficultyRepository.class).findByName(ExplorationDifficulty.class,playerWheatTaskRecord.getTaskDifficulty());
+        ExplorationDifficulty difficulty = IOC.getBean(DifficultyRepository.class)
+                .findByName(ExplorationDifficulty.class,playerWheatTaskRecord.getTaskDifficulty());
         assert difficulty != null;
         return difficulty.getBringSlotAmount();
     }
@@ -74,11 +75,17 @@ public class ExplorationBackpackMenu extends StaticMenu {
         playerWheatTaskRecord.setClaimed(true);
         IOC.getBean(TaskRecordDB.class).saveRecord(playerWheatTaskRecord);
         PlayerBackpack playerBackpack = playerWheatTaskRecord.getPlayerBackpack();
-        ExplorationDifficulty difficulty = IOC.getBean(DifficultyRepository.class).findByName(ExplorationDifficulty.class,playerWheatTaskRecord.getTaskDifficulty());
+        ExplorationDifficulty difficulty = IOC.getBean(DifficultyRepository.class)
+                .findByName(ExplorationDifficulty.class,playerWheatTaskRecord.getTaskDifficulty());
         assert difficulty != null;
+        double rewardMultiple = difficulty.getRewardMultiple();
         // TODO 任务奖励结算
-        double wheat = 0;
-        Notifier.chat("你从本次任务中收获了 §a" + String.format("%.0f", wheat) + " §6麦穗。", player);
+        double wheat = 0 * rewardMultiple;
+        int exp = (int) (playerBackpack.getTotalExp() * rewardMultiple);
+        IOC.getBean(PlayerAPI.class).addExp(player,exp);
+        String multiple = "§8(§7x"+String.format("%.0f",rewardMultiple * 100)+"%§8)";
+        Notifier.chat("你从本次任务中收获了 §a" + String.format("%.0f", wheat) + " §6麦穗。"+multiple, player);
+        Notifier.chat("你从本次任务中收获了 §a" + exp + " §e经验。"+multiple, player);
         Notifier.chat("你从本次任务中获得了 §a" + selectedSlots.size() + "格 §b物资。", player);
         IOC.getBean(VaultAPI.class).addEconomy(player, wheat);
         for (int index : selectedSlots) {
