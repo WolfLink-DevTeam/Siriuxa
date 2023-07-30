@@ -10,6 +10,7 @@ import org.wolflink.minecraft.plugin.siriuxa.api.view.BorderIcon;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.ItemIcon;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.StaticMenu;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.FiveSlotBackpack;
+import org.wolflink.minecraft.plugin.siriuxa.backpack.InvBackupService;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.InventoryDB;
 
 import java.util.UUID;
@@ -55,42 +56,48 @@ public class FiveSlotBackpackMenu extends StaticMenu {
     public void onClose(Player player) {
 
         ItemStack helmet = inventory.getItem(20);
-        if(helmet != null) {
+        if(helmet != null && helmet.getType() != Material.AIR) {
             if(helmet.getType().name().endsWith("_HELMET")) fiveSlotBackpack.setHelmet(helmet);
             else {
                 Notifier.chat("你在应该放置头盔的地方错误的放入了物品："+helmet.getType().name().toLowerCase()+"！物品已退回至背包。",player);
                 player.getInventory().addItem(helmet);
+                inventory.setItem(20,null);
             }
-        }
+        } else fiveSlotBackpack.setHelmet(null);
 
         ItemStack chestplate = inventory.getItem(21);
-        if(chestplate != null) {
+        if(chestplate != null && chestplate.getType() != Material.AIR) {
             if(chestplate.getType().name().endsWith("_CHESTPLATE")) fiveSlotBackpack.setChestplate(chestplate);
             else {
                 Notifier.chat("你在应该放置胸甲的地方错误的放入了物品："+chestplate.getType().name().toLowerCase()+"！物品已退回至背包。",player);
                 player.getInventory().addItem(chestplate);
+                inventory.setItem(21,null);
             }
-        }
+        } else fiveSlotBackpack.setChestplate(null);
 
         ItemStack leggings = inventory.getItem(22);
-        if(leggings != null) {
+        if(leggings != null && leggings.getType() != Material.AIR) {
             if(leggings.getType().name().endsWith("_LEGGINGS")) fiveSlotBackpack.setLeggings(leggings);
             else {
                 Notifier.chat("你在应该放置护腿的地方错误的放入了物品："+leggings.getType().name().toLowerCase()+"！物品已退回至背包。",player);
                 player.getInventory().addItem(leggings);
+                inventory.setItem(22,null);
             }
-        }
+        } else fiveSlotBackpack.setLeggings(null);
 
         ItemStack boots = inventory.getItem(23);
-        if(boots != null) {
+        if(boots != null && boots.getType() != Material.AIR) {
             if(boots.getType().name().endsWith("_BOOTS")) fiveSlotBackpack.setBoots(boots);
             else {
                 Notifier.chat("你在应该放置鞋子的地方错误的放入了物品："+boots.getType().name().toLowerCase()+"！物品已退回至背包。",player);
                 player.getInventory().addItem(boots);
+                inventory.setItem(23,null);
             }
-        }
+        } else fiveSlotBackpack.setBoots(null);
 
-        ItemStack item = getIcon(24).getIcon();
-        fiveSlotBackpack.setItem(item);
+        ItemStack item = inventory.getItem(24);
+        if(item != null && item.getType() != Material.AIR) fiveSlotBackpack.setItem(item);
+        else fiveSlotBackpack.setItem(null);
+        IOC.getBean(InvBackupService.class).saveFiveSlotBackpack(player,fiveSlotBackpack);
     }
 }

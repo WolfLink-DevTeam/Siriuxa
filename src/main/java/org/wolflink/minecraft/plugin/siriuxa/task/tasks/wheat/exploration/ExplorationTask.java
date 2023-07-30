@@ -33,17 +33,17 @@ import java.util.Set;
 public class ExplorationTask extends WheatTask {
     private static final PlayerBackpack defaultKit = new PlayerBackpack();
 
-    static {
-        defaultKit.setHelmet(new ItemStack(Material.LEATHER_HELMET));
-        defaultKit.setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE));
-        defaultKit.setLeggings(new ItemStack(Material.LEATHER_LEGGINGS));
-        defaultKit.setBoots(new ItemStack(Material.LEATHER_BOOTS));
-        List<ItemStack> items = new ArrayList<>();
-        items.add(new ItemStack(Material.WOODEN_SWORD));
-        items.add(new ItemStack(Material.WOODEN_PICKAXE));
-        items.add(new ItemStack(Material.BREAD, 8));
-        defaultKit.setItems(items);
-    }
+//    static {
+//        defaultKit.setHelmet(new ItemStack(Material.LEATHER_HELMET));
+//        defaultKit.setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE));
+//        defaultKit.setLeggings(new ItemStack(Material.LEATHER_LEGGINGS));
+//        defaultKit.setBoots(new ItemStack(Material.LEATHER_BOOTS));
+//        List<ItemStack> items = new ArrayList<>();
+//        items.add(new ItemStack(Material.WOODEN_SWORD));
+//        items.add(new ItemStack(Material.WOODEN_PICKAXE));
+//        items.add(new ItemStack(Material.BREAD, 8));
+//        defaultKit.setItems(items);
+//    }
     /**
      * 当前可用的撤离点
      */

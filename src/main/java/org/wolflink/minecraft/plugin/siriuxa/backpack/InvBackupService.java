@@ -24,6 +24,13 @@ public class InvBackupService {
         inventoryDB.saveMain(player, playerBackpack);
         return new Result(true, "保存成功。");
     }
+    public Result giveFiveSlotBackpack(Player player) {
+        FiveSlotBackpack fiveSlotBackpack = inventoryDB.loadFiveSlot(player);
+        fiveSlotBackpack.give(player);
+        fiveSlotBackpack.clear();
+        saveFiveSlotBackpack(player,fiveSlotBackpack);
+        return new Result(true,"发放成功。");
+    }
     public Result saveFiveSlotBackpack(Player player,FiveSlotBackpack fiveSlotBackpack) {
         inventoryDB.saveFiveSlot(player,fiveSlotBackpack);
         return new Result(true, "保存成功。");

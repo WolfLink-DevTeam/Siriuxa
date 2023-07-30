@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,6 +37,38 @@ public class FiveSlotBackpack implements ConfigurationSerializable {
     private ItemStack leggings = null;
     private ItemStack boots = null;
     private ItemStack item = null;
+
+    public boolean isEmpty() {
+        return helmet == null && chestplate == null && leggings == null && boots == null && item == null;
+    }
+    /**
+     * 发放到玩家背包
+     */
+    public void give(Player player) {
+        Inventory inventory = player.getInventory();
+
+        if(helmet == null) inventory.addItem(defaultBackpack.helmet);
+        else inventory.addItem(helmet);
+
+        if(chestplate == null) inventory.addItem(defaultBackpack.chestplate);
+        else inventory.addItem(chestplate);
+
+        if(leggings == null) inventory.addItem(defaultBackpack.leggings);
+        else inventory.addItem(leggings);
+
+        if(boots == null) inventory.addItem(defaultBackpack.boots);
+        else inventory.addItem(boots);
+
+        if(item == null) inventory.addItem(defaultBackpack.item);
+        else inventory.addItem(item);
+    }
+    public void clear() {
+        helmet = null;
+        chestplate = null;
+        leggings = null;
+        boots = null;
+        item = null;
+    }
 
     @NotNull
     @Override
