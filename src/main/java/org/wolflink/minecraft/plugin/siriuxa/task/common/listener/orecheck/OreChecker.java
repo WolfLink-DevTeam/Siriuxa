@@ -14,6 +14,7 @@ import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.file.Lang;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.common.TaskRepository;
+import org.wolflink.minecraft.plugin.siriuxa.task.event.WheatBlockSellEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.wheat.WheatTask;
 import org.wolflink.minecraft.plugin.siriuxa.task.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
@@ -51,6 +52,8 @@ public class OreChecker extends WolfirdListener {
                     new TextComponent("§f" + player.getName() + " §7刚刚出售了 " + lang.get("material." + material.name().toLowerCase(), "未知方块") + " §7换取 §f" + String.format("%.1f", wheatValue) + " §6麦穗"));
         }
         renderBlockBorder(block.getLocation());
+
+        Bukkit.getPluginManager().callEvent(new WheatBlockSellEvent(player,block,wheatValue));
     }
 
     private void renderBlockBorder(Location center) {
