@@ -113,6 +113,7 @@ public final class Siriuxa extends WolfirdPlugin {
         bindCommand(IOC.getBean(TeamLeave.class));
         bindCommand(IOC.getBean(TaskHistory.class));
         bindCommand(IOC.getBean(GoLobby.class));
+        bindCommand(IOC.getBean(OpenFiveSlotBackpack.class));
 
         notifier.setDebugMode(IOC.getBean(Config.class).get(ConfigProjection.DEBUG));
 

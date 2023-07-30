@@ -4,6 +4,8 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -14,9 +16,12 @@ public abstract class DynamicMenu extends Menu {
     @Getter
     private final long refreshTick;
     protected DynamicMenu(UUID ownerUuid, String title, int size,long refreshTick) {
-        super(ownerUuid,title,size);
+        this(ownerUuid,title,size,refreshTick,new HashSet<>());
+    }
+    protected DynamicMenu(UUID ownerUuid, String title, int size, long refreshTick, Set<Integer> containerSlots) {
+        super(ownerUuid,title,size,containerSlots);
         this.refreshTick = refreshTick;
-        Bukkit.getScheduler().runTaskTimer(Siriuxa.getInstance(),this::refreshLayout,refreshTick,refreshTick);
+        if(refreshTick > 0) Bukkit.getScheduler().runTaskTimer(Siriuxa.getInstance(),this::refreshLayout,refreshTick,refreshTick);
     }
     /**
      * 刷新菜单布局
@@ -30,6 +35,5 @@ public abstract class DynamicMenu extends Menu {
             overrideIcons();
             bindItems();
         });
-
     }
 }

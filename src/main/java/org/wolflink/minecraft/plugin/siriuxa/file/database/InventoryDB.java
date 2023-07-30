@@ -52,7 +52,7 @@ public class InventoryDB extends FileDB {
      */
     public void saveFiveSlot(Player player, FiveSlotBackpack fiveSlotBackpack) {
         File fiveSlotInvFile = new File(fiveSlotDataFolder,player.getName()+".yml");
-        if(fiveSlotInvFile.exists()) fiveSlotInvFile.delete();
+        if(fiveSlotInvFile.exists()) delete(fiveSlotInvFile);
         FileConfiguration fileConfiguration = createAndLoad(fiveSlotInvFile);
         fileConfiguration.set("data",fiveSlotBackpack);
         save(fiveSlotInvFile);

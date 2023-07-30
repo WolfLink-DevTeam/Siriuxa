@@ -76,6 +76,10 @@ public abstract class FileDB {
         fileConfigurations.put(file.getAbsolutePath(), fileConfiguration);
         return fileConfiguration;
     }
+    public void delete(File file) {
+        fileConfigurations.remove(file.getAbsolutePath());
+        file.delete();
+    }
 
     public void load() {
         fileConfigurations.clear();

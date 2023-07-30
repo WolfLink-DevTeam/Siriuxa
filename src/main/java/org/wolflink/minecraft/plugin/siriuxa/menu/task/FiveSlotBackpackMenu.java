@@ -7,6 +7,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.BorderIcon;
+import org.wolflink.minecraft.plugin.siriuxa.api.view.DynamicMenu;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.ItemIcon;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.StaticMenu;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.FiveSlotBackpack;
@@ -17,7 +18,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FiveSlotBackpackMenu extends StaticMenu {
+public class FiveSlotBackpackMenu extends DynamicMenu {
 
     private static final ItemStack anythingItemIcon = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
     static {
@@ -30,9 +31,8 @@ public class FiveSlotBackpackMenu extends StaticMenu {
     }
 
     public FiveSlotBackpackMenu(UUID ownerUuid) {
-        super(ownerUuid, "§0§l安全背包", 27, Stream.of(20,21,22,23,24).collect(Collectors.toSet()));
+        super(ownerUuid, "§0§l安全背包", 27,0, Stream.of(20,21,22,23,24).collect(Collectors.toSet()));
     }
-    private final FiveSlotBackpack fiveSlotBackpack = IOC.getBean(InventoryDB.class).loadFiveSlot(getOfflineOwner());
 
     @Override
     protected void overrideIcons() {
@@ -46,6 +46,7 @@ public class FiveSlotBackpackMenu extends StaticMenu {
         setIcon(4,new ItemIcon(defaultBackpack.getLeggings()));
         setIcon(5,new ItemIcon(defaultBackpack.getBoots()));
         setIcon(6,new ItemIcon(anythingItemIcon));
+        FiveSlotBackpack fiveSlotBackpack = IOC.getBean(InventoryDB.class).loadFiveSlot(getOfflineOwner());
         setIcon(20, new ItemIcon(fiveSlotBackpack.getHelmet()));
         setIcon(21, new ItemIcon(fiveSlotBackpack.getChestplate()));
         setIcon(22, new ItemIcon(fiveSlotBackpack.getLeggings()));
@@ -54,7 +55,7 @@ public class FiveSlotBackpackMenu extends StaticMenu {
     }
     @Override
     public void onClose(Player player) {
-
+        FiveSlotBackpack fiveSlotBackpack = IOC.getBean(InventoryDB.class).loadFiveSlot(getOfflineOwner());
         ItemStack helmet = inventory.getItem(20);
         if(helmet != null && helmet.getType() != Material.AIR) {
             if(helmet.getType().name().endsWith("_HELMET")) fiveSlotBackpack.setHelmet(helmet);
