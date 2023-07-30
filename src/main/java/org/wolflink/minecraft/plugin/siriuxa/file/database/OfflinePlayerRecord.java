@@ -4,7 +4,7 @@ import lombok.Data;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.wolflink.minecraft.plugin.siriuxa.invbackup.PlayerBackpack;
+import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package org.wolflink.minecraft.plugin.siriuxa.invbackup;
+package org.wolflink.minecraft.plugin.siriuxa.backpack;
 
 import lombok.Data;
 import lombok.Getter;
@@ -26,7 +26,6 @@ import java.util.Map;
  * 背包中36格物品
  */
 @Data
-@Json
 @NoArgsConstructor
 public final class PlayerBackpack implements ConfigurationSerializable {
     @Getter

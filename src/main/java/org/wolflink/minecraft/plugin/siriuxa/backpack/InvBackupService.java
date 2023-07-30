@@ -1,4 +1,4 @@
-package org.wolflink.minecraft.plugin.siriuxa.invbackup;
+package org.wolflink.minecraft.plugin.siriuxa.backpack;
 
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Inject;
@@ -22,6 +22,10 @@ public class InvBackupService {
 
     public Result saveMainInv(Player player, PlayerBackpack playerBackpack) {
         inventoryDB.saveMain(player, playerBackpack);
+        return new Result(true, "保存成功。");
+    }
+    public Result saveFiveSlotBackpack(Player player,FiveSlotBackpack fiveSlotBackpack) {
+        inventoryDB.saveFiveSlot(player,fiveSlotBackpack);
         return new Result(true, "保存成功。");
     }
 
