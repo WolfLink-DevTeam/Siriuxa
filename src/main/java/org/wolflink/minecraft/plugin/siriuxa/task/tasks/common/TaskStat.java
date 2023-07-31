@@ -1,6 +1,7 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.tasks.common;
 
 import lombok.Data;
+import lombok.Getter;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.IStatus;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.StatListener;
@@ -14,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 通用任务统计
  */
-@Data
+@Getter
 public abstract class TaskStat implements IStatus {
 
     protected boolean enabled = false;

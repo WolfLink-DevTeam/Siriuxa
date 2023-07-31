@@ -67,7 +67,7 @@ public class PlayerWheatTaskRecord implements ConfigurationSerializable {
         taskDifficulty = wheatTask.getTaskDifficulty().getName();
         isEscape = false;
         isClaimed = false;
-        rewardWheat = wheatTask.getTaskStat().getPlayerWheatReward(playerUuid);
+        rewardWheat = 0;
     }
 
     public PlayerWheatTaskRecord(Map<String, Object> map) {
