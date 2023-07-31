@@ -55,9 +55,9 @@ public class PlayerWheatTaskRecord implements ConfigurationSerializable {
      */
     private long finishedTimeInMills;
     /**
-     * 剩余麦穗
+     * 奖励麦穗
      */
-    private double wheat;
+    private double rewardWheat;
     public PlayerWheatTaskRecord(@NonNull UUID playerUuid, @NonNull WheatTask wheatTask) {
         this.playerUuid = playerUuid;
         taskUuid = wheatTask.getTaskUuid();
@@ -67,7 +67,7 @@ public class PlayerWheatTaskRecord implements ConfigurationSerializable {
         taskDifficulty = wheatTask.getTaskDifficulty().getName();
         isEscape = false;
         isClaimed = false;
-        wheat = wheatTask.getTaskWheat();
+        rewardWheat = wheatTask.getTaskStat().getPlayerWheatReward(playerUuid);
     }
 
     public PlayerWheatTaskRecord(Map<String, Object> map) {
@@ -82,7 +82,7 @@ public class PlayerWheatTaskRecord implements ConfigurationSerializable {
         taskType = (String) map.get("taskType");
         isClaimed = (boolean) map.get("isClaimed");
         isEscape = (boolean) map.get("isEscape");
-        wheat = (double) map.get("wheat");
+        rewardWheat = (double) map.get("rewardWheat");
     }
 
     public static PlayerWheatTaskRecord deserialize(Map<String, Object> map) {
@@ -104,7 +104,7 @@ public class PlayerWheatTaskRecord implements ConfigurationSerializable {
         map.put("taskType", taskType);
         map.put("isEscape", isEscape);
         map.put("isClaimed", isClaimed);
-        map.put("wheat", wheat);
+        map.put("rewardWheat", rewardWheat);
         return map;
     }
 }
