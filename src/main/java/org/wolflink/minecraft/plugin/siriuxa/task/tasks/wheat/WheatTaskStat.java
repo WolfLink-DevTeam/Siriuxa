@@ -48,8 +48,9 @@ public class WheatTaskStat extends TaskStat {
         int taskSecs = (int) ((Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis())/1000);
         int taskSecsValue = (int) (15 + Math.pow(taskSecs,0.85)/20);
         int randValue = new Random().nextInt(10,50);
-        int reward = (int) ((travelDistanceValue + damageTotalValue + oreBlockTotalValue + mobKillTotalValue + taskSecsValue + randValue) * wheatTask.getDifficulty().getRewardMultiple());
-        if(reward >= 400) reward = 400;
+        int originReward = (travelDistanceValue + damageTotalValue + oreBlockTotalValue + mobKillTotalValue + taskSecsValue + randValue);
+        if(originReward >= 250) originReward = 250;
+        int reward = (int) (originReward * wheatTask.getDifficulty().getRewardMultiple());
         Notifier.debug("结算玩家："+ Bukkit.getOfflinePlayer(uuid).getName());
         Notifier.debug("行走距离："+travelDistance+"|"+travelDistanceValue);
         Notifier.debug("造成伤害："+damageTotal+"|"+damageTotalValue);
