@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskStat;
@@ -54,8 +55,9 @@ public class StatListener extends WolfirdListener {
                 for (Player player : taskStat.getTask().getTaskPlayers()) {
                     UUID uuid = player.getUniqueId();
                     Location lastLocation = lastLocationMap.get(uuid);
-                    if(lastLocation == null || lastLocation.getWorld() == null) continue;
                     Location nowLocation = player.getLocation();
+                    lastLocationMap.put(uuid,nowLocation);
+                    if(lastLocation == null || lastLocation.getWorld() == null) continue;
                     // 两个坐标处在同一个世界
                     if(lastLocation.getWorld().equals(nowLocation.getWorld())) {
                         int distance = (int) nowLocation.distance(lastLocation);
@@ -65,7 +67,6 @@ public class StatListener extends WolfirdListener {
                             taskStat.getTravelDistanceMap().computeIfPresent(uuid,(ignore,value) -> value+distance);
                         }
                     }
-                    lastLocationMap.put(uuid,nowLocation);
                 }
             }
         },20 * 5,20 * 5);
