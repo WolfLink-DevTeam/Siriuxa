@@ -32,7 +32,7 @@ public class CreatureDeathListener extends WolfirdListener {
             if (rabbit.getRabbitType().equals(Rabbit.Type.THE_KILLER_BUNNY)) {
                 Player killer = e.getEntity().getKiller();
                 IOC.getBean(VaultAPI.class).addEconomy(killer, 114.514);
-                Notifier.chat("击杀彩蛋兔，在兔兔的腹中发现了 §a 114.514" + " §6麦穗。(无需结算，实时到账哦)", killer);
+                Notifier.chat("击杀彩蛋兔，在兔兔的腹中发现了§a114.514" + "§6麦穗。§f(无需结算，实时到账哦)", killer);
             }
         }
     }

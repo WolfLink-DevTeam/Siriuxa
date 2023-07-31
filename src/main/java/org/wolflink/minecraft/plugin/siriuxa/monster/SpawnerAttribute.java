@@ -5,7 +5,6 @@ import lombok.NonNull;
 import org.bukkit.entity.EntityType;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.WheatTaskDifficulty;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -65,8 +64,9 @@ public class SpawnerAttribute {
                 weightMap.put(EntityType.SILVERFISH, 20);
                 weightMap.put(EntityType.SPIDER, 40);
                 weightMap.put(EntityType.CREEPER, 20);
-                weightMap.put(EntityType.VEX, 5);
-                weightMap.put(EntityType.VINDICATOR, 9);
+                weightMap.put(EntityType.VEX, 4);
+                weightMap.put(EntityType.VINDICATOR, 5);
+                weightMap.put(EntityType.WITCH, 5);
                 weightMap.put(EntityType.RABBIT, 1);
             }
             case 4 -> { // 专家
@@ -80,9 +80,12 @@ public class SpawnerAttribute {
                 weightMap.put(EntityType.SKELETON, 20);
                 weightMap.put(EntityType.STRAY, 20);
                 weightMap.put(EntityType.SILVERFISH, 20);
+                weightMap.put(EntityType.ENDERMITE, 10);
                 weightMap.put(EntityType.SPIDER, 40);
                 weightMap.put(EntityType.CREEPER, 20);
+                weightMap.put(EntityType.VINDICATOR, 5);
                 weightMap.put(EntityType.VEX, 4);
+                weightMap.put(EntityType.WITCH, 5);
                 weightMap.put(EntityType.RABBIT, 1);
             }
             default -> {
@@ -91,9 +94,6 @@ public class SpawnerAttribute {
                 damageMultiple = 1.0;
                 spawnPeriodSecs = 30;
                 weightMap.put(EntityType.ZOMBIE, 100);
-                weightMap.put(EntityType.SKELETON, 40);
-                weightMap.put(EntityType.SPIDER, 40);
-                weightMap.put(EntityType.CREEPER, 20);
                 Notifier.error("不支持的难度等级：" + difficulty.getLevel());
             }
         }

@@ -3,7 +3,6 @@ package org.wolflink.minecraft.plugin.siriuxa.monster.strategy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.attribute.Attributable;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
 import org.wolflink.common.ioc.IOC;
@@ -95,8 +94,10 @@ public class PlayerFocusSpawnStrategy extends SpawnStrategy {
                 if (entityType.equals(EntityType.RABBIT)) {
                     Rabbit rabbit = (Rabbit) entity;
                     rabbit.setRabbitType(Rabbit.Type.THE_KILLER_BUNNY);
-                }
-                else if(entity instanceof Monster monster) {
+                } else if (entityType.equals(EntityType.CREEPER)) {
+                    Creeper creeper = (Creeper) entity;
+                    if (random.nextDouble() < 0.06) creeper.setPowered(true);
+                } else if (entity instanceof Monster monster) {
                     IOC.getBean(AttributeAPI.class).multiplyAttribute(monster, "pf_health",
                             Attribute.GENERIC_MAX_HEALTH, getSpawnerAttribute().getMovementMultiple());
                     monster.setHealth(Objects.requireNonNull(monster.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
