@@ -80,7 +80,7 @@ public class ExplorationBackpackMenu extends StaticMenu {
         assert difficulty != null;
         double rewardMultiple = difficulty.getRewardMultiple();
         // TODO 任务奖励结算
-        double wheat = 0 * rewardMultiple;
+        double wheat = playerWheatTaskRecord.getRewardWheat() * rewardMultiple;
         int exp = (int) (playerBackpack.getTotalExp() * rewardMultiple);
         IOC.getBean(PlayerAPI.class).addExp(player,exp);
         String multiple = "§8(§7x"+String.format("%.0f",rewardMultiple * 100)+"%§8)";

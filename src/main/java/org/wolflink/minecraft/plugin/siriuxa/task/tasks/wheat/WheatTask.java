@@ -60,7 +60,7 @@ public abstract class WheatTask extends Task {
             Notifier.error("在尝试补充任务记录数据时，未找到玩家" + offlinePlayer.getName() + "的任务记录类。");
             return;
         }
-        record.setWheat(taskWheat / getTaskTeam().getInitSize()); // 保存任务麦穗
+        record.setRewardWheat(wheatTaskStat.getPlayerWheatReward(offlinePlayer.getUniqueId())); // 保存任务麦穗
         record.setSuccess(taskResult); // 设置任务状态
         PlayerBackpack playerBackpack;
         Player player = offlinePlayer.getPlayer();

@@ -12,6 +12,7 @@ import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.DifficultyRepository;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.WheatTaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerWheatTaskRecord;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
@@ -68,11 +69,17 @@ public class TaskRecordIcon extends Icon {
             } else {
                 playerWheatTaskRecord.setClaimed(true);
                 IOC.getBean(TaskRecordDB.class).saveRecord(playerWheatTaskRecord);
-                String returnWheat = String.format("%.2f", Objects.requireNonNull(IOC.getBean(DifficultyRepository.class)
-                        .findByName(ExplorationDifficulty.class,playerWheatTaskRecord.getTaskDifficulty())).getWheatCost() * 0.6);
-                IOC.getBean(VaultAPI.class).addEconomy(player, Double.parseDouble(returnWheat));
-                IOC.getBean(PlayerAPI.class).addExp(player, (int) (playerWheatTaskRecord.getPlayerBackpack().getTotalExp() * 0.5));
-                Notifier.chat("任务花费的麦穗已补偿 60%，经验已保留 50%，祝你下次好运！", player);
+                WheatTaskDifficulty wheatTaskDifficulty = IOC.getBean(DifficultyRepository.class).findByName(ExplorationDifficulty.class, playerWheatTaskRecord.getTaskDifficulty());
+                if(wheatTaskDifficulty == null) {
+                    Notifier.error("尝试给玩家"+player.getName()+"发放奖励时，未找到对应的难度类："+playerWheatTaskRecord.getTaskDifficulty());
+                    return;
+                }
+                double rewardWheat = playerWheatTaskRecord.getRewardWheat() * wheatTaskDifficulty.getRewardMultiple();
+                int exp = (int) (playerWheatTaskRecord.getPlayerBackpack().getTotalExp() * wheatTaskDifficulty.getRewardMultiple());
+                IOC.getBean(VaultAPI.class).addEconomy(player, rewardWheat);
+                Notifier.chat("任务失败，但你仍然获得了 §a"+String.format("%.0f",rewardWheat)+" §6麦穗 §f以及 §a"+exp+" §e经验 §f作为奖励。",player);
+                IOC.getBean(PlayerAPI.class).addExp(player,exp);
+                Notifier.chat("任务奖励的麦穗与经验已发放，但物品丢失了，祝你下次好运！", player);
                 player.playSound(player.getLocation(), Sound.ENTITY_WOLF_HOWL, 0.7f, 1f);
             }
         }
