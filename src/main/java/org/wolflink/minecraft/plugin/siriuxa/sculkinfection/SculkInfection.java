@@ -57,6 +57,7 @@ public class SculkInfection implements IStatus {
         int oldValue = getInfectionValue(player.getUniqueId());
         int newValue = oldValue + value;
         if (newValue < 0) newValue = 0;
+        if (newValue >= 1200) newValue = 1200;
         infectionMap.put(pUuid, newValue);
     }
 
