@@ -1,6 +1,7 @@
 package org.wolflink.minecraft.plugin.siriuxa.api;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -58,6 +59,12 @@ public class Notifier {
         players.forEach(p -> {
             if (!p.isOnline()) return;
             notifier.chat(msg, p);
+        });
+    }
+    public static void broadcastSound(List<Player> players, Sound sound,float v,float v1) {
+        players.forEach(p -> {
+            if(!p.isOnline())return;
+            p.playSound(p.getLocation(),sound,v,v1);
         });
     }
 

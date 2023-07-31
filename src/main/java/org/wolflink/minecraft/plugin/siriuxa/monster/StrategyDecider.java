@@ -2,8 +2,10 @@ package org.wolflink.minecraft.plugin.siriuxa.monster;
 
 import lombok.NonNull;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.wolflink.minecraft.plugin.siriuxa.api.IStatus;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.OceanSpawnStrategy;
 import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.PlayerFocusSpawnStrategy;
 import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.SpawnStrategy;
@@ -47,18 +49,24 @@ public class StrategyDecider implements IStatus {
 
     @Override
     public void enable() {
-        subScheduler.runTaskTimerAsync(
-                this::updateStrategyMap,
-                20L * DECIDE_PERIOD_SECS,
-                20L * DECIDE_PERIOD_SECS
-        );
-        subScheduler.runTaskTimerAsync(
-                this::spawnTask,
-                20L * spawnPeriodSecs,
-                20L * spawnPeriodSecs
-        );
-        subScheduler.runTaskTimerAsync(this::updateAttribute,
-                20L * 60, 20L * 60);
+        Notifier.broadcastChat(task.getTaskPlayers(),"§c怪物们将在1分钟后来袭，请做好准备...");
+        Notifier.broadcastSound(task.getTaskPlayers(), Sound.ENTITY_VILLAGER_NO,1f,0.8f);
+        subScheduler.runTaskLaterAsync(()->{
+            subScheduler.runTaskTimerAsync(
+                    this::updateStrategyMap,
+                    20L * DECIDE_PERIOD_SECS,
+                    20L * DECIDE_PERIOD_SECS
+            );
+            subScheduler.runTaskTimerAsync(
+                    this::spawnTask,
+                    20L * spawnPeriodSecs,
+                    20L * spawnPeriodSecs
+            );
+            subScheduler.runTaskTimerAsync(this::updateAttribute,
+                    20L * 60, 20L * 60);
+            Notifier.broadcastChat(task.getTaskPlayers(),"§c它们来了！");
+            Notifier.broadcastSound(task.getTaskPlayers(), Sound.ENTITY_ENDER_DRAGON_AMBIENT,1f,1f);
+        },20 * 60);
     }
 
     private void updateStrategyMap() {
