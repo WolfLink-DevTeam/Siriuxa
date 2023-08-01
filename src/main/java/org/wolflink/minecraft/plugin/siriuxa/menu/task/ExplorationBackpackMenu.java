@@ -9,6 +9,7 @@ import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.PlayerAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.BorderIcon;
+import org.wolflink.minecraft.plugin.siriuxa.api.view.DynamicMenu;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.EmptyIcon;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.StaticMenu;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.DifficultyRepository;
@@ -25,7 +26,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-public class ExplorationBackpackMenu extends StaticMenu {
+public class ExplorationBackpackMenu extends DynamicMenu {
 
     private final Set<Integer> selectedSlots = new HashSet<>();
     @Setter
@@ -36,7 +37,7 @@ public class ExplorationBackpackMenu extends StaticMenu {
      * 静态菜单只会在打开时刷新一次
      */
     public ExplorationBackpackMenu(UUID ownerUuid) {
-        super(ownerUuid, "§0§l任务背包", 54);
+        super(ownerUuid, "§0§l任务背包", 54,0);
     }
 
     public boolean containSlot(int index) {
