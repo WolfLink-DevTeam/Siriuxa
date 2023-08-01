@@ -74,8 +74,8 @@ public class TaskRecordIcon extends Icon {
                     Notifier.error("尝试给玩家"+player.getName()+"发放奖励时，未找到对应的难度类："+playerWheatTaskRecord.getTaskDifficulty());
                     return;
                 }
-                double rewardWheat = playerWheatTaskRecord.getRewardWheat() * wheatTaskDifficulty.getRewardMultiple();
-                int exp = (int) (playerWheatTaskRecord.getPlayerBackpack().getTotalExp() * wheatTaskDifficulty.getRewardMultiple());
+                double rewardWheat = playerWheatTaskRecord.getRewardWheat();
+                int exp = (playerWheatTaskRecord.getPlayerBackpack().getTotalExp());
                 IOC.getBean(VaultAPI.class).addEconomy(player, rewardWheat);
                 Notifier.chat("任务失败，但你仍然获得了 §a"+String.format("%.0f",rewardWheat)+" §6麦穗 §f以及 §a"+exp+" §e经验 §f作为奖励。",player);
                 IOC.getBean(PlayerAPI.class).addExp(player,exp);
