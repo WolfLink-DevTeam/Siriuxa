@@ -5,11 +5,9 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.backpack.InvBackupService;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.WheatTaskDifficulty;
-import org.wolflink.minecraft.plugin.siriuxa.file.database.OfflinePlayerDB;
-import org.wolflink.minecraft.plugin.siriuxa.file.database.OfflinePlayerRecord;
-import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerWheatTaskRecord;
-import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.*;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.stages.TaskLinearStageHolder;
@@ -60,7 +58,11 @@ public abstract class WheatTask extends Task {
             Notifier.error("在尝试补充任务记录数据时，未找到玩家" + offlinePlayer.getName() + "的任务记录类。");
             return;
         }
-        record.setRewardWheat(wheatTaskStat.getPlayerWheatReward(offlinePlayer.getUniqueId())); // 保存任务麦穗
+        record.setRewardWheat(wheatTaskStat.getPlayerWheatReward(
+                offlinePlayer.getUniqueId(),
+                difficulty.getRewardMultiple(),
+                IOC.getBean(InventoryDB.class).loadFiveSlot(offlinePlayer).isEmpty()
+                )); // 保存任务麦穗
         record.setSuccess(taskResult); // 设置任务状态
         PlayerBackpack playerBackpack;
         Player player = offlinePlayer.getPlayer();

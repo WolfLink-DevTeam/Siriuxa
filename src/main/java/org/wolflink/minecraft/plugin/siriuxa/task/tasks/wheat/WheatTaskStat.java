@@ -35,8 +35,12 @@ public class WheatTaskStat extends TaskStat {
     }
     /**
      * 根据统计数据计算玩家麦穗奖励
+     * 如果不带物品进入，额外奖励50%麦穗
      */
-    public double getPlayerWheatReward(UUID uuid) {
+    public double getPlayerWheatReward(final UUID uuid,final double rewardMultiple,final boolean emptyBackpack) {
+
+        double multiple = rewardMultiple;
+        if(emptyBackpack) multiple += 0.5;
         int travelDistance = travelDistanceMap.getOrDefault(uuid,0);
         int travelDistanceValue = (int) Math.pow(travelDistance,0.4);
         int damageTotal = damageMap.getOrDefault(uuid,0);
@@ -46,10 +50,10 @@ public class WheatTaskStat extends TaskStat {
         int mobKillTotal = mobKillMap.getOrDefault(uuid,0);
         int mobKillTotalValue = (int) Math.pow(mobKillTotal,0.65);
         int taskSecs = (int) ((Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis())/1000);
-        int taskSecsValue = (int) (15 + Math.pow(taskSecs,0.85)/20);
-        int randValue = new Random().nextInt(10,50);
+        int taskSecsValue = (int) (Math.pow(taskSecs,0.82)/15);
+        int randValue = new Random().nextInt(10,20);
         int originReward = (travelDistanceValue + damageTotalValue + oreBlockTotalValue + mobKillTotalValue + taskSecsValue + randValue);
-        if(originReward >= 250) originReward = 250;
+        if(originReward >= 300) originReward = 300;
         int reward = (int) (originReward * wheatTask.getDifficulty().getRewardMultiple());
         Notifier.debug("结算玩家："+ Bukkit.getOfflinePlayer(uuid).getName());
         Notifier.debug("行走距离："+travelDistance+"|"+travelDistanceValue);
@@ -58,7 +62,8 @@ public class WheatTaskStat extends TaskStat {
         Notifier.debug("怪物击杀："+mobKillTotal+"|"+mobKillTotalValue);
         Notifier.debug("任务用时："+taskSecs+"|"+taskSecsValue);
         Notifier.debug("随机奖励："+randValue);
-        Notifier.debug("奖励倍率："+wheatTask.getDifficulty().getRewardMultiple());
+        Notifier.debug("奖励倍率："+multiple);
+        Notifier.debug("不携带装备入场："+emptyBackpack);
         Notifier.debug("合计："+reward);
         return reward;
     }
