@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.api.IStatus;
@@ -34,6 +35,11 @@ public class SculkInfection implements IStatus {
     static {
         sculkTypes.add(Material.SCULK);
         sculkTypes.add(Material.SCULK_CATALYST);
+    }
+    private static final Set<String> availableWorlds = new HashSet<>();
+
+    static {
+        availableWorlds.add(IOC.getBean(Config.class).get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME));
     }
 
     /**
@@ -77,8 +83,8 @@ public class SculkInfection implements IStatus {
      * 重度感染 达到 1000 点 虚弱+挖掘疲劳+走过的方块有概率变成潜声方块+凋零+缓慢+失明
      */
     private void updateInfectionValue(Player player) {
-        // 不在任务世界
-        if (!(player.getWorld().getName().equals(config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME)))) {
+        // 不在可用世界
+        if (!(availableWorlds.contains(player.getWorld().getName()))) {
             infectionMap.remove(player.getUniqueId());
             return;
         }
@@ -97,7 +103,8 @@ public class SculkInfection implements IStatus {
         int value = getInfectionValue(pUuid);
         ThreadLocalRandom random = ThreadLocalRandom.current();
         double randDouble = random.nextDouble();
-        subScheduler.runTaskLater(() -> {
+        subScheduler.runTask(() -> {
+            if(!availableWorlds.contains(player.getWorld().getName())) return; // 不在可用世界
             if (value >= 1000) {
                 player.playSound(player.getLocation(), Sound.BLOCK_SCULK_CHARGE, 1f, 1f);
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§c§l你被幽匿方块严重感染了！"));
@@ -135,18 +142,18 @@ public class SculkInfection implements IStatus {
                     player.getLocation().clone().add(0, -1, 0).getBlock().setType(material);
                 }
             }
-        }, 1);
+        });
     }
 
     public void breakSculk(Player player) {
-        if (!(player.getWorld().getName().equals(config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME)))) return;
+        if(!availableWorlds.contains(player.getWorld().getName())) return;
         // 不是生存模式
         if (player.getGameMode() != GameMode.SURVIVAL) return;
         addInfectionValue(player, 10);
     }
 
     public void drinkMilk(Player player) {
-        if (!(player.getWorld().getName().equals(config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME)))) return;
+        if(!availableWorlds.contains(player.getWorld().getName())) return;
         // 不是生存模式
         if (player.getGameMode() != GameMode.SURVIVAL) return;
         if (milkCDSet.contains(player.getUniqueId())) return;
