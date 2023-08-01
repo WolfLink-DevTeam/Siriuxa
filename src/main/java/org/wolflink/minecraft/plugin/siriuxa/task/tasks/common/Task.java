@@ -18,6 +18,7 @@ import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerWheatTaskRecord;
 import org.wolflink.minecraft.plugin.siriuxa.monster.StrategyDecider;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.IGlobalTeam;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.IRecordable;
@@ -30,6 +31,7 @@ import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 抽象任务类
@@ -76,6 +78,12 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
             }, 20 * 3L);
         }
         deleteTask();
+    }
+
+    private final Map<UUID, PlayerWheatTaskRecord> playerRecordMap = new ConcurrentHashMap<>();
+    @Override
+    public Map<UUID, PlayerWheatTaskRecord> getPlayerRecordMap() {
+        return playerRecordMap;
     }
 
     protected void triggerFinish() {

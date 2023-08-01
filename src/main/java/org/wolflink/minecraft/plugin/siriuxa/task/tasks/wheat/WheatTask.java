@@ -53,7 +53,7 @@ public abstract class WheatTask extends Task {
      */
     @Override
     public void fillRecord(OfflinePlayer offlinePlayer, boolean taskResult) {
-        PlayerWheatTaskRecord record = playerRecordMap.get(offlinePlayer.getUniqueId());
+        PlayerWheatTaskRecord record = getPlayerWheatTaskRecord(offlinePlayer.getUniqueId());
         if (record == null) {
             Notifier.error("在尝试补充任务记录数据时，未找到玩家" + offlinePlayer.getName() + "的任务记录类。");
             return;
@@ -85,7 +85,7 @@ public abstract class WheatTask extends Task {
     @Override
     public void finishRecord() {
         TaskRecordDB taskRecordDB = IOC.getBean(TaskRecordDB.class);
-        for (PlayerWheatTaskRecord playerWheatTaskRecord : playerRecordMap.values()) {
+        for (PlayerWheatTaskRecord playerWheatTaskRecord : getPlayerWheatTaskRecords()) {
             playerWheatTaskRecord.setUsingTimeInMills(getTaskStat().getUsingTimeInMills());
             playerWheatTaskRecord.setFinishedTimeInMills(getTaskStat().getEndTime().getTimeInMillis());
             taskRecordDB.saveRecord(playerWheatTaskRecord);
@@ -102,7 +102,7 @@ public abstract class WheatTask extends Task {
     public void initRecord() {
         for (UUID uuid : getTaskTeam().getMemberUuids()) {
             PlayerWheatTaskRecord record = new PlayerWheatTaskRecord(uuid, this);
-            playerRecordMap.put(uuid, record);
+            getPlayerRecordMap().put(uuid, record);
         }
     }
     @Override
