@@ -49,7 +49,7 @@ public class StrategyDecider implements IStatus {
 
     @Override
     public void enable() {
-        Notifier.broadcastChat(task.getTaskPlayers(),"§c怪物们将在1分钟后来袭，请做好准备...");
+        Notifier.broadcastChat(task.getTaskPlayers(),"§c怪物们将在90秒后来袭，请做好准备...");
         Notifier.broadcastSound(task.getTaskPlayers(), Sound.ENTITY_VILLAGER_NO,1f,0.8f);
         subScheduler.runTaskLaterAsync(()->{
             subScheduler.runTaskTimerAsync(
@@ -66,7 +66,7 @@ public class StrategyDecider implements IStatus {
                     20L * 60, 20L * 60);
             Notifier.broadcastChat(task.getTaskPlayers(),"§c它们来了！");
             Notifier.broadcastSound(task.getTaskPlayers(), Sound.ENTITY_ENDER_DRAGON_AMBIENT,1f,1f);
-        },20 * 60);
+        },20 * 90);
     }
 
     private void updateStrategyMap() {
