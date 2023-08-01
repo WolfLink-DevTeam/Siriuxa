@@ -80,7 +80,6 @@ public class SpawnerAttribute {
                 weightMap.put(EntityType.SKELETON, 20);
                 weightMap.put(EntityType.STRAY, 20);
                 weightMap.put(EntityType.SILVERFISH, 20);
-                weightMap.put(EntityType.ENDERMITE, 10);
                 weightMap.put(EntityType.SPIDER, 40);
                 weightMap.put(EntityType.CREEPER, 20);
                 weightMap.put(EntityType.VINDICATOR, 5);
