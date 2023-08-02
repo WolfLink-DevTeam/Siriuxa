@@ -11,6 +11,7 @@ import java.util.*;
 /**
  * 特殊物品不考虑堆叠的情况！
  * 只通过描述辨认特殊物品
+ * 例如护身符之类的被动道具
  */
 public abstract class SpecialItem {
     /**
@@ -18,7 +19,7 @@ public abstract class SpecialItem {
      */
     private final SubScheduler subScheduler = new SubScheduler();
     private final Set<String> availableWorlds;
-    private final Set<UUID> itemHolders = Collections.synchronizedSet(new HashSet<>());
+    protected final Set<UUID> itemHolders = Collections.synchronizedSet(new HashSet<>());
 
     public SpecialItem(String... availableWorld) {
         availableWorlds = Collections.synchronizedSet(new HashSet<>(Arrays.stream(availableWorld).toList()));
@@ -33,9 +34,29 @@ public abstract class SpecialItem {
         if (enabled) return;
         enabled = true;
         inventoryScan();
+        refreshItemAbility();
         onEnable();
     }
+    protected abstract boolean isThisSpecialItem(ItemStack itemStack);
 
+    protected boolean compareUniqueLore(ItemStack itemStack) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if(itemMeta == null) return false;
+        List<String> lores = itemMeta.getLore();
+        if(lores == null || lores.size() < 1) return false;
+        String uniqueLine = lores.get(0);
+        return uniqueLine.endsWith(getUniqueName());
+    }
+
+    private void refreshItemAbility() {
+        subScheduler.runTaskTimerAsync(()->{
+            for (UUID holderUuid : itemHolders) {
+                Player player = Bukkit.getPlayer(holderUuid);
+                if(player == null || !player.isOnline())continue;
+                applyItemAbility(player);
+            }
+        },60,60);
+    }
     /**
      * 扫描玩家背包里是否含有该特殊物品
      * 如果有，则添加到 itemHolders
@@ -46,12 +67,7 @@ public abstract class SpecialItem {
                 if(!availableWorlds.contains(player.getWorld().getName())) continue;
                 boolean hasItem = false;
                 for (ItemStack itemStack : player.getInventory()) {
-                    ItemMeta itemMeta = itemStack.getItemMeta();
-                    if(itemMeta == null) continue;
-                    List<String> lores = itemMeta.getLore();
-                    if(lores == null || lores.size() < 1) continue;
-                    String uniqueLine = lores.get(0);
-                    if(uniqueLine.endsWith(getUniqueName())) {
+                    if(isThisSpecialItem(itemStack)) {
                         hasItem = true;
                         break;
                     }
@@ -62,6 +78,7 @@ public abstract class SpecialItem {
             }
         },60,60);
     }
+    public abstract void applyItemAbility(Player holder);
     public abstract void onEnable();
     public abstract void onDisable();
     public void disable() {
