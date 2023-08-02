@@ -58,6 +58,14 @@ public class EvacuationZone {
         this.compassPlayers = new HashSet<>();
     }
 
+    private boolean hasCompass(Player player) {
+        for (ItemStack itemStack : player.getInventory()) {
+            if(itemStack == null)continue;
+            if(itemStack.getType() == Material.COMPASS) return true;
+        }
+        return false;
+    }
+
     public void setAvailable(boolean value) {
         if (available == value) return;
         available = value;
@@ -65,7 +73,8 @@ public class EvacuationZone {
             generateSchematic();
             subScheduler.runTaskTimer(() -> {
                 for (Player player : explorationTask.getTaskPlayers()) {
-                    if (!compassPlayers.contains(player)) {
+                    // 有指南针，并且指南针没有被激活
+                    if (hasCompass(player) && !compassPlayers.contains(player)) {
                         setPlayerCompass(player, true);
                         compassPlayers.add(player);
                     }
@@ -74,6 +83,7 @@ public class EvacuationZone {
         } else {
             undoSchematic();
             subScheduler.cancelAllTasks();
+
             for (Player player : compassPlayers) {
                 setPlayerCompass(player, false);
             }
