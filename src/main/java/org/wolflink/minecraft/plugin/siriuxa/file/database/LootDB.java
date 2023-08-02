@@ -7,7 +7,6 @@ import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 
 import java.io.File;
-import java.util.Map;
 
 @Singleton
 public class LootDB extends FileDB {
@@ -28,7 +27,7 @@ public class LootDB extends FileDB {
         }
     }
 
-    public void setLoot(EntityType entityType, String loot) {
+    public void setLoot(EntityType entityType, ItemStack loot) {
         File lootFile = new File(folder, entityType.name() + ".yml");
         FileConfiguration fileConfiguration = getFileConfiguration(lootFile);
         if (fileConfiguration == null) fileConfiguration = createAndLoad(lootFile);
@@ -42,7 +41,7 @@ public class LootDB extends FileDB {
         }
     }
 
-    public void setDropChance(Map<String, ItemStack> loot, double dropChance) {
+    public void setDropChance(ItemStack loot, double dropChance) {
         File lootFile = new File(folder, loot + ".yml");
         FileConfiguration fileConfiguration = getFileConfiguration(lootFile);
         if (fileConfiguration == null) fileConfiguration = createAndLoad(lootFile);
