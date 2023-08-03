@@ -60,8 +60,8 @@ public class EvacuationZone {
 
     private boolean hasCompass(Player player) {
         for (ItemStack itemStack : player.getInventory()) {
-            if(itemStack == null)continue;
-            if(itemStack.getType() == Material.COMPASS) return true;
+            if (itemStack == null) continue;
+            if (itemStack.getType() == Material.COMPASS) return true;
         }
         return false;
     }
