@@ -11,7 +11,7 @@ public class HurtCheckerConfig {
     /**
      * 无敌时间(单位：tick)
      */
-    static final long INVULNERABLE_TICKS = 35;
+    static final long INVULNERABLE_TICKS = 21;
     /**
      * 排除的伤害类型(不会触发无敌)
      */
