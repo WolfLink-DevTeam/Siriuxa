@@ -23,6 +23,7 @@ import org.wolflink.minecraft.plugin.siriuxa.sculkinfection.SculkInfection;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.*;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.huntcheck.HuntChecker;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.huntcheck.HuntValues;
+import org.wolflink.minecraft.plugin.siriuxa.task.listeners.hurtcheck.HurtChecker;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.orecheck.OreChecker;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.orecheck.OreValues;
 import org.wolflink.minecraft.wolfird.framework.WolfirdPlugin;

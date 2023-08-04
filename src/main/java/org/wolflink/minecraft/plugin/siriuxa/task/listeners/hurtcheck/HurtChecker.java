@@ -1,4 +1,4 @@
-package org.wolflink.minecraft.plugin.siriuxa.task.listeners;
+package org.wolflink.minecraft.plugin.siriuxa.task.listeners.hurtcheck;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
@@ -15,29 +15,8 @@ import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.WheatTask;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
-import java.util.ArrayList;
-
 @Singleton
 public class HurtChecker extends WolfirdListener {
-    private static final long INVULNERABLE_TICKS = 21;
-    private static final ArrayList<EntityDamageEvent.DamageCause> excludeDamageCause = new ArrayList<>();
-
-    static {
-        excludeDamageCause.add(EntityDamageEvent.DamageCause.KILL);
-        excludeDamageCause.add(EntityDamageEvent.DamageCause.VOID);
-        excludeDamageCause.add(EntityDamageEvent.DamageCause.LAVA);
-        excludeDamageCause.add(EntityDamageEvent.DamageCause.FIRE);
-        excludeDamageCause.add(EntityDamageEvent.DamageCause.WITHER);
-        excludeDamageCause.add(EntityDamageEvent.DamageCause.FREEZE);
-        excludeDamageCause.add(EntityDamageEvent.DamageCause.POISON);
-        excludeDamageCause.add(EntityDamageEvent.DamageCause.SUICIDE);
-        excludeDamageCause.add(EntityDamageEvent.DamageCause.DROWNING);
-        excludeDamageCause.add(EntityDamageEvent.DamageCause.HOT_FLOOR);
-        excludeDamageCause.add(EntityDamageEvent.DamageCause.FIRE_TICK);
-        excludeDamageCause.add(EntityDamageEvent.DamageCause.STARVATION);
-        excludeDamageCause.add(EntityDamageEvent.DamageCause.PROJECTILE);
-        excludeDamageCause.add(EntityDamageEvent.DamageCause.FALLING_BLOCK);
-    }
 
     @Inject
     private TaskRepository taskRepository;
@@ -45,7 +24,7 @@ public class HurtChecker extends WolfirdListener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void on(EntityDamageEvent event) {
         if (event.getEntityType() != EntityType.PLAYER) return;
-        if (excludeDamageCause.contains(event.getCause())) return;
+        if (HurtCheckerConfig.excludeDamageCause.contains(event.getCause())) return;
         Player player = (Player) event.getEntity();
         Task task = taskRepository.findByTaskTeamPlayer(player);
         if (task == null) return; // 没有任务
@@ -58,7 +37,7 @@ public class HurtChecker extends WolfirdListener {
         // 指定时间内只会受到一次伤害
         player.setInvulnerable(true);
         Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance(), () ->
-                player.setInvulnerable(false), INVULNERABLE_TICKS);
+                player.setInvulnerable(false), HurtCheckerConfig.INVULNERABLE_TICKS);
         // 扣除麦穗
         double cost = wheatTask.getHurtWheatCost() * event.getFinalDamage();
         wheatTask.takeWheat(cost);
