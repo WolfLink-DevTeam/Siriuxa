@@ -62,9 +62,13 @@ public class ExplorationTask extends WheatTask {
                 return;
             }
             if (availableEvacuationZone != null) {
-                availableEvacuationZone.setAvailable(false);
-                availableEvacuationZone = null;
-                startEvacuateTask(random.nextInt(12, 20));
+                subScheduler.runTaskLater(()->{
+                    Notifier.broadcastChat(getTaskPlayers(),"飞艇将在 3分钟 后撤离，请抓紧时间！");
+                    Notifier.broadcastSound(getTaskPlayers(),Sound.ENTITY_LIGHTNING_BOLT_THUNDER,1f,0.8f);
+                    availableEvacuationZone.setAvailable(false);
+                    availableEvacuationZone = null;
+                    startEvacuateTask(random.nextInt(12, 20));
+                },20 * 180L);
             } else {
                 availableEvacuationZone = new EvacuationZone(this, evacuateLocation.getWorld(), evacuateLocation.getBlockX(), evacuateLocation.getBlockZ(), 30);
                 availableEvacuationZone.setAvailable(true);
