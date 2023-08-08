@@ -109,7 +109,7 @@ public class ExplorationTask extends WheatTask {
         }
         initRecord();
         getTaskStat().enable();
-        this.taskWheat = (double) getTaskTeamSize() * (getExplorationDifficulty().getWheatCost() + getExplorationDifficulty().getWheatSupply());
+        this.taskWheat = (double) getTaskTeamSize() * getExplorationDifficulty().getWheatSupply();
         getStrategyDecider().enable();
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
             List<Location> portalLocations = IOC.getBean(BlockAPI.class)

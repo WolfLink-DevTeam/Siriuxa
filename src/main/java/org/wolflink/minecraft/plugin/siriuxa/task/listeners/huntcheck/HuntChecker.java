@@ -48,7 +48,7 @@ public class HuntChecker extends WolfirdListener {
             taskPlayer.playSound(taskPlayer.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_FALL, 1, 2f);
             //TODO 改为 Hologram 提示
             taskPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-                    new TextComponent("§f" + player.getName() + " §7刚刚击杀了 " + lang.get("monster." + entityType.name().toLowerCase(), "未知怪物") + " §7获得 §f" + String.format("%.1f", wheatValue) + " §6麦穗"));
+                    new TextComponent("§f" + player.getName() + " §7刚刚在 " + lang.get("monster." + entityType.name().toLowerCase(), "未知怪物") + " §7身上发现 §f" + String.format("%.1f", wheatValue) + "mg §d幽匿光体"));
         }
     }
 }
