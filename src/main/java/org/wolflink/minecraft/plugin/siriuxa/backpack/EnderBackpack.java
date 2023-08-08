@@ -32,7 +32,7 @@ public class EnderBackpack implements ConfigurationSerializable {
         defaultBackpack.leggings = new ItemStack(Material.LEATHER_LEGGINGS);
         defaultBackpack.boots = new ItemStack(Material.LEATHER_BOOTS);
         defaultBackpack.weapon = new ItemStack(Material.STONE_SWORD);
-        defaultBackpack.tool = new ItemStack(Material.STONE_AXE);
+        defaultBackpack.tool = new ItemStack(Material.STONE_PICKAXE);
         defaultBackpack.item = new ItemStack(Material.BREAD,8);
     }
     private ItemStack helmet;
@@ -63,6 +63,7 @@ public class EnderBackpack implements ConfigurationSerializable {
         return amount;
     }
     private static final int[] LOCK_PRICES = new int[]{30,60,90,120,150};
+    @Getter
     private static final int MAX_LOCKED_SLOTS_AMOUNT = LOCK_PRICES.length;
     public boolean canLock() {
         return getLockedSlotAmount() < MAX_LOCKED_SLOTS_AMOUNT;

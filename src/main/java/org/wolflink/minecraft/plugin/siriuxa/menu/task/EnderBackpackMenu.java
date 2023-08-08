@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 
 public class EnderBackpackMenu extends DynamicMenu {
 
-    private static final ItemStack anythingItemIcon = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
+    private static final ItemStack anythingItemIcon = new ItemStack(Material.NETHER_STAR);
     static {
         ItemMeta itemMeta = anythingItemIcon.getItemMeta();
         if(itemMeta != null) {
