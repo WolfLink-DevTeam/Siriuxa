@@ -31,7 +31,7 @@ public class EnderLock extends Icon {
                     "  §7但显然目前这种技术仍无法被广泛应用，使用代价昂贵。",
                     " ");
         } else {
-            if(enderBackpack.getLockedSlotAmount() < 4) return fastCreateItemStack(Material.ENDER_PEARL,1,"§8[ §d末影祝福 §8] §e可购买 §7(还可购买 §f"+(EnderBackpack.getMAX_LOCKED_SLOTS_AMOUNT() - enderBackpack.getLockedSlotAmount())+" §7格)",
+            if(enderBackpack.getLockedSlotAmount() < EnderBackpack.getMAX_LOCKED_SLOTS_AMOUNT()) return fastCreateItemStack(Material.ENDER_PEARL,1,"§8[ §d末影祝福 §8] §e可购买 §7(还可购买 §f"+(EnderBackpack.getMAX_LOCKED_SLOTS_AMOUNT() - enderBackpack.getLockedSlotAmount())+" §7格)",
                     " ",
                     "  §7源于末地的奇异力量能够保护你的贵重物品以防丢失，",
                     "  §7但显然目前这种技术仍无法被广泛应用，使用代价昂贵。",
