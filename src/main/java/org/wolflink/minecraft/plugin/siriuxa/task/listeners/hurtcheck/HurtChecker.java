@@ -20,11 +20,13 @@ public class HurtChecker extends WolfirdListener {
 
     @Inject
     private TaskRepository taskRepository;
+    @Inject
+    private HurtCheckerConfig hurtCheckerConfig;
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void on(EntityDamageEvent event) {
         if (event.getEntityType() != EntityType.PLAYER) return;
-        if (HurtCheckerConfig.excludeDamageCause.contains(event.getCause())) return;
+        if (hurtCheckerConfig.getExcludeDamageCause().contains(event.getCause())) return;
         Player player = (Player) event.getEntity();
         Task task = taskRepository.findByTaskTeamPlayer(player);
         if (task == null) return; // 没有任务
@@ -34,10 +36,6 @@ public class HurtChecker extends WolfirdListener {
         if (player.getWorld() != task.getTaskArea().getCenter().getWorld()) return; // 不在任务世界
         // 下调大额伤害
         if (event.getDamage() > 12) event.setDamage(12);
-        // 指定时间内只会受到一次伤害
-        player.setInvulnerable(true);
-        Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance(), () ->
-                player.setInvulnerable(false), HurtCheckerConfig.INVULNERABLE_TICKS);
         // 扣除麦穗
         double cost = wheatTask.getHurtWheatCost() * event.getFinalDamage();
         wheatTask.takeWheat(cost);

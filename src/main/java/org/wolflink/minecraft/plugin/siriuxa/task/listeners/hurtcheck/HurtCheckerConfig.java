@@ -1,5 +1,6 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.listeners.hurtcheck;
 
+import lombok.Getter;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.wolflink.common.ioc.Singleton;
 
@@ -9,13 +10,10 @@ import java.util.Set;
 @Singleton
 public class HurtCheckerConfig {
     /**
-     * 无敌时间(单位：tick)
-     */
-    static final long INVULNERABLE_TICKS = 21;
-    /**
      * 排除的伤害类型(不会触发无敌)
      */
-    static final Set<EntityDamageEvent.DamageCause> excludeDamageCause = EnumSet.of(
+    @Getter
+    private final Set<EntityDamageEvent.DamageCause> excludeDamageCause = EnumSet.of(
             EntityDamageEvent.DamageCause.VOID,
             EntityDamageEvent.DamageCause.LAVA,
             EntityDamageEvent.DamageCause.FIRE,
@@ -29,7 +27,4 @@ public class HurtCheckerConfig {
             EntityDamageEvent.DamageCause.STARVATION,
             EntityDamageEvent.DamageCause.FALLING_BLOCK
     );
-
-    private HurtCheckerConfig() {
-    }
 }
