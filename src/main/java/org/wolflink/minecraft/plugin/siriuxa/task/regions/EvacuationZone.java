@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class EvacuationZone {
 
@@ -96,11 +97,12 @@ public class EvacuationZone {
     public Set<Player> getPlayerInZone() {
         Set<Player> playerSet = new HashSet<>();
         if (!available || center.getWorld() == null) return playerSet;
-        for (Entity p : center.getWorld().getNearbyEntities(center, safeRadius, safeRadius, safeRadius,
-                entity -> entity.getType().equals(EntityType.PLAYER))) {
-            // 玩家脚下是末地门
-            if (p.getLocation().clone().getBlock().getType().equals(Material.END_PORTAL_FRAME)) {
-                playerSet.add((Player) p);
+
+        for (Player player : explorationTask.getTaskPlayers()) {
+            Location pLoc = player.getLocation();
+            if(pLoc.getWorld() != center.getWorld()) continue;
+            if(pLoc.distance(center) <= safeRadius && pLoc.clone().getBlock().getType().equals(Material.END_PORTAL_FRAME)) {
+                playerSet.add(player);
             }
         }
         return playerSet;
