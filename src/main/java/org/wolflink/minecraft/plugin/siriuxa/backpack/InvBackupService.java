@@ -28,8 +28,8 @@ public class InvBackupService {
         return new Result(true, "保存成功。");
     }
     public Result giveFiveSlotBackpack(Player player) {
-        FiveSlotBackpack fiveSlotBackpack = inventoryDB.loadFiveSlot(player);
-        fiveSlotBackpack.give(player);
+        EnderBackpack enderBackpack = inventoryDB.loadFiveSlot(player);
+        enderBackpack.give(player);
         return new Result(true,"发放成功。");
     }
 
@@ -42,27 +42,27 @@ public class InvBackupService {
         else return clearUnlockedFiveSlotBackpack(offlinePlayer);
     }
     public Result clearUnlockedFiveSlotBackpack(OfflinePlayer offlinePlayer) {
-        FiveSlotBackpack fiveSlotBackpack = inventoryDB.loadFiveSlot(offlinePlayer);
-        List<Boolean> lockedSlots = fiveSlotBackpack.getLockedSlots();
-        if (!lockedSlots.get(0)) fiveSlotBackpack.setHelmet(null);
-        if (!lockedSlots.get(1)) fiveSlotBackpack.setChestplate(null);
-        if (!lockedSlots.get(2)) fiveSlotBackpack.setLeggings(null);
-        if (!lockedSlots.get(3)) fiveSlotBackpack.setBoots(null);
-        if (!lockedSlots.get(4)) fiveSlotBackpack.setItem(null);
+        EnderBackpack enderBackpack = inventoryDB.loadFiveSlot(offlinePlayer);
+        List<Boolean> lockedSlots = enderBackpack.getLockedSlots();
+        if (!lockedSlots.get(0)) enderBackpack.setHelmet(null);
+        if (!lockedSlots.get(1)) enderBackpack.setChestplate(null);
+        if (!lockedSlots.get(2)) enderBackpack.setLeggings(null);
+        if (!lockedSlots.get(3)) enderBackpack.setBoots(null);
+        if (!lockedSlots.get(4)) enderBackpack.setItem(null);
         // 清理格子锁定状态
-        fiveSlotBackpack.resetLockedSlots();
-        saveFiveSlotBackpack(offlinePlayer,fiveSlotBackpack);
+        enderBackpack.resetLockedSlots();
+        saveFiveSlotBackpack(offlinePlayer, enderBackpack);
         return new Result(true,"未锁定物品清理成功。");
     }
     public Result clearFiveSlotBackpack(OfflinePlayer offlinePlayer) {
-        FiveSlotBackpack fiveSlotBackpack = inventoryDB.loadFiveSlot(offlinePlayer);
-        fiveSlotBackpack.clear();
-        fiveSlotBackpack.resetLockedSlots();
-        saveFiveSlotBackpack(offlinePlayer,fiveSlotBackpack);
+        EnderBackpack enderBackpack = inventoryDB.loadFiveSlot(offlinePlayer);
+        enderBackpack.clear();
+        enderBackpack.resetLockedSlots();
+        saveFiveSlotBackpack(offlinePlayer, enderBackpack);
         return new Result(true,"清理成功。");
     }
-    public Result saveFiveSlotBackpack(OfflinePlayer offlinePlayer,FiveSlotBackpack fiveSlotBackpack) {
-        inventoryDB.saveFiveSlot(offlinePlayer,fiveSlotBackpack);
+    public Result saveFiveSlotBackpack(OfflinePlayer offlinePlayer, EnderBackpack enderBackpack) {
+        inventoryDB.saveFiveSlot(offlinePlayer, enderBackpack);
         return new Result(true, "保存成功。");
     }
 

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -21,31 +22,36 @@ import java.util.stream.Stream;
  * 以及任意一格物品
  */
 @Data
-public class FiveSlotBackpack implements ConfigurationSerializable {
+public class EnderBackpack implements ConfigurationSerializable {
 
     @Getter
-    private static FiveSlotBackpack defaultBackpack = new FiveSlotBackpack();
+    private static EnderBackpack defaultBackpack = new EnderBackpack();
     static {
         defaultBackpack.helmet = new ItemStack(Material.LEATHER_HELMET);
         defaultBackpack.chestplate = new ItemStack(Material.LEATHER_CHESTPLATE);
         defaultBackpack.leggings = new ItemStack(Material.LEATHER_LEGGINGS);
         defaultBackpack.boots = new ItemStack(Material.LEATHER_BOOTS);
+        defaultBackpack.weapon = new ItemStack(Material.STONE_SWORD);
+        defaultBackpack.tool = new ItemStack(Material.STONE_AXE);
         defaultBackpack.item = new ItemStack(Material.BREAD,8);
     }
-
     private ItemStack helmet;
     private ItemStack chestplate;
     private ItemStack leggings;
     private ItemStack boots;
+    private ItemStack weapon;
+    private ItemStack tool;
     private ItemStack item;
 
     private List<Boolean> lockedSlots;
 
-    public FiveSlotBackpack() {
+    public EnderBackpack() {
         helmet = null;
         chestplate = null;
         leggings = null;
         boots = null;
+        weapon = null;
+        tool = null;
         item = null;
         resetLockedSlots();
     }
@@ -56,8 +62,8 @@ public class FiveSlotBackpack implements ConfigurationSerializable {
         }
         return amount;
     }
-    private static final int[] LOCK_PRICES = new int[]{30,60,90,180};
-    private static final int MAX_LOCKED_SLOTS_AMOUNT = 4;
+    private static final int[] LOCK_PRICES = new int[]{30,60,90,120,150};
+    private static final int MAX_LOCKED_SLOTS_AMOUNT = LOCK_PRICES.length;
     public boolean canLock() {
         return getLockedSlotAmount() < MAX_LOCKED_SLOTS_AMOUNT;
     }
@@ -65,7 +71,7 @@ public class FiveSlotBackpack implements ConfigurationSerializable {
         return LOCK_PRICES[getLockedSlotAmount()];
     }
     public boolean isEmpty() {
-        return helmet == null && chestplate == null && leggings == null && boots == null && item == null;
+        return helmet == null && chestplate == null && leggings == null && boots == null && item == null && weapon == null && tool == null;
     }
     public void give(Player player) {
         Inventory inventory = player.getInventory();
@@ -82,6 +88,12 @@ public class FiveSlotBackpack implements ConfigurationSerializable {
         if(boots == null) inventory.addItem(defaultBackpack.boots);
         else inventory.addItem(boots);
 
+        if(weapon == null) inventory.addItem(defaultBackpack.weapon);
+        else inventory.addItem(weapon);
+
+        if(tool == null) inventory.addItem(defaultBackpack.tool);
+        else inventory.addItem(tool);
+
         if(item == null) inventory.addItem(defaultBackpack.item);
         else inventory.addItem(item);
     }
@@ -91,10 +103,12 @@ public class FiveSlotBackpack implements ConfigurationSerializable {
         leggings = null;
         boots = null;
         item = null;
+        weapon = null;
+        tool = null;
         resetLockedSlots();
     }
     public void resetLockedSlots() {
-        lockedSlots = Stream.of(false,false,false,false,false).collect(Collectors.toList());
+        lockedSlots = Stream.of(false,false,false,false,false,false,false).collect(Collectors.toList());
     }
 
     @NotNull
@@ -106,18 +120,22 @@ public class FiveSlotBackpack implements ConfigurationSerializable {
         map.put("leggings",leggings);
         map.put("boots",boots);
         map.put("item",item);
+        map.put("weapon",weapon);
+        map.put("tool",tool);
         map.put("lockedSlots",lockedSlots);
         return map;
     }
-    public FiveSlotBackpack(Map<String,Object> map) {
+    public EnderBackpack(Map<String,Object> map) {
         helmet = (ItemStack) map.get("helmet");
         chestplate = (ItemStack) map.get("chestplate");
         leggings = (ItemStack) map.get("leggings");
         boots = (ItemStack) map.get("boots");
+        weapon = (ItemStack) map.get("weapon");
+        tool = (ItemStack) map.get("tool");
         item = (ItemStack) map.get("item");
         lockedSlots = (List<Boolean>) map.get("lockedSlots");
     }
-    public static FiveSlotBackpack deserialize(Map<String,Object> map) {
-        return new FiveSlotBackpack(map);
+    public static EnderBackpack deserialize(Map<String,Object> map) {
+        return new EnderBackpack(map);
     }
 }

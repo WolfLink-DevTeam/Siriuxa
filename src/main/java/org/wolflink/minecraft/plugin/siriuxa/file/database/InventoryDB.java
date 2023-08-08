@@ -9,7 +9,7 @@ import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.DateAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
-import org.wolflink.minecraft.plugin.siriuxa.backpack.FiveSlotBackpack;
+import org.wolflink.minecraft.plugin.siriuxa.backpack.EnderBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 
 import javax.annotation.Nullable;
@@ -50,11 +50,11 @@ public class InventoryDB extends FileDB {
     /**
      * 会覆盖原来的5格背包信息
      */
-    public void saveFiveSlot(OfflinePlayer offlinePlayer, FiveSlotBackpack fiveSlotBackpack) {
+    public void saveFiveSlot(OfflinePlayer offlinePlayer, EnderBackpack enderBackpack) {
         File fiveSlotInvFile = new File(fiveSlotDataFolder,offlinePlayer.getName()+".yml");
         if(fiveSlotInvFile.exists()) delete(fiveSlotInvFile);
         FileConfiguration fileConfiguration = createAndLoad(fiveSlotInvFile);
-        fileConfiguration.set("data",fiveSlotBackpack);
+        fileConfiguration.set("data", enderBackpack);
         save(fiveSlotInvFile);
     }
 
@@ -62,15 +62,15 @@ public class InventoryDB extends FileDB {
      * 如果数据库中不存在则传回空的5格背包信息
      * 存在则传回玩家自定义的5格背包信息
      */
-    public FiveSlotBackpack loadFiveSlot(OfflinePlayer offlinePlayer) {
+    public EnderBackpack loadFiveSlot(OfflinePlayer offlinePlayer) {
         File fiveSlotInvFile = new File(fiveSlotDataFolder,offlinePlayer.getName()+".yml");
-        if(!fiveSlotInvFile.exists()) return new FiveSlotBackpack();
+        if(!fiveSlotInvFile.exists()) return new EnderBackpack();
         FileConfiguration fileConfiguration = getFileConfiguration(fiveSlotInvFile);
         if(fileConfiguration == null) {
             Notifier.error("存在玩家 "+offlinePlayer.getName()+" 的背包数据文件，但无法读取其 FileConfiguration 对象");
-            return new FiveSlotBackpack();
+            return new EnderBackpack();
         }
-        return (FiveSlotBackpack) fileConfiguration.get("data");
+        return (EnderBackpack) fileConfiguration.get("data");
     }
     public void saveMain(Player player, PlayerBackpack playerBackpack) {
         File mainInvFile = new File(mainDataFolder, player.getName() + ".yml");
