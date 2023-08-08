@@ -60,6 +60,8 @@ public class SculkInfection implements IStatus {
      */
     private void addInfectionValue(Player player, int value) {
         UUID pUuid = player.getUniqueId();
+        // 喝了牛奶不再增加感染值
+        if(value > 0 && milkPlayers.contains(pUuid)) return;
         int oldValue = getInfectionValue(player.getUniqueId());
         int newValue = oldValue + value;
         if (newValue < 0) newValue = 0;
@@ -151,7 +153,7 @@ public class SculkInfection implements IStatus {
         if (player.getGameMode() != GameMode.SURVIVAL) return;
         addInfectionValue(player, 10);
     }
-
+    private final Set<UUID> milkPlayers = new HashSet<>();
     public void drinkMilk(Player player) {
         if(!availableWorlds.contains(player.getWorld().getName())) return;
         // 不是生存模式
@@ -159,10 +161,16 @@ public class SculkInfection implements IStatus {
         if (milkCDSet.contains(player.getUniqueId())) return;
         if (getInfectionValue(player.getUniqueId()) >= 300) {
             milkCDSet.add(player.getUniqueId());
+            milkPlayers.add(player.getUniqueId());
+            // 5分钟有效期，期间感染值不会增高
+            subScheduler.runTaskLater(() -> {
+                milkPlayers.remove(player.getUniqueId());
+            },20 * 300L);
+            // 8分钟冷却
             subScheduler.runTaskLater(() -> {
                 milkCDSet.remove(player.getUniqueId());
                 if (player.isOnline()) Notifier.chat("你可以再次饮用牛奶了。", player);
-            }, 20 * 180L);
+            }, 20 * 480L);
             addInfectionValue(player, -500);
             Notifier.chat("喝了牛奶之后你感觉好多了。", player);
         }
