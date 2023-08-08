@@ -23,7 +23,7 @@ import java.util.Calendar;
 public class InventoryDB extends FileDB {
     private final File mainDataFolder = new File(folder, "main");
     private final File cacheDataFolder = new File(folder, "cache");
-    private final File fiveSlotDataFolder = new File(folder, "five_slot");
+    private final File fiveSlotDataFolder = new File(folder, "ender_backpack");
     @Inject
     private DateAPI dateAPI;
 
