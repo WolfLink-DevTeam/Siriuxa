@@ -1,4 +1,4 @@
-package org.wolflink.minecraft.plugin.siriuxa.menu.task.icon;
+package org.wolflink.minecraft.plugin.siriuxa.menu.task.enderbackpack;
 
 import lombok.NonNull;
 import org.bukkit.Material;
@@ -10,7 +10,7 @@ import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.EnderBackpack;
-import org.wolflink.minecraft.plugin.siriuxa.menu.task.EnderBackpackMenu;
+import org.wolflink.minecraft.plugin.siriuxa.menu.task.enderbackpack.EnderBackpackMenu;
 
 public class EnderLock extends Icon {
     EnderBackpackMenu menu;

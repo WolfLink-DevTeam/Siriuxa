@@ -1,9 +1,8 @@
-package org.wolflink.minecraft.plugin.siriuxa.menu.task;
+package org.wolflink.minecraft.plugin.siriuxa.menu.task.enderbackpack;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.BorderIcon;
@@ -12,23 +11,12 @@ import org.wolflink.minecraft.plugin.siriuxa.api.view.ItemIcon;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.EnderBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.InvBackupService;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.InventoryDB;
-import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.EnderLock;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class EnderBackpackMenu extends DynamicMenu {
-
-    private static final ItemStack anythingItemIcon = new ItemStack(Material.NETHER_STAR);
-    static {
-        ItemMeta itemMeta = anythingItemIcon.getItemMeta();
-        if(itemMeta != null) {
-            itemMeta.setDisplayName("§8[ §a可放入任何物品 §8]");
-            itemMeta.setLore(Stream.of(" ","  §7可以放入任何类型的物品...","  §7当然，潜影盒等容器除外。"," ").toList());
-            anythingItemIcon.setItemMeta(itemMeta);
-        }
-    }
 
     public EnderBackpackMenu(UUID ownerUuid) {
         super(ownerUuid, "§0§l末影背包", 27,0, Stream.of(19,20,21,22,23,24,25).collect(Collectors.toSet()));
@@ -49,14 +37,13 @@ public class EnderBackpackMenu extends DynamicMenu {
         Stream.of(9,10,16,17).forEach(i -> setIcon(i,borderIcon));
         Player player = getOwner();
         if(player == null || !player.isOnline())return;
-        EnderBackpack defaultBackpack = EnderBackpack.getDefaultBackpack();
-        setIcon(1,new ItemIcon(defaultBackpack.getHelmet()));
-        setIcon(2,new ItemIcon(defaultBackpack.getChestplate()));
-        setIcon(3,new ItemIcon(defaultBackpack.getLeggings()));
-        setIcon(4,new ItemIcon(defaultBackpack.getBoots()));
-        setIcon(5,new ItemIcon(defaultBackpack.getWeapon()));
-        setIcon(6,new ItemIcon(defaultBackpack.getTool()));
-        setIcon(7,new ItemIcon(anythingItemIcon));
+        setIcon(1,IOC.getBean(HelmetIcon.class));
+        setIcon(2,IOC.getBean(ChestplateIcon.class));
+        setIcon(3,IOC.getBean(LeggingsIcon.class));
+        setIcon(4,IOC.getBean(BootsIcon.class));
+        setIcon(5,IOC.getBean(WeaponIcon.class));
+        setIcon(6,IOC.getBean(ToolIcon.class));
+        setIcon(7,IOC.getBean(AnythingIcon.class));
 
         setIcon(10,new EnderLock(this,0));
         setIcon(11,new EnderLock(this,1));
@@ -131,7 +118,7 @@ public class EnderBackpackMenu extends DynamicMenu {
             ItemStack weapon = inventory.getItem(23);
             if(weapon != null && weapon.getType() != Material.AIR) {
                 String weaponName = weapon.getType().name();
-                if(weaponName.endsWith("_SWORD") || weaponName.endsWith("_AXE")) enderBackpack.setWeapon(weapon);
+                if(weaponName.endsWith("_SWORD") || weaponName.endsWith("_AXE") || weaponName.equals("BOW") || weaponName.equals("CROSSBOW") || weaponName.equals("TRIDENT")) enderBackpack.setWeapon(weapon);
                 else {
                     Notifier.chat("你在应该放置武器的地方错误的放入了物品："+weaponName.toLowerCase()+"！物品已退回至背包。",player);
                     player.getInventory().addItem(weapon);

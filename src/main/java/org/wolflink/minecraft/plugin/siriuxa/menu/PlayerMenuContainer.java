@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Menu;
 import org.wolflink.minecraft.plugin.siriuxa.menu.difficulty.ExplorationDifficultyMenu;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.ExplorationBackpackMenu;
-import org.wolflink.minecraft.plugin.siriuxa.menu.task.EnderBackpackMenu;
+import org.wolflink.minecraft.plugin.siriuxa.menu.task.enderbackpack.EnderBackpackMenu;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskRecordMenu;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskMenu;
 
