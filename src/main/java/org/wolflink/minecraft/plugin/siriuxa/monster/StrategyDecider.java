@@ -81,11 +81,11 @@ public class StrategyDecider implements IStatus {
 
     /**
      * 每1分钟 +0.8% 血量
-     * 每1分钟 +0.4% 攻击
+     * 每1分钟 +1.2% 攻击
      */
     private void updateAttribute() {
         spawnerAttribute.setHealthMultiple(spawnerAttribute.getHealthMultiple() + 0.008);
-        spawnerAttribute.setDamageMultiple(spawnerAttribute.getDamageMultiple() + 0.004);
+        spawnerAttribute.setDamageMultiple(spawnerAttribute.getDamageMultiple() + 0.012);
     }
 
     private void spawnTask() {
