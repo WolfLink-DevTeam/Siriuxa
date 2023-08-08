@@ -5,7 +5,6 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
-import org.wolflink.minecraft.plugin.siriuxa.backpack.InvBackupService;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.WheatTaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.*;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
@@ -53,7 +52,7 @@ public abstract class WheatTask extends Task {
      */
     @Override
     public void fillRecord(OfflinePlayer offlinePlayer, boolean taskResult) {
-        PlayerWheatTaskRecord record = getPlayerWheatTaskRecord(offlinePlayer.getUniqueId());
+        PlayerTaskRecord record = getPlayerTaskRecord(offlinePlayer.getUniqueId());
         if (record == null) {
             Notifier.error("在尝试补充任务记录数据时，未找到玩家" + offlinePlayer.getName() + "的任务记录类。");
             return;
@@ -85,10 +84,10 @@ public abstract class WheatTask extends Task {
     @Override
     public void finishRecord() {
         TaskRecordDB taskRecordDB = IOC.getBean(TaskRecordDB.class);
-        for (PlayerWheatTaskRecord playerWheatTaskRecord : getPlayerWheatTaskRecords()) {
-            playerWheatTaskRecord.setUsingTimeInMills(getTaskStat().getUsingTimeInMills());
-            playerWheatTaskRecord.setFinishedTimeInMills(getTaskStat().getEndTime().getTimeInMillis());
-            taskRecordDB.saveRecord(playerWheatTaskRecord);
+        for (PlayerTaskRecord playerTaskRecord : getPlayerTaskRecords()) {
+            playerTaskRecord.setUsingTimeInMills(getTaskStat().getUsingTimeInMills());
+            playerTaskRecord.setFinishedTimeInMills(getTaskStat().getEndTime().getTimeInMillis());
+            taskRecordDB.saveRecord(playerTaskRecord);
         }
     }
 
@@ -101,7 +100,7 @@ public abstract class WheatTask extends Task {
     @Override
     public void initRecord() {
         for (UUID uuid : getTaskTeam().getMemberUuids()) {
-            PlayerWheatTaskRecord record = new PlayerWheatTaskRecord(uuid, this);
+            PlayerTaskRecord record = new PlayerTaskRecord(uuid, this);
             getPlayerRecordMap().put(uuid, record);
         }
     }

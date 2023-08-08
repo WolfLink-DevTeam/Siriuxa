@@ -3,7 +3,7 @@ package org.wolflink.minecraft.plugin.siriuxa.menu.task;
 import lombok.Getter;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.DynamicMenu;
-import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerWheatTaskRecord;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.NextPage;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.PreviousPage;
@@ -17,7 +17,7 @@ import java.util.UUID;
  * 任务记录菜单
  */
 public class TaskRecordMenu extends DynamicMenu {
-    List<PlayerWheatTaskRecord> totalRecordList = new ArrayList<>();
+    List<PlayerTaskRecord> totalRecordList = new ArrayList<>();
     @Getter
     private int page = 1;
     public TaskRecordMenu(UUID ownerUuid) {
@@ -44,10 +44,10 @@ public class TaskRecordMenu extends DynamicMenu {
 
         if (pageFirstRecord >= recordSize) return;
 
-        List<PlayerWheatTaskRecord> pageRecordList = totalRecordList.subList(pageFirstRecord, Math.min(pageLastRecord + 1, recordSize));
+        List<PlayerTaskRecord> pageRecordList = totalRecordList.subList(pageFirstRecord, Math.min(pageLastRecord + 1, recordSize));
         for (int i = 0; i < pageRecordList.size(); i++) {
-            PlayerWheatTaskRecord playerWheatTaskRecord = pageRecordList.get(i);
-            setIcon(startIndex + i, new TaskRecordIcon(playerWheatTaskRecord));
+            PlayerTaskRecord playerTaskRecord = pageRecordList.get(i);
+            setIcon(startIndex + i, new TaskRecordIcon(playerTaskRecord));
             if ((i + 1) % 7 == 0) startIndex += 2;
         }
     }

@@ -11,10 +11,9 @@ import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.BorderIcon;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.DynamicMenu;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.EmptyIcon;
-import org.wolflink.minecraft.plugin.siriuxa.api.view.StaticMenu;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.DifficultyRepository;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
-import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerWheatTaskRecord;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.ClaimTaskReward;
@@ -30,7 +29,7 @@ public class ExplorationBackpackMenu extends DynamicMenu {
 
     private final Set<Integer> selectedSlots = new HashSet<>();
     @Setter
-    private PlayerWheatTaskRecord playerWheatTaskRecord = null;
+    private PlayerTaskRecord playerTaskRecord = null;
 
     /**
      * 刷新周期设置小于0则为静态菜单
@@ -58,7 +57,7 @@ public class ExplorationBackpackMenu extends DynamicMenu {
      */
     public int getBringSlotAmount() {
         ExplorationDifficulty difficulty = IOC.getBean(DifficultyRepository.class)
-                .findByName(ExplorationDifficulty.class,playerWheatTaskRecord.getTaskDifficulty());
+                .findByName(ExplorationDifficulty.class, playerTaskRecord.getTaskDifficulty());
         assert difficulty != null;
         return difficulty.getBringSlotAmount();
     }
@@ -73,14 +72,14 @@ public class ExplorationBackpackMenu extends DynamicMenu {
         player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1f, 1f);
         player.playSound(player.getLocation(), Sound.ENTITY_PIGLIN_CELEBRATE, 1f, 1f);
         player.sendTitle("领取成功", "任务中的物资已发放至背包", 8, 24, 8);
-        playerWheatTaskRecord.setClaimed(true);
-        IOC.getBean(TaskRecordDB.class).saveRecord(playerWheatTaskRecord);
-        PlayerBackpack playerBackpack = playerWheatTaskRecord.getPlayerBackpack();
+        playerTaskRecord.setClaimed(true);
+        IOC.getBean(TaskRecordDB.class).saveRecord(playerTaskRecord);
+        PlayerBackpack playerBackpack = playerTaskRecord.getPlayerBackpack();
         ExplorationDifficulty difficulty = IOC.getBean(DifficultyRepository.class)
-                .findByName(ExplorationDifficulty.class,playerWheatTaskRecord.getTaskDifficulty());
+                .findByName(ExplorationDifficulty.class, playerTaskRecord.getTaskDifficulty());
         assert difficulty != null;
         double rewardMultiple = difficulty.getRewardMultiple();
-        double wheat = playerWheatTaskRecord.getRewardWheat();
+        double wheat = playerTaskRecord.getRewardWheat();
         int exp = playerBackpack.getTotalExp();
         IOC.getBean(PlayerAPI.class).addExp(player,exp);
         String multiple = "§8(§7x"+String.format("%.0f",rewardMultiple * 100)+"%§8)";
@@ -113,9 +112,9 @@ public class ExplorationBackpackMenu extends DynamicMenu {
                 .forEach(index -> setIcon(index, emptyIcon));
         // 放置新的边界图标
         Stream.of(0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 16, 17).forEach(index -> setIcon(index, borderIcon));
-        if (playerWheatTaskRecord == null) return;
+        if (playerTaskRecord == null) return;
         setIcon(4, new ClaimTaskReward(this));
-        PlayerBackpack playerBackpack = playerWheatTaskRecord.getPlayerBackpack();
+        PlayerBackpack playerBackpack = playerTaskRecord.getPlayerBackpack();
         if (playerBackpack == null) return;
         setIcon(11, new ExplorationBackpackItem(this, 11, playerBackpack.getHelmet()));
         setIcon(12, new ExplorationBackpackItem(this, 12, playerBackpack.getChestplate()));

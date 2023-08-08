@@ -3,26 +3,25 @@ package org.wolflink.minecraft.plugin.siriuxa.task.interfaces;
 import lombok.NonNull;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.Nullable;
-import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerWheatTaskRecord;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskStat;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public interface IRecordable {
 
-    Map<UUID,PlayerWheatTaskRecord> getPlayerRecordMap();
+    Map<UUID, PlayerTaskRecord> getPlayerRecordMap();
 
     TaskStat getTaskStat();
 
     @Nullable
-    default PlayerWheatTaskRecord getPlayerWheatTaskRecord(UUID uuid) {
+    default PlayerTaskRecord getPlayerTaskRecord(UUID uuid) {
         return getPlayerRecordMap().get(uuid);
     }
     @NonNull
-    default Collection<PlayerWheatTaskRecord> getPlayerWheatTaskRecords() {
+    default Collection<PlayerTaskRecord> getPlayerTaskRecords() {
         return getPlayerRecordMap().values();
     }
     /**

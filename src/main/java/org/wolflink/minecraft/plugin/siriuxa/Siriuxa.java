@@ -73,7 +73,7 @@ public final class Siriuxa extends WolfirdPlugin {
         globalListenerClasses.add(StatListener.class);
 
         serializableClasses.add(PlayerBackpack.class);
-        serializableClasses.add(PlayerWheatTaskRecord.class);
+        serializableClasses.add(PlayerTaskRecord.class);
         serializableClasses.add(OfflinePlayerRecord.class);
         serializableClasses.add(TaskDifficulty.class);
         serializableClasses.add(WheatTaskDifficulty.class);

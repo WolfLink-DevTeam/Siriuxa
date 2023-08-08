@@ -5,7 +5,7 @@ import lombok.NonNull;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.WheatTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +15,7 @@ import java.util.UUID;
  * 可以被序列化的麦穗任务记录
  */
 @Data
-public class PlayerWheatTaskRecord implements ConfigurationSerializable {
+public class PlayerTaskRecord implements ConfigurationSerializable {
     private final UUID playerUuid;
     private final UUID taskUuid;
     /**
@@ -58,19 +58,19 @@ public class PlayerWheatTaskRecord implements ConfigurationSerializable {
      * 奖励麦穗
      */
     private double rewardWheat;
-    public PlayerWheatTaskRecord(@NonNull UUID playerUuid, @NonNull WheatTask wheatTask) {
+    public PlayerTaskRecord(@NonNull UUID playerUuid, @NonNull Task task) {
         this.playerUuid = playerUuid;
-        taskUuid = wheatTask.getTaskUuid();
+        taskUuid = task.getTaskUuid();
         isSuccess = false;
-        teamSize = wheatTask.getTaskTeamSize();
-        taskType = wheatTask.getName();
-        taskDifficulty = wheatTask.getTaskDifficulty().getName();
+        teamSize = task.getTaskTeamSize();
+        taskType = task.getName();
+        taskDifficulty = task.getTaskDifficulty().getName();
         isEscape = false;
         isClaimed = false;
         rewardWheat = 0;
     }
 
-    public PlayerWheatTaskRecord(Map<String, Object> map) {
+    public PlayerTaskRecord(Map<String, Object> map) {
         playerUuid = UUID.fromString((String) map.get("playerUuid"));
         taskUuid = UUID.fromString((String) map.get("taskUuid"));
         isSuccess = (boolean) map.get("isSuccess");
@@ -85,8 +85,8 @@ public class PlayerWheatTaskRecord implements ConfigurationSerializable {
         rewardWheat = (double) map.get("rewardWheat");
     }
 
-    public static PlayerWheatTaskRecord deserialize(Map<String, Object> map) {
-        return new PlayerWheatTaskRecord(map);
+    public static PlayerTaskRecord deserialize(Map<String, Object> map) {
+        return new PlayerTaskRecord(map);
     }
 
     @NotNull
