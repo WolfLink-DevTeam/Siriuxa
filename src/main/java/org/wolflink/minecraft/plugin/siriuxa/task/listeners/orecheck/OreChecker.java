@@ -49,7 +49,7 @@ public class OreChecker extends WolfirdListener {
             taskPlayer.playSound(taskPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1.5f);
             //TODO 改为 Hologram 提示
             taskPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-                    new TextComponent("§f" + player.getName() + " §7刚刚在 " + lang.get("material." + material.name().toLowerCase(), "未知方块") + " §7中发现 §f" + String.format("%.1f", wheatValue) + "mg §d幽匿光体"));
+                    new TextComponent("§f" + player.getName() + " §7刚刚在 " + lang.get("material." + material.name().toLowerCase(), "未知方块") + " §7中发现 §f" + String.format("%.1f", wheatValue) + " §7mg §d幽匿光体"));
         }
         renderBlockBorder(block.getLocation());
 
