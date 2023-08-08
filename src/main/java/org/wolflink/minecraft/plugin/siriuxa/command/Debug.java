@@ -1,16 +1,8 @@
 package org.wolflink.minecraft.plugin.siriuxa.command;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Chest;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.loot.LootTables;
-import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
-import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
-import org.wolflink.minecraft.plugin.siriuxa.menu.task.FiveSlotBackpackMenu;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 

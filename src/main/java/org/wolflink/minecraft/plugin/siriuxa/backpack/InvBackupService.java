@@ -28,7 +28,7 @@ public class InvBackupService {
         return new Result(true, "保存成功。");
     }
     public Result giveFiveSlotBackpack(Player player) {
-        EnderBackpack enderBackpack = inventoryDB.loadFiveSlot(player);
+        EnderBackpack enderBackpack = inventoryDB.loadEnderBackpack(player);
         enderBackpack.give(player);
         return new Result(true,"发放成功。");
     }
@@ -42,7 +42,7 @@ public class InvBackupService {
         else return clearUnlockedFiveSlotBackpack(offlinePlayer);
     }
     public Result clearUnlockedFiveSlotBackpack(OfflinePlayer offlinePlayer) {
-        EnderBackpack enderBackpack = inventoryDB.loadFiveSlot(offlinePlayer);
+        EnderBackpack enderBackpack = inventoryDB.loadEnderBackpack(offlinePlayer);
         List<Boolean> lockedSlots = enderBackpack.getLockedSlots();
         if (!lockedSlots.get(0)) enderBackpack.setHelmet(null);
         if (!lockedSlots.get(1)) enderBackpack.setChestplate(null);
@@ -51,18 +51,18 @@ public class InvBackupService {
         if (!lockedSlots.get(4)) enderBackpack.setItem(null);
         // 清理格子锁定状态
         enderBackpack.resetLockedSlots();
-        saveFiveSlotBackpack(offlinePlayer, enderBackpack);
+        saveEnderBackpack(offlinePlayer, enderBackpack);
         return new Result(true,"未锁定物品清理成功。");
     }
     public Result clearFiveSlotBackpack(OfflinePlayer offlinePlayer) {
-        EnderBackpack enderBackpack = inventoryDB.loadFiveSlot(offlinePlayer);
+        EnderBackpack enderBackpack = inventoryDB.loadEnderBackpack(offlinePlayer);
         enderBackpack.clear();
         enderBackpack.resetLockedSlots();
-        saveFiveSlotBackpack(offlinePlayer, enderBackpack);
+        saveEnderBackpack(offlinePlayer, enderBackpack);
         return new Result(true,"清理成功。");
     }
-    public Result saveFiveSlotBackpack(OfflinePlayer offlinePlayer, EnderBackpack enderBackpack) {
-        inventoryDB.saveFiveSlot(offlinePlayer, enderBackpack);
+    public Result saveEnderBackpack(OfflinePlayer offlinePlayer, EnderBackpack enderBackpack) {
+        inventoryDB.saveEnderBackpack(offlinePlayer, enderBackpack);
         return new Result(true, "保存成功。");
     }
 

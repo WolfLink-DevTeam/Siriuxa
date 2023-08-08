@@ -50,22 +50,22 @@ public class InventoryDB extends FileDB {
     /**
      * 会覆盖原来的5格背包信息
      */
-    public void saveFiveSlot(OfflinePlayer offlinePlayer, EnderBackpack enderBackpack) {
-        File fiveSlotInvFile = new File(fiveSlotDataFolder,offlinePlayer.getName()+".yml");
-        if(fiveSlotInvFile.exists()) delete(fiveSlotInvFile);
-        FileConfiguration fileConfiguration = createAndLoad(fiveSlotInvFile);
+    public void saveEnderBackpack(OfflinePlayer offlinePlayer, EnderBackpack enderBackpack) {
+        File enderBackpackFile = new File(fiveSlotDataFolder,offlinePlayer.getName()+".yml");
+        if(enderBackpackFile.exists()) delete(enderBackpackFile);
+        FileConfiguration fileConfiguration = createAndLoad(enderBackpackFile);
         fileConfiguration.set("data", enderBackpack);
-        save(fiveSlotInvFile);
+        save(enderBackpackFile);
     }
 
     /**
      * 如果数据库中不存在则传回空的5格背包信息
      * 存在则传回玩家自定义的5格背包信息
      */
-    public EnderBackpack loadFiveSlot(OfflinePlayer offlinePlayer) {
-        File fiveSlotInvFile = new File(fiveSlotDataFolder,offlinePlayer.getName()+".yml");
-        if(!fiveSlotInvFile.exists()) return new EnderBackpack();
-        FileConfiguration fileConfiguration = getFileConfiguration(fiveSlotInvFile);
+    public EnderBackpack loadEnderBackpack(OfflinePlayer offlinePlayer) {
+        File enderBackpackFile = new File(fiveSlotDataFolder,offlinePlayer.getName()+".yml");
+        if(!enderBackpackFile.exists()) return new EnderBackpack();
+        FileConfiguration fileConfiguration = getFileConfiguration(enderBackpackFile);
         if(fileConfiguration == null) {
             Notifier.error("存在玩家 "+offlinePlayer.getName()+" 的背包数据文件，但无法读取其 FileConfiguration 对象");
             return new EnderBackpack();

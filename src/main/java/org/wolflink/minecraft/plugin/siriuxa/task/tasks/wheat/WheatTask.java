@@ -60,7 +60,7 @@ public abstract class WheatTask extends Task {
         record.setRewardWheat(wheatTaskStat.getPlayerWheatReward(
                 offlinePlayer.getUniqueId(),
                 difficulty.getRewardMultiple(),
-                IOC.getBean(InventoryDB.class).loadFiveSlot(offlinePlayer).isEmpty()
+                IOC.getBean(InventoryDB.class).loadEnderBackpack(offlinePlayer).isEmpty()
                 )); // 保存任务麦穗
         record.setSuccess(taskResult); // 设置任务状态
         PlayerBackpack playerBackpack;
