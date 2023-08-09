@@ -52,7 +52,8 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
     @Nullable
     private TaskArea taskArea = null;
     GlobalTeam globalTeam;
-    TaskTeam taskTeam = new TaskTeam(new GlobalTeam());
+    @Nullable
+    TaskTeam taskTeam = null;
     protected Task(@NotNull GlobalTeam globalTeam,
                    @NotNull TaskDifficulty taskDifficulty,
                    @NotNull PlayerBackpack defaultKit) {
@@ -148,12 +149,16 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
      */
     protected void deleteTask() {
         if (globalTeam != null) globalTeam.setSelectedTask(null);
-        taskTeam.clear();
+        if(taskTeam != null) taskTeam.clear();
         IOC.getBean(TaskRepository.class).deleteByKey(taskUuid);
     }
 
 
     public void death(Player player) {
+        if(taskTeam == null) {
+            Notifier.error("任务的队伍未被初始化！");
+            return;
+        }
         fillRecord(player, false);
         taskTeam.leave(player);
         player.setGameMode(GameMode.SPECTATOR);
@@ -169,6 +174,10 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
      * (适用于任务过程中玩家非正常离开任务的情况)
      */
     public void escape(OfflinePlayer offlinePlayer) {
+        if(taskTeam == null) {
+            Notifier.error("任务的队伍未被初始化！");
+            return;
+        }
         fillRecord(offlinePlayer, false);
         taskTeam.leave(offlinePlayer);
         Notifier.debug("玩家" + offlinePlayer.getName() + "在任务过程中失踪了。");

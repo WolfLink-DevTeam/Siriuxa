@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -13,6 +14,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 public abstract class Team {
+
+    private final UUID ownerUuid;
     private final Set<UUID> memberUuids;
 
     public List<Player> getPlayers() {
@@ -48,6 +51,7 @@ public abstract class Team {
         memberUuids.clear();
     }
 
+    void leave(OfflinePlayer offlinePlayer) { leave(offlinePlayer.getUniqueId()); }
     void leave(Player player) {
         leave(player.getUniqueId());
     }

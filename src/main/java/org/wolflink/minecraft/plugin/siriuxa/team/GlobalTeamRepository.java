@@ -1,5 +1,6 @@
 package org.wolflink.minecraft.plugin.siriuxa.team;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.wolfird.framework.database.repository.MapRepository;
@@ -25,5 +26,9 @@ public class GlobalTeamRepository extends MapRepository<UUID, GlobalTeam> {
     @Nullable
     public GlobalTeam findByPlayer(Player player) {
         return findByPlayerUuid(player.getUniqueId());
+    }
+    @Nullable
+    public GlobalTeam findByPlayer(OfflinePlayer offlinePlayer) {
+        return findByPlayerUuid(offlinePlayer.getUniqueId());
     }
 }

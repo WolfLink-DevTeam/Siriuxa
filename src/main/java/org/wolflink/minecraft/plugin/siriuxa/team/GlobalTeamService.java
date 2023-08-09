@@ -1,6 +1,7 @@
 package org.wolflink.minecraft.plugin.siriuxa.team;
 
 import lombok.NonNull;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
@@ -34,7 +35,7 @@ public class GlobalTeamService {
     public Result create(Player player) {
         if (globalTeamRepository.findByPlayer(player) != null)
             return new Result(false, "你当前已处于其它队伍中，无法创建队伍。");
-        GlobalTeam globalTeam = new GlobalTeam();
+        GlobalTeam globalTeam = new GlobalTeam(player.getUniqueId());
         globalTeam.join(player);
         globalTeamRepository.insert(globalTeam);
         return new Result(true, "队伍创建成功。");
@@ -70,15 +71,23 @@ public class GlobalTeamService {
      * 玩家主动离开队伍
      * 如果队伍已经选择了任务，则无法退出
      */
-    public Result leave(@NonNull Player player, @NonNull GlobalTeam globalTeam) {
+    public Result leave(@NonNull OfflinePlayer offlinePlayer, @NonNull GlobalTeam globalTeam) {
         if (globalTeam.getSelectedTask() != null) return new Result(false, "队伍已经选择了任务，无法退出。");
-        globalTeam.leave(player);
+        globalTeam.leave(offlinePlayer);
         return new Result(true, "退出队伍成功。");
     }
 
-    public Result leave(@NonNull Player player) {
-        GlobalTeam globalTeam = globalTeamRepository.findByPlayer(player);
+    public Result leave(@NonNull OfflinePlayer offlinePlayer) {
+        GlobalTeam globalTeam = globalTeamRepository.findByPlayer(offlinePlayer);
         if (globalTeam == null) return new Result(false, "你没有处在任何队伍中。");
-        return leave(player, globalTeam);
+        return leave(offlinePlayer, globalTeam);
+    }
+    public Result kick(@NonNull OfflinePlayer teamOwner,@NonNull OfflinePlayer beenKicked) {
+        GlobalTeam globalTeam = globalTeamRepository.findByPlayer(teamOwner);
+        if(globalTeam == null) return new Result(false,"你没有处在任何队伍中。");
+        if(globalTeam.getOwnerUuid() != teamOwner.getUniqueId()) return new Result(false,"你不是队长，无法进行此操作。");
+        Result kickedResult = leave(beenKicked,globalTeam);
+        if(!kickedResult.result())return new Result(false,"踢出失败："+kickedResult.msg());
+        return new Result(true,"玩家 "+beenKicked.getName()+" 已从队伍中踢出。");
     }
 }

@@ -20,7 +20,7 @@ public class TaskTeam extends Team {
     private final int initSize;
 
     public TaskTeam(GlobalTeam globalTeam) {
-        super(new HashSet<>(globalTeam.getMemberUuids()));
+        super(globalTeam.getOwnerUuid(),new HashSet<>(globalTeam.getMemberUuids()));
         sourceTeamUuid = globalTeam.getTeamUuid();
         initSize = globalTeam.getMemberUuids().size();
     }

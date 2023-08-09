@@ -9,18 +9,17 @@ import java.util.HashSet;
 import java.util.UUID;
 
 
+@Getter
 public final class GlobalTeam extends Team {
-    @Getter
     private final UUID teamUuid = UUID.randomUUID();
     /**
      * 当前选择的任务
      */
     @Setter
-    @Getter
     @Nullable
     private Task selectedTask = null;
 
-    public GlobalTeam() {
-        super(new HashSet<>());
+    public GlobalTeam(UUID ownerUuid) {
+        super(ownerUuid,new HashSet<>());
     }
 }
