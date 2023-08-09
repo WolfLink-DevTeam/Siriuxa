@@ -191,4 +191,13 @@ public class TaskService implements ITaskService {
         ITaskService taskService = taskRelationProxy.getTaskService(taskClass);
         taskService.accept(taskClass,taskDifficulty,offlinePlayer);
     }
+
+    /**
+     * 强制标记所有任务为完成状态
+     */
+    public void finishAllTask() {
+        for (Task task : taskRepository.findAll()) {
+            task.triggerFinish();
+        }
+    }
 }

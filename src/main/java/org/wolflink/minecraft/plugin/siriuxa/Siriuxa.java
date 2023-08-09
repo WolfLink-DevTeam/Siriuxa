@@ -26,6 +26,7 @@ import org.wolflink.minecraft.plugin.siriuxa.task.listeners.huntcheck.HuntValues
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.hurtcheck.HurtChecker;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.orecheck.OreChecker;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.orecheck.OreValues;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskService;
 import org.wolflink.minecraft.wolfird.framework.WolfirdPlugin;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 import org.wolflink.minecraft.wolfird.framework.command.CmdHelp;
@@ -130,6 +131,9 @@ public final class Siriuxa extends WolfirdPlugin {
 
     @Override
     public void beforeDisabled() {
+        // 强制结束所有还在进行中的任务，将其标记为完成
+        IOC.getBean(TaskService.class).finishAllTask();
+
         IOC.getBean(SculkInfection.class).disable();
         IOC.getBean(OreValues.class).doSave();
         IOC.getBean(HuntValues.class).doSave();
