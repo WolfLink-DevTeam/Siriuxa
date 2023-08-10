@@ -1,5 +1,6 @@
 package org.wolflink.minecraft.plugin.siriuxa.command;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Inject;
@@ -19,7 +20,7 @@ public class TeamKick extends WolfirdCommand {
     @Override
     protected void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
-
+        globalTeamService.kick(player, strings[0]).show(player);
 //        globalTeamService.kick(player, strings[0]).show(player);
     }
 }

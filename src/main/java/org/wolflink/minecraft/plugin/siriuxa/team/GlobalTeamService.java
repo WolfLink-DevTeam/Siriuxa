@@ -82,10 +82,12 @@ public class GlobalTeamService {
         if (globalTeam == null) return new Result(false, "你没有处在任何队伍中。");
         return leave(offlinePlayer, globalTeam);
     }
-    public Result kick(@NonNull OfflinePlayer teamOwner,@NonNull OfflinePlayer beenKicked) {
+    public Result kick(@NonNull OfflinePlayer teamOwner,@NonNull String beenKickedName) {
         GlobalTeam globalTeam = globalTeamRepository.findByPlayer(teamOwner);
         if(globalTeam == null) return new Result(false,"你没有处在任何队伍中。");
         if(globalTeam.getOwnerUuid() != teamOwner.getUniqueId()) return new Result(false,"你不是队长，无法进行此操作。");
+        OfflinePlayer beenKicked = globalTeam.getOfflinePlayer(beenKickedName);
+        if(beenKicked == null) return new Result(false,"未在队伍中找到名为 "+beenKickedName+" 的玩家。");
         Result kickedResult = leave(beenKicked,globalTeam);
         if(!kickedResult.result())return new Result(false,"踢出失败："+kickedResult.msg());
         return new Result(true,"玩家 "+beenKicked.getName()+" 已从队伍中踢出。");

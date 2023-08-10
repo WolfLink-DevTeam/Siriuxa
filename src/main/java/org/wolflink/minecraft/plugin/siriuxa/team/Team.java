@@ -5,6 +5,7 @@ import lombok.Data;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -18,6 +19,14 @@ public abstract class Team {
     private final UUID ownerUuid;
     private final Set<UUID> memberUuids;
 
+    @Nullable
+    public OfflinePlayer getOfflinePlayer(String name) {
+        for (OfflinePlayer offlinePlayer : getOfflinePlayers()) {
+            if(offlinePlayer.getName() == null) continue;
+            if(offlinePlayer.getName().equalsIgnoreCase(name)) return offlinePlayer;
+        }
+        return null;
+    }
     public List<Player> getPlayers() {
         return memberUuids.stream()
                 .map(Bukkit::getPlayer)
