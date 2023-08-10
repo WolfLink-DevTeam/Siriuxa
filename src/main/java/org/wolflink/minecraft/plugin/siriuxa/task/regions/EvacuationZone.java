@@ -10,6 +10,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
@@ -42,8 +43,6 @@ public class EvacuationZone {
     private final ExplorationTask explorationTask;
     // 用于设置指南针的SubScheduler
     private final SubScheduler subScheduler;
-    // 用于存贮指南针已经生效的玩家的列表
-    private final Set<Player> compassPlayers;
     /**
      * 是否可用
      */
@@ -56,13 +55,14 @@ public class EvacuationZone {
         this.safeRadius = safeRadius;
         this.locationCommandSender = new LocationCommandSender(center);
         this.subScheduler = new SubScheduler();
-        this.compassPlayers = new HashSet<>();
     }
 
-    private boolean hasCompass(Player player) {
+    private boolean hasDefaultCompass(Player player) {
         for (ItemStack itemStack : player.getInventory()) {
             if (itemStack == null) continue;
-            if (itemStack.getType() == Material.COMPASS) return true;
+            if (itemStack.getType() != Material.COMPASS) continue;
+            ItemMeta meta = itemStack.getItemMeta();
+            if(meta == null || meta.getLore() == null) return true;
         }
         return false;
     }
@@ -75,17 +75,15 @@ public class EvacuationZone {
             subScheduler.runTaskTimer(() -> {
                 for (Player player : explorationTask.getTaskPlayers()) {
                     // 有指南针，并且指南针没有被激活
-                    if (hasCompass(player) && !compassPlayers.contains(player)) {
+                    if (hasDefaultCompass(player)) {
                         setPlayerCompass(player, true);
-                        compassPlayers.add(player);
                     }
                 }
             }, 20L, 20L);
         } else {
             undoSchematic();
             subScheduler.cancelAllTasks();
-
-            for (Player player : compassPlayers) {
+            for (Player player : explorationTask.getTaskPlayers()) {
                 setPlayerCompass(player, false);
             }
         }
@@ -133,15 +131,14 @@ public class EvacuationZone {
     @Nullable
     private CompassMeta prepareCompassMeta(boolean available) {
         CompassMeta compassMeta = (CompassMeta) new ItemStack(Material.COMPASS).getItemMeta();
+        if(!available) return compassMeta;
         if (compassMeta == null) {
             Notifier.warn("获取撤离指南针的itemMeta失败");
             return null;
         }
-        if (available) {
-            compassMeta.setDisplayName("§a飞艇指南针");
-            compassMeta.setLore(List.of("§f ", "  §7接收到了神奇的信号，指向最近的撤离飞艇", "§f "));
-            compassMeta.setLodestone(center);
-        } else compassMeta.setLodestone(Objects.requireNonNull(explorationTask.getTaskArea()).getCenter());
+        compassMeta.setDisplayName("§a飞艇指南针");
+        compassMeta.setLore(List.of("§f ", "  §7接收到了神奇的信号，指向最近的撤离飞艇", "§f "));
+        compassMeta.setLodestone(center);
         compassMeta.setLodestoneTracked(false);
         return compassMeta;
     }
