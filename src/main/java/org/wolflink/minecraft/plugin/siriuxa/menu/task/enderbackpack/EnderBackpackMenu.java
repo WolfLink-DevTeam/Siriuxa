@@ -154,7 +154,16 @@ public class EnderBackpackMenu extends DynamicMenu {
         // 通用
         {
             ItemStack item = inventory.getItem(25);
-            if(item != null && item.getType() != Material.AIR) enderBackpack.setItem(item);
+            if(item != null && item.getType() != Material.AIR) {
+                if(!item.getType().name().endsWith("SHULKER_BOX")) enderBackpack.setItem(item);
+                else {
+                    Notifier.chat("你不可以携带容器进入任务！",player);
+                    player.getInventory().addItem(item);
+                    enderBackpack.setItem(null);
+                    setIcon(25,null);
+                    inventory.setItem(25,null);
+                }
+            }
             else enderBackpack.setItem(null);
             saveEnderBackpack(enderBackpack);
         }
