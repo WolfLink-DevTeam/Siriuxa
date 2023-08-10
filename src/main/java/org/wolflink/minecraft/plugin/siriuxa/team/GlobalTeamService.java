@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.Result;
 import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
@@ -64,9 +65,11 @@ public class GlobalTeamService {
             }
             taskService.accept(task.getClass(),task.getTaskDifficulty(),player);
             globalTeam.join(player);
+            Notifier.broadcastChat(globalTeam.getPlayers(),"玩家 "+player.getName()+" 加入了队伍。");
             return new Result(true, "成功加入队伍，并接受了相应的任务。");
         } else {
             globalTeam.join(player);
+            Notifier.broadcastChat(globalTeam.getPlayers(),"玩家 "+player.getName()+" 加入了队伍。");
             return new Result(true, "成功加入队伍。");
         }
     }
@@ -78,6 +81,7 @@ public class GlobalTeamService {
     public Result leave(@NonNull OfflinePlayer offlinePlayer, @NonNull GlobalTeam globalTeam) {
         if (globalTeam.getSelectedTask() != null) return new Result(false, "队伍已经选择了任务，无法退出。");
         globalTeam.leave(offlinePlayer);
+        Notifier.broadcastChat(globalTeam.getPlayers(),"玩家 "+offlinePlayer.getName()+" 离开了队伍。");
         return new Result(true, "退出队伍成功。");
     }
 
@@ -94,6 +98,7 @@ public class GlobalTeamService {
         if(beenKicked == null) return new Result(false,"未在队伍中找到名为 "+beenKickedName+" 的玩家。");
         Result kickedResult = leave(beenKicked,globalTeam);
         if(!kickedResult.result())return new Result(false,"踢出失败："+kickedResult.msg());
+        if(beenKicked.isOnline()) Notifier.chat("你已被踢出队伍。",beenKicked.getPlayer());
         return new Result(true,"玩家 "+beenKicked.getName()+" 已从队伍中踢出。");
     }
     public Result giveUpTask(@NonNull OfflinePlayer teamOwner) {
