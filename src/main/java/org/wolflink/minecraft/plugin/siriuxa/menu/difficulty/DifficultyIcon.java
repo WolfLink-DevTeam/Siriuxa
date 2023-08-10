@@ -53,7 +53,7 @@ public class DifficultyIcon<T extends WheatTaskDifficulty> extends Icon {
                     "§7任务成本 §f" + explorationDifficulty.getWheatCost() + " §6麦穗",
                     "§7初始光体 §f" + explorationDifficulty.getWheatSupply() + " §d幽匿光体",
                     "§7流速加快 §f+" + String.format("%.2f", explorationDifficulty.getWheatLostAcceleratedSpeed() * 100) + "% §8/ §7每5分钟",
-                    "§7受伤惩罚 §f-" + String.format("%.2f", explorationDifficulty.getHurtWheatCost()) + " §6麦穗 §8/ §71点伤害",
+                    "§7受伤惩罚 §f-" + String.format("%.2f", explorationDifficulty.getHurtWheatCost()) + " §d幽匿光体 §8/ §71点伤害",
                     "§7受伤倍率 §fx" + String.format("%.2f", explorationDifficulty.getHurtDamageMultiple() * 100) + "§7%",
                     "§7带回物资 §f" + explorationDifficulty.getBringSlotAmount() + "§7格",
                     "§7奖励倍率 §f" + String.format("%.0f", explorationDifficulty.getRewardMultiple() * 100) + "§7%",
