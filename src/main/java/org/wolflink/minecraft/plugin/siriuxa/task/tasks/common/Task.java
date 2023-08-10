@@ -2,6 +2,7 @@ package org.wolflink.minecraft.plugin.siriuxa.task.tasks.common;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -51,6 +52,7 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
 
     @Nullable
     private TaskArea taskArea = null;
+    @NonNull
     GlobalTeam globalTeam;
     @Nullable
     TaskTeam taskTeam = null;
@@ -148,7 +150,7 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
      * 在任务完成/失败后调用
      */
     protected void deleteTask() {
-        if (globalTeam != null) globalTeam.setSelectedTask(null);
+        globalTeam.setSelectedTask(null);
         if(taskTeam != null) taskTeam.clear();
         IOC.getBean(TaskRepository.class).deleteByKey(taskUuid);
     }

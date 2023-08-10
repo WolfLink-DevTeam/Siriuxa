@@ -192,6 +192,18 @@ public class TaskService implements ITaskService {
         taskService.accept(taskClass,taskDifficulty,offlinePlayer);
     }
 
+    public Result giveUp(Task task) {
+        if(task.getStageHolder().getThisStage() instanceof WaitStage) {
+            task.deleteTask();
+            return new Result(true,"任务已成功删除。");
+        }
+        if(task.getStageHolder().getThisStage() instanceof GameStage) {
+            task.triggerFailed();
+            return new Result(true,"在任务进行的过程中放弃了，任务失败。");
+        }
+        return new Result(false,"暂不支持的任务阶段："+task.getStageHolder().getThisStage().getDisplayName());
+    }
+
     /**
      * 强制标记所有任务为完成状态
      */

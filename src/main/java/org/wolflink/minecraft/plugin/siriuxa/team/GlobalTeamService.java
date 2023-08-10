@@ -3,6 +3,7 @@ package org.wolflink.minecraft.plugin.siriuxa.team;
 import lombok.NonNull;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.api.Result;
@@ -11,6 +12,9 @@ import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRelationProxy;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.ITaskService;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskService;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.WaitStage;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 
@@ -91,5 +95,15 @@ public class GlobalTeamService {
         Result kickedResult = leave(beenKicked,globalTeam);
         if(!kickedResult.result())return new Result(false,"踢出失败："+kickedResult.msg());
         return new Result(true,"玩家 "+beenKicked.getName()+" 已从队伍中踢出。");
+    }
+    public Result giveUpTask(@NonNull OfflinePlayer teamOwner) {
+        GlobalTeam globalTeam = globalTeamRepository.findByPlayer(teamOwner);
+        if(globalTeam == null) return new Result(false,"你没有处在任何队伍中。");
+        if(globalTeam.getOwnerUuid() != teamOwner.getUniqueId()) return new Result(false,"你不是队长，无法进行此操作。");
+        if(globalTeam.getSelectedTask() == null) return new Result(false,"队伍目前还没有选择任务。");
+        Task task = globalTeam.getSelectedTask();
+        Result result = IOC.getBean(TaskService.class).giveUp(task);
+        if(!result.result()) return new Result(false,"放弃任务失败，原因："+result.msg());
+        return result;
     }
 }
