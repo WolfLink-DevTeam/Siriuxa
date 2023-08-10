@@ -72,6 +72,7 @@ public class EnderBackpackMenu extends DynamicMenu {
                 if(helmet.getType().name().endsWith("_HELMET")) enderBackpack.setHelmet(helmet);
                 else {
                     Notifier.chat("你在应该放置头盔的地方错误的放入了物品："+helmet.getType().name().toLowerCase()+"！物品已退回至背包。",player);
+                    enderBackpack.setHelmet(null);
                     player.getInventory().addItem(helmet);
                     setIcon(19,null);
                     inventory.setItem(19,null);
@@ -86,6 +87,7 @@ public class EnderBackpackMenu extends DynamicMenu {
                 else {
                     Notifier.chat("你在应该放置胸甲的地方错误的放入了物品："+chestplate.getType().name().toLowerCase()+"！物品已退回至背包。",player);
                     player.getInventory().addItem(chestplate);
+                    enderBackpack.setChestplate(null);
                     setIcon(20,null);
                     inventory.setItem(20,null);
                 }
@@ -99,6 +101,7 @@ public class EnderBackpackMenu extends DynamicMenu {
                 else {
                     Notifier.chat("你在应该放置护腿的地方错误的放入了物品："+leggings.getType().name().toLowerCase()+"！物品已退回至背包。",player);
                     player.getInventory().addItem(leggings);
+                    enderBackpack.setLeggings(null);
                     setIcon(21,null);
                     inventory.setItem(21,null);
                 }
@@ -112,6 +115,7 @@ public class EnderBackpackMenu extends DynamicMenu {
                 else {
                     Notifier.chat("你在应该放置鞋子的地方错误的放入了物品："+boots.getType().name().toLowerCase()+"！物品已退回至背包。",player);
                     player.getInventory().addItem(boots);
+                    enderBackpack.setBoots(null);
                     setIcon(22,null);
                     inventory.setItem(22,null);
                 }
@@ -126,6 +130,7 @@ public class EnderBackpackMenu extends DynamicMenu {
                 else {
                     Notifier.chat("你在应该放置武器的地方错误的放入了物品："+weaponName.toLowerCase()+"！物品已退回至背包。",player);
                     player.getInventory().addItem(weapon);
+                    enderBackpack.setWeapon(null);
                     setIcon(23,null);
                     inventory.setItem(23,null);
                 }
@@ -140,6 +145,7 @@ public class EnderBackpackMenu extends DynamicMenu {
                 else {
                     Notifier.chat("你在应该放置工具的地方错误的放入了物品："+toolName.toLowerCase()+"！物品已退回至背包。",player);
                     player.getInventory().addItem(tool);
+                    enderBackpack.setTool(null);
                     setIcon(24,null);
                     inventory.setItem(24,null);
                 }
