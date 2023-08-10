@@ -62,8 +62,8 @@ public class ExplorationTask extends WheatTask {
                 return;
             }
             if (availableEvacuationZone != null) {
+                Notifier.broadcastChat(getTaskPlayers(),"飞艇将在 3分钟 后撤离，请抓紧时间！");
                 subScheduler.runTaskLater(()->{
-                    Notifier.broadcastChat(getTaskPlayers(),"飞艇将在 3分钟 后撤离，请抓紧时间！");
                     Notifier.broadcastSound(getTaskPlayers(),Sound.ENTITY_LIGHTNING_BOLT_THUNDER,1f,0.8f);
                     availableEvacuationZone.setAvailable(false);
                     availableEvacuationZone = null;
