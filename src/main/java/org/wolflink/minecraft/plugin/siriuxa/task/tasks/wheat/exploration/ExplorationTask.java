@@ -122,11 +122,13 @@ public class ExplorationTask extends WheatTask {
         for (Location location : chestLocations) {
             if (location.getBlock().getType() != Material.CHEST) continue;
             if (lootChestAmount >= getTaskTeamSize()) {
-                location.getBlock().setType(Material.AIR);
+                subScheduler.runTask(()->location.getBlock().setType(Material.AIR));
                 continue;
             } // 跟人数有关
-            Chest chest = (Chest) location.getBlock().getState();
-            new ChestLoot(chest).applyLootTable();
+            subScheduler.runTask(()->{
+                Chest chest = (Chest) location.getBlock().getState();
+                new ChestLoot(chest).applyLootTable();
+            });
             lootChestAmount++;
         }
         finishPreLoad = true;
