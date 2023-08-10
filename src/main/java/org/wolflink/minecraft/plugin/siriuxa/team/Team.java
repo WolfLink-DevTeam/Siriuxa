@@ -19,6 +19,9 @@ public abstract class Team {
     private final UUID ownerUuid;
     private final Set<UUID> memberUuids;
 
+    public OfflinePlayer getOfflineOwner() {
+        return Bukkit.getOfflinePlayer(ownerUuid);
+    }
     @Nullable
     public OfflinePlayer getOfflinePlayer(String name) {
         for (OfflinePlayer offlinePlayer : getOfflinePlayers()) {
