@@ -1,12 +1,10 @@
 package org.wolflink.minecraft.plugin.siriuxa.file.database;
 
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
-import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.DateAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.EnderBackpack;
@@ -51,8 +49,8 @@ public class InventoryDB extends FileDB {
      * 会覆盖原来的5格背包信息
      */
     public void saveEnderBackpack(OfflinePlayer offlinePlayer, EnderBackpack enderBackpack) {
-        File enderBackpackFile = new File(fiveSlotDataFolder,offlinePlayer.getName()+".yml");
-        if(enderBackpackFile.exists()) delete(enderBackpackFile);
+        File enderBackpackFile = new File(fiveSlotDataFolder, offlinePlayer.getName() + ".yml");
+        if (enderBackpackFile.exists()) delete(enderBackpackFile);
         FileConfiguration fileConfiguration = createAndLoad(enderBackpackFile);
         fileConfiguration.set("data", enderBackpack);
         save(enderBackpackFile);
@@ -63,15 +61,16 @@ public class InventoryDB extends FileDB {
      * 存在则传回玩家自定义的5格背包信息
      */
     public EnderBackpack loadEnderBackpack(OfflinePlayer offlinePlayer) {
-        File enderBackpackFile = new File(fiveSlotDataFolder,offlinePlayer.getName()+".yml");
-        if(!enderBackpackFile.exists()) return new EnderBackpack();
+        File enderBackpackFile = new File(fiveSlotDataFolder, offlinePlayer.getName() + ".yml");
+        if (!enderBackpackFile.exists()) return new EnderBackpack();
         FileConfiguration fileConfiguration = getFileConfiguration(enderBackpackFile);
-        if(fileConfiguration == null) {
-            Notifier.error("存在玩家 "+offlinePlayer.getName()+" 的背包数据文件，但无法读取其 FileConfiguration 对象");
+        if (fileConfiguration == null) {
+            Notifier.error("存在玩家 " + offlinePlayer.getName() + " 的背包数据文件，但无法读取其 FileConfiguration 对象");
             return new EnderBackpack();
         }
         return (EnderBackpack) fileConfiguration.get("data");
     }
+
     public void saveMain(Player player, PlayerBackpack playerBackpack) {
         File mainInvFile = new File(mainDataFolder, player.getName() + ".yml");
         FileConfiguration fileConfiguration = getFileConfiguration(mainInvFile);
@@ -86,14 +85,12 @@ public class InventoryDB extends FileDB {
     }
 
     private void saveCache(Player player, PlayerBackpack playerBackpack) {
-        Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
-            File cacheInvFolder = new File(cacheDataFolder, player.getName());
-            if (!cacheInvFolder.exists()) cacheInvFolder.mkdirs();
-            String time = dateAPI.getTime(Calendar.getInstance());
-            File cacheFile = new File(cacheInvFolder, time + ".yml");
-            FileConfiguration cache = createAndLoad(cacheFile);
-            cache.set("data", playerBackpack);
-            save(cacheFile);
-        });
+        File cacheInvFolder = new File(cacheDataFolder, player.getName());
+        if (!cacheInvFolder.exists()) cacheInvFolder.mkdirs();
+        String time = dateAPI.getTime(Calendar.getInstance());
+        File cacheFile = new File(cacheInvFolder, time + ".yml");
+        FileConfiguration cache = createAndLoad(cacheFile);
+        cache.set("data", playerBackpack);
+        save(cacheFile);
     }
 }
