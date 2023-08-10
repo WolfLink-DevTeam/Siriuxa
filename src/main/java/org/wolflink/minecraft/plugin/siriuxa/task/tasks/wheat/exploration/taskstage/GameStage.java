@@ -1,6 +1,8 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage;
 
+import org.bukkit.Bukkit;
 import org.wolflink.common.ioc.IOC;
+import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.stages.TaskLinearStageHolder;
@@ -19,7 +21,19 @@ public class GameStage extends TaskStage {
     @Override
     protected void onEnter() {
         super.onEnter();
-        getStageHolder().getTask().start();
+        getSubScheduler().runTaskAsync(()->{
+            // 阻塞直到任务加载完成
+            while (!task.isFinishPreLoad()) {
+                task.getGlobalTeam().getPlayers().forEach(player -> player.sendTitle(" ","§e任务区域仍在加载中，已超出预计时间，请耐心等待...",4,12,4));
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            getSubScheduler().runTask(()->getStageHolder().getTask().start());
+        });
+
     }
 
     @Override

@@ -20,12 +20,12 @@ public class ReadyStage extends TaskStage {
     protected void onEnter() {
         super.onEnter();
         Task task = getStageHolder().getTask();
-        task.preLoad();
+        getSubScheduler().runTaskAsync(task::preLoad);
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
-            int timeLeft = 15;
+            int timeLeft = 30;
             while (timeLeft > 0) {
                 for (Player player : task.getGlobalTeam().getPlayers()) {
-                    player.sendTitle("§f§l" + timeLeft, "§7任务即将开始，请做好准备", 4, 12, 4);
+                    player.sendTitle("§f§l" + timeLeft, "§7任务区域生成中，可能会出现卡顿和滞后，请稍作休息", 4, 12, 4);
                     player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1f, 1.2f);
                     player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_GUITAR, 1f, 1.2f);
                     Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> {

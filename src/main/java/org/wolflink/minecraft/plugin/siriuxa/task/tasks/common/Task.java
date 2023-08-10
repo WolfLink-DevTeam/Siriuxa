@@ -111,18 +111,20 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
 
     public void preLoad() {
         this.taskTeam = new TaskTeam(getGlobalTeam());
-        subScheduler.runTaskLaterAsync(() -> {
-            String worldName = IOC.getBean(Config.class).get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME);
-            World world = Bukkit.getWorld(worldName);
-            if (world == null) {
-                Notifier.error(worldName + "世界不存在！请检查配置文件");
-                return;
-            }
-            Location regionCenter = IOC.getBean(RegionAPI.class).autoGetRegionCenter(world);
-            this.taskArea = new SquareArea(this, regionCenter);
-            IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(new LocationCommandSender(taskArea.getCenter().clone().add(0, 2, 0)));
-        }, 0);
+        String worldName = IOC.getBean(Config.class).get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME);
+        World world = Bukkit.getWorld(worldName);
+        if (world == null) {
+            Notifier.error(worldName + "世界不存在！请检查配置文件");
+            return;
+        }
+        Location regionCenter = IOC.getBean(RegionAPI.class).autoGetRegionCenter(world);
+        this.taskArea = new SquareArea(this, regionCenter);
+        IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(new LocationCommandSender(taskArea.getCenter().clone().add(0, 2, 0)));
+        implPreLoad();
     }
+    @Getter
+    protected boolean finishPreLoad = false;
+    protected abstract void implPreLoad();
 
     public abstract void start();
 

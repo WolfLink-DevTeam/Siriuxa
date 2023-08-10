@@ -105,6 +105,33 @@ public class ExplorationTask extends WheatTask {
             }
         },20,20);
     }
+
+    @Override
+    protected void implPreLoad() {
+        if(getTaskArea() == null) {
+            Notifier.error("在任务区域未初始化时执行了任务的implPreLoad方法");
+            return;
+        }
+        List<Location> portalLocations = IOC.getBean(BlockAPI.class)
+                .searchBlock(Material.END_PORTAL_FRAME, getTaskArea().getCenter(), 30);
+        setSpawnLocations(portalLocations);
+        // 战利品箱子数量
+        int lootChestAmount = 0;
+        // 生成初始战利品
+        List<Location> chestLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.CHEST, getTaskArea().getCenter(), 30);
+        for (Location location : chestLocations) {
+            if (location.getBlock().getType() != Material.CHEST) continue;
+            if (lootChestAmount >= getTaskTeamSize()) {
+                location.getBlock().setType(Material.AIR);
+                continue;
+            } // 跟人数有关
+            Chest chest = (Chest) location.getBlock().getState();
+            new ChestLoot(chest).applyLootTable();
+            lootChestAmount++;
+        }
+        finishPreLoad = true;
+    }
+
     @Override
     public void start()  {
         if(getTaskArea() == null) {
@@ -116,25 +143,7 @@ public class ExplorationTask extends WheatTask {
         this.taskWheat = (double) getTaskTeamSize() * getExplorationDifficulty().getWheatSupply();
         getStrategyDecider().enable();
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
-            List<Location> portalLocations = IOC.getBean(BlockAPI.class)
-                    .searchBlock(Material.END_PORTAL_FRAME, getTaskArea().getCenter(), 30);
-            setSpawnLocations(portalLocations);
             Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> {
-                // 战利品箱子数量
-                int lootChestAmount = 0;
-                // 生成初始战利品
-                List<Location> chestLocations = IOC.getBean(BlockAPI.class).searchBlock(Material.CHEST, getTaskArea().getCenter(), 30);
-                for (Location location : chestLocations) {
-                    if (location.getBlock().getType() != Material.CHEST) continue;
-                    if (lootChestAmount >= getTaskTeamSize()) {
-                        location.getBlock().setType(Material.AIR);
-                        continue;
-                    } // 跟人数有关
-                    Chest chest = (Chest) location.getBlock().getState();
-                    new ChestLoot(chest).applyLootTable();
-                    lootChestAmount++;
-                }
-
                 for (Player player : getTaskPlayers()) {
                     IOC.getBean(ExplorationTaskService.class).goTask(player, this);
                 }
