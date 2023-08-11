@@ -2,6 +2,7 @@ package org.wolflink.minecraft.plugin.siriuxa.task.tasks.common;
 
 import lombok.NonNull;
 import org.bukkit.*;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Inject;
@@ -217,5 +218,19 @@ public class TaskService implements ITaskService {
         for (Task task : taskRepository.findAll()) {
             task.triggerFinish();
         }
+    }
+    public Result forceFinishTask(Player player) {
+        Task task = taskRepository.findByTaskTeamPlayer(player);
+        if(task == null) return new Result(false,"玩家当前没有正在进行的任务。");
+        if(!(task.getStageHolder().getThisStage() instanceof GameStage)) return new Result(false,"玩家任务不处于游戏阶段，无法结束。");
+        task.triggerFinish();
+        return new Result(true,"任务已被强制触发为完成。");
+    }
+    public Result forceFailedTask(Player player) {
+        Task task = taskRepository.findByTaskTeamPlayer(player);
+        if(task == null) return new Result(false,"玩家当前没有正在进行的任务。");
+        if(!(task.getStageHolder().getThisStage() instanceof GameStage)) return new Result(false,"玩家任务不处于游戏阶段，无法结束。");
+        task.triggerFailed();
+        return new Result(true,"任务已被强制触发为失败。");
     }
 }
