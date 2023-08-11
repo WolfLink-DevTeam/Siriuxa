@@ -36,6 +36,8 @@ public class HurtChecker extends WolfirdListener {
         if (player.getWorld() != task.getTaskArea().getCenter().getWorld()) return; // 不在任务世界
         // 下调大额伤害
         if (event.getDamage() > 12) event.setDamage(12);
+        // 上调小额伤害
+        if(event.getDamage() < 2) event.setDamage(2);
         // 扣除麦穗
         double cost = wheatTask.getHurtWheatCost() * event.getFinalDamage();
         wheatTask.takeWheat(cost);
