@@ -2,6 +2,7 @@ package org.wolflink.minecraft.plugin.siriuxa.task.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,6 +16,8 @@ public class SpawnerOptimizeListener extends WolfirdListener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onSpawnerSpawn(SpawnerSpawnEvent event) {
         CreatureSpawner spawner = event.getSpawner();
+        Block spawnerBlock = spawner.getBlock();
+        Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance(), () -> spawnerBlock.setType(Material.AIR), 20L * 60 * 10);
         if (spawner.getRequiredPlayerRange() <= 4) return;
         spawner.setSpawnCount(1);
         spawner.setSpawnRange(2);
@@ -22,9 +25,5 @@ public class SpawnerOptimizeListener extends WolfirdListener {
         spawner.setMaxSpawnDelay(200);
         spawner.setRequiredPlayerRange(4);
         spawner.update();
-        Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance(), () -> {
-            spawner.setType(Material.AIR);
-            spawner.update();
-        }, 20L * 60 * 10);
     }
 }

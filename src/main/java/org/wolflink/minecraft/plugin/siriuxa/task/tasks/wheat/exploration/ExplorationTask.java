@@ -4,21 +4,19 @@ import lombok.Getter;
 import org.bukkit.*;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.BlockAPI;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.InvBackupService;
+import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
-import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.loot.ChestLoot;
 import org.wolflink.minecraft.plugin.siriuxa.task.regions.EvacuationZone;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.WheatTask;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,17 +40,24 @@ public class ExplorationTask extends WheatTask {
 //        items.add(new ItemStack(Material.BREAD, 8));
 //        defaultKit.setItems(items);
 //    }
+    @Getter
+    private final ExplorationDifficulty explorationDifficulty;
     /**
      * 当前可用的撤离点
      */
     @Getter
     private EvacuationZone availableEvacuationZone = null;
-    @Getter
-    private final ExplorationDifficulty explorationDifficulty;
+
+    public ExplorationTask(GlobalTeam globalTeam, ExplorationDifficulty explorationDifficulty) {
+        super(globalTeam, explorationDifficulty, defaultKit);
+        this.explorationDifficulty = explorationDifficulty;
+    }
+
     public Set<Player> waitForEvacuatePlayers() {
         if (availableEvacuationZone == null) return new HashSet<>();
         else return availableEvacuationZone.getPlayerInZone();
     }
+
     private void startEvacuateTask(int minutes) {
         subScheduler.runTaskLater(() -> {
             if (getTaskArea() == null) return;
@@ -62,13 +67,13 @@ public class ExplorationTask extends WheatTask {
                 return;
             }
             if (availableEvacuationZone != null) {
-                Notifier.broadcastChat(getTaskPlayers(),"飞艇将在 3分钟 后撤离，请抓紧时间！");
-                subScheduler.runTaskLater(()->{
-                    Notifier.broadcastSound(getTaskPlayers(),Sound.ENTITY_LIGHTNING_BOLT_THUNDER,1f,0.8f);
+                Notifier.broadcastChat(getTaskPlayers(), "飞艇将在 3分钟 后撤离，请抓紧时间！");
+                subScheduler.runTaskLater(() -> {
+                    Notifier.broadcastSound(getTaskPlayers(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1f, 0.8f);
                     availableEvacuationZone.setAvailable(false);
                     availableEvacuationZone = null;
                     startEvacuateTask(random.nextInt(12, 20));
-                },20 * 180L);
+                }, 20 * 180L);
             } else {
                 availableEvacuationZone = new EvacuationZone(this, evacuateLocation.getWorld(), evacuateLocation.getBlockX(), evacuateLocation.getBlockZ(), 30);
                 availableEvacuationZone.setAvailable(true);
@@ -76,10 +81,7 @@ public class ExplorationTask extends WheatTask {
             }
         }, 20L * 60 * minutes);
     }
-    public ExplorationTask(GlobalTeam globalTeam, ExplorationDifficulty explorationDifficulty) {
-        super(globalTeam, explorationDifficulty,defaultKit);
-        this.explorationDifficulty = explorationDifficulty;
-    }
+
     /**
      * 撤离玩家
      * (适用于只有部分玩家乘坐撤离飞艇的情况)
@@ -99,16 +101,16 @@ public class ExplorationTask extends WheatTask {
 
     @Override
     protected void finishedCheck() {
-        subScheduler.runTaskTimer(()->{
+        subScheduler.runTaskTimer(() -> {
             if (waitForEvacuatePlayers().size() == getTaskTeamSize()) {
                 triggerFinish();
             }
-        },20,20);
+        }, 20, 20);
     }
 
     @Override
     protected void implPreLoad() {
-        if(getTaskArea() == null) {
+        if (getTaskArea() == null) {
             Notifier.error("在任务区域未初始化时执行了任务的implPreLoad方法");
             return;
         }
@@ -122,10 +124,10 @@ public class ExplorationTask extends WheatTask {
         for (Location location : chestLocations) {
             if (location.getBlock().getType() != Material.CHEST) continue;
             if (lootChestAmount >= getTaskTeamSize()) {
-                subScheduler.runTask(()->location.getBlock().setType(Material.AIR));
+                subScheduler.runTask(() -> location.getBlock().setType(Material.AIR));
                 continue;
             } // 跟人数有关
-            subScheduler.runTask(()->{
+            subScheduler.runTask(() -> {
                 Chest chest = (Chest) location.getBlock().getState();
                 new ChestLoot(chest).applyLootTable();
             });
@@ -135,8 +137,8 @@ public class ExplorationTask extends WheatTask {
     }
 
     @Override
-    public void start()  {
-        if(getTaskArea() == null) {
+    public void start() {
+        if (getTaskArea() == null) {
             Notifier.error("在任务区域未初始化时执行了任务的start方法");
             return;
         }
@@ -162,7 +164,7 @@ public class ExplorationTask extends WheatTask {
     protected void finish() {
         InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
         for (OfflinePlayer offlinePlayer : getGlobalTeam().getOfflinePlayers()) {
-            invBackupService.updateFiveSlotBackpack(offlinePlayer,true);
+            invBackupService.updateFiveSlotBackpack(offlinePlayer, true);
         }
     }
 
@@ -170,7 +172,7 @@ public class ExplorationTask extends WheatTask {
     public void failed() {
         InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
         for (OfflinePlayer offlinePlayer : getGlobalTeam().getOfflinePlayers()) {
-            invBackupService.updateFiveSlotBackpack(offlinePlayer,false);
+            invBackupService.updateFiveSlotBackpack(offlinePlayer, false);
         }
     }
 }

@@ -33,8 +33,8 @@ public class ExplorationTaskVariables extends PlaceholderExpansion {
     public String onRequest(OfflinePlayer offlinePlayer, @NotNull String params) {
         if (offlinePlayer == null) return "不存在的玩家";
         Task task = taskRepository.findByTaskTeamPlayerUuid(offlinePlayer.getUniqueId());
-        if(task == null) return "暂无任务";
-        if(!(task instanceof ExplorationTask explorationTask)) return "暂无该类型任务";
+        if (task == null) return "暂无任务";
+        if (!(task instanceof ExplorationTask explorationTask)) return "暂无该类型任务";
         switch (params.toLowerCase()) {
             case "wheat" -> {
                 return String.format("%.1f", explorationTask.getTaskWheat());
@@ -59,7 +59,18 @@ public class ExplorationTaskVariables extends PlaceholderExpansion {
             }
             case "evacuable" -> {
                 if (explorationTask.getAvailableEvacuationZone() != null) return "§a可撤离";
-                else return "§c无法撤离";
+                else return "§c等待中";
+            }
+            case "eva_loc" -> {
+                if (explorationTask.getAvailableEvacuationZone() != null)
+                    return "["
+                            .concat(String.valueOf((int) explorationTask.getAvailableEvacuationZone().getCenter().getX()))
+                            .concat(", ")
+                            .concat(String.valueOf((int) explorationTask.getAvailableEvacuationZone().getCenter().getY()))
+                            .concat(", ")
+                            .concat(String.valueOf((int) explorationTask.getAvailableEvacuationZone().getCenter().getZ()))
+                            .concat("]");
+                else return "[?, ?, ?]";
             }
             default -> {
                 return "没做完呢";
