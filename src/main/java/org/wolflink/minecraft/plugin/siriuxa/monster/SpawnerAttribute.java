@@ -27,7 +27,7 @@ public class SpawnerAttribute {
                 healthMultiple = 0.5;
                 movementMultiple = 0.8;
                 damageMultiple = 0.5;
-                spawnPeriodSecs = 15;
+                spawnPeriodSecs = 12;
                 weightMap.put(EntityType.ZOMBIE, 50);
                 weightMap.put(EntityType.HUSK, 50);
                 weightMap.put(EntityType.ZOMBIE_VILLAGER, 50);
@@ -41,7 +41,7 @@ public class SpawnerAttribute {
                 healthMultiple = 0.8;
                 movementMultiple = 1.0;
                 damageMultiple = 0.8;
-                spawnPeriodSecs = 12;
+                spawnPeriodSecs = 11;
                 weightMap.put(EntityType.ZOMBIE, 50);
                 weightMap.put(EntityType.HUSK, 50);
                 weightMap.put(EntityType.ZOMBIE_VILLAGER, 50);
@@ -52,10 +52,10 @@ public class SpawnerAttribute {
                 weightMap.put(EntityType.CREEPER, 20);
             }
             case 3 -> { // 困难
-                healthMultiple = 1.0;
+                healthMultiple = 1.05;
                 movementMultiple = 1.1;
-                damageMultiple = 1.0;
-                spawnPeriodSecs = 9;
+                damageMultiple = 1.05;
+                spawnPeriodSecs = 10;
                 weightMap.put(EntityType.ZOMBIE, 45);
                 weightMap.put(EntityType.HUSK, 45);
                 weightMap.put(EntityType.ZOMBIE_VILLAGER, 45);
@@ -70,10 +70,10 @@ public class SpawnerAttribute {
                 weightMap.put(EntityType.RABBIT, 1);
             }
             case 4 -> { // 专家
-                healthMultiple = 1.2;
-                movementMultiple = 1.2;
-                damageMultiple = 1.2;
-                spawnPeriodSecs = 7;
+                healthMultiple = 1.25;
+                movementMultiple = 1.25;
+                damageMultiple = 1.25;
+                spawnPeriodSecs = 9;
                 weightMap.put(EntityType.ZOMBIE, 40);
                 weightMap.put(EntityType.HUSK, 40);
                 weightMap.put(EntityType.ZOMBIE_VILLAGER, 40);
