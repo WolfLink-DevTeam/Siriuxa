@@ -27,7 +27,7 @@ public class TaskQueueInfo extends WolfirdCommand {
         player.sendMessage("§f最近一组任务开始于 §a"+secs+" §f秒之前");
         player.sendMessage(" ");
         player.sendMessage("§f当前进行 §a"+explorationTaskQueue.getNowSize()+"组");
-        player.sendMessage("§f最大容量 §a"+explorationTaskQueue.getMAX_SIZE()+"组");
+        player.sendMessage("§f最大容量 §a"+explorationTaskQueue.getMaxSize()+"组");
         player.sendMessage(" ");
     }
 }
