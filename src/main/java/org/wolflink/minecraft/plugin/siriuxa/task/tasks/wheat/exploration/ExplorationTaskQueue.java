@@ -1,5 +1,6 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration;
 
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.api.Result;
@@ -10,6 +11,7 @@ import java.util.Calendar;
  * 调查任务队列，减缓服务器压力
  */
 @Singleton
+@Getter
 public class ExplorationTaskQueue {
     // 最多允许同时游玩的数量
     private final int MAX_SIZE = 8;
