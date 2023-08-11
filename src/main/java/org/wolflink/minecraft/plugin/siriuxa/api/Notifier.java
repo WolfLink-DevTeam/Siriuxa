@@ -5,6 +5,8 @@ import org.bukkit.Sound;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.wolfird.framework.notifier.BaseNotifier;
@@ -40,6 +42,11 @@ public class Notifier {
         notifier.debug(msg);
     }
 
+    public static void msg(CommandSender sender, String msg) {
+        if(sender instanceof Player player) chat(msg,player);
+        if(sender instanceof ConsoleCommandSender) info(msg);
+        else warn("未知的 Sender 类型："+sender.getClass().getName()+"消息："+msg);
+    }
     public static void chat(String msg, Player player) {
         notifier.chat(msg, player);
     }

@@ -2,8 +2,11 @@ package org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.api.Result;
+import org.wolflink.minecraft.plugin.siriuxa.file.Config;
+import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
 
 import java.util.Calendar;
 
@@ -13,8 +16,6 @@ import java.util.Calendar;
 @Singleton
 @Getter
 public class ExplorationTaskQueue {
-    // 最多允许同时游玩的数量
-    private final int MAX_SIZE = 8;
 
     private int nowSize = 0;
     private Calendar lastStarted = Calendar.getInstance();
@@ -23,8 +24,9 @@ public class ExplorationTaskQueue {
      * 现在是否可以开始新的任务
      */
     public Result canCreateTask() {
+        int maxSize = IOC.getBean(Config.class).get(ConfigProjection.EXPLORATION_TASK_QUEUE_SIZE);
         // 达到上限
-        if(nowSize >= MAX_SIZE) return new Result(false,"任务队列已经达到最大上限，请等待一会！");
+        if(nowSize >= maxSize) return new Result(false,"任务队列已经达到最大上限，请等待一会！");
         // 上一个刚开3分钟之内
         if(lastStarted != null) {
             long delta = (Calendar.getInstance().getTimeInMillis() - lastStarted.getTimeInMillis()) / 1000;
