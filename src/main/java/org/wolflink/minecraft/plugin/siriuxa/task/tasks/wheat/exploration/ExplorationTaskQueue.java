@@ -33,7 +33,7 @@ public class ExplorationTaskQueue {
         // 上一个刚开3分钟之内
         if(lastStarted != null) {
             long delta = (Calendar.getInstance().getTimeInMillis() - lastStarted.getTimeInMillis()) / 1000;
-            if(delta < 60 * 3) return new Result(false,"上一个任务刚刚开始 "+delta+" 秒，请等待至 3 分钟后方可开始新的任务。");
+            if(delta < 60) return new Result(false,"上一个任务刚刚开始 "+delta+" 秒，请等待至 60 秒后方可开始新的任务。");
         }
         return new Result(true,"可以创建任务");
     }
