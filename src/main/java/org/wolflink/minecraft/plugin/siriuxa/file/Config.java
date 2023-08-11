@@ -54,7 +54,7 @@ public class Config extends YamlConfig {
         throw new NullPointerException("配置文件中没有设置 LobbyReadyLocation");
     }
 
-    public int getNextRegionIndex() {
+    public synchronized int getNextRegionIndex() {
         int value = get(ConfigProjection.EXPLORATION_REGION_INDEX);
         update(ConfigProjection.EXPLORATION_REGION_INDEX.getPath(), value + 1);
         return value;
