@@ -63,14 +63,14 @@ public class ExplorationTaskVariables extends PlaceholderExpansion {
             }
             case "eva_loc" -> {
                 if (explorationTask.getAvailableEvacuationZone() != null)
-                    return "["
-                            .concat(String.valueOf((int) explorationTask.getAvailableEvacuationZone().getCenter().getX()))
-                            .concat(", ")
-                            .concat(String.valueOf((int) explorationTask.getAvailableEvacuationZone().getCenter().getY()))
-                            .concat(", ")
-                            .concat(String.valueOf((int) explorationTask.getAvailableEvacuationZone().getCenter().getZ()))
-                            .concat("]");
-                else return "[?, ?, ?]";
+                    return "§7[ §a"
+                            .concat(String.valueOf(explorationTask.getAvailableEvacuationZone().getCenter().getBlockX()))
+                            .concat("§8, §a")
+                            .concat(String.valueOf(explorationTask.getAvailableEvacuationZone().getCenter().getBlockY()))
+                            .concat("§8, §a")
+                            .concat(String.valueOf(explorationTask.getAvailableEvacuationZone().getCenter().getBlockZ()))
+                            .concat(" §7]");
+                else return "§7[ ?, ?, ? ]";
             }
             default -> {
                 return "没做完呢";
