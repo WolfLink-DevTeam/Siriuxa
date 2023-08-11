@@ -17,7 +17,7 @@ public class ExplorationTaskQueue {
     private final int MAX_SIZE = 8;
 
     private int nowSize = 0;
-    private Calendar lastStarted = null;
+    private Calendar lastStarted = Calendar.getInstance();
 
     /**
      * 现在是否可以开始新的任务

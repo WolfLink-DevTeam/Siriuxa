@@ -21,12 +21,13 @@ public class TaskQueueInfo extends WolfirdCommand {
     @Override
     protected void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
-        Notifier.chat("§6服务器队列信息",player);
         int secs = (int) ((Calendar.getInstance().getTimeInMillis() - explorationTaskQueue.getLastStarted().getTimeInMillis()) / 1000);
+        Notifier.chat("§f服务器队列信息",player);
         player.sendMessage(" ");
-        player.sendMessage("§a距离最近一组开始的任务：§f"+secs+"秒");
-        player.sendMessage("§a进行中：§f"+explorationTaskQueue.getNowSize()+"组");
-        player.sendMessage("§a最大容量：§f"+explorationTaskQueue.getMAX_SIZE()+"组");
+        player.sendMessage("§f最近一组任务开始于 §a"+secs+" §f秒之前");
+        player.sendMessage(" ");
+        player.sendMessage("§f当前进行 §a"+explorationTaskQueue.getNowSize()+"组");
+        player.sendMessage("§f最大容量 §a"+explorationTaskQueue.getMAX_SIZE()+"组");
         player.sendMessage(" ");
     }
 }
