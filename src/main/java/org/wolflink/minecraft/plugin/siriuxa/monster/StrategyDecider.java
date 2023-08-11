@@ -2,6 +2,7 @@ package org.wolflink.minecraft.plugin.siriuxa.monster;
 
 import lombok.NonNull;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -113,7 +114,7 @@ public class StrategyDecider implements IStatus {
     private void spawnTask() {
         for (Map.Entry<UUID, SpawnStrategy> entry : playerStrategyMap.entrySet()) {
             Player player = Bukkit.getPlayer(entry.getKey());
-            if (player == null || !player.isOnline()) continue;
+            if (player == null || !player.isOnline() || player.getGameMode().equals(GameMode.SPECTATOR)) continue;
             Location location = player.getLocation();
             int nearbyPlayerAmount = getHuddlePlayersAmount(location);
             if (Math.random() >= getEfficiencyReduction(nearbyPlayerAmount)) entry.getValue().spawn(player);
