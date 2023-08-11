@@ -53,7 +53,7 @@ public class DifficultyRepository extends MapRepository<DifficultyKey, TaskDiffi
                 .wheatLostAcceleratedSpeed(0.32)
                 .hurtWheatCost(2.25)
                 .hurtDamageMultiple(1.1)
-                .rewardMultiple(1.5)
+                .rewardMultiple(1.6)
                 .bringSlotAmount(12)
                 .build());
         insert(ExplorationDifficulty.builder()
@@ -67,7 +67,7 @@ public class DifficultyRepository extends MapRepository<DifficultyKey, TaskDiffi
                 .wheatLostAcceleratedSpeed(0.36)
                 .hurtWheatCost(3.0)
                 .hurtDamageMultiple(1.5)
-                .rewardMultiple(2.0)
+                .rewardMultiple(2.2)
                 .bringSlotAmount(15)
                 .build());
     }
