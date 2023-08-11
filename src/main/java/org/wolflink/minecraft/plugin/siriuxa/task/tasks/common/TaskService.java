@@ -15,6 +15,7 @@ import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.OfflinePlayerDB;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.OfflinePlayerRecord;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.ITaskService;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.ExplorationTaskQueue;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.EndStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.WaitStage;
@@ -41,6 +42,8 @@ public class TaskService implements ITaskService {
     private TaskFactory taskFactory;
     @Inject
     private TaskRelationProxy taskRelationProxy;
+    @Inject
+    private ExplorationTaskQueue explorationTaskQueue;
 
     @Override
     public void goLobby(Player player) {
@@ -81,6 +84,8 @@ public class TaskService implements ITaskService {
      */
     @Override
     public Result create(GlobalTeam globalTeam, Class<? extends Task> taskClass, TaskDifficulty taskDifficulty) {
+        Result canCreate = explorationTaskQueue.canCreateTask();
+        if(!canCreate.result())return canCreate;
         if (globalTeam.getSelectedTask() != null) return new Result(false, "当前队伍已经选择了任务，无法再次创建。");
 
         List<OfflinePlayer> offlinePlayers = globalTeam.getOfflinePlayers();
@@ -116,6 +121,7 @@ public class TaskService implements ITaskService {
             return new Result(false, "该任务所属队伍没有任何在线玩家。");
         }
         if (task.getStageHolder().getThisStage() instanceof WaitStage) {
+            explorationTaskQueue.taskStarted();
             task.getStageHolder().next();
             return new Result(true, "任务即将开始。");
         }

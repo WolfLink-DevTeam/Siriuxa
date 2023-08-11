@@ -26,6 +26,7 @@ import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.IRecordable;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.ITaskTeam;
 import org.wolflink.minecraft.plugin.siriuxa.task.regions.SquareArea;
 import org.wolflink.minecraft.plugin.siriuxa.task.regions.TaskArea;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.ExplorationTaskQueue;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
@@ -155,6 +156,8 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
         globalTeam.setSelectedTask(null);
         if(taskTeam != null) taskTeam.clear();
         IOC.getBean(TaskRepository.class).deleteByKey(taskUuid);
+        // 释放队列
+        IOC.getBean(ExplorationTaskQueue.class).taskEnded();
     }
 
 
