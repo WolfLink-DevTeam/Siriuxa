@@ -13,7 +13,10 @@ import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.SpawnStrategy;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -26,6 +29,10 @@ public class StrategyDecider implements IStatus {
      * 决策周期(秒)
      */
     private static final int DECIDE_PERIOD_SECS = 10;
+    /**
+     * 判断抱团的半径(格)
+     */
+    private static final int HUDDLE_RADIUS = 6;
     private final SpawnerAttribute spawnerAttribute;
     private final Task task;
     private final int spawnPeriodSecs;
@@ -38,6 +45,7 @@ public class StrategyDecider implements IStatus {
      * 优先级从上往下，最上方的最优先进行决策
      */
     private final List<SpawnStrategy> strategyList;
+
     public StrategyDecider(Task task) {
         this.task = task;
         spawnerAttribute = new SpawnerAttribute(task.getTaskDifficulty());
@@ -47,9 +55,9 @@ public class StrategyDecider implements IStatus {
 
     @Override
     public void enable() {
-        Notifier.broadcastChat(task.getTaskPlayers(),"§c怪物们将在90秒后来袭，请做好准备...");
-        Notifier.broadcastSound(task.getTaskPlayers(), Sound.ENTITY_VILLAGER_NO,1f,0.8f);
-        subScheduler.runTaskLaterAsync(()->{
+        Notifier.broadcastChat(task.getTaskPlayers(), "§c怪物们将在90秒后来袭，请做好准备...");
+        Notifier.broadcastSound(task.getTaskPlayers(), Sound.ENTITY_VILLAGER_NO, 1f, 0.8f);
+        subScheduler.runTaskLaterAsync(() -> {
             subScheduler.runTaskTimerAsync(
                     this::updateStrategyMap,
                     20L * DECIDE_PERIOD_SECS,
@@ -62,9 +70,9 @@ public class StrategyDecider implements IStatus {
             );
             subScheduler.runTaskTimerAsync(this::updateAttribute,
                     20L * 60, 20L * 60);
-            Notifier.broadcastChat(task.getTaskPlayers(),"§c它们来了！");
-            Notifier.broadcastSound(task.getTaskPlayers(), Sound.ENTITY_ENDER_DRAGON_AMBIENT,1f,1f);
-        },20 * 90);
+            Notifier.broadcastChat(task.getTaskPlayers(), "§c它们来了！");
+            Notifier.broadcastSound(task.getTaskPlayers(), Sound.ENTITY_ENDER_DRAGON_AMBIENT, 1f, 1f);
+        }, 20L * 90);
     }
 
     private void updateStrategyMap() {
@@ -87,16 +95,18 @@ public class StrategyDecider implements IStatus {
     }
 
     private double getEfficiencyReduction(int playerAmount) {
-        return 1 - (0.75 * Math.log(playerAmount) + 1.0)/playerAmount;
+        return 1 - (0.75 * Math.log(playerAmount) + 1.0) / playerAmount;
     }
-    private int getNearbyPlayers(Location location) {
+
+    private int getHuddlePlayersAmount(Location location) {
         int amount = 0;
         for (Player player : task.getTaskPlayers()) {
-            if(player.getWorld() != location.getWorld()) continue;
-            if(player.getLocation().distance(location) <= 6) amount++;
+            if (player.getWorld() != location.getWorld()) continue;
+            if (player.getLocation().distance(location) <= HUDDLE_RADIUS) amount++;
         }
         return amount;
     }
+
     /**
      * 多位玩家抱团时降低刷怪效率
      */
@@ -105,8 +115,8 @@ public class StrategyDecider implements IStatus {
             Player player = Bukkit.getPlayer(entry.getKey());
             if (player == null || !player.isOnline()) continue;
             Location location = player.getLocation();
-            int nearbyPlayerAmount = getNearbyPlayers(location);
-            if(Math.random() >= getEfficiencyReduction(nearbyPlayerAmount)) entry.getValue().spawn(player);
+            int nearbyPlayerAmount = getHuddlePlayersAmount(location);
+            if (Math.random() >= getEfficiencyReduction(nearbyPlayerAmount)) entry.getValue().spawn(player);
         }
     }
 
