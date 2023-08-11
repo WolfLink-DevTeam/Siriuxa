@@ -2,6 +2,7 @@ package org.wolflink.minecraft.plugin.siriuxa.monster;
 
 import lombok.NonNull;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.wolflink.minecraft.plugin.siriuxa.api.IStatus;
@@ -12,10 +13,7 @@ import org.wolflink.minecraft.plugin.siriuxa.monster.strategy.SpawnStrategy;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -88,11 +86,27 @@ public class StrategyDecider implements IStatus {
         spawnerAttribute.setDamageMultiple(spawnerAttribute.getDamageMultiple() + 0.012);
     }
 
+    private double getEfficiencyReduction(int playerAmount) {
+        return 1 - (0.75 * Math.log(playerAmount) + 1.0)/playerAmount;
+    }
+    private int getNearbyPlayers(Location location) {
+        int amount = 0;
+        for (Player player : task.getTaskPlayers()) {
+            if(player.getWorld() != location.getWorld()) continue;
+            if(player.getLocation().distance(location) <= 6) amount++;
+        }
+        return amount;
+    }
+    /**
+     * 多位玩家抱团时降低刷怪效率
+     */
     private void spawnTask() {
         for (Map.Entry<UUID, SpawnStrategy> entry : playerStrategyMap.entrySet()) {
             Player player = Bukkit.getPlayer(entry.getKey());
             if (player == null || !player.isOnline()) continue;
-            entry.getValue().spawn(player);
+            Location location = player.getLocation();
+            int nearbyPlayerAmount = getNearbyPlayers(location);
+            if(Math.random() >= getEfficiencyReduction(nearbyPlayerAmount)) entry.getValue().spawn(player);
         }
     }
 
