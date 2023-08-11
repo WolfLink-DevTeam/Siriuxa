@@ -16,12 +16,12 @@ public class AddLoot extends WolfirdCommand {
     private LootService lootService;
 
     public AddLoot() {
-        super(true, false, false, "sx addloot {entityType}", "动态修改怪物掉落战利品的概率");
+        super(true, false, false, "sx addloot {entityType} {dropChance}", "动态修改怪物掉落战利品的概率");
     }
 
     @Override
     protected void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
-        lootService.addLoot(player, strings);
+        lootService.addLoot(player, strings[0],strings[1]).show(player);
     }
 }

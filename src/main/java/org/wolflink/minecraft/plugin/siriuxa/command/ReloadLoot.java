@@ -16,7 +16,7 @@ public class ReloadLoot extends WolfirdCommand {
     private LootService lootService;
 
     public ReloadLoot() {
-        super(true, false, false, "sx reloadloot", "重载有关于自定义战利品的配置文件");
+        super(true, false, true, "sx reloadloot", "重载有关于自定义战利品的配置文件");
     }
 
     @Override
