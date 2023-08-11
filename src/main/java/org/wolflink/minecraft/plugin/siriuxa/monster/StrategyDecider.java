@@ -32,7 +32,7 @@ public class StrategyDecider implements IStatus {
     /**
      * 判断抱团的半径(格)
      */
-    private static final int HUDDLE_RADIUS = 6;
+    private static final int HUDDLE_RADIUS = 8;
     private final SpawnerAttribute spawnerAttribute;
     private final Task task;
     private final int spawnPeriodSecs;
