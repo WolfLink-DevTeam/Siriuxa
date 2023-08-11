@@ -122,6 +122,8 @@ public class TaskService implements ITaskService {
             return new Result(false, "该任务所属队伍没有任何在线玩家。");
         }
         if (task.getStageHolder().getThisStage() instanceof WaitStage) {
+            Result canStart = explorationTaskQueue.canCreateTask();
+            if(!canStart.result()) return canStart;
             explorationTaskQueue.taskStarted();
             task.getStageHolder().next();
             return new Result(true, "任务即将开始。");
