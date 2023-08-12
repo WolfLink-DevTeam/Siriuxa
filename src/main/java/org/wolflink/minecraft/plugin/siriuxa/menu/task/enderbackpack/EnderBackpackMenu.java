@@ -12,6 +12,8 @@ import org.wolflink.minecraft.plugin.siriuxa.backpack.EnderBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.InvBackupService;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.InventoryDB;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -53,6 +55,11 @@ public class EnderBackpackMenu extends DynamicMenu {
         setIcon(23, new ItemIcon(enderBackpack.getWeapon()));
         setIcon(24, new ItemIcon(enderBackpack.getTool()));
         setIcon(25, new ItemIcon(enderBackpack.getItem()));
+    }
+    private static final Set<String> containerSuffix = new HashSet<>();
+    static {
+        containerSuffix.add("SHULKER_BOX");
+        containerSuffix.add("BUNDLE");
     }
     @Override
     public void onClose(Player player) {
@@ -147,14 +154,21 @@ public class EnderBackpackMenu extends DynamicMenu {
         {
             ItemStack item = inventory.getItem(25);
             if(item != null && item.getType() != Material.AIR) {
-                if(!item.getType().name().endsWith("SHULKER_BOX")) enderBackpack.setItem(item);
-                else {
+                boolean isContainer = false;
+                for (String containerName : containerSuffix) {
+                    if(item.getType().name().endsWith(containerName)){
+                        isContainer = true;
+                        break;
+                    }
+                }
+                if(isContainer) {
                     Notifier.chat("你不可以携带容器进入任务！",player);
                     player.getInventory().addItem(item);
                     enderBackpack.setItem(null);
                     setIcon(25,null);
                     inventory.setItem(25,null);
                 }
+                else enderBackpack.setItem(item);
             }
             else enderBackpack.setItem(null);
             saveEnderBackpack(enderBackpack);
