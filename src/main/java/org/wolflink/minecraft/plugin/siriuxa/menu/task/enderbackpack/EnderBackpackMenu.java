@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 public class EnderBackpackMenu extends DynamicMenu {
 
     public EnderBackpackMenu(UUID ownerUuid) {
-        super(ownerUuid, "§0§l末影背包", 27,0, Stream.of(19,20,21,22,23,24,25).collect(Collectors.toSet()));
+        super(ownerUuid, "§0§l行李托运", 27,0, Stream.of(19,20,21,22,23,24,25).collect(Collectors.toSet()));
     }
 
     public EnderBackpack getEnderBackpack() {

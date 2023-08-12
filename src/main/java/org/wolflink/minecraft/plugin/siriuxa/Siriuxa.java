@@ -56,6 +56,7 @@ public final class Siriuxa extends WolfirdPlugin {
         databases.add(OreDB.class);
         databases.add(HuntDB.class);
         databases.add(TaskRecordDB.class);
+        databases.add(PlayerVariableDB.class);
 
         globalListenerClasses.add(OreChecker.class);
         globalListenerClasses.add(HuntChecker.class);
@@ -81,6 +82,7 @@ public final class Siriuxa extends WolfirdPlugin {
         serializableClasses.add(WheatTaskDifficulty.class);
         serializableClasses.add(ExplorationDifficulty.class);
         serializableClasses.add(EnderBackpack.class);
+        serializableClasses.add(PlayerVariables.class);
     }
 
     @Override
@@ -116,7 +118,6 @@ public final class Siriuxa extends WolfirdPlugin {
         bindCommand(IOC.getBean(TeamLeave.class));
         bindCommand(IOC.getBean(TaskHistory.class));
         bindCommand(IOC.getBean(GoLobby.class));
-        bindCommand(IOC.getBean(OpenFiveSlotBackpack.class));
         bindCommand(IOC.getBean(TeamGiveUpTask.class));
         bindCommand(IOC.getBean(TaskQueueInfo.class));
         bindCommand(IOC.getBean(ForceFailedTask.class));
