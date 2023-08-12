@@ -64,7 +64,7 @@ public class ExplorationBackpackMenu extends DynamicMenu {
             assert difficulty != null;
             return difficulty.getBringSlotAmount();
         } else {
-            return IOC.getBean(PlayerVariableDB.class).get(getOfflineOwner()).getSafeSlotAmount();
+            return playerTaskRecord.getSafeSlotAmount();
         }
     }
 
