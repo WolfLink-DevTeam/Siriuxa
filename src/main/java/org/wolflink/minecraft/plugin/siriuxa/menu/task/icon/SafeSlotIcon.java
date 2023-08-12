@@ -9,19 +9,26 @@ import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerVariableDB;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerVariables;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskMenu;
 
 public class SafeSlotIcon extends Icon {
 
     private static final int MAX_SLOTS = 5;
     private static final int[] SLOT_PRICE = new int[]{30,60,90,120,150};
-    private int slotAmount = 0;
+    private final TaskMenu taskMenu;
     public SafeSlotIcon(TaskMenu taskMenu) {
         super(10);
+        this.taskMenu = taskMenu;
     }
 
+    public int getSlotAmount() {
+        return IOC.getBean(PlayerVariableDB.class).get(taskMenu.getOfflineOwner()).getSafeSlotAmount();
+    }
     @Override
     protected @NonNull ItemStack createIcon() {
+        int slotAmount = getSlotAmount();
         Material mat;
         int amount = slotAmount;
         String price;
@@ -38,7 +45,7 @@ public class SafeSlotIcon extends Icon {
                 "  §f购买后如果任务失败可以拿回对应数量的物资",
                 "  §f任务成功后祝福也会失效",
                 "  ",
-                "  §f价格 §r"+SLOT_PRICE[slotAmount+1],
+                "  §f价格 §r"+price,
                 "  §e右键 购买祝福",
                 " ");
     }
@@ -50,12 +57,16 @@ public class SafeSlotIcon extends Icon {
 
     @Override
     public void rightClick(Player player) {
+        int slotAmount = getSlotAmount();
         if(slotAmount >= MAX_SLOTS) return;
         VaultAPI vaultAPI = IOC.getBean(VaultAPI.class);
         int lockPrice = SLOT_PRICE[slotAmount];
         if(vaultAPI.getEconomy(player) < lockPrice) return;
         vaultAPI.takeEconomy(player,lockPrice);
-        slotAmount++;
+        PlayerVariableDB db = IOC.getBean(PlayerVariableDB.class);
+        PlayerVariables playerVariables = db.get(taskMenu.getOfflineOwner());
+        playerVariables.setSafeSlotAmount(playerVariables.getSafeSlotAmount()+1);
+        db.save(taskMenu.getOfflineOwner(), playerVariables);
         Notifier.chat("§d远古的咒语在你耳边吟唱...末影祝福开始生效了！",player);
         player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE,1.2f,0.7f);
         player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES,1f,1f);
