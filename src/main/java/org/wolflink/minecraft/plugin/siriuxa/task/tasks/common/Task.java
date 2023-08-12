@@ -158,6 +158,7 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
         IOC.getBean(TaskRepository.class).deleteByKey(taskUuid);
         // 释放队列
         IOC.getBean(ExplorationTaskQueue.class).taskEnded();
+        globalTeam = new GlobalTeam(null);
     }
 
 

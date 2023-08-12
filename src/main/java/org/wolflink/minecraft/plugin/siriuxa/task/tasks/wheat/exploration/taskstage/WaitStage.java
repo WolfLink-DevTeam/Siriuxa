@@ -7,6 +7,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
+import org.wolflink.minecraft.plugin.siriuxa.api.Result;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
@@ -42,7 +43,10 @@ public class WaitStage extends TaskStage {
                 }
             }
             if (readyPlayers.size() == task.getGlobalTeam().size()) {
-                Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> IOC.getBean(TaskService.class).ready(task));
+                Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> {
+                    Result result = IOC.getBean(TaskService.class).ready(task);
+                    task.getGlobalTeam().getPlayers().forEach(result::show);
+                });
             }
         }, 20, 20);
     }
