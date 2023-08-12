@@ -1,8 +1,11 @@
 package org.wolflink.minecraft.plugin.siriuxa.menu.task;
 
 import lombok.Setter;
+import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
@@ -73,6 +76,18 @@ public class ExplorationBackpackMenu extends DynamicMenu {
     }
 
     public void claimReward(Player player) {
+        int emptySlots = 0;
+        Inventory inv = player.getInventory();
+        for (int i = 0;i < 36;i++) {
+            ItemStack itemStack = inv.getItem(i);
+            if(itemStack == null || itemStack.getType() == Material.AIR)emptySlots++;
+        }
+        System.out.println("空闲背包："+emptySlots);
+        if(emptySlots < getSelectedSlotAmount()) {
+            player.playSound(player.getLocation(),Sound.ENTITY_VILLAGER_NO,1f,1f);
+            Notifier.chat("你的背包没有足够的空间！",player);
+            return;
+        }
         // 背包格数检查
         player.closeInventory();
         player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1f, 1f);

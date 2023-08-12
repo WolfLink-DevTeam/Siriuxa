@@ -5,9 +5,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.*;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
@@ -26,8 +24,6 @@ public class MenuEventListener extends WolfirdListener {
     @EventHandler
     void onService(InventoryClickEvent e) {
         if (!(e.getWhoClicked() instanceof Player p)) return;
-        cooldownPlayers.add(p);
-        getSubScheduler().runTaskLaterAsync(()->cooldownPlayers.remove(p),10);
         String title = e.getView().getTitle();
         Menu menu = menuService.findMenu(p, title);
         if (menu == null) return;
@@ -48,16 +44,30 @@ public class MenuEventListener extends WolfirdListener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     void onProtect(InventoryClickEvent e) {
-        // 点击自己的背包
-        if (e.getWhoClicked().getInventory().equals(e.getClickedInventory())) {
+        if(!(e.getWhoClicked() instanceof Player p)) {
             return;
         }
-        String title = e.getWhoClicked().getOpenInventory().getTitle();
-        Menu menu = menuService.findMenu((Player) e.getWhoClicked(), title);
-        if (menu != null) {
-            if(menu.containerSlots.contains(e.getSlot())) return;
+        Menu menu = menuService.findMenu(p, e.getView().getTitle());
+        if(menu == null) return;
+        // 防止把物品移动到菜单中
+        if(menu.containerSlots.size() == 0) {
             e.setCancelled(true);
+            return;
         }
+        // 点击自己的背包
+        if (p.getInventory().equals(e.getClickedInventory())) {
+            return;
+        }
+        if(cooldownPlayers.contains(p)) {
+            e.setCancelled(true);
+            return;
+        }
+        cooldownPlayers.add(p);
+        getSubScheduler().runTaskLaterAsync(()->cooldownPlayers.remove(p),3);
+        if (menu.containerSlots.contains(e.getSlot())) {
+            return;
+        }
+        e.setCancelled(true);
     }
 
     private void invokeViewClick(Player player, Icon icon, ClickType clickType) {
