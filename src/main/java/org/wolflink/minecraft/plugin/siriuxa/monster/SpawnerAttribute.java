@@ -55,7 +55,7 @@ public class SpawnerAttribute {
                 healthMultiple = 1.05;
                 movementMultiple = 1.1;
                 damageMultiple = 1.05;
-                spawnPeriodSecs = 10;
+                spawnPeriodSecs = 9;
                 weightMap.put(EntityType.ZOMBIE, 45);
                 weightMap.put(EntityType.HUSK, 45);
                 weightMap.put(EntityType.ZOMBIE_VILLAGER, 45);
@@ -73,7 +73,7 @@ public class SpawnerAttribute {
                 healthMultiple = 1.25;
                 movementMultiple = 1.25;
                 damageMultiple = 1.25;
-                spawnPeriodSecs = 9;
+                spawnPeriodSecs = 8;
                 weightMap.put(EntityType.ZOMBIE, 40);
                 weightMap.put(EntityType.HUSK, 40);
                 weightMap.put(EntityType.ZOMBIE_VILLAGER, 40);

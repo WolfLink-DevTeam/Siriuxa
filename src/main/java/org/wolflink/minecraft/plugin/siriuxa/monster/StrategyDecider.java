@@ -96,7 +96,7 @@ public class StrategyDecider implements IStatus {
     }
 
     private double getEfficiencyReduction(int playerAmount) {
-        return 1 - (0.75 * Math.log(playerAmount) + 1.0) / playerAmount;
+        return 1 - (1.5 * Math.log(playerAmount) + 0.75) / playerAmount;
     }
 
     private int getHuddlePlayersAmount(Location location) {
