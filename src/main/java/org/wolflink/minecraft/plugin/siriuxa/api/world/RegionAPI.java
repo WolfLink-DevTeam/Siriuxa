@@ -29,12 +29,12 @@ public class RegionAPI {
         int spacingRadius = config.get(ConfigProjection.EXPLORATION_REGION_SPACING_RADIUS);
         double radius = config.get(ConfigProjection.EXPLORATION_REGION_RADIUS);
         int maxLength = config.get(ConfigProjection.EXPLORATION_REGION_TOTAL_LENGTH);
-        int finalRadius = (int) ((spacingRadius + radius) * 2);
-        int maxRegionPerLine = maxLength / finalRadius;
+        int areaLength = (int) ((spacingRadius + radius) * 2);
+        int maxRegionPerLine = 2 * maxLength / areaLength;
         int x = index % maxRegionPerLine;
         int z = (index / maxRegionPerLine) % maxRegionPerLine;
-        int centerX = -maxLength + x * finalRadius;
-        int centerZ = -maxLength + z * finalRadius;
+        int centerX = -maxLength + x * areaLength;
+        int centerZ = -maxLength + z * areaLength;
         int y = world.getHighestBlockYAt(centerX, centerZ);
         Location location = new Location(world, centerX, y, centerZ);
         if (retry > 0 && IOC.getBean(BlockAPI.class).checkIsOcean(location)) {
