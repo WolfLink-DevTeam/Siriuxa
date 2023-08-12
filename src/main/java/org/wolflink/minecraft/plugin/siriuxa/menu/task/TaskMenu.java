@@ -7,6 +7,7 @@ import org.wolflink.minecraft.plugin.siriuxa.api.view.StaticMenu;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
 import org.wolflink.minecraft.plugin.siriuxa.menu.difficulty.ExplorationDifficultyMenu;
+import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.ChallengeTag;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.CreateTask;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.SelectDifficulty;
 
@@ -28,6 +29,7 @@ public class TaskMenu extends StaticMenu {
         setIcon(15, borderIcon);
         setIcon(17, borderIcon);
         setIcon(10, new SelectDifficulty(this));
+        setIcon(11, new ChallengeTag());
         setIcon(16, new CreateTask(this));
     }
 
