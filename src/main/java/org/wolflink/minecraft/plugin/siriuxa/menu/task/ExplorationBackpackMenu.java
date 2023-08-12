@@ -14,6 +14,7 @@ import org.wolflink.minecraft.plugin.siriuxa.api.view.EmptyIcon;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.DifficultyRepository;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerVariableDB;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.ClaimTaskReward;
@@ -56,10 +57,15 @@ public class ExplorationBackpackMenu extends DynamicMenu {
      * 允许的可带回物品最大数量
      */
     public int getBringSlotAmount() {
-        ExplorationDifficulty difficulty = IOC.getBean(DifficultyRepository.class)
-                .findByName(ExplorationDifficulty.class, playerTaskRecord.getTaskDifficulty());
-        assert difficulty != null;
-        return difficulty.getBringSlotAmount();
+        boolean taskSuccess = playerTaskRecord.isSuccess();
+        if(taskSuccess) {
+            ExplorationDifficulty difficulty = IOC.getBean(DifficultyRepository.class)
+                    .findByName(ExplorationDifficulty.class, playerTaskRecord.getTaskDifficulty());
+            assert difficulty != null;
+            return difficulty.getBringSlotAmount();
+        } else {
+            return IOC.getBean(PlayerVariableDB.class).get(getOfflineOwner()).getSafeSlotAmount();
+        }
     }
 
     public int getSelectedSlotAmount() {

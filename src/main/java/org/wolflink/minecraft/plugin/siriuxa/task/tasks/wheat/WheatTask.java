@@ -64,6 +64,11 @@ public abstract class WheatTask extends Task {
                 IOC.getBean(InventoryDB.class).loadEnderBackpack(offlinePlayer).isEmpty()
                 )); // 保存任务麦穗
         record.setSuccess(taskResult); // 设置任务状态
+        PlayerVariableDB db = IOC.getBean(PlayerVariableDB.class);
+        PlayerVariables playerVariables = db.get(offlinePlayer);
+        record.setSafeSlotAmount(playerVariables.getSafeSlotAmount());
+        playerVariables.setSafeSlotAmount(0);
+        db.save(offlinePlayer,playerVariables);
         PlayerBackpack playerBackpack;
         Player player = offlinePlayer.getPlayer();
         if (player == null || !player.isOnline()) {

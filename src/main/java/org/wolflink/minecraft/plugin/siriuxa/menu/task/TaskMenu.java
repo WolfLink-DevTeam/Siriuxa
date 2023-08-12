@@ -27,9 +27,8 @@ public class TaskMenu extends StaticMenu {
         setIcon(15, borderIcon);
         setIcon(17, borderIcon);
         setIcon(10, new SelectDifficulty(this));
-        setIcon(11,new EnderBackpackIcon());
-        setIcon(12,new SafeSlotIcon(this));
-        setIcon(13, new ChallengeTag());
+        setIcon(11,new SafeSlotIcon(this));
+        setIcon(12, new ChallengeTag());
         setIcon(16, new CreateTask(this));
     }
 

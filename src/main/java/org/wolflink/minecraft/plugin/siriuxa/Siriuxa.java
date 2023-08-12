@@ -123,6 +123,7 @@ public final class Siriuxa extends WolfirdPlugin {
         bindCommand(IOC.getBean(ForceFailedTask.class));
         bindCommand(IOC.getBean(ForceFinishTask.class));
         bindCommand(IOC.getBean(SetTaskQueueSize.class));
+        bindCommand(IOC.getBean(OpenEnderBackpack.class));
 
         notifier.setDebugMode(IOC.getBean(Config.class).get(ConfigProjection.DEBUG));
 

@@ -18,10 +18,12 @@ public class ClaimTaskReward extends Icon {
     @Override
     protected @NonNull ItemStack createIcon() {
         int moreSlots = explorationBackpackMenu.getBringSlotAmount() - explorationBackpackMenu.getSelectedSlotAmount();
-        if (moreSlots == 0)
-            return fastCreateItemStack(Material.END_CRYSTAL, 1, "§a§l带回物品", " ", "  §7点击即可将选中物品添加到背包", " ");
-        else
-            return fastCreateItemStack(Material.END_CRYSTAL, 1, "§a§l带回物品", " ", "  §f还可以选择额外 §e" + moreSlots + " §f格物品", " ");
+        return fastCreateItemStack(Material.END_CRYSTAL, 1, "§a§l带回物品",
+                " ",
+                    "  §f还可以选择额外 §e" + moreSlots + " §f格物品",
+                    "  ",
+                    "  §e点击立刻领取选中的物品 §8(§7不要遗漏贵重物资哦§8)",
+                    " ");
     }
 
     @Override

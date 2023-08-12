@@ -60,27 +60,10 @@ public class TaskRecordIcon extends Icon {
     @Override
     public void leftClick(Player player) {
         if (!playerTaskRecord.isClaimed()) {
-            if (playerTaskRecord.isSuccess()) {
-                MenuService menuService = IOC.getBean(MenuService.class);
-                ExplorationBackpackMenu menu = menuService.findMenu(player, ExplorationBackpackMenu.class);
-                menu.setPlayerTaskRecord(playerTaskRecord);
-                IOC.getBean(MenuService.class).display(menu, player);
-            } else {
-                playerTaskRecord.setClaimed(true);
-                IOC.getBean(TaskRecordDB.class).saveRecord(playerTaskRecord);
-                WheatTaskDifficulty wheatTaskDifficulty = IOC.getBean(DifficultyRepository.class).findByName(ExplorationDifficulty.class, playerTaskRecord.getTaskDifficulty());
-                if(wheatTaskDifficulty == null) {
-                    Notifier.error("尝试给玩家"+player.getName()+"发放奖励时，未找到对应的难度类："+ playerTaskRecord.getTaskDifficulty());
-                    return;
-                }
-                double rewardWheat = playerTaskRecord.getRewardWheat();
-                int exp = (playerTaskRecord.getPlayerBackpack().getTotalExp());
-                IOC.getBean(VaultAPI.class).addEconomy(player, rewardWheat);
-                Notifier.chat("任务失败，但你仍然获得了 §a"+String.format("%.0f",rewardWheat)+" §6麦穗 §f以及 §a"+exp+" §e经验 §f作为奖励。",player);
-                IOC.getBean(PlayerAPI.class).addExp(player,exp);
-                Notifier.chat("任务奖励的麦穗与经验已发放，但物品丢失了，祝你下次好运！", player);
-                player.playSound(player.getLocation(), Sound.ENTITY_WOLF_HOWL, 0.7f, 1f);
-            }
+            MenuService menuService = IOC.getBean(MenuService.class);
+            ExplorationBackpackMenu menu = menuService.findMenu(player, ExplorationBackpackMenu.class);
+            menu.setPlayerTaskRecord(playerTaskRecord);
+            IOC.getBean(MenuService.class).display(menu, player);
         }
     }
 
