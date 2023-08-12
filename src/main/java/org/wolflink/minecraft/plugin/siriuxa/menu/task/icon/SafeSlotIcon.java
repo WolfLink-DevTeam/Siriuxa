@@ -46,7 +46,8 @@ public class SafeSlotIcon extends Icon {
                 "  §f任务成功后祝福也会失效",
                 "  ",
                 "  §f价格 §r"+price,
-                "  §e右键 购买祝福",
+                "  ",
+                "  §a右键 §d购买祝福",
                 " ");
     }
 
