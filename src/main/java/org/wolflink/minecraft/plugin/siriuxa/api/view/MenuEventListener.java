@@ -13,14 +13,21 @@ import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 @Singleton
 public class MenuEventListener extends WolfirdListener {
     @Inject
     MenuService menuService;
 
+    private final Set<Player> cooldownPlayers = Collections.synchronizedSet(new HashSet<>());
     @EventHandler
     void onService(InventoryClickEvent e) {
         if (!(e.getWhoClicked() instanceof Player p)) return;
+        cooldownPlayers.add(p);
+        getSubScheduler().runTaskLaterAsync(()->cooldownPlayers.remove(p),10);
         String title = e.getView().getTitle();
         Menu menu = menuService.findMenu(p, title);
         if (menu == null) return;
