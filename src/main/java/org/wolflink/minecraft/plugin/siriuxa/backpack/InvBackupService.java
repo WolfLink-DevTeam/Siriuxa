@@ -36,28 +36,9 @@ public class InvBackupService {
     /**
      * 结束任务后更新背包状态
      */
-    public Result updateFiveSlotBackpack(OfflinePlayer offlinePlayer, boolean taskResult) {
-        if(taskResult) return clearFiveSlotBackpack(offlinePlayer);
-        // 任务失败，清理未锁定物品
-        else return clearUnlockedFiveSlotBackpack(offlinePlayer);
-    }
-    public Result clearUnlockedFiveSlotBackpack(OfflinePlayer offlinePlayer) {
-        EnderBackpack enderBackpack = inventoryDB.loadEnderBackpack(offlinePlayer);
-        List<Boolean> lockedSlots = enderBackpack.getLockedSlots();
-        if (!lockedSlots.get(0)) enderBackpack.setHelmet(null);
-        if (!lockedSlots.get(1)) enderBackpack.setChestplate(null);
-        if (!lockedSlots.get(2)) enderBackpack.setLeggings(null);
-        if (!lockedSlots.get(3)) enderBackpack.setBoots(null);
-        if (!lockedSlots.get(4)) enderBackpack.setItem(null);
-        // 清理格子锁定状态
-        enderBackpack.resetLockedSlots();
-        saveEnderBackpack(offlinePlayer, enderBackpack);
-        return new Result(true,"未锁定物品清理成功。");
-    }
     public Result clearFiveSlotBackpack(OfflinePlayer offlinePlayer) {
         EnderBackpack enderBackpack = inventoryDB.loadEnderBackpack(offlinePlayer);
         enderBackpack.clear();
-        enderBackpack.resetLockedSlots();
         saveEnderBackpack(offlinePlayer, enderBackpack);
         return new Result(true,"清理成功。");
     }

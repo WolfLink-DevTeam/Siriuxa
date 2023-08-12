@@ -43,8 +43,6 @@ public class EnderBackpack implements ConfigurationSerializable {
     private ItemStack tool;
     private ItemStack item;
 
-    private List<Boolean> lockedSlots;
-
     public EnderBackpack() {
         helmet = null;
         chestplate = null;
@@ -53,23 +51,6 @@ public class EnderBackpack implements ConfigurationSerializable {
         weapon = null;
         tool = null;
         item = null;
-        resetLockedSlots();
-    }
-    public int getLockedSlotAmount() {
-        int amount = 0;
-        for (boolean b : lockedSlots) {
-            if(b) amount++;
-        }
-        return amount;
-    }
-    private static final int[] LOCK_PRICES = new int[]{30,60,90,120,150};
-    @Getter
-    private static final int MAX_LOCKED_SLOTS_AMOUNT = LOCK_PRICES.length;
-    public boolean canLock() {
-        return getLockedSlotAmount() < MAX_LOCKED_SLOTS_AMOUNT;
-    }
-    public int getLockPrice() {
-        return LOCK_PRICES[getLockedSlotAmount()];
     }
     public boolean isEmpty() {
         return helmet == null && chestplate == null && leggings == null && boots == null && item == null && weapon == null && tool == null;
@@ -106,10 +87,6 @@ public class EnderBackpack implements ConfigurationSerializable {
         item = null;
         weapon = null;
         tool = null;
-        resetLockedSlots();
-    }
-    public void resetLockedSlots() {
-        lockedSlots = Stream.of(false,false,false,false,false,false,false).collect(Collectors.toList());
     }
 
     @NotNull
@@ -123,7 +100,6 @@ public class EnderBackpack implements ConfigurationSerializable {
         map.put("item",item);
         map.put("weapon",weapon);
         map.put("tool",tool);
-        map.put("lockedSlots",lockedSlots);
         return map;
     }
     public EnderBackpack(Map<String,Object> map) {
@@ -134,7 +110,6 @@ public class EnderBackpack implements ConfigurationSerializable {
         weapon = (ItemStack) map.get("weapon");
         tool = (ItemStack) map.get("tool");
         item = (ItemStack) map.get("item");
-        lockedSlots = (List<Boolean>) map.get("lockedSlots");
     }
     public static EnderBackpack deserialize(Map<String,Object> map) {
         return new EnderBackpack(map);

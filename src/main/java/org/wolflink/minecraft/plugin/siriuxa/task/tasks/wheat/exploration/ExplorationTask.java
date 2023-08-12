@@ -164,7 +164,7 @@ public class ExplorationTask extends WheatTask {
     protected void finish() {
         InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
         for (OfflinePlayer offlinePlayer : getGlobalTeam().getOfflinePlayers()) {
-            invBackupService.updateFiveSlotBackpack(offlinePlayer, true);
+            invBackupService.clearFiveSlotBackpack(offlinePlayer);
         }
     }
 
@@ -172,7 +172,7 @@ public class ExplorationTask extends WheatTask {
     public void failed() {
         InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
         for (OfflinePlayer offlinePlayer : getGlobalTeam().getOfflinePlayers()) {
-            invBackupService.updateFiveSlotBackpack(offlinePlayer, false);
+            invBackupService.clearFiveSlotBackpack(offlinePlayer);
         }
     }
 }

@@ -34,7 +34,7 @@ public class EnderBackpackMenu extends DynamicMenu {
     @Override
     protected void overrideIcons() {
         BorderIcon borderIcon = IOC.getBean(BorderIcon.class);
-        Stream.of(9,10,16,17).forEach(i -> setIcon(i,borderIcon));
+        Stream.of(9,10,11,12,13,14,15,16,17).forEach(i -> setIcon(i,borderIcon));
         Player player = getOwner();
         if(player == null || !player.isOnline())return;
         setIcon(1,IOC.getBean(HelmetIcon.class));
@@ -44,14 +44,6 @@ public class EnderBackpackMenu extends DynamicMenu {
         setIcon(5,IOC.getBean(WeaponIcon.class));
         setIcon(6,IOC.getBean(ToolIcon.class));
         setIcon(7,IOC.getBean(AnythingIcon.class));
-
-        setIcon(10,new EnderLock(this,0));
-        setIcon(11,new EnderLock(this,1));
-        setIcon(12,new EnderLock(this,2));
-        setIcon(13,new EnderLock(this,3));
-        setIcon(14,new EnderLock(this,4));
-        setIcon(15,new EnderLock(this,5));
-        setIcon(16,new EnderLock(this,6));
 
         EnderBackpack enderBackpack = getEnderBackpack();
         setIcon(19, new ItemIcon(enderBackpack.getHelmet()));
