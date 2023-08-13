@@ -91,6 +91,9 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
     }
 
     protected void triggerFinish() {
+        triggerFinish(false);
+    }
+    protected void triggerFinish(boolean isServerClosing) {
         getTaskPlayers().forEach(player -> fillRecord(player, true));
         stageHolder.next();
         getTaskStat().disable();
@@ -99,11 +102,13 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
         finish();
         for (Player player : getGlobalTeam().getPlayers()) {
             IOC.getBean(TaskService.class).goLobby(player);
-            Siriuxa.getInstance().getSubScheduler().runTaskLater(() -> {
-                player.sendTitle("§a任务完成", "§7前往领取本次任务的报酬吧", 10, 80, 10);
-                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f);
-                player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1f, 1f);
-            }, 20 * 3L);
+            if(!isServerClosing) {
+                Siriuxa.getInstance().getSubScheduler().runTaskLater(() -> {
+                    player.sendTitle("§a任务完成", "§7前往领取本次任务的报酬吧", 10, 80, 10);
+                    player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f);
+                    player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1f, 1f);
+                }, 20 * 3L);
+            }
         }
         deleteTask();
     }

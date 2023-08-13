@@ -218,7 +218,7 @@ public class TaskService implements ITaskService {
      */
     public void finishAllTask() {
         for (Task task : taskRepository.findAll()) {
-            task.triggerFinish();
+            if(task.getStageHolder().getThisStage() instanceof GameStage) task.triggerFinish(true);
         }
     }
     public Result forceFinishTask(Player player) {
