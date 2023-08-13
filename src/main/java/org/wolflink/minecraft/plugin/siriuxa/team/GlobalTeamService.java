@@ -111,4 +111,25 @@ public class GlobalTeamService {
         if(!result.result()) return new Result(false,"放弃任务失败，原因："+result.msg());
         return result;
     }
+
+    /**
+     * 解散队伍
+     * 如果队伍正在进行任务则无法解散
+     */
+    public Result dissolve(GlobalTeam globalTeam) {
+        Task task = globalTeam.getSelectedTask();
+        // 当前已经选择了任务
+        if(task != null) {
+            if(task.getStageHolder().getThisStage() instanceof WaitStage) {
+                // 尝试放弃
+                Result giveupResult = giveUpTask(globalTeam.getOfflineOwner());
+                // 放弃失败
+                if(!giveupResult.result()) return giveupResult;
+            } else return new Result(false,"任务正在进行中，无法解散队伍。");
+        }
+        globalTeamRepository.deleteByKey(globalTeam.getTeamUuid());
+        globalTeam.getPlayers().forEach(p -> Notifier.chat("由于队长退出，队伍已自动解散。",p));
+        globalTeam.clear();
+        return new Result(true,"解散成功");
+    }
 }
