@@ -1,8 +1,8 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.tasks.common;
 
 import lombok.NonNull;
-import org.bukkit.*;
-import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Inject;
@@ -49,8 +49,8 @@ public class TaskService implements ITaskService {
     @Override
     public void goLobby(Player player) {
         ITaskService taskService = taskRelationProxy.getTaskService(player.getWorld().getName());
-        if(taskService == null) {
-            Notifier.chat("你当前所处的世界不支持返回大厅！",player);
+        if (taskService == null) {
+            Notifier.chat("你当前所处的世界不支持返回大厅！", player);
             return;
         }
         taskService.goLobby(player);
@@ -59,7 +59,7 @@ public class TaskService implements ITaskService {
     @Override
     public void goTask(Player player, Task task) {
         ITaskService taskService = taskRelationProxy.getTaskService(task);
-        taskService.goTask(player,task);
+        taskService.goTask(player, task);
     }
 
     /**
@@ -86,7 +86,7 @@ public class TaskService implements ITaskService {
     @Override
     public Result create(GlobalTeam globalTeam, Class<? extends Task> taskClass, TaskDifficulty taskDifficulty) {
         Result canCreate = explorationTaskQueue.canCreateTask();
-        if(!canCreate.result())return canCreate;
+        if (!canCreate.result()) return canCreate;
         if (globalTeam.getSelectedTask() != null) return new Result(false, "当前队伍已经选择了任务，无法再次创建。");
 
         List<OfflinePlayer> offlinePlayers = globalTeam.getOfflinePlayers();
@@ -95,12 +95,12 @@ public class TaskService implements ITaskService {
         }
         // 检查成员能否接受任务
         for (OfflinePlayer offlinePlayer : offlinePlayers) {
-            if(!canAccept(taskClass,taskDifficulty,offlinePlayer))
-                return new Result(false, "队伍中至少有一名成员不满足接受任务的条件。");
+            if (!canAccept(taskClass, taskDifficulty, offlinePlayer))
+                return new Result(false, "队伍中至少有一名成员不满足接受任务的条件，请确保所有成员有足够的麦穗进行任务。");
         }
         // 成员接受任务
         for (OfflinePlayer offlinePlayer : offlinePlayers) {
-            accept(taskClass,taskDifficulty,offlinePlayer);
+            accept(taskClass, taskDifficulty, offlinePlayer);
         }
         Task task = taskFactory.create(taskClass, globalTeam, taskDifficulty);
         if (task != null) {
@@ -123,7 +123,7 @@ public class TaskService implements ITaskService {
         }
         if (task.getStageHolder().getThisStage() instanceof WaitStage) {
             Result canStart = explorationTaskQueue.canCreateTask();
-            if(!canStart.result()) return canStart;
+            if (!canStart.result()) return canStart;
             explorationTaskQueue.taskStarted();
             task.getStageHolder().next();
             return new Result(true, "任务即将开始。");
@@ -190,27 +190,28 @@ public class TaskService implements ITaskService {
     @Override
     public boolean canAccept(Class<? extends Task> taskClass, TaskDifficulty taskDifficulty, OfflinePlayer offlinePlayer) {
         ITaskService taskService = taskRelationProxy.getTaskService(taskClass);
-        return taskService.canAccept(taskClass,taskDifficulty,offlinePlayer);
+        return taskService.canAccept(taskClass, taskDifficulty, offlinePlayer);
     }
+
     /**
      * 将请求转发给对应具体任务的业务类
      */
     @Override
     public void accept(Class<? extends Task> taskClass, TaskDifficulty taskDifficulty, OfflinePlayer offlinePlayer) {
         ITaskService taskService = taskRelationProxy.getTaskService(taskClass);
-        taskService.accept(taskClass,taskDifficulty,offlinePlayer);
+        taskService.accept(taskClass, taskDifficulty, offlinePlayer);
     }
 
     public Result giveUp(Task task) {
-        if(task.getStageHolder().getThisStage() instanceof WaitStage) {
+        if (task.getStageHolder().getThisStage() instanceof WaitStage) {
             task.deleteTask();
-            return new Result(true,"任务已成功删除。");
+            return new Result(true, "任务已成功删除。");
         }
-        if(task.getStageHolder().getThisStage() instanceof GameStage) {
+        if (task.getStageHolder().getThisStage() instanceof GameStage) {
             task.triggerFailed();
-            return new Result(true,"在任务进行的过程中放弃了，任务失败。");
+            return new Result(true, "在任务进行的过程中放弃了，任务失败。");
         }
-        return new Result(false,"暂不支持的任务阶段："+task.getStageHolder().getThisStage().getDisplayName());
+        return new Result(false, "暂不支持的任务阶段：" + task.getStageHolder().getThisStage().getDisplayName());
     }
 
     /**
@@ -221,18 +222,22 @@ public class TaskService implements ITaskService {
             if(task.getStageHolder().getThisStage() instanceof GameStage) task.triggerFinish(true);
         }
     }
+
     public Result forceFinishTask(Player player) {
         Task task = taskRepository.findByTaskTeamPlayer(player);
-        if(task == null) return new Result(false,"玩家当前没有正在进行的任务。");
-        if(!(task.getStageHolder().getThisStage() instanceof GameStage)) return new Result(false,"玩家任务不处于游戏阶段，无法结束。");
+        if (task == null) return new Result(false, "玩家当前没有正在进行的任务。");
+        if (!(task.getStageHolder().getThisStage() instanceof GameStage))
+            return new Result(false, "玩家任务不处于游戏阶段，无法结束。");
         task.triggerFinish();
-        return new Result(true,"任务已被强制触发为完成。");
+        return new Result(true, "任务已被强制触发为完成。");
     }
+
     public Result forceFailedTask(Player player) {
         Task task = taskRepository.findByTaskTeamPlayer(player);
-        if(task == null) return new Result(false,"玩家当前没有正在进行的任务。");
-        if(!(task.getStageHolder().getThisStage() instanceof GameStage)) return new Result(false,"玩家任务不处于游戏阶段，无法结束。");
+        if (task == null) return new Result(false, "玩家当前没有正在进行的任务。");
+        if (!(task.getStageHolder().getThisStage() instanceof GameStage))
+            return new Result(false, "玩家任务不处于游戏阶段，无法结束。");
         task.triggerFailed();
-        return new Result(true,"任务已被强制触发为失败。");
+        return new Result(true, "任务已被强制触发为失败。");
     }
 }
