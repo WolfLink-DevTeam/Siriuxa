@@ -93,7 +93,7 @@ public class GlobalTeamService {
     public Result kick(@NonNull OfflinePlayer teamOwner,@NonNull String beenKickedName) {
         GlobalTeam globalTeam = globalTeamRepository.findByPlayer(teamOwner);
         if(globalTeam == null) return new Result(false,"你没有处在任何队伍中。");
-        if(globalTeam.getOwnerUuid() != teamOwner.getUniqueId()) return new Result(false,"你不是队长，无法进行此操作。");
+        if(!globalTeam.getOwnerUuid().equals(teamOwner.getUniqueId())) return new Result(false,"你不是队长，无法进行此操作。");
         OfflinePlayer beenKicked = globalTeam.getOfflinePlayer(beenKickedName);
         if(beenKicked == null) return new Result(false,"未在队伍中找到名为 "+beenKickedName+" 的玩家。");
         Result kickedResult = leave(beenKicked,globalTeam);
@@ -104,7 +104,7 @@ public class GlobalTeamService {
     public Result giveUpTask(@NonNull OfflinePlayer teamOwner) {
         GlobalTeam globalTeam = globalTeamRepository.findByPlayer(teamOwner);
         if(globalTeam == null) return new Result(false,"你没有处在任何队伍中。");
-        if(globalTeam.getOwnerUuid() != teamOwner.getUniqueId()) return new Result(false,"你不是队长，无法进行此操作。");
+        if(!globalTeam.getOwnerUuid().equals(teamOwner.getUniqueId())) return new Result(false,"你不是队长，无法进行此操作。");
         if(globalTeam.getSelectedTask() == null) return new Result(false,"队伍目前还没有选择任务。");
         Task task = globalTeam.getSelectedTask();
         Result result = IOC.getBean(TaskService.class).giveUp(task);
