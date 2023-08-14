@@ -77,11 +77,13 @@ public class GlobalTeamService {
     /**
      * 玩家主动离开队伍
      * 如果队伍已经选择了任务，则无法退出
+     * 如果玩家是队长，则解散队伍
      */
-    public Result leave(@NonNull OfflinePlayer offlinePlayer, @NonNull GlobalTeam globalTeam) {
+    private Result leave(@NonNull OfflinePlayer offlinePlayer, @NonNull GlobalTeam globalTeam) {
         if (globalTeam.getSelectedTask() != null) return new Result(false, "队伍已经选择了任务，无法退出。");
         globalTeam.leave(offlinePlayer);
         Notifier.broadcastChat(globalTeam.getPlayers(),"玩家 "+offlinePlayer.getName()+" 离开了队伍。");
+        if(globalTeam.getOwnerUuid().equals(offlinePlayer.getUniqueId())) dissolve(globalTeam);
         return new Result(true, "退出队伍成功。");
     }
 
