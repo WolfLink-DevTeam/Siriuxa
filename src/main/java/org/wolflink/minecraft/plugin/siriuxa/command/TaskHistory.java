@@ -15,7 +15,7 @@ public class TaskHistory extends WolfirdCommand {
     }
 
     @Override
-    protected void execute(CommandSender commandSender, String[] strings) {
+    public void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
         IOC.getBean(MenuService.class).display(TaskRecordMenu.class, player);
     }

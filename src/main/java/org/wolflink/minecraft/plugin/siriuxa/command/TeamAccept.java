@@ -16,7 +16,7 @@ public class TeamAccept extends WolfirdCommand {
     }
 
     @Override
-    protected void execute(CommandSender commandSender, String[] strings) {
+    public void execute(CommandSender commandSender, String[] strings) {
         teamInvite.accept((Player) commandSender);
     }
 }

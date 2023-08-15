@@ -16,6 +16,6 @@ public class Debug extends WolfirdCommand {
     }
 
     @Override
-    protected void execute(CommandSender commandSender, String[] strings) {
+    public void execute(CommandSender commandSender, String[] strings) {
     }
 }

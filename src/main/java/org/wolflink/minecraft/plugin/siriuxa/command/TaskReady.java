@@ -21,7 +21,7 @@ public class TaskReady extends WolfirdCommand {
     }
 
     @Override
-    protected void execute(CommandSender commandSender, String[] strings) {
+    public void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
         Task task = taskRepository.findByGlobalTeamPlayer(player);
         taskService.ready(task).show(player);

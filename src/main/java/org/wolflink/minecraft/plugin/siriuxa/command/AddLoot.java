@@ -20,7 +20,7 @@ public class AddLoot extends WolfirdCommand {
     }
 
     @Override
-    protected void execute(CommandSender commandSender, String[] strings) {
+    public void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
         lootService.addLoot(player, strings[0],strings[1]).show(player);
     }

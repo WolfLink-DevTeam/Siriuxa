@@ -22,7 +22,7 @@ public class ForceFinishTask extends WolfirdCommand {
     }
 
     @Override
-    protected void execute(CommandSender commandSender, String[] strings) {
+    public void execute(CommandSender commandSender, String[] strings) {
         Player player = Bukkit.getPlayer(strings[0]);
         String result = "";
         if(player == null) {

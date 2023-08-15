@@ -20,7 +20,7 @@ public class ReloadLoot extends WolfirdCommand {
     }
 
     @Override
-    protected void execute(CommandSender commandSender, String[] strings) {
+    public void execute(CommandSender commandSender, String[] strings) {
         lootService.reloadLoot();
     }
 }

@@ -18,7 +18,7 @@ public class TeamKick extends WolfirdCommand {
     }
 
     @Override
-    protected void execute(CommandSender commandSender, String[] strings) {
+    public void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
         globalTeamService.kick(player, strings[0]).show(player);
 //        globalTeamService.kick(player, strings[0]).show(player);

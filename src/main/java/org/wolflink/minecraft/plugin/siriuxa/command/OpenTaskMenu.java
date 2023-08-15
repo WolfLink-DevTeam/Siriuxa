@@ -18,7 +18,7 @@ public class OpenTaskMenu extends WolfirdCommand {
     }
 
     @Override
-    protected void execute(CommandSender commandSender, String[] strings) {
+    public void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
         menuService.display(TaskMenu.class, player);
     }

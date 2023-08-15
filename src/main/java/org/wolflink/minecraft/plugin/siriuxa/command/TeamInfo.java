@@ -28,7 +28,7 @@ public class TeamInfo extends WolfirdCommand {
      * 成员列表：
      */
     @Override
-    protected void execute(CommandSender commandSender, String[] strings) {
+    public void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
         GlobalTeam globalTeam = globalTeamRepository.findByPlayer(player);
         if (globalTeam == null) {

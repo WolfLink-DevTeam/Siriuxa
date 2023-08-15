@@ -19,7 +19,7 @@ public class TaskQueueInfo extends WolfirdCommand {
     }
 
     @Override
-    protected void execute(CommandSender commandSender, String[] strings) {
+    public void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
         int secs = (int) ((Calendar.getInstance().getTimeInMillis() - explorationTaskQueue.getLastStarted().getTimeInMillis()) / 1000);
         Notifier.chat("§f服务器队列信息",player);
