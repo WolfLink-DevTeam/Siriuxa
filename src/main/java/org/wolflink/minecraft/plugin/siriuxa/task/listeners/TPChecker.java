@@ -43,7 +43,7 @@ public class TPChecker extends WolfirdListener {
                 if(player.getWorld().getName().equals(taskWorldName)) {
                     // Y >= 300 而且是观察者
                     if(player.getLocation().getBlockY() >= 300 && player.getGameMode() == GameMode.SPECTATOR) {
-                        IOC.getBean(GoLobby.class).execute(player);
+                        getSubScheduler().runTask(()->IOC.getBean(GoLobby.class).execute(player));
                     }
                 }
             }
