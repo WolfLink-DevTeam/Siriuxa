@@ -82,7 +82,6 @@ public class ExplorationBackpackMenu extends DynamicMenu {
             ItemStack itemStack = inv.getItem(i);
             if(itemStack == null || itemStack.getType() == Material.AIR)emptySlots++;
         }
-        System.out.println("空闲背包："+emptySlots);
         if(emptySlots < getSelectedSlotAmount()) {
             player.playSound(player.getLocation(),Sound.ENTITY_VILLAGER_NO,1f,1f);
             Notifier.chat("你的背包没有足够的空间！",player);
