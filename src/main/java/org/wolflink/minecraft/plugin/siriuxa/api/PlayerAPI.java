@@ -7,6 +7,18 @@ import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 
 @Singleton
 public class PlayerAPI {
+    /**
+     * 获取玩家实时等级的总经验值
+     */
+    public int getRealExp(Player player) {
+        int totalExp = Math.round(player.getExpToLevel() * player.getExp());
+        while (player.getLevel() > 0) {
+            player.setLevel(player.getLevel() - 1);
+            totalExp += player.getExpToLevel();
+        }
+        setExp(player,totalExp);
+        return totalExp;
+    }
     public void setExp(Player player,final int totalExp) {
         int exp = totalExp;
         Notifier.debug("玩家 " + player.getName() + " 的经验已被重置为 0，即将发放经验：" + exp);

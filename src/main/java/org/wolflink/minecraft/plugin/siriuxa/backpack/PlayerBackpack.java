@@ -47,7 +47,7 @@ public final class PlayerBackpack implements ConfigurationSerializable {
             boots = equipment.getBoots() == null ? null : equipment.getBoots().clone();
             offhand = equipment.getItemInOffHand().clone();
         } else Notifier.error("玩家" + player.getName() + "装备栏为空！");
-        totalExp = player.getTotalExperience();
+        totalExp = IOC.getBean(PlayerAPI.class).getRealExp(player);
         items = new ArrayList<>();
         // 拷贝背包
         Inventory playerInv = player.getInventory();
