@@ -19,7 +19,7 @@ import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.CreatureDeathListener;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.CreatureSpawnListener;
 import org.wolflink.minecraft.plugin.siriuxa.papi.ExplorationTaskVariables;
-import org.wolflink.minecraft.plugin.siriuxa.sculkinfection.SculkInfection;
+import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.sculkinfection.SculkInfectionManager;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.*;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.huntcheck.HuntChecker;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.huntcheck.HuntValues;
@@ -136,7 +136,7 @@ public final class Siriuxa extends WolfirdPlugin {
         for (Class<? extends WolfirdListener> listenerClass : globalListenerClasses) {
             IOC.getBean(listenerClass).setEnabled(true);
         }
-        IOC.getBean(SculkInfection.class).enable();
+        IOC.getBean(SculkInfectionManager.class).enable();
     }
 
     @Override
@@ -144,7 +144,7 @@ public final class Siriuxa extends WolfirdPlugin {
         // 强制结束所有还在进行中的任务，将其标记为完成
         IOC.getBean(TaskService.class).finishAllTask();
 
-        IOC.getBean(SculkInfection.class).disable();
+        IOC.getBean(SculkInfectionManager.class).disable();
         IOC.getBean(OreValues.class).doSave();
         IOC.getBean(HuntValues.class).doSave();
 

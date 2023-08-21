@@ -24,6 +24,7 @@ import org.wolflink.minecraft.plugin.siriuxa.monster.StrategyDecider;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.IGlobalTeam;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.IRecordable;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.ITaskTeam;
+import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
 import org.wolflink.minecraft.plugin.siriuxa.task.regions.SquareArea;
 import org.wolflink.minecraft.plugin.siriuxa.task.regions.TaskArea;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
@@ -40,12 +41,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @Data
 public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameable {
 
+    public abstract Set<OrnamentType> getOrnamentTypes();
     protected final SubScheduler subScheduler = new SubScheduler();
     protected final UUID taskUuid = UUID.randomUUID();
-    @Getter
     private final TaskDifficulty taskDifficulty;
     protected final Random random = new Random();
-    @Getter
     private final StageHolder stageHolder;
     private final PlayerBackpack defaultKit;
     private final StrategyDecider strategyDecider;

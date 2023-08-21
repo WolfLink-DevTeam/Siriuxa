@@ -1,6 +1,7 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration;
 
 import lombok.Getter;
+import org.antlr.v4.runtime.atn.SemanticContext;
 import org.bukkit.*;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
@@ -13,6 +14,9 @@ import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.loot.ChestLoot;
+import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskEndEvent;
+import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskStartEvent;
+import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
 import org.wolflink.minecraft.plugin.siriuxa.task.regions.EvacuationZone;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen.LumenTask;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
@@ -99,6 +103,17 @@ public class ExplorationTask extends LumenTask {
         }, 20 * 3L);
     }
 
+    private static final Set<OrnamentType> ornamentTypes = new HashSet<>();
+    static {
+        ornamentTypes.add(OrnamentType.SCULK_INFECTION);
+        ornamentTypes.add(OrnamentType.SAFE_WORKING);
+        ornamentTypes.add(OrnamentType.SUPPLIES_COLLECTION);
+    }
+    @Override
+    public Set<OrnamentType> getOrnamentTypes() {
+        return ornamentTypes;
+    }
+
     @Override
     protected void finishedCheck() {
         subScheduler.runTaskTimer(() -> {
@@ -158,6 +173,7 @@ public class ExplorationTask extends LumenTask {
                 getTaskArea().startCheck();
             });
         });
+        Bukkit.getPluginManager().callEvent(new TaskStartEvent(this));
     }
 
     @Override
@@ -166,6 +182,7 @@ public class ExplorationTask extends LumenTask {
         for (OfflinePlayer offlinePlayer : getGlobalTeam().getOfflinePlayers()) {
             invBackupService.clearFiveSlotBackpack(offlinePlayer);
         }
+        Bukkit.getPluginManager().callEvent(new TaskEndEvent(this,true));
     }
 
     @Override
@@ -174,5 +191,6 @@ public class ExplorationTask extends LumenTask {
         for (OfflinePlayer offlinePlayer : getGlobalTeam().getOfflinePlayers()) {
             invBackupService.clearFiveSlotBackpack(offlinePlayer);
         }
+        Bukkit.getPluginManager().callEvent(new TaskEndEvent(this,false));
     }
 }

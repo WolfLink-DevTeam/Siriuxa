@@ -1,10 +1,10 @@
-package org.wolflink.minecraft.plugin.siriuxa.sculkinfection;
+package org.wolflink.minecraft.plugin.siriuxa.task.ornaments.sculkinfection;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -19,28 +19,26 @@ import org.wolflink.minecraft.plugin.siriuxa.api.IStatus;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.BlockAPI;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
-import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
+import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskEndEvent;
+import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskStartEvent;
+import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Singleton
-public class SculkInfection implements IStatus {
-    @Getter
-    private static final Set<Material> sculkTypes = new HashSet<>();
-
-    static {
-        sculkTypes.add(Material.SCULK);
-        sculkTypes.add(Material.SCULK_CATALYST);
-    }
-    private static final Set<String> availableWorlds = new HashSet<>();
-
-    static {
-        availableWorlds.add(IOC.getBean(Config.class).get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME));
-    }
+public class SculkInfectionManager extends WolfirdListener implements IStatus {
+    @Inject
+    private TaskRepository taskRepository;
+    private final Set<Material> sculkTypes = Stream.of(Material.SCULK, Material.SCULK_CATALYST).collect(Collectors.toSet());
+    private final Set<Task> availableTasks = new HashSet<>();
 
     /**
      * 感染值
@@ -49,7 +47,6 @@ public class SculkInfection implements IStatus {
 
     private final SubScheduler subScheduler = new SubScheduler();
     private final Set<UUID> milkCDSet = new HashSet<>();
-    private final SculkInfectionListener sculkInfectionListener = new SculkInfectionListener(this);
     @Inject
     private BlockAPI blockAPI;
     @Inject
@@ -61,7 +58,7 @@ public class SculkInfection implements IStatus {
     private void addInfectionValue(Player player, int value) {
         UUID pUuid = player.getUniqueId();
         // 喝了牛奶不再增加感染值
-        if(value > 0 && milkPlayers.contains(pUuid)) return;
+        if (value > 0 && milkPlayers.contains(pUuid)) return;
         int oldValue = getInfectionValue(player.getUniqueId());
         int newValue = oldValue + value;
         if (newValue < 0) newValue = 0;
@@ -85,20 +82,10 @@ public class SculkInfection implements IStatus {
      * 重度感染 达到 1000 点 虚弱+挖掘疲劳+走过的方块有概率变成潜声方块+凋零+缓慢+失明
      */
     private void updateInfectionValue(Player player) {
-        // 不在可用世界
-        if (!(availableWorlds.contains(player.getWorld().getName()))) {
-            infectionMap.remove(player.getUniqueId());
-            return;
-        }
-        // 不是生存模式
-        if (player.getGameMode() != GameMode.SURVIVAL) {
-            infectionMap.remove(player.getUniqueId());
-            return;
-        }
         UUID pUuid = player.getUniqueId();
         List<Location> nearbySculks = blockAPI.searchBlock(Material.SCULK, player.getLocation(), 7);
         int sculkAmount = (int) (nearbySculks.size() * 1.25);
-        if (sculkAmount >= 64) sculkAmount = 64;
+        if (sculkAmount >= 48) sculkAmount = 48;
         addInfectionValue(player, sculkAmount - 20);
         Material blockType = player.getLocation().add(0, -1, 0).getBlock().getType();
         if (sculkTypes.contains(blockType)) addInfectionValue(player, 20);
@@ -106,7 +93,7 @@ public class SculkInfection implements IStatus {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         double randDouble = random.nextDouble();
         subScheduler.runTask(() -> {
-            if(!availableWorlds.contains(player.getWorld().getName())) return; // 不在可用世界
+            if (IOC.getBean(TaskRepository.class).findByTaskTeamPlayer(player) == null) return; // 玩家已经不在任务
             if (value >= 1000) {
                 player.playSound(player.getLocation(), Sound.BLOCK_SCULK_CHARGE, 1f, 1f);
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§c§l你被幽匿方块严重感染了！"));
@@ -147,25 +134,65 @@ public class SculkInfection implements IStatus {
         });
     }
 
-    public void breakSculk(Player player) {
-        if(!availableWorlds.contains(player.getWorld().getName())) return;
-        // 不是生存模式
-        if (player.getGameMode() != GameMode.SURVIVAL) return;
-        addInfectionValue(player, 10);
-    }
     private final Set<UUID> milkPlayers = new HashSet<>();
-    public void drinkMilk(Player player) {
-        if(!availableWorlds.contains(player.getWorld().getName())) return;
-        // 不是生存模式
-        if (player.getGameMode() != GameMode.SURVIVAL) return;
+
+    @Override
+    public void enable() {
+        setEnabled(true);
+        subScheduler.runTaskTimerAsync(() ->
+                        availableTasks.stream()
+                                .flatMap(task -> task.getTaskPlayers().stream())
+                                .forEach(this::updateInfectionValue),
+                20, 20);
+    }
+
+    @Override
+    public void disable() {
+        milkCDSet.clear();
+        setEnabled(false);
+        subScheduler.cancelAllTasks();
+    }
+
+    @EventHandler
+    void on(TaskStartEvent event) {
+        if (event.getTask().getOrnamentTypes().contains(OrnamentType.SCULK_INFECTION)) {
+            availableTasks.add(event.getTask());
+        }
+    }
+
+    @EventHandler
+    void on(TaskEndEvent event) {
+        if (event.getTask().getOrnamentTypes().contains(OrnamentType.SCULK_INFECTION)) {
+            availableTasks.remove(event.getTask());
+        }
+    }
+
+    @EventHandler
+    void breakSculk(BlockBreakEvent event) {
+        if (!sculkTypes.contains(event.getBlock().getType())) return;
+        Task task = taskRepository.findByTaskTeamPlayer(event.getPlayer());
+        if (task == null || !availableTasks.contains(task)) return;
+        addInfectionValue(event.getPlayer(), 10);
+    }
+
+    @EventHandler
+    void drinkMilk(PlayerItemConsumeEvent event) {
+        ItemStack item = event.getItem();
+        Player player = event.getPlayer();
+        Task task = taskRepository.findByTaskTeamPlayer(player);
+        if (task == null || !availableTasks.contains(task)) return;
+        if (item.getType() != Material.MILK_BUCKET) return;
+        // 玩家喝了牛奶
         if (milkCDSet.contains(player.getUniqueId())) return;
         if (getInfectionValue(player.getUniqueId()) >= 300) {
             milkCDSet.add(player.getUniqueId());
             milkPlayers.add(player.getUniqueId());
+            player.setCooldown(Material.MILK_BUCKET,20 * 480);
             // 5分钟有效期，期间感染值不会增高
             subScheduler.runTaskLater(() -> {
                 milkPlayers.remove(player.getUniqueId());
-            },20 * 300L);
+                Notifier.chat("牛奶的效果减退了。",player);
+            }, 20 * 300L);
             // 8分钟冷却
             subScheduler.runTaskLater(() -> {
                 milkCDSet.remove(player.getUniqueId());
@@ -173,41 +200,6 @@ public class SculkInfection implements IStatus {
             }, 20 * 480L);
             addInfectionValue(player, -500);
             Notifier.chat("喝了牛奶之后你感觉好多了。", player);
-        }
-    }
-
-    @Override
-    public void enable() {
-        sculkInfectionListener.setEnabled(true);
-        subScheduler.runTaskTimerAsync(() ->
-                Bukkit.getOnlinePlayers().forEach(this::updateInfectionValue), 20, 20);
-    }
-
-    @Override
-    public void disable() {
-        milkCDSet.clear();
-        sculkInfectionListener.setEnabled(false);
-        subScheduler.cancelAllTasks();
-    }
-}
-
-@AllArgsConstructor
-class SculkInfectionListener extends WolfirdListener {
-    private final SculkInfection sculkInfection;
-
-    @EventHandler
-    void on(BlockBreakEvent event) {
-        // 不是潜声方块
-        if (!SculkInfection.getSculkTypes().contains(event.getBlock().getType())) return;
-        sculkInfection.breakSculk(event.getPlayer());
-    }
-
-    @EventHandler
-    void on(PlayerItemConsumeEvent event) {
-        ItemStack item = event.getItem();
-        if (item.getType() == Material.MILK_BUCKET) {
-            // 玩家喝了牛奶
-            sculkInfection.drinkMilk(event.getPlayer());
         }
     }
 }
