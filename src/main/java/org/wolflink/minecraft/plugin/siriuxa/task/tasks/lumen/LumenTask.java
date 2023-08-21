@@ -1,4 +1,4 @@
-package org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat;
+package org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen;
 
 import lombok.Getter;
 import org.bukkit.*;
@@ -8,13 +8,12 @@ import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.WheatTaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.*;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
-import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.stages.TaskLinearStageHolder;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.EndStage;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.GameStage;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.ReadyStage;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.WaitStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.EndStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.GameStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.ReadyStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.WaitStage;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.LinearStageHolder;
@@ -28,7 +27,7 @@ import java.util.*;
  * 完成任务的方式有所不同
  * 麦穗归零/玩家人数为0，任务失败
  */
-public abstract class WheatTask extends Task {
+public abstract class LumenTask extends Task {
     /**
      * 麦穗流失倍率
      */
@@ -45,7 +44,7 @@ public abstract class WheatTask extends Task {
     private final LinearStageHolder stageHolder = (LinearStageHolder) super.getStageHolder();
     @Getter
     private final WheatTaskDifficulty difficulty = (WheatTaskDifficulty) super.getTaskDifficulty();
-    public WheatTask(GlobalTeam globalTeam, WheatTaskDifficulty difficulty, PlayerBackpack defaultKit) {
+    public LumenTask(GlobalTeam globalTeam, WheatTaskDifficulty difficulty, PlayerBackpack defaultKit) {
         super(globalTeam, difficulty, defaultKit);
     }
     /**
@@ -58,7 +57,7 @@ public abstract class WheatTask extends Task {
             Notifier.error("在尝试补充任务记录数据时，未找到玩家" + offlinePlayer.getName() + "的任务记录类。");
             return;
         }
-        record.setRewardWheat(wheatTaskStat.getPlayerWheatReward(
+        record.setRewardWheat(lumenTaskStat.getPlayerWheatReward(
                 offlinePlayer.getUniqueId(),
                 difficulty.getRewardMultiple(),
                 IOC.getBean(InventoryDB.class).loadEnderBackpack(offlinePlayer).isEmpty()
@@ -97,10 +96,10 @@ public abstract class WheatTask extends Task {
         }
     }
 
-    private final WheatTaskStat wheatTaskStat = new WheatTaskStat(this);
+    private final LumenTaskStat lumenTaskStat = new LumenTaskStat(this);
     @Override
-    public WheatTaskStat getTaskStat() {
-        return wheatTaskStat;
+    public LumenTaskStat getTaskStat() {
+        return lumenTaskStat;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration;
+package org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;

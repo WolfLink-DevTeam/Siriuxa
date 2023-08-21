@@ -14,8 +14,8 @@ import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.file.Lang;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.WheatTask;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.GameStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen.LumenTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
 @Singleton
@@ -35,7 +35,7 @@ public class HuntChecker extends WolfirdListener {
         if (e.getEntity().hasMetadata("bySpawner")) return; // 来自刷怪笼
         Task task = taskRepository.findByTaskTeamPlayer(player);
         if (task == null) return; // 没有任务
-        if(!(task instanceof WheatTask wheatTask)) return; // 不是麦穗任务，无法应用
+        if(!(task instanceof LumenTask lumenTask)) return; // 不是麦穗任务，无法应用
         if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 任务没在游戏阶段
         if (task.getTaskArea() == null) return; // 任务区域未设定
         if (player.getWorld() != task.getTaskArea().getCenter().getWorld()) return; // 不在任务世界
@@ -43,7 +43,7 @@ public class HuntChecker extends WolfirdListener {
         if (!huntValues.getMonsterTypes().contains(entityType)) return;
         huntValues.doRecord(entityType);
         double wheatValue = huntValues.getHuntValue(entityType);
-        wheatTask.addWheat(wheatValue);
+        lumenTask.addWheat(wheatValue);
         for (Player taskPlayer : task.getTaskPlayers()) {
             taskPlayer.playSound(taskPlayer.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_FALL, 1, 2f);
             //TODO 改为 Hologram 提示

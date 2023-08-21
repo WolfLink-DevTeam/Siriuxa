@@ -1,4 +1,4 @@
-package org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat;
+package org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen;
 
 import org.bukkit.Bukkit;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
@@ -11,14 +11,14 @@ import java.util.UUID;
 /**
  * 麦穗任务统计
  */
-public class WheatTaskStat extends TaskStat {
+public class LumenTaskStat extends TaskStat {
     private double lastWheat = 0;
     private double nowWheat = 0;
 
-    private final WheatTask wheatTask;
-    public WheatTaskStat(WheatTask wheatTask) {
-        super(wheatTask);
-        this.wheatTask = wheatTask;
+    private final LumenTask lumenTask;
+    public LumenTaskStat(LumenTask lumenTask) {
+        super(lumenTask);
+        this.lumenTask = lumenTask;
     }
 
     public double getWheatChange() {
@@ -30,7 +30,7 @@ public class WheatTaskStat extends TaskStat {
         super.enable();
         subScheduler.runTaskTimerAsync(() -> {
             lastWheat = nowWheat;
-            nowWheat = wheatTask.getTaskWheat();
+            nowWheat = lumenTask.getTaskWheat();
         }, 20, 20);
     }
     /**
@@ -54,7 +54,7 @@ public class WheatTaskStat extends TaskStat {
         int randValue = new Random().nextInt(10,20);
         int originReward = (travelDistanceValue + damageTotalValue + oreBlockTotalValue + mobKillTotalValue + taskSecsValue + randValue);
         if(originReward >= 300) originReward = 300;
-        int reward = (int) (originReward * wheatTask.getDifficulty().getRewardMultiple());
+        int reward = (int) (originReward * lumenTask.getDifficulty().getRewardMultiple());
         Notifier.debug("结算玩家："+ Bukkit.getOfflinePlayer(uuid).getName());
         Notifier.debug("行走距离："+travelDistance+"|"+travelDistanceValue);
         Notifier.debug("造成伤害："+damageTotal+"|"+damageTotalValue);

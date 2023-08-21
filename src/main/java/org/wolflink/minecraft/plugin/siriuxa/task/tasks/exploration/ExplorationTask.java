@@ -1,4 +1,4 @@
-package org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration;
+package org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration;
 
 import lombok.Getter;
 import org.bukkit.*;
@@ -14,7 +14,7 @@ import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.loot.ChestLoot;
 import org.wolflink.minecraft.plugin.siriuxa.task.regions.EvacuationZone;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.WheatTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen.LumenTask;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 
 import java.util.HashSet;
@@ -26,7 +26,7 @@ import java.util.Set;
  * 玩家需要乘坐飞艇撤离才算任务完成
  * 可携带物资离开
  */
-public class ExplorationTask extends WheatTask {
+public class ExplorationTask extends LumenTask {
     private static final PlayerBackpack defaultKit = new PlayerBackpack();
 
 //    static {

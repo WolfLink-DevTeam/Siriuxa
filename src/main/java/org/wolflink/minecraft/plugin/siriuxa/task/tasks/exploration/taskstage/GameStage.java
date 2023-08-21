@@ -1,8 +1,6 @@
-package org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage;
+package org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage;
 
-import org.bukkit.Bukkit;
 import org.wolflink.common.ioc.IOC;
-import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.stages.TaskLinearStageHolder;

@@ -7,7 +7,7 @@ import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.ExplorationTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.ExplorationTask;
 
 @Singleton
 public class ExplorationTaskVariables extends PlaceholderExpansion {
@@ -36,7 +36,7 @@ public class ExplorationTaskVariables extends PlaceholderExpansion {
         if (task == null) return "暂无任务";
         if (!(task instanceof ExplorationTask explorationTask)) return "暂无该类型任务";
         switch (params.toLowerCase()) {
-            case "wheat" -> {
+            case "lumen" -> {
                 return String.format("%.1f", explorationTask.getTaskWheat());
             }
             case "wheat_loss_per_sec" -> {

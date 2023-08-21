@@ -5,8 +5,6 @@ import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
@@ -16,14 +14,12 @@ import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.LocationCommandSender;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.WorldEditAPI;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.ExplorationTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.ExplorationTask;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class EvacuationZone {
 

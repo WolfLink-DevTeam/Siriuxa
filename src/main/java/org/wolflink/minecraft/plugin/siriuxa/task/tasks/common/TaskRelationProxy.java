@@ -10,8 +10,8 @@ import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.ITaskService;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.ExplorationTask;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.ExplorationTaskService;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.ExplorationTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.ExplorationTaskService;
 
 @Singleton
 public class TaskRelationProxy {
