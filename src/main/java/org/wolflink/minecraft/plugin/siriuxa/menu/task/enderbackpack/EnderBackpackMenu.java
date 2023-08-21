@@ -59,6 +59,7 @@ public class EnderBackpackMenu extends DynamicMenu {
     private static final Set<String> containerSuffix = new HashSet<>();
     static {
         containerSuffix.add("SHULKER_BOX");
+        containerSuffix.add("SHULKER_SHELL");
         containerSuffix.add("BUNDLE");
     }
     @Override
