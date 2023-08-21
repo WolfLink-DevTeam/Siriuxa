@@ -100,11 +100,11 @@ public class ExplorationBackpackMenu extends DynamicMenu {
         assert difficulty != null;
         double rewardMultiple = difficulty.getRewardMultiple();
         double wheat = playerTaskRecord.getRewardWheat();
-        int exp = playerBackpack.getTotalExp();
+        int exp = (int) (playerBackpack.getTotalExp() * rewardMultiple);
         IOC.getBean(PlayerAPI.class).addExp(player,exp);
         String multiple = "§8(§7x"+String.format("%.0f",rewardMultiple * 100)+"%§8)";
         Notifier.chat("你从本次任务中收获了 §a" + String.format("%.0f", wheat) + " §6麦穗。"+multiple, player);
-        Notifier.chat("你从本次任务中收获了 §a" + exp + " §e经验。", player);
+        Notifier.chat("你从本次任务中收获了 §a" + exp + " §e经验。"+multiple, player);
         Notifier.chat("你从本次任务中获得了 §a" + selectedSlots.size() + "格 §b物资。", player);
         IOC.getBean(VaultAPI.class).addEconomy(player, wheat);
         for (int index : selectedSlots) {
