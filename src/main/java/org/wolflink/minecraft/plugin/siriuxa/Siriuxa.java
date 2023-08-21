@@ -10,7 +10,7 @@ import org.wolflink.minecraft.plugin.siriuxa.backpack.EnderBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.command.*;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.WheatTaskDifficulty;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.LumenTaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
 import org.wolflink.minecraft.plugin.siriuxa.file.Lang;
@@ -81,7 +81,7 @@ public final class Siriuxa extends WolfirdPlugin {
         serializableClasses.add(PlayerTaskRecord.class);
         serializableClasses.add(OfflinePlayerRecord.class);
         serializableClasses.add(TaskDifficulty.class);
-        serializableClasses.add(WheatTaskDifficulty.class);
+        serializableClasses.add(LumenTaskDifficulty.class);
         serializableClasses.add(ExplorationDifficulty.class);
         serializableClasses.add(EnderBackpack.class);
         serializableClasses.add(PlayerVariables.class);

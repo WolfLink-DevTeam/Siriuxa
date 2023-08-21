@@ -144,7 +144,7 @@ public class ExplorationTask extends LumenTask {
         }
         initRecord();
         getTaskStat().enable();
-        this.taskWheat = (double) getTaskTeamSize() * getExplorationDifficulty().getWheatSupply();
+        this.taskLumen = (double) getTaskTeamSize() * getExplorationDifficulty().getLumenSupply();
         getStrategyDecider().enable();
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
             Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> {
@@ -153,7 +153,7 @@ public class ExplorationTask extends LumenTask {
                 }
                 failedCheck();
                 finishedCheck();
-                startWheatTask();
+                startLumenTask();
                 startEvacuateTask(random.nextInt(12, 20));
                 getTaskArea().startCheck();
             });

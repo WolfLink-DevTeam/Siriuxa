@@ -43,7 +43,7 @@ public class HuntChecker extends WolfirdListener {
         if (!huntValues.getMonsterTypes().contains(entityType)) return;
         huntValues.doRecord(entityType);
         double wheatValue = huntValues.getHuntValue(entityType);
-        lumenTask.addWheat(wheatValue);
+        lumenTask.addLumen(wheatValue);
         for (Player taskPlayer : task.getTaskPlayers()) {
             taskPlayer.playSound(taskPlayer.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_FALL, 1, 2f);
             //TODO 改为 Hologram 提示

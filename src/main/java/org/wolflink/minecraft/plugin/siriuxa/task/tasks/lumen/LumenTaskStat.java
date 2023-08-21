@@ -12,8 +12,8 @@ import java.util.UUID;
  * 麦穗任务统计
  */
 public class LumenTaskStat extends TaskStat {
-    private double lastWheat = 0;
-    private double nowWheat = 0;
+    private double lastLumen = 0;
+    private double nowLumen = 0;
 
     private final LumenTask lumenTask;
     public LumenTaskStat(LumenTask lumenTask) {
@@ -22,15 +22,15 @@ public class LumenTaskStat extends TaskStat {
     }
 
     public double getWheatChange() {
-        return nowWheat - lastWheat;
+        return nowLumen - lastLumen;
     }
 
     @Override
     public void enable() {
         super.enable();
         subScheduler.runTaskTimerAsync(() -> {
-            lastWheat = nowWheat;
-            nowWheat = lumenTask.getTaskWheat();
+            lastLumen = nowLumen;
+            nowLumen = lumenTask.getTaskLumen();
         }, 20, 20);
     }
     /**

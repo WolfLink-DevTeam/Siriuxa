@@ -2,19 +2,11 @@ package org.wolflink.minecraft.plugin.siriuxa.menu.task.icon;
 
 import lombok.NonNull;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.wolflink.common.ioc.IOC;
-import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
-import org.wolflink.minecraft.plugin.siriuxa.api.PlayerAPI;
-import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.DifficultyRepository;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.WheatTaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
-import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.ExplorationBackpackMenu;
 

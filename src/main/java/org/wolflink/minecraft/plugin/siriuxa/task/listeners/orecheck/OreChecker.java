@@ -44,7 +44,7 @@ public class OreChecker extends WolfirdListener {
         oreValues.doRecord(material);
         block.setType(Material.AIR);
         double wheatValue = oreValues.getOreValue(material);
-        lumenTask.addWheat(wheatValue);
+        lumenTask.addLumen(wheatValue);
         for (Player taskPlayer : task.getTaskPlayers()) {
             taskPlayer.playSound(taskPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1.5f);
             //TODO 改为 Hologram 提示

@@ -5,7 +5,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.WheatTaskDifficulty;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.LumenTaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.*;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
@@ -29,22 +29,22 @@ import java.util.*;
  */
 public abstract class LumenTask extends Task {
     /**
-     * 麦穗流失倍率
+     * 光体流失倍率
      */
-    protected double wheatLossMultiple = 1.0;
+    protected double lumenLossMultiple = 1.0;
     /**
-     * 本次任务的麦穗余量
+     * 本次任务的光体余量
      */
     @Getter
-    protected double taskWheat = 0;
-    public void addWheatLossMultiple(double value) {
-        wheatLossMultiple += value;
+    protected double taskLumen = 0;
+    public void addLumenLossMultiple(double value) {
+        lumenLossMultiple += value;
     }
     @Getter
     private final LinearStageHolder stageHolder = (LinearStageHolder) super.getStageHolder();
     @Getter
-    private final WheatTaskDifficulty difficulty = (WheatTaskDifficulty) super.getTaskDifficulty();
-    public LumenTask(GlobalTeam globalTeam, WheatTaskDifficulty difficulty, PlayerBackpack defaultKit) {
+    private final LumenTaskDifficulty difficulty = (LumenTaskDifficulty) super.getTaskDifficulty();
+    public LumenTask(GlobalTeam globalTeam, LumenTaskDifficulty difficulty, PlayerBackpack defaultKit) {
         super(globalTeam, difficulty, defaultKit);
     }
     /**
@@ -117,30 +117,30 @@ public abstract class LumenTask extends Task {
         linearStageHolder.next();
         return linearStageHolder;
     }
-    public void addWheat(double wheat) {
-        taskWheat += wheat;
+    public void addLumen(double lumen) {
+        taskLumen += lumen;
     }
 
-    public void takeWheat(double wheat) {
-        taskWheat -= wheat;
-        if (taskWheat <= 0) {
-            taskWheat = 0;
+    public void takeLumen(double lumen) {
+        taskLumen -= lumen;
+        if (taskLumen <= 0) {
+            taskLumen = 0;
             triggerFailed();
         }
     }
-    public double getWheatLossPerSecNow() {
-        return difficulty.getBaseWheatLoss() * wheatLossMultiple * getTaskTeam().getInitSize();
+    public double getLumenLossPerSecNow() {
+        return difficulty.getBaseLumenLoss() * lumenLossMultiple * getTaskTeam().getInitSize();
     }
 
-    protected void startWheatTask() {
-        subScheduler.runTaskTimer(() -> takeWheat(getWheatLossPerSecNow())
+    protected void startLumenTask() {
+        subScheduler.runTaskTimer(() -> takeLumen(getLumenLossPerSecNow())
                 , 20, 20);
-        subScheduler.runTaskTimer(() -> addWheatLossMultiple(difficulty.getWheatLostAcceleratedSpeed())
+        subScheduler.runTaskTimer(() -> addLumenLossMultiple(difficulty.getLumenLostAcceleratedSpeed())
                 , 20 * 60 * 5L, 20 * 60 * 5L);
     }
 
-    public double getHurtWheatCost() {
-        return difficulty.getHurtWheatCost();
+    public double getHurtLumenCost() {
+        return difficulty.getHurtLumenCost();
     }
 
     @Override

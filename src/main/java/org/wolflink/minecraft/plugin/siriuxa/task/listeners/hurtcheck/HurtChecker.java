@@ -37,7 +37,7 @@ public class HurtChecker extends WolfirdListener {
         // 上调小额伤害
         if(player.getHealth() >= 3 && event.getDamage() < 2) event.setDamage(2);
         // 扣除麦穗
-        double cost = lumenTask.getHurtWheatCost() * event.getFinalDamage();
-        lumenTask.takeWheat(cost);
+        double cost = lumenTask.getHurtLumenCost() * event.getFinalDamage();
+        lumenTask.takeLumen(cost);
     }
 }

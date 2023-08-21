@@ -37,19 +37,19 @@ public class ExplorationTaskVariables extends PlaceholderExpansion {
         if (!(task instanceof ExplorationTask explorationTask)) return "暂无该类型任务";
         switch (params.toLowerCase()) {
             case "lumen" -> {
-                return String.format("%.1f", explorationTask.getTaskWheat());
+                return String.format("%.1f", explorationTask.getTaskLumen());
             }
-            case "wheat_loss_per_sec" -> {
-                return String.format("%.1f", explorationTask.getWheatLossPerSecNow());
+            case "lumen_loss_per_sec" -> {
+                return String.format("%.1f", explorationTask.getLumenLossPerSecNow());
             }
             case "team_size" -> {
                 return explorationTask.getTaskTeamSize() + "人";
             }
-            case "detail_wheat" -> {
+            case "detail_lumen" -> {
                 double value = explorationTask.getTaskStat().getWheatChange();
-                if (value > 0) return "§f%.1f§a(+%.1f)".formatted(explorationTask.getTaskWheat(), value);
-                else if (value < 0) return "§f%.1f§c(%.1f)".formatted(explorationTask.getTaskWheat(), value);
-                else return "§f%.1f".formatted(explorationTask.getTaskWheat());
+                if (value > 0) return "§f%.1f§a(+%.1f)".formatted(explorationTask.getTaskLumen(), value);
+                else if (value < 0) return "§f%.1f§c(%.1f)".formatted(explorationTask.getTaskLumen(), value);
+                else return "§f%.1f".formatted(explorationTask.getTaskLumen());
             }
             case "stages" -> {
                 return explorationTask.getStageHolder().getThisStage().getDisplayName();

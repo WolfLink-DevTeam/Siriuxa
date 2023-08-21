@@ -104,7 +104,7 @@ public class ExplorationTaskService implements ITaskService {
             Notifier.error("任务难度与任务类型不匹配！");
             return false;
         }
-        double cost = explorationDifficulty.getWheatCost();
+        double cost = explorationDifficulty.getLumenCost();
         return (vaultAPI.getEconomy(offlinePlayer) >= cost);
     }
 
@@ -118,6 +118,6 @@ public class ExplorationTaskService implements ITaskService {
             Notifier.error("任务难度与任务类型不匹配！");
             return;
         }
-        vaultAPI.takeEconomy(offlinePlayer, explorationDifficulty.getWheatCost());
+        vaultAPI.takeEconomy(offlinePlayer, explorationDifficulty.getLumenCost());
     }
 }
