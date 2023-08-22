@@ -21,6 +21,8 @@ import org.wolflink.minecraft.plugin.siriuxa.task.listeners.CreatureSpawnListene
 import org.wolflink.minecraft.plugin.siriuxa.papi.ExplorationTaskVariables;
 import org.wolflink.minecraft.plugin.siriuxa.sculkinfection.SculkInfection;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.*;
+import org.wolflink.minecraft.plugin.siriuxa.task.listeners.farmcheck.FarmChecker;
+import org.wolflink.minecraft.plugin.siriuxa.task.listeners.farmcheck.FarmValues;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.huntcheck.HuntChecker;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.huntcheck.HuntValues;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.hurtcheck.HurtChecker;
@@ -56,12 +58,14 @@ public final class Siriuxa extends WolfirdPlugin {
         databases.add(InventoryDB.class);
         databases.add(OreDB.class);
         databases.add(HuntDB.class);
+        databases.add(CropDB.class);
         databases.add(TaskRecordDB.class);
         databases.add(PlayerVariableDB.class);
 
         globalListenerClasses.add(OreChecker.class);
         globalListenerClasses.add(HuntChecker.class);
         globalListenerClasses.add(HurtChecker.class);
+        globalListenerClasses.add(FarmChecker.class);
         globalListenerClasses.add(FriendlyProtection.class);
         globalListenerClasses.add(FunctionBan.class);
         globalListenerClasses.add(TaskJoinQuitListener.class);
@@ -147,6 +151,7 @@ public final class Siriuxa extends WolfirdPlugin {
         IOC.getBean(SculkInfection.class).disable();
         IOC.getBean(OreValues.class).doSave();
         IOC.getBean(HuntValues.class).doSave();
+        IOC.getBean(FarmValues.class).doSave();
 
         // 保存数据库
         for (Class<? extends FileDB> db : databases) {
