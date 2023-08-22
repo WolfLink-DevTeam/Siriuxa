@@ -61,8 +61,8 @@ public class ExplorationTaskService implements ITaskService {
         InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
         // 保存玩家背包信息
         invBackupService.saveMainInv(player);
-        // 应用任务背包信息
-        invBackupService.applyInv(player,task.getDefaultKit());
+        // 情空背包
+        invBackupService.applyInv(player,PlayerBackpack.getEmptyBackpack());
         // 发放5格背包物品
         invBackupService.giveFiveSlotBackpack(player);
 

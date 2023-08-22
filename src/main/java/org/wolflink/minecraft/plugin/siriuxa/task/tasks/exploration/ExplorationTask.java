@@ -31,19 +31,6 @@ import java.util.Set;
  * 可携带物资离开
  */
 public class ExplorationTask extends LumenTask {
-    private static final PlayerBackpack defaultKit = new PlayerBackpack();
-
-//    static {
-//        defaultKit.setHelmet(new ItemStack(Material.LEATHER_HELMET));
-//        defaultKit.setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE));
-//        defaultKit.setLeggings(new ItemStack(Material.LEATHER_LEGGINGS));
-//        defaultKit.setBoots(new ItemStack(Material.LEATHER_BOOTS));
-//        List<ItemStack> items = new ArrayList<>();
-//        items.add(new ItemStack(Material.WOODEN_SWORD));
-//        items.add(new ItemStack(Material.WOODEN_PICKAXE));
-//        items.add(new ItemStack(Material.BREAD, 8));
-//        defaultKit.setItems(items);
-//    }
     @Getter
     private final ExplorationDifficulty explorationDifficulty;
     /**
@@ -53,7 +40,7 @@ public class ExplorationTask extends LumenTask {
     private EvacuationZone availableEvacuationZone = null;
 
     public ExplorationTask(GlobalTeam globalTeam, ExplorationDifficulty explorationDifficulty) {
-        super(globalTeam, explorationDifficulty, defaultKit);
+        super(globalTeam, explorationDifficulty);
         this.explorationDifficulty = explorationDifficulty;
     }
 

@@ -44,8 +44,8 @@ public abstract class LumenTask extends Task {
     private final LinearStageHolder stageHolder = (LinearStageHolder) super.getStageHolder();
     @Getter
     private final LumenTaskDifficulty difficulty = (LumenTaskDifficulty) super.getTaskDifficulty();
-    public LumenTask(GlobalTeam globalTeam, LumenTaskDifficulty difficulty, PlayerBackpack defaultKit) {
-        super(globalTeam, difficulty, defaultKit);
+    public LumenTask(GlobalTeam globalTeam, LumenTaskDifficulty difficulty) {
+        super(globalTeam, difficulty);
     }
     /**
      * 填充玩家任务快照

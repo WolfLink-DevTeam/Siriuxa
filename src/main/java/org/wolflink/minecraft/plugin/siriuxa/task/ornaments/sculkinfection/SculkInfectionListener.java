@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -32,7 +31,7 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @AllArgsConstructor
-public class SculkInfectionListener extends WolfirdListener {
+class SculkInfectionListener extends WolfirdListener {
     SculkInfectionManager manager;
     final Set<UUID> milkPlayers = new HashSet<>();
     private final Set<UUID> milkCDSet = new HashSet<>();
@@ -115,7 +114,6 @@ public class SculkInfectionListener extends WolfirdListener {
         },20 * 60 * 4,20 * 60 * 6);
     }
     private void autoSculkSpread(Task task) {
-        Notifier.debug("幽匿爆发了...");
         getSubScheduler().runTaskAsync(()->{
             Player player = IOC.getBean(RandomAPI.class).selectRandom(task.getTaskPlayers());
             if(player == null || !player.isOnline()) return;
@@ -129,7 +127,6 @@ public class SculkInfectionListener extends WolfirdListener {
                 Location finalSolidLoc = solidLoc;
                 Bukkit.getScheduler().runTask(Siriuxa.getInstance(),
                         ()->WolfBlockSpreadAPI.start(SPREAD_BLUEPRINT_ID, finalSolidLoc));
-                Notifier.debug("幽匿任务已成功启动");
                 break;
             }
         });

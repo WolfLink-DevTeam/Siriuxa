@@ -41,13 +41,15 @@ import java.util.concurrent.ConcurrentHashMap;
 @Data
 public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameable {
 
+    /**
+     * 任务装饰 例如：幽匿爆发，安全作业，物资收集，潘多拉试炼
+     */
     public abstract Set<OrnamentType> getOrnamentTypes();
     protected final SubScheduler subScheduler = new SubScheduler();
     protected final UUID taskUuid = UUID.randomUUID();
     private final TaskDifficulty taskDifficulty;
     protected final Random random = new Random();
     private final StageHolder stageHolder;
-    private final PlayerBackpack defaultKit;
     private final StrategyDecider strategyDecider;
 
     @Nullable
@@ -57,11 +59,9 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
     @Nullable
     TaskTeam taskTeam = null;
     protected Task(@NotNull GlobalTeam globalTeam,
-                   @NotNull TaskDifficulty taskDifficulty,
-                   @NotNull PlayerBackpack defaultKit) {
+                   @NotNull TaskDifficulty taskDifficulty) {
         this.globalTeam = globalTeam;
         this.taskDifficulty = taskDifficulty;
-        this.defaultKit = defaultKit;
         stageHolder = initStageHolder();
         strategyDecider = new StrategyDecider(this);
     }
