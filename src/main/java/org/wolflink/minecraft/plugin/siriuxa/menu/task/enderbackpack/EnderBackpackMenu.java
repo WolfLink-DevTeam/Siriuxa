@@ -141,7 +141,7 @@ public class EnderBackpackMenu extends DynamicMenu {
             ItemStack tool = inventory.getItem(24);
             if(tool != null && tool.getType() != Material.AIR) {
                 String toolName = tool.getType().name();
-                if(toolName.endsWith("_PICKAXE") || toolName.endsWith("_AXE") || toolName.endsWith("_HOE") || toolName.endsWith("_SHOVEL")) enderBackpack.setTool(tool);
+                if(toolName.endsWith("_PICKAXE") || toolName.endsWith("_AXE") || toolName.endsWith("_HOE") || toolName.endsWith("_SHOVEL") || toolName.endsWith("FISHING_ROD")) enderBackpack.setTool(tool);
                 else {
                     Notifier.chat("你在应该放置工具的地方错误的放入了物品："+toolName.toLowerCase()+"！物品已退回至背包。",player);
                     player.getInventory().addItem(tool);
