@@ -2,6 +2,7 @@ package org.wolflink.minecraft.plugin.siriuxa.task.ornaments.sculkinfection;
 
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -16,6 +17,8 @@ import org.wolflink.minecraft.bukkit.wolfblockspread.SpreadType;
 import org.wolflink.minecraft.bukkit.wolfblockspread.WolfBlockSpreadAPI;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
+import org.wolflink.minecraft.plugin.siriuxa.api.RandomAPI;
+import org.wolflink.minecraft.plugin.siriuxa.api.world.LocationAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.SculkSpawnBox;
 import org.wolflink.minecraft.plugin.siriuxa.monster.MetadataKey;
 import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskEndEvent;
@@ -25,10 +28,7 @@ import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @AllArgsConstructor
@@ -95,20 +95,42 @@ public class SculkInfectionListener extends WolfirdListener {
             if(task == null || !task.getOrnamentTypes().contains(OrnamentType.SCULK_INFECTION)) return;
             ThreadLocalRandom random = ThreadLocalRandom.current();
             double rand = random.nextDouble();
-            // 1%几率生成会自己扩散的幽匿块
-            if(rand <= 0.01) {
-                Block block = event.getEntity().getLocation().clone().getBlock().getRelative(0,-2,0);
-                if(block.getType().isSolid()) {
-                    Bukkit.getScheduler().runTask(Siriuxa.getInstance(),
-                            ()->WolfBlockSpreadAPI.start(SPREAD_BLUEPRINT_ID,block.getLocation()));
-                }
-            }
             // 15%几率生成地基
-            else if (rand <= 0.16) {
+            if (rand <= 0.15) {
                 SculkSpawnBox sculkSpawnBox = new SculkSpawnBox(event.getEntity().getLocation().clone());
                 if (sculkSpawnBox.isAvailable()) {
                     Bukkit.getScheduler().runTask(Siriuxa.getInstance(), sculkSpawnBox::spawn);
                 }
+            }
+        });
+    }
+    private final Random r = new Random();
+    @Override
+    public void onEnable() {
+        getSubScheduler().runTaskTimerAsync(()->{
+            int secs = r.nextInt(180);
+            for (Task task : manager.availableTasks) {
+                getSubScheduler().runTaskLater(()-> autoSculkSpread(task),20 * secs);
+            }
+        },20 * 60 * 4,20 * 60 * 6);
+    }
+    private void autoSculkSpread(Task task) {
+        Notifier.debug("幽匿爆发了...");
+        getSubScheduler().runTaskAsync(()->{
+            Player player = IOC.getBean(RandomAPI.class).selectRandom(task.getTaskPlayers());
+            if(player == null || !player.isOnline()) return;
+            LocationAPI locationAPI = IOC.getBean(LocationAPI.class);
+            for (int i = 0; i < 3; i++) {
+                Location solidLoc = locationAPI.getLocationByAngle(player.getLocation(),r.nextInt(360) - 180,7);
+                if(!solidLoc.getBlock().getType().isSolid()) {
+                    solidLoc = locationAPI.getNearestSolid(solidLoc,7);
+                }
+                if(solidLoc == null) continue;
+                Location finalSolidLoc = solidLoc;
+                Bukkit.getScheduler().runTask(Siriuxa.getInstance(),
+                        ()->WolfBlockSpreadAPI.start(SPREAD_BLUEPRINT_ID, finalSolidLoc));
+                Notifier.debug("幽匿任务已成功启动");
+                break;
             }
         });
     }
