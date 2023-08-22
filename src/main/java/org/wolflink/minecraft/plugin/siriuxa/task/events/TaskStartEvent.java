@@ -7,6 +7,9 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 
+/**
+ * 任务已经完全开始，玩家已经到达任务地点后触发
+ */
 @Getter
 @AllArgsConstructor
 public class TaskStartEvent extends Event {

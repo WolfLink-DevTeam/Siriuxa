@@ -63,9 +63,6 @@ public class ExplorationTaskService implements ITaskService {
         invBackupService.saveMainInv(player);
         // 情空背包
         invBackupService.applyInv(player,PlayerBackpack.getEmptyBackpack());
-        // 发放5格背包物品
-        invBackupService.giveFiveSlotBackpack(player);
-
         // 传送玩家到任务地点
         List<Location> spawnLocations = task.getSpawnLocations();
         if (spawnLocations.isEmpty()) player.teleport(task.getTaskArea().getCenter());

@@ -19,6 +19,7 @@ import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.CreatureDeathListener;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.CreatureSpawnListener;
 import org.wolflink.minecraft.plugin.siriuxa.papi.ExplorationTaskVariables;
+import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.safeworking.SafeWorkingListener;
 import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.sculkinfection.SculkInfectionManager;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.*;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.farmcheck.FarmChecker;
@@ -79,6 +80,7 @@ public final class Siriuxa extends WolfirdPlugin {
         globalListenerClasses.add(AttributeChecker.class);
         globalListenerClasses.add(StatListener.class);
         globalListenerClasses.add(AutoDissolveListener.class);
+        globalListenerClasses.add(SafeWorkingListener.class);
 
         serializableClasses.add(PlayerBackpack.class);
         serializableClasses.add(PlayerTaskRecord.class);

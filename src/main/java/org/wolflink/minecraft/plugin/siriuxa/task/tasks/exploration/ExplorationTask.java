@@ -165,19 +165,11 @@ public class ExplorationTask extends LumenTask {
 
     @Override
     protected void finish() {
-        InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
-        for (OfflinePlayer offlinePlayer : getGlobalTeam().getOfflinePlayers()) {
-            invBackupService.clearFiveSlotBackpack(offlinePlayer);
-        }
         Bukkit.getPluginManager().callEvent(new TaskEndEvent(this,true));
     }
 
     @Override
     public void failed() {
-        InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
-        for (OfflinePlayer offlinePlayer : getGlobalTeam().getOfflinePlayers()) {
-            invBackupService.clearFiveSlotBackpack(offlinePlayer);
-        }
         Bukkit.getPluginManager().callEvent(new TaskEndEvent(this,false));
     }
 }
