@@ -3,6 +3,7 @@ package org.wolflink.minecraft.plugin.siriuxa.task.ornaments.sculkinfection;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -11,11 +12,11 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.wolflink.common.ioc.IOC;
+import org.wolflink.minecraft.bukkit.wolfblockspread.SpreadType;
+import org.wolflink.minecraft.bukkit.wolfblockspread.WolfBlockSpreadAPI;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.SculkSpawnBox;
-import org.wolflink.minecraft.plugin.siriuxa.file.Config;
-import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
 import org.wolflink.minecraft.plugin.siriuxa.monster.MetadataKey;
 import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskEndEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskStartEvent;
@@ -84,21 +85,26 @@ public class SculkInfectionListener extends WolfirdListener {
             Notifier.chat("喝了牛奶之后你感觉好多了。", player);
         }
     }
+    private static final int SPREAD_BLUEPRINT_ID = WolfBlockSpreadAPI.create(Material.SCULK, SpreadType.SINGLE_SPREAD,20,30);
     @EventHandler
     void sculkSpread(EntityDeathEvent event) {
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
             List<MetadataValue> metadataValueList = event.getEntity().getMetadata(MetadataKey.BELONG_TASK_UUID.getKey());
-            if (metadataValueList.size() == 0) return;
+            if (metadataValueList.isEmpty()) return;
             Task task = IOC.getBean(TaskRepository.class).find((UUID) metadataValueList.get(0).value());
             if(task == null || !task.getOrnamentTypes().contains(OrnamentType.SCULK_INFECTION)) return;
             ThreadLocalRandom random = ThreadLocalRandom.current();
             double rand = random.nextDouble();
-            // 3%几率生成会自己扩散的幽匿块
-            if(rand <= 0.03) {
-
+            // 1%几率生成会自己扩散的幽匿块
+            if(rand <= 0.01) {
+                Block block = event.getEntity().getLocation().clone().getBlock().getRelative(0,-2,0);
+                if(block.getType().isSolid()) {
+                    Bukkit.getScheduler().runTask(Siriuxa.getInstance(),
+                            ()->WolfBlockSpreadAPI.start(SPREAD_BLUEPRINT_ID,block.getLocation()));
+                }
             }
             // 15%几率生成地基
-            else if (rand <= 0.18) {
+            else if (rand <= 0.16) {
                 SculkSpawnBox sculkSpawnBox = new SculkSpawnBox(event.getEntity().getLocation().clone());
                 if (sculkSpawnBox.isAvailable()) {
                     Bukkit.getScheduler().runTask(Siriuxa.getInstance(), sculkSpawnBox::spawn);
