@@ -22,6 +22,8 @@ import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.ClaimTaskReward;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.ExplorationBackpackItem;
+import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRelationProxy;
 
 import java.util.HashSet;
 import java.util.List;
@@ -67,7 +69,9 @@ public class ExplorationBackpackMenu extends DynamicMenu {
             assert difficulty != null;
             return difficulty.getBringSlotAmount();
         } else {
-            return playerTaskRecord.getSafeSlotAmount();
+            boolean safeWorking = IOC.getBean(TaskRelationProxy.class).getTaskProperties(playerTaskRecord.getTaskType())
+                    .getOrnamentTypes().contains(OrnamentType.SAFE_WORKING);
+            return safeWorking ? playerTaskRecord.getSafeSlotAmount() : 0;
         }
     }
 
@@ -121,6 +125,7 @@ public class ExplorationBackpackMenu extends DynamicMenu {
             }
         }
         selectedSlots.clear();
+        playerTaskRecord = null;
     }
 
     @Override
