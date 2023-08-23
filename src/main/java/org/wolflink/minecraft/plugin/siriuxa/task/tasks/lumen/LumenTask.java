@@ -143,15 +143,7 @@ public abstract class LumenTask extends Task {
         return difficulty.getHurtLumenCost();
     }
 
-    @Override
-    public String getName() {
-        return "自由勘探";
-    }
 
-    @Override
-    public String getColor() {
-        return "§f";
-    }
     /**
      * 游戏结束检查
      * 如果本次任务玩家数为0则意味着所有玩家逃跑/离线，宣布任务失败

@@ -18,6 +18,7 @@ import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskEndEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskStartEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
 import org.wolflink.minecraft.plugin.siriuxa.task.regions.EvacuationZone;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskProperties;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen.LumenTask;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 
@@ -96,6 +97,7 @@ public class ExplorationTask extends LumenTask {
         ornamentTypes.add(OrnamentType.SAFE_WORKING);
         ornamentTypes.add(OrnamentType.SUPPLIES_COLLECTION);
     }
+
     @Override
     public Set<OrnamentType> getOrnamentTypes() {
         return ornamentTypes;
@@ -162,7 +164,6 @@ public class ExplorationTask extends LumenTask {
         });
         Bukkit.getPluginManager().callEvent(new TaskStartEvent(this));
     }
-
     @Override
     protected void finish() {
         Bukkit.getPluginManager().callEvent(new TaskEndEvent(this,true));
@@ -172,4 +173,6 @@ public class ExplorationTask extends LumenTask {
     public void failed() {
         Bukkit.getPluginManager().callEvent(new TaskEndEvent(this,false));
     }
+
+
 }

@@ -40,4 +40,12 @@ public class TaskRelationProxy {
     public Class<? extends TaskDifficulty> getTaskDifficultyClass(Task task) {
         return getTaskDifficultyClass(task.getClass());
     }
+    public TaskProperties getTaskProperties(Task task) {
+        return getTaskProperties(task.getClass());
+    }
+    @NonNull
+    public TaskProperties getTaskProperties(Class<? extends Task> taskClass) {
+        if (taskClass.isAssignableFrom(ExplorationTask.class)) return TaskProperties.EXPLORATION;
+        throw new IllegalArgumentException("未知的任务类："+taskClass.getName());
+    }
 }

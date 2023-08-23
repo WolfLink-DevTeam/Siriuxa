@@ -41,10 +41,26 @@ import java.util.concurrent.ConcurrentHashMap;
 @Data
 public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameable {
 
+    public TaskProperties getTaskProperties() {
+        return IOC.getBean(TaskRelationProxy.class).getTaskProperties(getClass());
+    }
+
+    @Override
+    public String getName() {
+        return getTaskProperties().getTaskName();
+    }
+
+    @Override
+    public String getColor() {
+        return getTaskProperties().getColor();
+    }
     /**
      * 任务装饰 例如：幽匿爆发，安全作业，物资收集，潘多拉试炼
      */
-    public abstract Set<OrnamentType> getOrnamentTypes();
+    public Set<OrnamentType> getOrnamentTypes() {
+        return getTaskProperties().getOrnamentTypes();
+    }
+
     protected final SubScheduler subScheduler = new SubScheduler();
     protected final UUID taskUuid = UUID.randomUUID();
     private final TaskDifficulty taskDifficulty;
