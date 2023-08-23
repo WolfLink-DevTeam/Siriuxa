@@ -37,9 +37,10 @@ public class FarmValues {
 
     static {
         valueMap.put(Material.WHEAT, 1.0);
-        valueMap.put(Material.CARROT, 1.0);
-        valueMap.put(Material.POTATO, 1.0);
-        // TODO: 完善其他作物价值
+        valueMap.put(Material.CARROT, 1.2);
+        valueMap.put(Material.POTATO, 1.2);
+        valueMap.put(Material.BEETROOT, 1.5);
+        valueMap.put(Material.MELON_SLICE, 1.3);
     }
 
     /**

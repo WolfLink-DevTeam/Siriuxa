@@ -38,20 +38,22 @@ public class FarmChecker extends WolfirdListener {
         if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 任务没在游戏阶段
         if (task.getTaskArea() == null) return; // 任务区域未设定
         if (player.getWorld() != task.getTaskArea().getCenter().getWorld()) return; // 不在任务世界
+
         List<Item> dropItems = e.getItems();
         for (Item item : dropItems) {
             Material crop = item.getItemStack().getType();
             int amount = item.getItemStack().getAmount();
-            if (!farmValues.getCropTypes().contains(crop)) continue;
-            if (amount <= 1) continue;
-            farmValues.doRecord(crop);
-            double cropValue = farmValues.getCropValue(crop);
-            lumenTask.addLumen(cropValue);
-            for (Player taskPlayer : task.getTaskPlayers()) {
-                taskPlayer.playSound(taskPlayer.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_FALL, 1, 2f);
-                //TODO 改为 Hologram 提示
-                taskPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-                        new TextComponent("§f" + player.getName() + " §7刚刚在 " + lang.get("crop." + crop.name().toLowerCase(), "未知作物") + " §7中发现 §f" + String.format("%.1f", cropValue) + " §7mg §d幽匿光体"));
+            if (farmValues.getCropTypes().contains(crop)) {
+                if ((crop.equals(Material.CARROT) || crop.equals(Material.POTATO)) && amount <= 1) return;
+                farmValues.doRecord(crop);
+                double cropValue = farmValues.getCropValue(crop);
+                lumenTask.addLumen(cropValue);
+                for (Player taskPlayer : task.getTaskPlayers()) {
+                    taskPlayer.playSound(taskPlayer.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_FALL, 1, 2f);
+                    //TODO 改为 Hologram 提示
+                    taskPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                            new TextComponent("§f" + player.getName() + " §7刚刚在 " + lang.get("crop." + crop.name().toLowerCase(), "未知作物") + " §7中发现 §f" + String.format("%.1f", cropValue) + " §7mg §d幽匿光体"));
+                }
             }
         }
     }
