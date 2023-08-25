@@ -19,7 +19,7 @@ import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.RandomAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.LocationAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.SculkSpawnBox;
-import org.wolflink.minecraft.plugin.siriuxa.monster.MetadataKey;
+import org.wolflink.minecraft.plugin.siriuxa.api.MetadataKey;
 import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskEndEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskStartEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
@@ -88,7 +88,7 @@ class SculkInfectionListener extends WolfirdListener {
     @EventHandler
     void sculkSpread(EntityDeathEvent event) {
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
-            List<MetadataValue> metadataValueList = event.getEntity().getMetadata(MetadataKey.BELONG_TASK_UUID.getKey());
+            List<MetadataValue> metadataValueList = event.getEntity().getMetadata(MetadataKey.MONSTER_BELONG_TASK_UUID.getKey());
             if (metadataValueList.isEmpty()) return;
             Task task = IOC.getBean(TaskRepository.class).find((UUID) metadataValueList.get(0).value());
             if(task == null || !task.getOrnamentTypes().contains(OrnamentType.SCULK_INFECTION)) return;

@@ -25,7 +25,7 @@ public class FarmValues {
     /**
      * 整体价值倍率
      */
-    private static final double MULTIPLE = 9.0;
+    private static final double MULTIPLE = 1.0;
     /**
      * 最少记录池数量
      */
@@ -37,10 +37,11 @@ public class FarmValues {
 
     static {
         valueMap.put(Material.WHEAT, 1.0);
-        valueMap.put(Material.CARROT, 1.2);
-        valueMap.put(Material.POTATO, 1.2);
-        valueMap.put(Material.BEETROOT, 1.5);
-        valueMap.put(Material.MELON_SLICE, 1.3);
+        valueMap.put(Material.CARROTS, 0.7);
+        valueMap.put(Material.POTATOES, 0.7);
+        valueMap.put(Material.BEETROOTS, 1.1);
+        valueMap.put(Material.MELON, 1.2);
+        valueMap.put(Material.PUMPKIN, 1.3);
     }
 
     /**
