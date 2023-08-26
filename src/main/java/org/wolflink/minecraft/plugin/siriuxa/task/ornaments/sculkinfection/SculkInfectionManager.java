@@ -88,10 +88,10 @@ public class SculkInfectionManager implements IStatus {
         UUID pUuid = player.getUniqueId();
         List<Location> nearbySculks = blockAPI.searchBlock(Material.SCULK, player.getLocation(), 6);
         int sculkAmount = (int) (nearbySculks.size() * 1.25);
-        if (sculkAmount >= 48) sculkAmount = 48;
+        if (sculkAmount >= 40) sculkAmount = 40;
         addInfectionValue(player, sculkAmount - 20);
         Material blockType = player.getLocation().add(0, -1, 0).getBlock().getType();
-        if (sculkTypes.contains(blockType)) addInfectionValue(player, 20);
+        if (sculkTypes.contains(blockType)) addInfectionValue(player, 10);
     }
     private void applyInfectionEffect(Player player,int value) {
         Random random = new Random();
@@ -104,7 +104,6 @@ public class SculkInfectionManager implements IStatus {
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 40, 1, false, false, false));
             player.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 40, 0, false, false, false));
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 40, 0, false, false, false));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 40, 0, false, false, false));
             Material material;
             if (random.nextDouble() <= 0.2) material = Material.SCULK_CATALYST;
             else material = Material.SCULK;
