@@ -77,7 +77,7 @@ public class FunctionBan extends WolfirdListener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     void banTaskCommand(PlayerCommandPreprocessEvent event) {
-        if (event.getPlayer().isOp()) return; // 不处理管理员
+        if (event.getPlayer().isOp() || event.getPlayer().hasPermission("siriuxa.bypass")) return; // 不处理管理员
         Player player = event.getPlayer();
         // 在任务世界
         if (player.getWorld().getName().equals(IOC.getBean(Config.class).get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME))) {
