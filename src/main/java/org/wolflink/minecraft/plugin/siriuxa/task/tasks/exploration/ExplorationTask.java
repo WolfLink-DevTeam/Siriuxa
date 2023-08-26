@@ -161,8 +161,8 @@ public class ExplorationTask extends LumenTask {
                 startEvacuateTask(random.nextInt(12, 20));
                 getTaskArea().startCheck();
             });
+            Bukkit.getScheduler().runTask(Siriuxa.getInstance(),()->Bukkit.getPluginManager().callEvent(new TaskStartEvent(this)));
         });
-        Bukkit.getPluginManager().callEvent(new TaskStartEvent(this));
     }
     @Override
     protected void finish() {
