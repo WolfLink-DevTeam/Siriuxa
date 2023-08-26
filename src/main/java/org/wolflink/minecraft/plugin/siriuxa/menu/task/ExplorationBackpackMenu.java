@@ -62,6 +62,7 @@ public class ExplorationBackpackMenu extends DynamicMenu {
      * 允许的可带回物品最大数量
      */
     public int getBringSlotAmount() {
+        if(playerTaskRecord == null) return 0;
         boolean taskSuccess = playerTaskRecord.isSuccess();
         if(taskSuccess) {
             ExplorationDifficulty difficulty = IOC.getBean(DifficultyRepository.class)
