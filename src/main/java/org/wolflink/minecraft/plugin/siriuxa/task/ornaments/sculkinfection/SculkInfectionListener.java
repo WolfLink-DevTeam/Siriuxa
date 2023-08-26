@@ -84,7 +84,7 @@ class SculkInfectionListener extends WolfirdListener {
             Notifier.chat("喝了牛奶之后你感觉好多了。", player);
         }
     }
-    private static final int SPREAD_BLUEPRINT_ID = WolfBlockSpreadAPI.create(Material.SCULK, SpreadType.SINGLE_SPREAD,20,30);
+    private static final int SPREAD_BLUEPRINT_ID = WolfBlockSpreadAPI.create(Material.SCULK, SpreadType.SINGLE_SPREAD,20,40);
     @EventHandler
     void sculkSpread(EntityDeathEvent event) {
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
@@ -119,7 +119,7 @@ class SculkInfectionListener extends WolfirdListener {
             if(player == null || !player.isOnline()) return;
             LocationAPI locationAPI = IOC.getBean(LocationAPI.class);
             for (int i = 0; i < 3; i++) {
-                Location solidLoc = locationAPI.getLocationByAngle(player.getLocation(),r.nextInt(360) - 180,7);
+                Location solidLoc = locationAPI.getLocationByAngle(player.getLocation(),r.nextInt(360) - 180,10);
                 if(!solidLoc.getBlock().getType().isSolid()) {
                     solidLoc = locationAPI.getNearestSolid(solidLoc,7);
                 }
