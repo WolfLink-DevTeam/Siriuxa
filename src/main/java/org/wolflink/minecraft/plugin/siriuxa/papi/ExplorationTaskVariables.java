@@ -72,6 +72,9 @@ public class ExplorationTaskVariables extends PlaceholderExpansion {
                             .concat(" §7]");
                 else return "§7[ ?, ?, ? ]";
             }
+            case "lumen_time" -> {
+                return "§a"+explorationTask.getTaskStat().getLumenTimeLeft()+" §f秒";
+            }
             default -> {
                 return "没做完呢";
             }

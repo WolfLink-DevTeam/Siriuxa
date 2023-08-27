@@ -1,5 +1,6 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen;
 
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskStat;
@@ -14,7 +15,34 @@ import java.util.UUID;
 public class LumenTaskStat extends TaskStat {
     private double lastLumen = 0;
     private double nowLumen = 0;
+    private static int calculateTime(double lumen, double baseLoss, double lossAcceleratedValue) {
+        double totalMoneySpent = 0;
+        int n = 0;
+        while (totalMoneySpent <= lumen) {
+            totalMoneySpent += 300 * (baseLoss + n * lossAcceleratedValue);
+            n++;
+        }
+        totalMoneySpent -= 300 * (baseLoss + (n - 1) * lossAcceleratedValue);
+        n--;
+        double remainingMoney = lumen - totalMoneySpent;
+        double remainingTime = remainingMoney / (baseLoss + n * lossAcceleratedValue);
+        return (int) (n * 300 + remainingTime);
+    }
+    public double getLumenLossPerSec() {
+        return lumenTask.getLumenLossPerSecNow();
+    }
+    public double getLumenLossAcceleratedValue() {
+        return lumenTask.getDifficulty().getLumenLostAcceleratedSpeed() * lumenTask.getDifficulty().getBaseLumenLoss();
+    }
 
+    @Getter
+    private int lumenTimeLeft = -1;
+    /**
+     * 大致获取任务当前光体相应的生存时间
+     */
+    private void updateLumenTimeLeft() {
+        lumenTimeLeft = calculateTime(nowLumen,getLumenLossPerSec(),getLumenLossAcceleratedValue());
+    }
     private final LumenTask lumenTask;
     public LumenTaskStat(LumenTask lumenTask) {
         super(lumenTask);
@@ -31,6 +59,7 @@ public class LumenTaskStat extends TaskStat {
         subScheduler.runTaskTimerAsync(() -> {
             lastLumen = nowLumen;
             nowLumen = lumenTask.getTaskLumen();
+            updateLumenTimeLeft();
         }, 20, 20);
     }
     /**
