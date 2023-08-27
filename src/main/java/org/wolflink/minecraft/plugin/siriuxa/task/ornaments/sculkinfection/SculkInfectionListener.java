@@ -23,6 +23,7 @@ import org.wolflink.minecraft.plugin.siriuxa.api.MetadataKey;
 import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskEndEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskStartEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
+import org.wolflink.minecraft.plugin.siriuxa.task.regions.TaskArea;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
@@ -39,6 +40,10 @@ class SculkInfectionListener extends WolfirdListener {
     void taskStart(TaskStartEvent event) {
         if (event.getTask().getOrnamentTypes().contains(OrnamentType.SCULK_INFECTION)) {
             manager.availableTasks.add(event.getTask());
+            TaskArea taskArea = event.getTask().getTaskArea();
+            if(taskArea != null) {
+                manager.availableWorlds.add(Objects.requireNonNull(taskArea.getCenter().getWorld()).getName());
+            }
         }
     }
 

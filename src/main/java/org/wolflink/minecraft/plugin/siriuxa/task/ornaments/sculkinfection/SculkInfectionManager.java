@@ -25,6 +25,7 @@ import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskStartEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 
@@ -40,7 +41,7 @@ public class SculkInfectionManager implements IStatus {
     TaskRepository taskRepository;
     final Set<Material> sculkTypes = Stream.of(Material.SCULK, Material.SCULK_CATALYST).collect(Collectors.toSet());
     final Set<Task> availableTasks = new HashSet<>();
-
+    final Set<String> availableWorlds = new HashSet<>();
     /**
      * 感染值
      */
@@ -96,7 +97,14 @@ public class SculkInfectionManager implements IStatus {
     private void applyInfectionEffect(Player player,int value) {
         Random random = new Random();
         double randDouble = random.nextDouble();
-        if (IOC.getBean(TaskRepository.class).findByTaskTeamPlayer(player) == null) return; // 玩家已经不在任务
+        Task task = IOC.getBean(TaskRepository.class).findByTaskTeamPlayer(player);
+        // 玩家已经不在任务或者任务不在游戏阶段
+        if (task == null || !(task.getStageHolder().getThisStage() instanceof GameStage)) {
+            infectionMap.remove(player.getUniqueId());
+            return;
+        }
+        // 其它世界保护
+        if(!availableWorlds.contains(player.getWorld().getName())) return;
         if (value >= 1000) {
             player.playSound(player.getLocation(), Sound.BLOCK_SCULK_CHARGE, 1f, 1f);
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§c§l你被幽匿方块严重感染了！"));
