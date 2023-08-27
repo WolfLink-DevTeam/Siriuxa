@@ -39,17 +39,14 @@ public class ExplorationTask extends LumenTask {
      */
     @Getter
     private EvacuationZone availableEvacuationZone = null;
-
     public ExplorationTask(GlobalTeam globalTeam, ExplorationDifficulty explorationDifficulty) {
         super(globalTeam, explorationDifficulty);
         this.explorationDifficulty = explorationDifficulty;
     }
-
     public Set<Player> waitForEvacuatePlayers() {
         if (availableEvacuationZone == null) return new HashSet<>();
         else return availableEvacuationZone.getPlayerInZone();
     }
-
     private void startEvacuateTask(int minutes) {
         subScheduler.runTaskLater(() -> {
             if (getTaskArea() == null) return;
@@ -73,7 +70,6 @@ public class ExplorationTask extends LumenTask {
             }
         }, 20L * 60 * minutes);
     }
-
     /**
      * 撤离玩家
      * (适用于只有部分玩家乘坐撤离飞艇的情况)
@@ -90,19 +86,16 @@ public class ExplorationTask extends LumenTask {
             player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1f, 1f);
         }, 20 * 3L);
     }
-
     private static final Set<OrnamentType> ornamentTypes = new HashSet<>();
     static {
         ornamentTypes.add(OrnamentType.SCULK_INFECTION);
         ornamentTypes.add(OrnamentType.SAFE_WORKING);
         ornamentTypes.add(OrnamentType.SUPPLIES_COLLECTION);
     }
-
     @Override
     public Set<OrnamentType> getOrnamentTypes() {
         return ornamentTypes;
     }
-
     @Override
     protected void finishedCheck() {
         subScheduler.runTaskTimer(() -> {
@@ -111,7 +104,6 @@ public class ExplorationTask extends LumenTask {
             }
         }, 20, 20);
     }
-
     @Override
     protected void implPreLoad() {
         if (getTaskArea() == null) {
@@ -139,9 +131,9 @@ public class ExplorationTask extends LumenTask {
         }
         finishPreLoad = true;
     }
-
     @Override
     public void start() {
+        super.lumenTip.setEnabled(true);
         if (getTaskArea() == null) {
             Notifier.error("在任务区域未初始化时执行了任务的start方法");
             return;
@@ -166,13 +158,12 @@ public class ExplorationTask extends LumenTask {
     }
     @Override
     protected void finish() {
+        super.lumenTip.setEnabled(false);
         Bukkit.getPluginManager().callEvent(new TaskEndEvent(this,true));
     }
-
     @Override
     public void failed() {
+        super.lumenTip.setEnabled(false);
         Bukkit.getPluginManager().callEvent(new TaskEndEvent(this,false));
     }
-
-
 }

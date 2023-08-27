@@ -38,6 +38,7 @@ public abstract class LumenTask extends Task {
      */
     @Getter
     protected double taskLumen = 0;
+    protected final LumenTip lumenTip = new LumenTip();
     public void addLumenLossMultiple(double value) {
         lumenLossMultiple += value;
     }
