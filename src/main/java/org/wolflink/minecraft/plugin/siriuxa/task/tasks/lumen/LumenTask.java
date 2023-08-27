@@ -8,6 +8,7 @@ import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.LumenTaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.*;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
+import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskLumenLeftNotifyEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.stages.TaskLinearStageHolder;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.EndStage;
@@ -121,8 +122,22 @@ public abstract class LumenTask extends Task {
         taskLumen += lumen;
     }
 
+    private TaskLumenLeftNotifyEvent.Status status = TaskLumenLeftNotifyEvent.Status.ENOUGH;
     public void takeLumen(double lumen) {
         taskLumen -= lumen;
+        int lumenTime = lumenTaskStat.getLumenTimeLeft();
+        if(0 < lumenTime && lumenTime <= 300 && status != TaskLumenLeftNotifyEvent.Status.FEW) {
+            status = TaskLumenLeftNotifyEvent.Status.FEW;
+            Bukkit.getPluginManager().callEvent(new TaskLumenLeftNotifyEvent(this, status));
+        }
+        else if(300 < lumenTime && lumenTime <= 600 && status != TaskLumenLeftNotifyEvent.Status.INSUFFICIENT ) {
+            status = TaskLumenLeftNotifyEvent.Status.INSUFFICIENT;
+            Bukkit.getPluginManager().callEvent(new TaskLumenLeftNotifyEvent(this, status));
+        }
+        else if(600 < lumenTime && status != TaskLumenLeftNotifyEvent.Status.ENOUGH) {
+            status = TaskLumenLeftNotifyEvent.Status.ENOUGH;
+            Bukkit.getPluginManager().callEvent(new TaskLumenLeftNotifyEvent(this, status));
+        }
         if (taskLumen <= 0) {
             taskLumen = 0;
             triggerFailed();
