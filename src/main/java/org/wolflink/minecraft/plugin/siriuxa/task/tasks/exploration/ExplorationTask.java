@@ -1,6 +1,7 @@
-package org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration;
+package org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration;
 
 import lombok.Getter;
+import org.antlr.v4.runtime.atn.SemanticContext;
 import org.bukkit.*;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
@@ -13,8 +14,12 @@ import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.loot.ChestLoot;
+import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskEndEvent;
+import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskStartEvent;
+import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
 import org.wolflink.minecraft.plugin.siriuxa.task.regions.EvacuationZone;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.WheatTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskProperties;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen.LumenTask;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 
 import java.util.HashSet;
@@ -26,20 +31,7 @@ import java.util.Set;
  * 玩家需要乘坐飞艇撤离才算任务完成
  * 可携带物资离开
  */
-public class ExplorationTask extends WheatTask {
-    private static final PlayerBackpack defaultKit = new PlayerBackpack();
-
-//    static {
-//        defaultKit.setHelmet(new ItemStack(Material.LEATHER_HELMET));
-//        defaultKit.setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE));
-//        defaultKit.setLeggings(new ItemStack(Material.LEATHER_LEGGINGS));
-//        defaultKit.setBoots(new ItemStack(Material.LEATHER_BOOTS));
-//        List<ItemStack> items = new ArrayList<>();
-//        items.add(new ItemStack(Material.WOODEN_SWORD));
-//        items.add(new ItemStack(Material.WOODEN_PICKAXE));
-//        items.add(new ItemStack(Material.BREAD, 8));
-//        defaultKit.setItems(items);
-//    }
+public class ExplorationTask extends LumenTask {
     @Getter
     private final ExplorationDifficulty explorationDifficulty;
     /**
@@ -47,17 +39,14 @@ public class ExplorationTask extends WheatTask {
      */
     @Getter
     private EvacuationZone availableEvacuationZone = null;
-
     public ExplorationTask(GlobalTeam globalTeam, ExplorationDifficulty explorationDifficulty) {
-        super(globalTeam, explorationDifficulty, defaultKit);
+        super(globalTeam, explorationDifficulty);
         this.explorationDifficulty = explorationDifficulty;
     }
-
     public Set<Player> waitForEvacuatePlayers() {
         if (availableEvacuationZone == null) return new HashSet<>();
         else return availableEvacuationZone.getPlayerInZone();
     }
-
     private void startEvacuateTask(int minutes) {
         subScheduler.runTaskLater(() -> {
             if (getTaskArea() == null) return;
@@ -81,7 +70,6 @@ public class ExplorationTask extends WheatTask {
             }
         }, 20L * 60 * minutes);
     }
-
     /**
      * 撤离玩家
      * (适用于只有部分玩家乘坐撤离飞艇的情况)
@@ -98,7 +86,16 @@ public class ExplorationTask extends WheatTask {
             player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1f, 1f);
         }, 20 * 3L);
     }
-
+    private static final Set<OrnamentType> ornamentTypes = new HashSet<>();
+    static {
+        ornamentTypes.add(OrnamentType.SCULK_INFECTION);
+        ornamentTypes.add(OrnamentType.SAFE_WORKING);
+        ornamentTypes.add(OrnamentType.SUPPLIES_COLLECTION);
+    }
+    @Override
+    public Set<OrnamentType> getOrnamentTypes() {
+        return ornamentTypes;
+    }
     @Override
     protected void finishedCheck() {
         subScheduler.runTaskTimer(() -> {
@@ -107,7 +104,6 @@ public class ExplorationTask extends WheatTask {
             }
         }, 20, 20);
     }
-
     @Override
     protected void implPreLoad() {
         if (getTaskArea() == null) {
@@ -135,16 +131,16 @@ public class ExplorationTask extends WheatTask {
         }
         finishPreLoad = true;
     }
-
     @Override
     public void start() {
+        super.lumenTip.setEnabled(true);
         if (getTaskArea() == null) {
             Notifier.error("在任务区域未初始化时执行了任务的start方法");
             return;
         }
         initRecord();
         getTaskStat().enable();
-        this.taskWheat = (double) getTaskTeamSize() * getExplorationDifficulty().getWheatSupply();
+        this.taskLumen = (double) getTaskTeamSize() * getExplorationDifficulty().getLumenSupply();
         getStrategyDecider().enable();
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
             Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> {
@@ -153,26 +149,21 @@ public class ExplorationTask extends WheatTask {
                 }
                 failedCheck();
                 finishedCheck();
-                startWheatTask();
+                startLumenTask();
                 startEvacuateTask(random.nextInt(12, 20));
                 getTaskArea().startCheck();
             });
+            Bukkit.getScheduler().runTask(Siriuxa.getInstance(),()->Bukkit.getPluginManager().callEvent(new TaskStartEvent(this)));
         });
     }
-
     @Override
     protected void finish() {
-        InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
-        for (OfflinePlayer offlinePlayer : getGlobalTeam().getOfflinePlayers()) {
-            invBackupService.clearFiveSlotBackpack(offlinePlayer);
-        }
+        super.lumenTip.setEnabled(false);
+        Bukkit.getPluginManager().callEvent(new TaskEndEvent(this,true));
     }
-
     @Override
     public void failed() {
-        InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
-        for (OfflinePlayer offlinePlayer : getGlobalTeam().getOfflinePlayers()) {
-            invBackupService.clearFiveSlotBackpack(offlinePlayer);
-        }
+        super.lumenTip.setEnabled(false);
+        Bukkit.getPluginManager().callEvent(new TaskEndEvent(this,false));
     }
 }

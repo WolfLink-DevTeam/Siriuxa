@@ -1,4 +1,4 @@
-package org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage;
+package org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage;
 
 import org.wolflink.minecraft.plugin.siriuxa.task.stages.TaskLinearStageHolder;
 import org.wolflink.minecraft.plugin.siriuxa.task.stages.TaskStage;

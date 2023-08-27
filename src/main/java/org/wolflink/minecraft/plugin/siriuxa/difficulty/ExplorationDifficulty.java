@@ -7,12 +7,11 @@ import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class ExplorationDifficulty extends WheatTaskDifficulty implements ConfigurationSerializable {
+public class ExplorationDifficulty extends LumenTaskDifficulty implements ConfigurationSerializable {
     /**
      * 带回格数
      */

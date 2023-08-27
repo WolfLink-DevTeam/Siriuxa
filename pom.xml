@@ -132,5 +132,11 @@
             <version>1.18.26</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.wolflink.minecraft.bukkit</groupId>
+            <artifactId>WolfBlockSpread</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>

@@ -16,7 +16,7 @@ public class ToolIcon extends ItemIcon {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if(itemMeta != null) {
             itemMeta.setDisplayName("§8[ §a可放入工具 §8]");
-            itemMeta.setLore(Stream.of(" ","  §7可以放入 §f镐,斧,锄,铲 §7类型的工具"," ").toList());
+            itemMeta.setLore(Stream.of(" ","  §7可以放入 §f镐,斧,锄,铲,鱼竿 §7类型的工具"," ").toList());
             itemStack.setItemMeta(itemMeta);
         }
     }

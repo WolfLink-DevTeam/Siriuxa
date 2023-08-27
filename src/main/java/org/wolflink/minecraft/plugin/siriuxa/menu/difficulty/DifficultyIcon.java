@@ -9,11 +9,11 @@ import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.DifficultyRepository;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.WheatTaskDifficulty;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.LumenTaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskMenu;
 
-public class DifficultyIcon<T extends WheatTaskDifficulty> extends Icon {
+public class DifficultyIcon<T extends LumenTaskDifficulty> extends Icon {
 
     private final T taskDifficulty;
     private final DifficultyRepository difficultyRepository;
@@ -50,10 +50,10 @@ public class DifficultyIcon<T extends WheatTaskDifficulty> extends Icon {
             return fastCreateItemStack(taskDifficulty.getIcon(), 1, "§f难度 " + taskDifficulty.getColor() + taskDifficulty.getName(),
                     " ",
                     "§7风险指标 " + taskDifficulty.getColor() + levelStr,
-                    "§7任务成本 §f" + explorationDifficulty.getWheatCost() + " §6麦穗",
-                    "§7初始光体 §f" + explorationDifficulty.getWheatSupply() + " §d幽匿光体",
-                    "§7流速加快 §f+" + String.format("%.2f", explorationDifficulty.getWheatLostAcceleratedSpeed() * 100) + "% §8/ §7每5分钟",
-                    "§7受伤惩罚 §f-" + String.format("%.2f", explorationDifficulty.getHurtWheatCost()) + " §d幽匿光体 §8/ §71点伤害",
+                    "§7任务成本 §f" + explorationDifficulty.getLumenCost() + " §6麦穗",
+                    "§7初始光体 §f" + explorationDifficulty.getLumenSupply() + " §d幽匿光体",
+                    "§7流速加快 §f+" + String.format("%.2f", explorationDifficulty.getLumenLostAcceleratedSpeed() * 100) + "% §8/ §7每5分钟",
+                    "§7受伤惩罚 §f-" + String.format("%.2f", explorationDifficulty.getHurtLumenCost()) + " §d幽匿光体 §8/ §71点伤害",
                     "§7受伤倍率 §fx" + String.format("%.2f", explorationDifficulty.getHurtDamageMultiple() * 100) + "§7%",
                     "§7带回物资 §f" + explorationDifficulty.getBringSlotAmount() + "§7格",
                     "§7奖励倍率 §f" + String.format("%.0f", explorationDifficulty.getRewardMultiple() * 100) + "§7%",

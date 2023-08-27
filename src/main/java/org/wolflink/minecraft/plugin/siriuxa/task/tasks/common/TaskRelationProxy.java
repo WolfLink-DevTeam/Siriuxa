@@ -10,8 +10,8 @@ import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.ITaskService;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.ExplorationTask;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.ExplorationTaskService;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.ExplorationTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.ExplorationTaskService;
 
 @Singleton
 public class TaskRelationProxy {
@@ -39,5 +39,20 @@ public class TaskRelationProxy {
     }
     public Class<? extends TaskDifficulty> getTaskDifficultyClass(Task task) {
         return getTaskDifficultyClass(task.getClass());
+    }
+    public TaskProperties getTaskProperties(Task task) {
+        return getTaskProperties(task.getClass());
+    }
+    @NonNull
+    public TaskProperties getTaskProperties(String taskType) {
+        for (TaskProperties taskProperties : TaskProperties.values()) {
+            if(taskProperties.getTaskName().equals(taskType)) return taskProperties;
+        }
+        throw new IllegalArgumentException("未找到任务类型："+taskType);
+    }
+    @NonNull
+    public TaskProperties getTaskProperties(Class<? extends Task> taskClass) {
+        if (taskClass.isAssignableFrom(ExplorationTask.class)) return TaskProperties.EXPLORATION;
+        throw new IllegalArgumentException("未知的任务类："+taskClass.getName());
     }
 }

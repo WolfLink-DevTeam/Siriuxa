@@ -1,6 +1,5 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.listeners.hurtcheck;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -8,11 +7,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
-import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.WheatTask;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.GameStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen.LumenTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
 @Singleton
@@ -30,7 +28,7 @@ public class HurtChecker extends WolfirdListener {
         Player player = (Player) event.getEntity();
         Task task = taskRepository.findByTaskTeamPlayer(player);
         if (task == null) return; // 没有任务
-        if (!(task instanceof WheatTask wheatTask)) return; // 任务模式不可用该检测
+        if (!(task instanceof LumenTask lumenTask)) return; // 任务模式不可用该检测
         if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 任务没在游戏阶段
         if (task.getTaskArea() == null) return; // 任务区域未设定
         if (player.getWorld() != task.getTaskArea().getCenter().getWorld()) return; // 不在任务世界
@@ -39,7 +37,7 @@ public class HurtChecker extends WolfirdListener {
         // 上调小额伤害
         if(player.getHealth() >= 3 && event.getDamage() < 2) event.setDamage(2);
         // 扣除麦穗
-        double cost = wheatTask.getHurtWheatCost() * event.getFinalDamage();
-        wheatTask.takeWheat(cost);
+        double cost = lumenTask.getHurtLumenCost() * event.getFinalDamage();
+        lumenTask.takeLumen(cost);
     }
 }

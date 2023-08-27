@@ -24,9 +24,9 @@ import org.wolflink.minecraft.plugin.siriuxa.monster.StrategyDecider;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.IGlobalTeam;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.IRecordable;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.ITaskTeam;
+import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
 import org.wolflink.minecraft.plugin.siriuxa.task.regions.SquareArea;
 import org.wolflink.minecraft.plugin.siriuxa.task.regions.TaskArea;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.ExplorationTaskQueue;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
@@ -41,14 +41,31 @@ import java.util.concurrent.ConcurrentHashMap;
 @Data
 public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameable {
 
+    public TaskProperties getTaskProperties() {
+        return IOC.getBean(TaskRelationProxy.class).getTaskProperties(getClass());
+    }
+
+    @Override
+    public String getName() {
+        return getTaskProperties().getTaskName();
+    }
+
+    @Override
+    public String getColor() {
+        return getTaskProperties().getColor();
+    }
+    /**
+     * 任务装饰 例如：幽匿爆发，安全作业，物资收集，潘多拉试炼
+     */
+    public Set<OrnamentType> getOrnamentTypes() {
+        return getTaskProperties().getOrnamentTypes();
+    }
+
     protected final SubScheduler subScheduler = new SubScheduler();
     protected final UUID taskUuid = UUID.randomUUID();
-    @Getter
     private final TaskDifficulty taskDifficulty;
     protected final Random random = new Random();
-    @Getter
     private final StageHolder stageHolder;
-    private final PlayerBackpack defaultKit;
     private final StrategyDecider strategyDecider;
 
     @Nullable
@@ -58,11 +75,9 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
     @Nullable
     TaskTeam taskTeam = null;
     protected Task(@NotNull GlobalTeam globalTeam,
-                   @NotNull TaskDifficulty taskDifficulty,
-                   @NotNull PlayerBackpack defaultKit) {
+                   @NotNull TaskDifficulty taskDifficulty) {
         this.globalTeam = globalTeam;
         this.taskDifficulty = taskDifficulty;
-        this.defaultKit = defaultKit;
         stageHolder = initStageHolder();
         strategyDecider = new StrategyDecider(this);
     }
@@ -162,7 +177,7 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
         if(taskTeam != null) taskTeam.clear();
         IOC.getBean(TaskRepository.class).deleteByKey(taskUuid);
         // 释放队列
-        IOC.getBean(ExplorationTaskQueue.class).taskEnded();
+        IOC.getBean(TaskQueue.class).taskEnded();
         globalTeam = new GlobalTeam(null);
     }
 

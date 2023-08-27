@@ -1,4 +1,4 @@
-package org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration;
+package org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -61,11 +61,8 @@ public class ExplorationTaskService implements ITaskService {
         InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
         // 保存玩家背包信息
         invBackupService.saveMainInv(player);
-        // 应用任务背包信息
-        invBackupService.applyInv(player,task.getDefaultKit());
-        // 发放5格背包物品
-        invBackupService.giveFiveSlotBackpack(player);
-
+        // 情空背包
+        invBackupService.applyInv(player,PlayerBackpack.getEmptyBackpack());
         // 传送玩家到任务地点
         List<Location> spawnLocations = task.getSpawnLocations();
         if (spawnLocations.isEmpty()) player.teleport(task.getTaskArea().getCenter());
@@ -104,7 +101,7 @@ public class ExplorationTaskService implements ITaskService {
             Notifier.error("任务难度与任务类型不匹配！");
             return false;
         }
-        double cost = explorationDifficulty.getWheatCost();
+        double cost = explorationDifficulty.getLumenCost();
         return (vaultAPI.getEconomy(offlinePlayer) >= cost);
     }
 
@@ -118,6 +115,6 @@ public class ExplorationTaskService implements ITaskService {
             Notifier.error("任务难度与任务类型不匹配！");
             return;
         }
-        vaultAPI.takeEconomy(offlinePlayer, explorationDifficulty.getWheatCost());
+        vaultAPI.takeEconomy(offlinePlayer, explorationDifficulty.getLumenCost());
     }
 }

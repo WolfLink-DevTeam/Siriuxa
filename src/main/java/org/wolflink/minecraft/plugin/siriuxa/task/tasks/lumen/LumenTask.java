@@ -1,20 +1,20 @@
-package org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat;
+package org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen;
 
 import lombok.Getter;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.WheatTaskDifficulty;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.LumenTaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.*;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
-import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
+import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskLumenLeftNotifyEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.stages.TaskLinearStageHolder;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.EndStage;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.GameStage;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.ReadyStage;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.WaitStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.EndStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.GameStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.ReadyStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.WaitStage;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.LinearStageHolder;
@@ -28,25 +28,26 @@ import java.util.*;
  * 完成任务的方式有所不同
  * 麦穗归零/玩家人数为0，任务失败
  */
-public abstract class WheatTask extends Task {
+public abstract class LumenTask extends Task {
     /**
-     * 麦穗流失倍率
+     * 光体流失倍率
      */
-    protected double wheatLossMultiple = 1.0;
+    protected double lumenLossMultiple = 1.0;
     /**
-     * 本次任务的麦穗余量
+     * 本次任务的光体余量
      */
     @Getter
-    protected double taskWheat = 0;
-    public void addWheatLossMultiple(double value) {
-        wheatLossMultiple += value;
+    protected double taskLumen = 0;
+    protected final LumenTip lumenTip = new LumenTip();
+    public void addLumenLossMultiple(double value) {
+        lumenLossMultiple += value;
     }
     @Getter
     private final LinearStageHolder stageHolder = (LinearStageHolder) super.getStageHolder();
     @Getter
-    private final WheatTaskDifficulty difficulty = (WheatTaskDifficulty) super.getTaskDifficulty();
-    public WheatTask(GlobalTeam globalTeam, WheatTaskDifficulty difficulty, PlayerBackpack defaultKit) {
-        super(globalTeam, difficulty, defaultKit);
+    private final LumenTaskDifficulty difficulty = (LumenTaskDifficulty) super.getTaskDifficulty();
+    public LumenTask(GlobalTeam globalTeam, LumenTaskDifficulty difficulty) {
+        super(globalTeam, difficulty);
     }
     /**
      * 填充玩家任务快照
@@ -58,7 +59,7 @@ public abstract class WheatTask extends Task {
             Notifier.error("在尝试补充任务记录数据时，未找到玩家" + offlinePlayer.getName() + "的任务记录类。");
             return;
         }
-        record.setRewardWheat(wheatTaskStat.getPlayerWheatReward(
+        record.setRewardWheat(lumenTaskStat.getPlayerWheatReward(
                 offlinePlayer.getUniqueId(),
                 difficulty.getRewardMultiple(),
                 IOC.getBean(InventoryDB.class).loadEnderBackpack(offlinePlayer).isEmpty()
@@ -97,10 +98,10 @@ public abstract class WheatTask extends Task {
         }
     }
 
-    private final WheatTaskStat wheatTaskStat = new WheatTaskStat(this);
+    private final LumenTaskStat lumenTaskStat = new LumenTaskStat(this);
     @Override
-    public WheatTaskStat getTaskStat() {
-        return wheatTaskStat;
+    public LumenTaskStat getTaskStat() {
+        return lumenTaskStat;
     }
 
     @Override
@@ -118,41 +119,47 @@ public abstract class WheatTask extends Task {
         linearStageHolder.next();
         return linearStageHolder;
     }
-    public void addWheat(double wheat) {
-        taskWheat += wheat;
+    public void addLumen(double lumen) {
+        taskLumen += lumen;
     }
 
-    public void takeWheat(double wheat) {
-        taskWheat -= wheat;
-        if (taskWheat <= 0) {
-            taskWheat = 0;
+    private TaskLumenLeftNotifyEvent.Status status = TaskLumenLeftNotifyEvent.Status.ENOUGH;
+    public void takeLumen(double lumen) {
+        taskLumen -= lumen;
+        int lumenTime = lumenTaskStat.getLumenTimeLeft();
+        if(0 < lumenTime && lumenTime <= 300 && status != TaskLumenLeftNotifyEvent.Status.FEW) {
+            status = TaskLumenLeftNotifyEvent.Status.FEW;
+            Bukkit.getPluginManager().callEvent(new TaskLumenLeftNotifyEvent(this, status));
+        }
+        else if(300 < lumenTime && lumenTime <= 600 && status != TaskLumenLeftNotifyEvent.Status.INSUFFICIENT ) {
+            status = TaskLumenLeftNotifyEvent.Status.INSUFFICIENT;
+            Bukkit.getPluginManager().callEvent(new TaskLumenLeftNotifyEvent(this, status));
+        }
+        else if(600 < lumenTime && status != TaskLumenLeftNotifyEvent.Status.ENOUGH) {
+            status = TaskLumenLeftNotifyEvent.Status.ENOUGH;
+            Bukkit.getPluginManager().callEvent(new TaskLumenLeftNotifyEvent(this, status));
+        }
+        if (taskLumen <= 0) {
+            taskLumen = 0;
             triggerFailed();
         }
     }
-    public double getWheatLossPerSecNow() {
-        return difficulty.getBaseWheatLoss() * wheatLossMultiple * getTaskTeam().getInitSize();
+    public double getLumenLossPerSecNow() {
+        return difficulty.getBaseLumenLoss() * lumenLossMultiple * getTaskTeam().getInitSize();
     }
 
-    protected void startWheatTask() {
-        subScheduler.runTaskTimer(() -> takeWheat(getWheatLossPerSecNow())
+    protected void startLumenTask() {
+        subScheduler.runTaskTimer(() -> takeLumen(getLumenLossPerSecNow())
                 , 20, 20);
-        subScheduler.runTaskTimer(() -> addWheatLossMultiple(difficulty.getWheatLostAcceleratedSpeed())
+        subScheduler.runTaskTimer(() -> addLumenLossMultiple(difficulty.getLumenLostAcceleratedSpeed())
                 , 20 * 60 * 5L, 20 * 60 * 5L);
     }
 
-    public double getHurtWheatCost() {
-        return difficulty.getHurtWheatCost();
+    public double getHurtLumenCost() {
+        return difficulty.getHurtLumenCost();
     }
 
-    @Override
-    public String getName() {
-        return "自由勘探";
-    }
 
-    @Override
-    public String getColor() {
-        return "§f";
-    }
     /**
      * 游戏结束检查
      * 如果本次任务玩家数为0则意味着所有玩家逃跑/离线，宣布任务失败

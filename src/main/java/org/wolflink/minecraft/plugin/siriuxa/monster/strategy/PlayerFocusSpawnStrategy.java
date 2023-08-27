@@ -106,6 +106,7 @@ public class PlayerFocusSpawnStrategy extends SpawnStrategy {
                     IOC.getBean(AttributeAPI.class).multiplyAttribute(monster, "pf_attack",
                             Attribute.GENERIC_ATTACK_DAMAGE, getSpawnerAttribute().getDamageMultiple());
                 }
+                appendMetadata(player,entity);
             });
         }, 20 * 3L);
     }

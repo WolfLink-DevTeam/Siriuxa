@@ -10,7 +10,7 @@ import org.wolflink.minecraft.plugin.siriuxa.backpack.EnderBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.command.*;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.WheatTaskDifficulty;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.LumenTaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
 import org.wolflink.minecraft.plugin.siriuxa.file.Lang;
@@ -19,8 +19,11 @@ import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.CreatureDeathListener;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.CreatureSpawnListener;
 import org.wolflink.minecraft.plugin.siriuxa.papi.ExplorationTaskVariables;
-import org.wolflink.minecraft.plugin.siriuxa.sculkinfection.SculkInfection;
+import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.safeworking.SafeWorkingListener;
+import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.sculkinfection.SculkInfectionManager;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.*;
+import org.wolflink.minecraft.plugin.siriuxa.task.listeners.farmcheck.FarmChecker;
+import org.wolflink.minecraft.plugin.siriuxa.task.listeners.farmcheck.FarmValues;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.huntcheck.HuntChecker;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.huntcheck.HuntValues;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.hurtcheck.HurtChecker;
@@ -56,12 +59,14 @@ public final class Siriuxa extends WolfirdPlugin {
         databases.add(InventoryDB.class);
         databases.add(OreDB.class);
         databases.add(HuntDB.class);
+        databases.add(CropDB.class);
         databases.add(TaskRecordDB.class);
         databases.add(PlayerVariableDB.class);
 
         globalListenerClasses.add(OreChecker.class);
         globalListenerClasses.add(HuntChecker.class);
         globalListenerClasses.add(HurtChecker.class);
+        globalListenerClasses.add(FarmChecker.class);
         globalListenerClasses.add(FriendlyProtection.class);
         globalListenerClasses.add(FunctionBan.class);
         globalListenerClasses.add(TaskJoinQuitListener.class);
@@ -69,19 +74,19 @@ public final class Siriuxa extends WolfirdPlugin {
         globalListenerClasses.add(PlayerRespawn.class);
         globalListenerClasses.add(TPChecker.class);
         globalListenerClasses.add(SpawnChecker.class);
-        globalListenerClasses.add(SculkSpreader.class);
         globalListenerClasses.add(CreatureSpawnListener.class);
         globalListenerClasses.add(CreatureDeathListener.class);
         globalListenerClasses.add(SpawnerOptimizeListener.class);
         globalListenerClasses.add(AttributeChecker.class);
         globalListenerClasses.add(StatListener.class);
         globalListenerClasses.add(AutoDissolveListener.class);
+        globalListenerClasses.add(SafeWorkingListener.class);
 
         serializableClasses.add(PlayerBackpack.class);
         serializableClasses.add(PlayerTaskRecord.class);
         serializableClasses.add(OfflinePlayerRecord.class);
         serializableClasses.add(TaskDifficulty.class);
-        serializableClasses.add(WheatTaskDifficulty.class);
+        serializableClasses.add(LumenTaskDifficulty.class);
         serializableClasses.add(ExplorationDifficulty.class);
         serializableClasses.add(EnderBackpack.class);
         serializableClasses.add(PlayerVariables.class);
@@ -136,7 +141,7 @@ public final class Siriuxa extends WolfirdPlugin {
         for (Class<? extends WolfirdListener> listenerClass : globalListenerClasses) {
             IOC.getBean(listenerClass).setEnabled(true);
         }
-        IOC.getBean(SculkInfection.class).enable();
+        IOC.getBean(SculkInfectionManager.class).enable();
     }
 
     @Override
@@ -144,9 +149,10 @@ public final class Siriuxa extends WolfirdPlugin {
         // 强制结束所有还在进行中的任务，将其标记为完成
         IOC.getBean(TaskService.class).finishAllTask();
 
-        IOC.getBean(SculkInfection.class).disable();
+        IOC.getBean(SculkInfectionManager.class).disable();
         IOC.getBean(OreValues.class).doSave();
         IOC.getBean(HuntValues.class).doSave();
+        IOC.getBean(FarmValues.class).doSave();
 
         // 保存数据库
         for (Class<? extends FileDB> db : databases) {

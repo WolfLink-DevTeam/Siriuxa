@@ -11,7 +11,7 @@ public class PlayerAPI {
      * 获取玩家实时等级的总经验值
      */
     public int getRealExp(Player player) {
-        int totalExp = (int) (player.getExpToLevel() * player.getExp());
+        int totalExp = Math.round(player.getExpToLevel() * player.getExp());
         while (player.getLevel() > 0) {
             player.setLevel(player.getLevel() - 1);
             totalExp += player.getExpToLevel();

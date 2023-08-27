@@ -5,11 +5,11 @@ import lombok.Setter;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.StaticMenu;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.DifficultyRepository;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.WheatTaskDifficulty;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.LumenTaskDifficulty;
 
 import java.util.UUID;
 
-public abstract class DifficultyMenu<T extends WheatTaskDifficulty> extends StaticMenu {
+public abstract class DifficultyMenu<T extends LumenTaskDifficulty> extends StaticMenu {
 
     private final Class<T> difficultyClass;
     @Setter

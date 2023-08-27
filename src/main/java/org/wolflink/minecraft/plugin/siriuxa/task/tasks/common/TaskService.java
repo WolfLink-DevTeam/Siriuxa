@@ -16,10 +16,9 @@ import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.OfflinePlayerDB;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.OfflinePlayerRecord;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.ITaskService;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.ExplorationTaskQueue;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.EndStage;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.GameStage;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat.exploration.taskstage.WaitStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.EndStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.GameStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.WaitStage;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeamRepository;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeamService;
@@ -44,7 +43,7 @@ public class TaskService implements ITaskService {
     @Inject
     private TaskRelationProxy taskRelationProxy;
     @Inject
-    private ExplorationTaskQueue explorationTaskQueue;
+    private TaskQueue taskQueue;
 
     @Override
     public void goLobby(Player player) {
@@ -85,8 +84,8 @@ public class TaskService implements ITaskService {
      */
     @Override
     public Result create(GlobalTeam globalTeam, Class<? extends Task> taskClass, TaskDifficulty taskDifficulty) {
-        Result canCreate = explorationTaskQueue.canCreateTask();
-        if (!canCreate.result()) return canCreate;
+        Result isBlocking = taskQueue.isBlocking();
+        if (isBlocking.result()) return isBlocking;
         if (globalTeam.getSelectedTask() != null) return new Result(false, "当前队伍已经选择了任务，无法再次创建。");
 
         List<OfflinePlayer> offlinePlayers = globalTeam.getOfflinePlayers();
@@ -122,9 +121,9 @@ public class TaskService implements ITaskService {
             return new Result(false, "该任务所属队伍没有任何在线玩家。");
         }
         if (task.getStageHolder().getThisStage() instanceof WaitStage) {
-            Result canStart = explorationTaskQueue.canCreateTask();
-            if (!canStart.result()) return canStart;
-            explorationTaskQueue.taskStarted();
+            Result isBlocking = taskQueue.isBlocking();
+            if (isBlocking.result()) return isBlocking;
+            taskQueue.taskStarted();
             task.getStageHolder().next();
             return new Result(true, "任务即将开始。");
         }

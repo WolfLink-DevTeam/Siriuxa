@@ -1,5 +1,6 @@
-package org.wolflink.minecraft.plugin.siriuxa.task.tasks.wheat;
+package org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen;
 
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskStat;
@@ -11,26 +12,54 @@ import java.util.UUID;
 /**
  * 麦穗任务统计
  */
-public class WheatTaskStat extends TaskStat {
-    private double lastWheat = 0;
-    private double nowWheat = 0;
+public class LumenTaskStat extends TaskStat {
+    private double lastLumen = 0;
+    private double nowLumen = 0;
+    private static int calculateTime(double lumen, double baseLoss, double lossAcceleratedValue) {
+        double totalMoneySpent = 0;
+        int n = 0;
+        while (totalMoneySpent <= lumen) {
+            totalMoneySpent += 300 * (baseLoss + n * lossAcceleratedValue);
+            n++;
+        }
+        totalMoneySpent -= 300 * (baseLoss + (n - 1) * lossAcceleratedValue);
+        n--;
+        double remainingMoney = lumen - totalMoneySpent;
+        double remainingTime = remainingMoney / (baseLoss + n * lossAcceleratedValue);
+        return (int) (n * 300 + remainingTime);
+    }
+    public double getLumenLossPerSec() {
+        return lumenTask.getLumenLossPerSecNow();
+    }
+    public double getLumenLossAcceleratedValue() {
+        return lumenTask.getDifficulty().getLumenLostAcceleratedSpeed() * lumenTask.getDifficulty().getBaseLumenLoss();
+    }
 
-    private final WheatTask wheatTask;
-    public WheatTaskStat(WheatTask wheatTask) {
-        super(wheatTask);
-        this.wheatTask = wheatTask;
+    @Getter
+    private int lumenTimeLeft = -1;
+    /**
+     * 大致获取任务当前光体相应的生存时间
+     */
+    private void updateLumenTimeLeft() {
+        lumenTimeLeft = calculateTime(nowLumen,getLumenLossPerSec(),getLumenLossAcceleratedValue());
+    }
+    private final LumenTask lumenTask;
+    public LumenTaskStat(LumenTask lumenTask) {
+        super(lumenTask);
+        this.lumenTask = lumenTask;
     }
 
     public double getWheatChange() {
-        return nowWheat - lastWheat;
+        return nowLumen - lastLumen;
     }
 
     @Override
     public void enable() {
         super.enable();
         subScheduler.runTaskTimerAsync(() -> {
-            lastWheat = nowWheat;
-            nowWheat = wheatTask.getTaskWheat();
+            lastLumen = nowLumen;
+            nowLumen = lumenTask.getTaskLumen();
+            updateLumenTimeLeft();
         }, 20, 20);
     }
     /**
@@ -54,7 +83,7 @@ public class WheatTaskStat extends TaskStat {
         int randValue = new Random().nextInt(10,20);
         int originReward = (travelDistanceValue + damageTotalValue + oreBlockTotalValue + mobKillTotalValue + taskSecsValue + randValue);
         if(originReward >= 300) originReward = 300;
-        int reward = (int) (originReward * wheatTask.getDifficulty().getRewardMultiple());
+        int reward = (int) (originReward * lumenTask.getDifficulty().getRewardMultiple());
         Notifier.debug("结算玩家："+ Bukkit.getOfflinePlayer(uuid).getName());
         Notifier.debug("行走距离："+travelDistance+"|"+travelDistanceValue);
         Notifier.debug("造成伤害："+damageTotal+"|"+damageTotalValue);
