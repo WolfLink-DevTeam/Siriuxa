@@ -142,6 +142,7 @@ public class ExplorationTask extends LumenTask {
 
     @Override
     public void start() {
+        super.lumenTip.setEnabled(true);
         if (getTaskArea() == null) {
             Notifier.error("在任务区域未初始化时执行了任务的start方法");
             return;
@@ -166,11 +167,13 @@ public class ExplorationTask extends LumenTask {
     }
     @Override
     protected void finish() {
+        super.lumenTip.setEnabled(false);
         Bukkit.getPluginManager().callEvent(new TaskEndEvent(this,true));
     }
 
     @Override
     public void failed() {
+        super.lumenTip.setEnabled(false);
         Bukkit.getPluginManager().callEvent(new TaskEndEvent(this,false));
     }
 
