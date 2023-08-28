@@ -29,6 +29,7 @@ import org.wolflink.minecraft.plugin.siriuxa.task.listeners.huntcheck.HuntValues
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.hurtcheck.HurtChecker;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.orecheck.OreChecker;
 import org.wolflink.minecraft.plugin.siriuxa.task.listeners.orecheck.OreValues;
+import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.smartai.SmartAIListener;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskService;
 import org.wolflink.minecraft.plugin.siriuxa.team.AutoDissolveListener;
 import org.wolflink.minecraft.wolfird.framework.WolfirdPlugin;
@@ -81,6 +82,7 @@ public final class Siriuxa extends WolfirdPlugin {
         globalListenerClasses.add(StatListener.class);
         globalListenerClasses.add(AutoDissolveListener.class);
         globalListenerClasses.add(SafeWorkingListener.class);
+        globalListenerClasses.add(SmartAIListener.class);
 
         serializableClasses.add(PlayerBackpack.class);
         serializableClasses.add(PlayerTaskRecord.class);
