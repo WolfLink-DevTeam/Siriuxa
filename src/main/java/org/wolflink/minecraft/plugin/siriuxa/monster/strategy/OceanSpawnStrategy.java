@@ -65,6 +65,7 @@ public class OceanSpawnStrategy extends SpawnStrategy {
             IOC.getBean(AttributeAPI.class).multiplyAttribute(monster, "o_attack",
                     Attribute.GENERIC_ATTACK_DAMAGE, getSpawnerAttribute().getDamageMultiple());
             appendMetadata(player,monster);
+            callEvent(player,monster);
         });
     }
 }

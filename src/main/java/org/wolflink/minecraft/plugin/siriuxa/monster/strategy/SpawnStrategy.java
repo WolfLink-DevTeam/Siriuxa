@@ -2,6 +2,7 @@ package org.wolflink.minecraft.plugin.siriuxa.monster.strategy;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -9,6 +10,7 @@ import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.MetadataKey;
 import org.wolflink.minecraft.plugin.siriuxa.monster.SpawnerAttribute;
+import org.wolflink.minecraft.plugin.siriuxa.monster.TaskSpawnEntityEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
 
@@ -47,6 +49,12 @@ public abstract class SpawnStrategy {
         // 玩家归属的任务UUID
         if(task != null) {
             entity.setMetadata(MetadataKey.MONSTER_BELONG_TASK_UUID.getKey(), new FixedMetadataValue(Siriuxa.getInstance(),task.getTaskUuid()));
+        }
+    }
+    void callEvent(Player player,Entity entity) {
+        Task task = IOC.getBean(TaskRepository.class).findByTaskTeamPlayer(player);
+        if(task != null) {
+            Bukkit.getPluginManager().callEvent(new TaskSpawnEntityEvent(task,entity));
         }
     }
 }

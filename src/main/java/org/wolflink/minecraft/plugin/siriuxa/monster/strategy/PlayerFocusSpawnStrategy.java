@@ -107,6 +107,7 @@ public class PlayerFocusSpawnStrategy extends SpawnStrategy {
                             Attribute.GENERIC_ATTACK_DAMAGE, getSpawnerAttribute().getDamageMultiple());
                 }
                 appendMetadata(player,entity);
+                callEvent(player,entity);
             });
         }, 20 * 3L);
     }
