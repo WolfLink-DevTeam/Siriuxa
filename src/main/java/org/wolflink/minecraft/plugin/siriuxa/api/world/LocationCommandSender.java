@@ -4,6 +4,7 @@ import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import lombok.Getter;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -79,6 +80,11 @@ public class LocationCommandSender implements BlockCommandSender {
     @Override
     public Spigot spigot() {
         return new CommandSender.Spigot();
+    }
+
+    @Override
+    public @NotNull Component name() {
+        return Component.text("LocationCommandSender");
     }
 
     @Override

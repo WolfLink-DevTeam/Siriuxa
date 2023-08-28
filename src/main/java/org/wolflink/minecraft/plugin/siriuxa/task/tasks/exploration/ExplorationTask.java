@@ -91,6 +91,7 @@ public class ExplorationTask extends LumenTask {
         ornamentTypes.add(OrnamentType.SCULK_INFECTION);
         ornamentTypes.add(OrnamentType.SAFE_WORKING);
         ornamentTypes.add(OrnamentType.SUPPLIES_COLLECTION);
+        ornamentTypes.add(OrnamentType.SMART_AI);
     }
     @Override
     public Set<OrnamentType> getOrnamentTypes() {

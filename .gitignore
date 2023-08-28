@@ -10,7 +10,7 @@ out/
 
 # Compiled class file
 *.class
-
+.paper-nms
 # Log file
 *.log
 

@@ -101,6 +101,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.20.1-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>com.fastasyncworldedit</groupId>
             <artifactId>FastAsyncWorldEdit-Core</artifactId>
             <scope>provided</scope>
@@ -115,12 +121,6 @@
                     <groupId>*</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>io.papermc.paper</groupId>
-            <artifactId>paper-api</artifactId>
-            <version>1.20.1-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.wolflink.minecraft.wolfird</groupId>
@@ -156,6 +156,18 @@
             <groupId>ca.bkaw</groupId>
             <artifactId>paper-nms</artifactId>
             <version>1.20.1-SNAPSHOT</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.kyori</groupId>
+                    <artifactId>adventure-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-api</artifactId>
+            <version>4.14.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

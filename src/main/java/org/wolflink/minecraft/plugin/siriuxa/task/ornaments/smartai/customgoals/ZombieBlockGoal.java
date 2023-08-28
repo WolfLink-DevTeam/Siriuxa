@@ -76,6 +76,10 @@ public class ZombieBlockGoal extends Goal {
      * 破坏紧邻的方块
      */
     private void breakNearestBlocks() {
+        // 没有目标，跳过
+        if(zombie.getTarget() == null) return;
+        // 高度差大于2格，不触发墙体破坏
+        if(zombie.getTarget().position().y - zombieEntity.getLocation().getBlockY() > 2) return;
         Block locBlock = zombieEntity.getLocation().getBlock();
         Stream.of(
                 locBlock.getRelative(-1,0,0),
