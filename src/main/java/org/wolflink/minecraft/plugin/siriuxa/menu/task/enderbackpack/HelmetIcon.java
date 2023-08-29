@@ -11,14 +11,16 @@ import java.util.stream.Stream;
 @Singleton
 public class HelmetIcon extends ItemIcon {
     private static final ItemStack itemStack = EnderBackpack.getDefaultBackpack().getHelmet().clone();
+
     static {
         ItemMeta itemMeta = itemStack.getItemMeta();
-        if(itemMeta != null) {
+        if (itemMeta != null) {
             itemMeta.setDisplayName("§8[ §a可放入护甲 §8]");
-            itemMeta.setLore(Stream.of(" ","  §7可以放入 §f头盔 §7类型的护甲"," ").toList());
+            itemMeta.setLore(Stream.of(" ", "  §7可以放入 §f头盔 §7类型的护甲", " ").toList());
             itemStack.setItemMeta(itemMeta);
         }
     }
+
     public HelmetIcon() {
         super(itemStack);
     }

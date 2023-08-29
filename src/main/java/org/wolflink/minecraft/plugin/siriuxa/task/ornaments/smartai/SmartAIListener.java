@@ -22,25 +22,28 @@ import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 public class SmartAIListener extends WolfirdListener {
     @EventHandler
     public void on(TaskSpawnEntityEvent event) {
-        if(event.getTask().getOrnamentTypes().contains(OrnamentType.SMART_AI)) {
-            Entity craftEntity = ((CraftEntity)event.getEntity()).getHandle();
-            if(craftEntity instanceof Mob mob) {
+        if (event.getTask().getOrnamentTypes().contains(OrnamentType.SMART_AI)) {
+            Entity craftEntity = ((CraftEntity) event.getEntity()).getHandle();
+            if (craftEntity instanceof Mob mob) {
                 addXrayAbility(mob);
             }
-            if(craftEntity instanceof Zombie zombie) {
+            if (craftEntity instanceof Zombie zombie) {
                 enhanceZombie(zombie);
             } else if (craftEntity instanceof Creeper creeper) {
                 enhanceCreeper(creeper);
             }
         }
     }
+
     private void enhanceZombie(Zombie zombie) {
-        zombie.goalSelector.addGoal(1,new ZombieBlockGoal(zombie));
+        zombie.goalSelector.addGoal(1, new ZombieBlockGoal(zombie));
     }
+
     private void addXrayAbility(Mob mob) {
-        mob.targetSelector.addGoal(1,new XrayNearestAttackableTargetGoal<>(mob, Player.class));
+        mob.targetSelector.addGoal(1, new XrayNearestAttackableTargetGoal<>(mob, Player.class));
     }
+
     private void enhanceCreeper(Creeper creeper) {
-        creeper.goalSelector.addGoal(1,new SelfExplosionGoal<>(creeper,Player.class));
+        creeper.goalSelector.addGoal(1, new SelfExplosionGoal<>(creeper, Player.class));
     }
 }

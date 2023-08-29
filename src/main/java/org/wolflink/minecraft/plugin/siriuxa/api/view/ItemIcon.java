@@ -5,8 +5,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class ItemIcon extends Icon{
+public class ItemIcon extends Icon {
     private final ItemStack itemStack;
+
     /**
      * 设置为 小于等于0 则该图标不需要刷新
      */
@@ -17,7 +18,7 @@ public class ItemIcon extends Icon{
 
     @Override
     protected @NonNull ItemStack createIcon() {
-        if(itemStack == null) return new ItemStack(Material.AIR);
+        if (itemStack == null) return new ItemStack(Material.AIR);
         else return itemStack;
     }
 

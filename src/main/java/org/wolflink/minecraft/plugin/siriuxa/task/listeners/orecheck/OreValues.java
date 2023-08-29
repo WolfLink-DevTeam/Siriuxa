@@ -36,12 +36,12 @@ public class OreValues {
     private static final int MAX_RECORD_DATE = 30;
 
     static {
-        valueMap.put(Material.RAW_COPPER_BLOCK,0.5);
+        valueMap.put(Material.RAW_COPPER_BLOCK, 0.5);
         valueMap.put(Material.COPPER_BLOCK, 0.95);
         valueMap.put(Material.COAL_BLOCK, 1.2);
-        valueMap.put(Material.RAW_IRON_BLOCK,1.0);
+        valueMap.put(Material.RAW_IRON_BLOCK, 1.0);
         valueMap.put(Material.IRON_BLOCK, 2.25);
-        valueMap.put(Material.RAW_GOLD_BLOCK,1.2);
+        valueMap.put(Material.RAW_GOLD_BLOCK, 1.2);
         valueMap.put(Material.GOLD_BLOCK, 2.5);
         valueMap.put(Material.LAPIS_BLOCK, 0.75);
         valueMap.put(Material.REDSTONE_BLOCK, 0.75);

@@ -17,7 +17,7 @@ public abstract class DifficultyMenu<T extends LumenTaskDifficulty> extends Stat
     private T selectedDifficulty = null;
 
     protected DifficultyMenu(UUID ownerUuid, Class<T> difficultyClass) {
-        super(ownerUuid,  "§0§l难度选择", 27);
+        super(ownerUuid, "§0§l难度选择", 27);
         this.difficultyClass = difficultyClass;
     }
 

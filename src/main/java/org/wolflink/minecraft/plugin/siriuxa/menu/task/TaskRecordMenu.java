@@ -20,8 +20,9 @@ public class TaskRecordMenu extends DynamicMenu {
     List<PlayerTaskRecord> totalRecordList = new ArrayList<>();
     @Getter
     private int page = 1;
+
     public TaskRecordMenu(UUID ownerUuid) {
-        super(ownerUuid, "§0§l任务记录", 54,20);
+        super(ownerUuid, "§0§l任务记录", 54, 20);
     }
 
     public void setPage(int value) {

@@ -7,31 +7,21 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.api.IStatus;
-import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.BlockAPI;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
-import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskEndEvent;
-import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskStartEvent;
-import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.GameStage;
-import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -80,7 +70,7 @@ public class SculkInfectionManager implements IStatus {
      * 每秒获得 附近6格内潜声方块数量x1.25 - 20 点感染值，，最多检测64个方块
      * 如果不处在附近，则每秒 -20 点感染值
      * 牛奶可以减少 500 点感染值
-     *
+     * <p>
      * 轻度感染 达到 300 点 间歇性虚弱+间歇性挖掘疲劳+走过的方块有概率变成潜声方块
      * 中度感染 达到 600 点 虚弱+挖掘疲劳+缓慢+走过的方块有概率变成潜声方块
      * 重度感染 达到 1000 点 虚弱+挖掘疲劳+走过的方块有概率变成潜声方块+凋零+缓慢+失明
@@ -94,7 +84,8 @@ public class SculkInfectionManager implements IStatus {
         Material blockType = player.getLocation().add(0, -1, 0).getBlock().getType();
         if (sculkTypes.contains(blockType)) addInfectionValue(player, 10);
     }
-    private void applyInfectionEffect(Player player,int value) {
+
+    private void applyInfectionEffect(Player player, int value) {
         Random random = new Random();
         double randDouble = random.nextDouble();
         Task task = IOC.getBean(TaskRepository.class).findByTaskTeamPlayer(player);
@@ -104,7 +95,7 @@ public class SculkInfectionManager implements IStatus {
             return;
         }
         // 其它世界保护
-        if(!availableWorlds.contains(player.getWorld().getName())) return;
+        if (!availableWorlds.contains(player.getWorld().getName())) return;
         if (value >= 1000) {
             player.playSound(player.getLocation(), Sound.BLOCK_SCULK_CHARGE, 1f, 1f);
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§c§l你被幽匿方块严重感染了！"));
@@ -152,11 +143,12 @@ public class SculkInfectionManager implements IStatus {
                                 .forEach(this::updateInfectionValue),
                 20, 20);
         subScheduler.runTaskTimer(() -> infectionMap.forEach((uuid, value) -> {
-                    Player player = Bukkit.getPlayer(uuid);
-                    if(player == null || !player.isOnline())return;
-                    applyInfectionEffect(player,value);
-                }), 20, 20);
+            Player player = Bukkit.getPlayer(uuid);
+            if (player == null || !player.isOnline()) return;
+            applyInfectionEffect(player, value);
+        }), 20, 20);
     }
+
     @Override
     public void disable() {
         listener.setEnabled(false);

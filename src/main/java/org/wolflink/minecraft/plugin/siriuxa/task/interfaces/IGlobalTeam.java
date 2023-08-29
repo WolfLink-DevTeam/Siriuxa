@@ -7,6 +7,7 @@ import java.util.UUID;
 
 public interface IGlobalTeam {
     GlobalTeam getGlobalTeam();
+
     default boolean globalTeamContains(UUID uuid) {
         return getGlobalTeam().contains(uuid);
     }

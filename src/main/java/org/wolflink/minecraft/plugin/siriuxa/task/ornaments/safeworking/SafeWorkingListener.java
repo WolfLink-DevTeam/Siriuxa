@@ -20,16 +20,17 @@ public class SafeWorkingListener extends WolfirdListener {
     @EventHandler
     void on(TaskStartEvent event) {
         Task task = event.getTask();
-        if(!task.getOrnamentTypes().contains(OrnamentType.SAFE_WORKING)) return;
+        if (!task.getOrnamentTypes().contains(OrnamentType.SAFE_WORKING)) return;
         // 发放5格背包物品
         for (Player player : task.getTaskPlayers()) {
             service.giveFiveSlotBackpack(player);
         }
     }
+
     @EventHandler
     void on(TaskEndEvent event) {
         Task task = event.getTask();
-        if(!task.getOrnamentTypes().contains(OrnamentType.SAFE_WORKING)) return;
+        if (!task.getOrnamentTypes().contains(OrnamentType.SAFE_WORKING)) return;
         for (OfflinePlayer offlinePlayer : task.getGlobalTeam().getOfflinePlayers()) {
             service.clearFiveSlotBackpack(offlinePlayer);
         }

@@ -38,8 +38,9 @@ public abstract class LumenTaskDifficulty extends TaskDifficulty {
      * 结算奖励倍率
      */
     protected final double rewardMultiple;
+
     public LumenTaskDifficulty(Material icon, String color, int level, String name, int lumenCost, int lumenSupply, double baseLumenLoss, double lumenLostAcceleratedSpeed, double hurtLumenCost, double hurtDamageMultiple, double rewardMultiple) {
-        super(icon,color,level,name);
+        super(icon, color, level, name);
         this.lumenCost = lumenCost;
         this.lumenSupply = lumenSupply;
         this.baseLumenLoss = baseLumenLoss;
@@ -48,6 +49,7 @@ public abstract class LumenTaskDifficulty extends TaskDifficulty {
         this.hurtDamageMultiple = hurtDamageMultiple;
         this.rewardMultiple = rewardMultiple;
     }
+
     public LumenTaskDifficulty(Map<String, Object> map) {
         super(map);
         this.lumenCost = (int) map.get("lumenCost");
@@ -58,17 +60,18 @@ public abstract class LumenTaskDifficulty extends TaskDifficulty {
         this.hurtDamageMultiple = (double) map.get("hurtDamageMultiple");
         this.rewardMultiple = (double) map.get("rewardMultiple");
     }
+
     @Override
     @NotNull
     public Map<String, Object> serialize() {
-        Map<String,Object> map = super.serialize();
+        Map<String, Object> map = super.serialize();
         map.put("lumenCost", lumenCost);
         map.put("lumenSupply", lumenSupply);
         map.put("baseLumenLoss", baseLumenLoss);
         map.put("lumenLostAcceleratedSpeed", lumenLostAcceleratedSpeed);
         map.put("hurtLumenCost", hurtLumenCost);
-        map.put("hurtDamageMultiple",hurtDamageMultiple);
-        map.put("rewardMultiple",rewardMultiple);
+        map.put("hurtDamageMultiple", hurtDamageMultiple);
+        map.put("rewardMultiple", rewardMultiple);
         return map;
     }
 }

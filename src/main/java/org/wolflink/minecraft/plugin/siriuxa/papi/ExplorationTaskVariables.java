@@ -73,7 +73,7 @@ public class ExplorationTaskVariables extends PlaceholderExpansion {
                 else return "§7[ ?, ?, ? ]";
             }
             case "lumen_time" -> {
-                return "§a"+explorationTask.getTaskStat().getLumenTimeLeft()+" §f秒";
+                return "§a" + explorationTask.getTaskStat().getLumenTimeLeft() + " §f秒";
             }
             default -> {
                 return "没做完呢";

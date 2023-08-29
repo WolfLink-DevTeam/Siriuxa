@@ -1,12 +1,7 @@
 package org.wolflink.minecraft.plugin.siriuxa.api.view;
 
-import org.bukkit.entity.Player;
-import org.wolflink.common.ioc.IOC;
-import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
-
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 /**
  * 静态布局菜单
@@ -19,10 +14,11 @@ public abstract class StaticMenu extends Menu {
      */
 
     protected StaticMenu(UUID ownerUuid, String title, int size) {
-        super(ownerUuid,title,size);
+        super(ownerUuid, title, size);
     }
+
     protected StaticMenu(UUID ownerUuid, String title, int size, Set<Integer> containerSlots) {
-        super(ownerUuid,title,size,containerSlots);
+        super(ownerUuid, title, size, containerSlots);
     }
 
     /**
@@ -31,8 +27,8 @@ public abstract class StaticMenu extends Menu {
      */
     @Override
     protected void refreshLayout() {
-        if(getOwner() == null || !getOwner().isOnline()) return;
-        if(icons == null) {
+        if (getOwner() == null || !getOwner().isOnline()) return;
+        if (icons == null) {
             initIcons();
             overrideIcons();
             bindItems();

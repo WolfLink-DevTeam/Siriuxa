@@ -14,20 +14,20 @@ public class LumenTip extends WolfirdListener {
         switch (event.getStatus()) {
             case FEW -> {
                 event.getTask().getTaskPlayers().forEach(player -> {
-                    player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO,1f,1f);
-                    player.sendTitle("","§c当前幽匿光体所剩无几，请注意补充！",8,24,8);
+                    player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 1f);
+                    player.sendTitle("", "§c当前幽匿光体所剩无几，请注意补充！", 8, 24, 8);
                 });
             }
             case ENOUGH -> {
                 event.getTask().getTaskPlayers().forEach(player -> {
-                    player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP,1f,1f);
-                    player.sendTitle("","§c当前幽匿光体剩余不多！",8,24,8);
+                    player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
+                    player.sendTitle("", "§c当前幽匿光体剩余不多！", 8, 24, 8);
                 });
             }
             case INSUFFICIENT -> {
                 event.getTask().getTaskPlayers().forEach(player -> {
-                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP,1f,1f);
-                    player.sendTitle("","§a当前幽匿光体剩余充足。",8,24,8);
+                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1f, 1f);
+                    player.sendTitle("", "§a当前幽匿光体剩余充足。", 8, 24, 8);
                 });
             }
         }

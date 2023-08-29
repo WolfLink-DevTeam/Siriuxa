@@ -1,7 +1,6 @@
 package org.wolflink.minecraft.plugin.siriuxa.api;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 
 @AllArgsConstructor

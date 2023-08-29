@@ -10,7 +10,7 @@ import org.wolflink.minecraft.plugin.siriuxa.file.database.LootDB;
 
 @Singleton
 public class LootService extends LootDB {
-    public Result addLoot(Player player, String entityTypeName,String dropChanceStr) {
+    public Result addLoot(Player player, String entityTypeName, String dropChanceStr) {
         double dropChance;
         EntityType entityType;
         try {

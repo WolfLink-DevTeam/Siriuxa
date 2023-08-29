@@ -3,7 +3,6 @@ package org.wolflink.minecraft.plugin.siriuxa.menu.task;
 import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -14,12 +13,11 @@ import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.BorderIcon;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.DynamicMenu;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.EmptyIcon;
+import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.DifficultyRepository;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
-import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerVariableDB;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
-import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.ClaimTaskReward;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.ExplorationBackpackItem;
 import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
@@ -42,7 +40,7 @@ public class ExplorationBackpackMenu extends DynamicMenu {
      * 静态菜单只会在打开时刷新一次
      */
     public ExplorationBackpackMenu(UUID ownerUuid) {
-        super(ownerUuid, "§0§l任务背包", 54,0);
+        super(ownerUuid, "§0§l任务背包", 54, 0);
     }
 
     public boolean containSlot(int index) {
@@ -62,9 +60,9 @@ public class ExplorationBackpackMenu extends DynamicMenu {
      * 允许的可带回物品最大数量
      */
     public int getBringSlotAmount() {
-        if(playerTaskRecord == null) return 0;
+        if (playerTaskRecord == null) return 0;
         boolean taskSuccess = playerTaskRecord.isSuccess();
-        if(taskSuccess) {
+        if (taskSuccess) {
             ExplorationDifficulty difficulty = IOC.getBean(DifficultyRepository.class)
                     .findByName(ExplorationDifficulty.class, playerTaskRecord.getTaskDifficulty());
             assert difficulty != null;
@@ -83,13 +81,13 @@ public class ExplorationBackpackMenu extends DynamicMenu {
     public void claimReward(Player player) {
         int emptySlots = 0;
         Inventory inv = player.getInventory();
-        for (int i = 0;i < 36;i++) {
+        for (int i = 0; i < 36; i++) {
             ItemStack itemStack = inv.getItem(i);
-            if(itemStack == null || itemStack.getType() == Material.AIR)emptySlots++;
+            if (itemStack == null || itemStack.getType() == Material.AIR) emptySlots++;
         }
-        if(emptySlots < getSelectedSlotAmount()) {
-            player.playSound(player.getLocation(),Sound.ENTITY_VILLAGER_NO,1f,1f);
-            Notifier.chat("你的背包没有足够的空间！",player);
+        if (emptySlots < getSelectedSlotAmount()) {
+            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 1f);
+            Notifier.chat("你的背包没有足够的空间！", player);
             return;
         }
         // 背包格数检查
@@ -104,14 +102,14 @@ public class ExplorationBackpackMenu extends DynamicMenu {
                 .findByName(ExplorationDifficulty.class, playerTaskRecord.getTaskDifficulty());
         assert difficulty != null;
         double wheatMultiple = difficulty.getRewardMultiple();
-        double expMultiple = (1 + wheatMultiple)/2.0;
+        double expMultiple = (1 + wheatMultiple) / 2.0;
         double wheat = playerTaskRecord.getRewardWheat();
         int exp = (int) (playerBackpack.getTotalExp() * expMultiple);
-        IOC.getBean(PlayerAPI.class).addExp(player,exp);
-        String wheatMultipleStr = "§8(§7x"+String.format("%.0f",wheatMultiple * 100)+"%§8)";
-        String expMultipleStr = "§8(§7x"+String.format("%.0f",expMultiple * 100)+"%§8)";
-        Notifier.chat("你从本次任务中收获了 §a" + String.format("%.0f", wheat) + " §6麦穗。"+wheatMultipleStr, player);
-        Notifier.chat("你从本次任务中收获了 §a" + exp + " §e经验。"+expMultipleStr, player);
+        IOC.getBean(PlayerAPI.class).addExp(player, exp);
+        String wheatMultipleStr = "§8(§7x" + String.format("%.0f", wheatMultiple * 100) + "%§8)";
+        String expMultipleStr = "§8(§7x" + String.format("%.0f", expMultiple * 100) + "%§8)";
+        Notifier.chat("你从本次任务中收获了 §a" + String.format("%.0f", wheat) + " §6麦穗。" + wheatMultipleStr, player);
+        Notifier.chat("你从本次任务中收获了 §a" + exp + " §e经验。" + expMultipleStr, player);
         Notifier.chat("你从本次任务中获得了 §a" + selectedSlots.size() + "格 §b物资。", player);
         IOC.getBean(VaultAPI.class).addEconomy(player, wheat);
         for (int index : selectedSlots) {

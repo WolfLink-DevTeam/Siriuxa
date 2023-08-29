@@ -23,9 +23,9 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 
+@Getter
 public class LocationCommandSender implements BlockCommandSender {
 
-    @Getter
     private final Location location;
     @Getter
     private final LocalSession localSession;

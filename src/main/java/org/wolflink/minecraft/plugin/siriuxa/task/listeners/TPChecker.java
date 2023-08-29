@@ -25,7 +25,6 @@ public class TPChecker extends WolfirdListener {
         if (event.getCause().equals(PlayerTeleportEvent.TeleportCause.SPECTATE)) {
             World fromWorld = event.getFrom().getWorld();
             if (fromWorld == null) return;
-            if (event.getTo() == null) return;
             World toWorld = event.getTo().getWorld();
             if (toWorld == null) return;
             if (fromWorld.equals(toWorld)) return;
@@ -37,16 +36,16 @@ public class TPChecker extends WolfirdListener {
     @Override
     public void onEnable() {
         String taskWorldName = IOC.getBean(Config.class).get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME);
-        getSubScheduler().runTaskTimerAsync(()->{
+        getSubScheduler().runTaskTimerAsync(() -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 // 玩家在任务世界
-                if(player.getWorld().getName().equals(taskWorldName)) {
+                if (player.getWorld().getName().equals(taskWorldName)) {
                     // Y >= 300 而且是观察者
-                    if(player.getLocation().getBlockY() >= 300 && player.getGameMode() == GameMode.SPECTATOR) {
-                        getSubScheduler().runTask(()->IOC.getBean(GoLobby.class).execute(player));
+                    if (player.getLocation().getBlockY() >= 300 && player.getGameMode() == GameMode.SPECTATOR) {
+                        getSubScheduler().runTask(() -> IOC.getBean(GoLobby.class).execute(player));
                     }
                 }
             }
-        },20,20);
+        }, 20, 20);
     }
 }

@@ -10,7 +10,6 @@ import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.ExplorationBackpackMenu;
 import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskProperties;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRelationProxy;
 
 import java.text.DateFormat;
@@ -43,12 +42,11 @@ public class TaskRecordIcon extends Icon {
         int minutes = (int) (playerTaskRecord.getUsingTimeInMills() / 60000);
         String claimStatus;
         if (!playerTaskRecord.isSuccess()) {
-            if(safeWorking) {
+            if (safeWorking) {
                 claimStatus = playerTaskRecord.isClaimed() ? "§7补偿已领取" : "§a可领取补偿";
             } else claimStatus = "";
-        }
-        else {
-            if(suppliesCollection) claimStatus = playerTaskRecord.isClaimed() ? "§7物资已领取" : "§a可领取物资";
+        } else {
+            if (suppliesCollection) claimStatus = playerTaskRecord.isClaimed() ? "§7物资已领取" : "§a可领取物资";
             else claimStatus = "";
         }
         return fastCreateItemStack(Material.PAPER, 1, iconName,

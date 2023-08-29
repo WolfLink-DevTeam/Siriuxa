@@ -11,14 +11,14 @@ import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.Result;
 import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
+import org.wolflink.minecraft.plugin.siriuxa.backpack.InvBackupService;
+import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
-import org.wolflink.minecraft.plugin.siriuxa.backpack.InvBackupService;
-import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.ITaskService;
 import org.wolflink.minecraft.plugin.siriuxa.task.regions.TaskArea;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 
 import java.util.List;
@@ -41,8 +41,8 @@ public class ExplorationTaskService implements ITaskService {
         InvBackupService invBackupService = IOC.getBean(InvBackupService.class);
         invBackupService.applyInv(player, PlayerBackpack.getEmptyBackpack());
         Result r = invBackupService.applyMainInv(player);
-        if(!r.result()) return;
-        invBackupService.saveMainInv(player,PlayerBackpack.getEmptyBackpack());
+        if (!r.result()) return;
+        invBackupService.saveMainInv(player, PlayerBackpack.getEmptyBackpack());
         // 传送回城
         player.teleport(config.getLobbyLocation());
         if (!player.isOp()) player.setGameMode(GameMode.SURVIVAL);
@@ -62,7 +62,7 @@ public class ExplorationTaskService implements ITaskService {
         // 保存玩家背包信息
         invBackupService.saveMainInv(player);
         // 情空背包
-        invBackupService.applyInv(player,PlayerBackpack.getEmptyBackpack());
+        invBackupService.applyInv(player, PlayerBackpack.getEmptyBackpack());
         // 传送玩家到任务地点
         List<Location> spawnLocations = task.getSpawnLocations();
         if (spawnLocations.isEmpty()) player.teleport(task.getTaskArea().getCenter());
@@ -92,12 +92,12 @@ public class ExplorationTaskService implements ITaskService {
     }
 
     @Override
-    public boolean canAccept(Class<? extends Task> taskClass,TaskDifficulty taskDifficulty, OfflinePlayer offlinePlayer) {
-        if(taskClass != ExplorationTask.class) {
+    public boolean canAccept(Class<? extends Task> taskClass, TaskDifficulty taskDifficulty, OfflinePlayer offlinePlayer) {
+        if (taskClass != ExplorationTask.class) {
             Notifier.error("任务类型与任务业务类不匹配！");
             return false;
         }
-        if(!(taskDifficulty instanceof ExplorationDifficulty explorationDifficulty)) {
+        if (!(taskDifficulty instanceof ExplorationDifficulty explorationDifficulty)) {
             Notifier.error("任务难度与任务类型不匹配！");
             return false;
         }
@@ -106,12 +106,12 @@ public class ExplorationTaskService implements ITaskService {
     }
 
     @Override
-    public void accept(Class<? extends Task> taskClass,TaskDifficulty taskDifficulty, OfflinePlayer offlinePlayer) {
-        if(taskClass != ExplorationTask.class) {
+    public void accept(Class<? extends Task> taskClass, TaskDifficulty taskDifficulty, OfflinePlayer offlinePlayer) {
+        if (taskClass != ExplorationTask.class) {
             Notifier.error("任务类型与任务业务类不匹配！");
             return;
         }
-        if(!(taskDifficulty instanceof ExplorationDifficulty explorationDifficulty)) {
+        if (!(taskDifficulty instanceof ExplorationDifficulty explorationDifficulty)) {
             Notifier.error("任务难度与任务类型不匹配！");
             return;
         }

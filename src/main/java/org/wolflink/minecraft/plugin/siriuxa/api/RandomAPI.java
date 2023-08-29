@@ -10,9 +10,10 @@ import java.util.Random;
 @Singleton
 public class RandomAPI {
     Random random = new Random();
+
     @Nullable
     public <T> T selectRandom(@Nullable Collection<T> collection) {
-        if(collection == null || collection.isEmpty()) return null;
+        if (collection == null || collection.isEmpty()) return null;
         int r = random.nextInt(collection.size());
         T value = null;
         Iterator<T> iterator = collection.iterator();

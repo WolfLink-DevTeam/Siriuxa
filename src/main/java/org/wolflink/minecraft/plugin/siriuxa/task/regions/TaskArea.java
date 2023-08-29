@@ -22,13 +22,13 @@ import java.util.Random;
 /**
  * 任务活动区域
  */
+@Getter
 public abstract class TaskArea {
 
 
     /**
      * 边界半径
      */
-    @Getter
     protected final double radius;
     protected final Task task;
     @Getter
@@ -60,7 +60,7 @@ public abstract class TaskArea {
     private String getBorderBar(Player player) {
         double percent = distanceToBorderPercent(player);
         int temp = (int) Math.round(percent * 50);
-        if(temp < 0) temp = 0;
+        if (temp < 0) temp = 0;
         String lineColor = "§a";
         if (temp <= 15) lineColor = "§e";
         if (temp <= 5) lineColor = "§c";

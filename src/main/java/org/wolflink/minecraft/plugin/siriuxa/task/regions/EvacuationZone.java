@@ -58,7 +58,7 @@ public class EvacuationZone {
             if (itemStack == null) continue;
             if (itemStack.getType() != Material.COMPASS) continue;
             ItemMeta meta = itemStack.getItemMeta();
-            if(meta == null || meta.getLore() == null) return true;
+            if (meta == null || meta.getLore() == null) return true;
         }
         return false;
     }
@@ -94,8 +94,8 @@ public class EvacuationZone {
 
         for (Player player : explorationTask.getTaskPlayers()) {
             Location pLoc = player.getLocation();
-            if(pLoc.getWorld() != center.getWorld()) continue;
-            if(pLoc.distance(center) <= safeRadius && pLoc.clone().getBlock().getType().equals(Material.END_PORTAL_FRAME)) {
+            if (pLoc.getWorld() != center.getWorld()) continue;
+            if (pLoc.distance(center) <= safeRadius && pLoc.clone().getBlock().getType().equals(Material.END_PORTAL_FRAME)) {
                 playerSet.add(player);
             }
         }
@@ -127,7 +127,7 @@ public class EvacuationZone {
     @Nullable
     private CompassMeta prepareCompassMeta(boolean available) {
         CompassMeta compassMeta = (CompassMeta) new ItemStack(Material.COMPASS).getItemMeta();
-        if(!available) return compassMeta;
+        if (!available) return compassMeta;
         if (compassMeta == null) {
             Notifier.warn("获取撤离指南针的itemMeta失败");
             return null;

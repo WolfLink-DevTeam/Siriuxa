@@ -62,6 +62,7 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
      * 保险格数
      */
     private int safeSlotAmount;
+
     public PlayerTaskRecord(@NonNull UUID playerUuid, @NonNull Task task) {
         this.playerUuid = playerUuid;
         taskUuid = task.getTaskUuid();
@@ -88,7 +89,7 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
         isClaimed = (boolean) map.get("isClaimed");
         isEscape = (boolean) map.get("isEscape");
         rewardWheat = (double) map.get("rewardWheat");
-        safeSlotAmount = (int) map.getOrDefault("safeSlotAmount",0);
+        safeSlotAmount = (int) map.getOrDefault("safeSlotAmount", 0);
     }
 
     public static PlayerTaskRecord deserialize(Map<String, Object> map) {
@@ -111,7 +112,7 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
         map.put("isEscape", isEscape);
         map.put("isClaimed", isClaimed);
         map.put("rewardWheat", rewardWheat);
-        map.put("safeSlotAmount",safeSlotAmount);
+        map.put("safeSlotAmount", safeSlotAmount);
         return map;
     }
 }

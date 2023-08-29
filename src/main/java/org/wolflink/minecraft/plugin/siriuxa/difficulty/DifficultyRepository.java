@@ -81,7 +81,7 @@ public class DifficultyRepository extends MapRepository<DifficultyKey, TaskDiffi
      * 根据难度类型和名字查找指定的难度
      */
     @Nullable
-    public <T extends TaskDifficulty> T findByName(Class<T> clazz,String name) {
+    public <T extends TaskDifficulty> T findByName(Class<T> clazz, String name) {
         for (T difficulty : findByType(clazz)) {
             if (name.equals(difficulty.getName())) return difficulty;
         }

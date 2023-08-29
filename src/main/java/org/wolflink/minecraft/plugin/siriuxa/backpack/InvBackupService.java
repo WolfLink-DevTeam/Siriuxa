@@ -7,8 +7,6 @@ import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.api.Result;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.InventoryDB;
 
-import java.util.List;
-
 @Singleton
 public class InvBackupService {
 
@@ -27,10 +25,11 @@ public class InvBackupService {
         inventoryDB.saveMain(player, playerBackpack);
         return new Result(true, "保存成功。");
     }
+
     public Result giveFiveSlotBackpack(Player player) {
         EnderBackpack enderBackpack = inventoryDB.loadEnderBackpack(player);
         enderBackpack.give(player);
-        return new Result(true,"发放成功。");
+        return new Result(true, "发放成功。");
     }
 
     /**
@@ -40,8 +39,9 @@ public class InvBackupService {
         EnderBackpack enderBackpack = inventoryDB.loadEnderBackpack(offlinePlayer);
         enderBackpack.clear();
         saveEnderBackpack(offlinePlayer, enderBackpack);
-        return new Result(true,"清理成功。");
+        return new Result(true, "清理成功。");
     }
+
     public Result saveEnderBackpack(OfflinePlayer offlinePlayer, EnderBackpack enderBackpack) {
         inventoryDB.saveEnderBackpack(offlinePlayer, enderBackpack);
         return new Result(true, "保存成功。");

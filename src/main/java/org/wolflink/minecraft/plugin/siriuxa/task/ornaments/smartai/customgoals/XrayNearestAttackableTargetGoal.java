@@ -3,13 +3,11 @@ package org.wolflink.minecraft.plugin.siriuxa.task.ornaments.smartai.customgoals
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
-import org.bukkit.Bukkit;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -46,7 +44,8 @@ public class XrayNearestAttackableTargetGoal<T extends LivingEntity> extends Tar
         this.setFlags(EnumSet.of(Goal.Flag.TARGET));
         this.targetConditions = TargetingConditions.forCombat().range(this.getFollowDistance()).selector(targetPredicate);
         this.targetConditions.ignoreLineOfSight();
-        if (mob.level().paperConfig().entities.entitiesTargetWithFollowRange) this.targetConditions.useFollowRange(); // Paper
+        if (mob.level().paperConfig().entities.entitiesTargetWithFollowRange)
+            this.targetConditions.useFollowRange(); // Paper
     }
 
     @Override

@@ -16,10 +16,11 @@ public class PlayerAPI {
             player.setLevel(player.getLevel() - 1);
             totalExp += player.getExpToLevel();
         }
-        setExp(player,totalExp);
+        setExp(player, totalExp);
         return totalExp;
     }
-    public void setExp(Player player,final int totalExp) {
+
+    public void setExp(Player player, final int totalExp) {
         int exp = totalExp;
         Notifier.debug("玩家 " + player.getName() + " 的经验已被重置为 0，即将发放经验：" + exp);
         player.setTotalExperience(0);

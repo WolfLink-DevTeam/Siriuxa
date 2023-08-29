@@ -7,11 +7,11 @@ import org.bukkit.entity.Player;
 import java.util.HashSet;
 import java.util.UUID;
 
+@Getter
 public class TaskTeam extends Team {
     /**
      * 创建该任务队伍的源队伍UUID
      */
-    @Getter
     private final UUID sourceTeamUuid;
     /**
      * 初始队伍大小
@@ -20,7 +20,7 @@ public class TaskTeam extends Team {
     private final int initSize;
 
     public TaskTeam(GlobalTeam globalTeam) {
-        super(globalTeam.getOwnerUuid(),new HashSet<>(globalTeam.getMemberUuids()));
+        super(globalTeam.getOwnerUuid(), new HashSet<>(globalTeam.getMemberUuids()));
         sourceTeamUuid = globalTeam.getTeamUuid();
         initSize = globalTeam.getMemberUuids().size();
     }

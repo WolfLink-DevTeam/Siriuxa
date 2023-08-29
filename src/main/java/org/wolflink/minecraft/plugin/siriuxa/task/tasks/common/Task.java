@@ -18,7 +18,6 @@ import org.wolflink.minecraft.plugin.siriuxa.api.world.WorldEditAPI;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
-import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
 import org.wolflink.minecraft.plugin.siriuxa.monster.StrategyDecider;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.IGlobalTeam;
@@ -39,7 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 抽象任务类
  */
 @Data
-public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameable {
+public abstract class Task implements IGlobalTeam, ITaskTeam, IRecordable, INameable {
 
     public TaskProperties getTaskProperties() {
         return IOC.getBean(TaskRelationProxy.class).getTaskProperties(getClass());
@@ -54,6 +53,7 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
     public String getColor() {
         return getTaskProperties().getColor();
     }
+
     /**
      * 任务装饰 例如：幽匿爆发，安全作业，物资收集，潘多拉试炼
      */
@@ -74,6 +74,7 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
     GlobalTeam globalTeam;
     @Nullable
     TaskTeam taskTeam = null;
+
     protected Task(@NotNull GlobalTeam globalTeam,
                    @NotNull TaskDifficulty taskDifficulty) {
         this.globalTeam = globalTeam;
@@ -81,7 +82,9 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
         stageHolder = initStageHolder();
         strategyDecider = new StrategyDecider(this);
     }
+
     protected abstract StageHolder initStageHolder();
+
     protected void triggerFailed() {
         getTaskPlayers().forEach(player -> fillRecord(player, false));
         stageHolder.next();
@@ -100,6 +103,7 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
     }
 
     private final Map<UUID, PlayerTaskRecord> playerRecordMap = new ConcurrentHashMap<>();
+
     @Override
     public Map<UUID, PlayerTaskRecord> getPlayerRecordMap() {
         return playerRecordMap;
@@ -108,6 +112,7 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
     protected void triggerFinish() {
         triggerFinish(false);
     }
+
     protected void triggerFinish(boolean isServerClosing) {
         getTaskPlayers().forEach(player -> fillRecord(player, true));
         stageHolder.next();
@@ -117,7 +122,7 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
         finish();
         for (Player player : getGlobalTeam().getPlayers()) {
             IOC.getBean(TaskService.class).goLobby(player);
-            if(!isServerClosing) {
+            if (!isServerClosing) {
                 Siriuxa.getInstance().getSubScheduler().runTaskLater(() -> {
                     player.sendTitle("§a任务完成", "§7前往领取本次任务的报酬吧", 10, 80, 10);
                     player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f);
@@ -127,7 +132,9 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
         }
         deleteTask();
     }
+
     protected abstract void failedCheck();
+
     protected abstract void finishedCheck();
 
     public void preLoad() {
@@ -143,8 +150,10 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
         IOC.getBean(WorldEditAPI.class).pasteWorkingUnit(new LocationCommandSender(taskArea.getCenter().clone().add(0, 2, 0)));
         implPreLoad();
     }
+
     @Getter
     protected boolean finishPreLoad = false;
+
     protected abstract void implPreLoad();
 
     public abstract void start();
@@ -174,7 +183,7 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
      */
     protected void deleteTask() {
         globalTeam.setSelectedTask(null);
-        if(taskTeam != null) taskTeam.clear();
+        if (taskTeam != null) taskTeam.clear();
         IOC.getBean(TaskRepository.class).deleteByKey(taskUuid);
         // 释放队列
         IOC.getBean(TaskQueue.class).taskEnded();
@@ -183,7 +192,7 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
 
 
     public void death(Player player) {
-        if(taskTeam == null) {
+        if (taskTeam == null) {
             Notifier.error("任务的队伍未被初始化！");
             return;
         }
@@ -202,7 +211,7 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
      * (适用于任务过程中玩家非正常离开任务的情况)
      */
     public void escape(OfflinePlayer offlinePlayer) {
-        if(taskTeam == null) {
+        if (taskTeam == null) {
             Notifier.error("任务的队伍未被初始化！");
             return;
         }
@@ -211,6 +220,7 @@ public abstract class Task implements IGlobalTeam, ITaskTeam,IRecordable,INameab
         Notifier.debug("玩家" + offlinePlayer.getName() + "在任务过程中失踪了。");
         Notifier.broadcastChat(taskTeam.getPlayers(), "玩家" + offlinePlayer.getName() + "在任务过程中失踪了。");
     }
+
     @Getter
     @Setter
     private List<Location> spawnLocations = new ArrayList<>();

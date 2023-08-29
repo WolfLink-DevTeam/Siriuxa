@@ -44,17 +44,18 @@ public abstract class SpawnStrategy {
      */
     void appendMetadata(Player player, Entity entity) {
         // 生成该怪物的玩家
-        entity.setMetadata(MetadataKey.MONSTER_BELONG_PLAYER.getKey(), new FixedMetadataValue(Siriuxa.getInstance(),player.getName()));
+        entity.setMetadata(MetadataKey.MONSTER_BELONG_PLAYER.getKey(), new FixedMetadataValue(Siriuxa.getInstance(), player.getName()));
         Task task = IOC.getBean(TaskRepository.class).findByTaskTeamPlayer(player);
         // 玩家归属的任务UUID
-        if(task != null) {
-            entity.setMetadata(MetadataKey.MONSTER_BELONG_TASK_UUID.getKey(), new FixedMetadataValue(Siriuxa.getInstance(),task.getTaskUuid()));
+        if (task != null) {
+            entity.setMetadata(MetadataKey.MONSTER_BELONG_TASK_UUID.getKey(), new FixedMetadataValue(Siriuxa.getInstance(), task.getTaskUuid()));
         }
     }
-    void callEvent(Player player,Entity entity) {
+
+    void callEvent(Player player, Entity entity) {
         Task task = IOC.getBean(TaskRepository.class).findByTaskTeamPlayer(player);
-        if(task != null) {
-            Bukkit.getPluginManager().callEvent(new TaskSpawnEntityEvent(task,entity));
+        if (task != null) {
+            Bukkit.getPluginManager().callEvent(new TaskSpawnEntityEvent(task, entity));
         }
     }
 }

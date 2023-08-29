@@ -12,11 +12,11 @@ import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.file.Lang;
+import org.wolflink.minecraft.plugin.siriuxa.task.events.WheatBlockSellEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
-import org.wolflink.minecraft.plugin.siriuxa.task.events.WheatBlockSellEvent;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen.LumenTask;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.GameStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen.LumenTask;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
 @Singleton
@@ -53,7 +53,7 @@ public class OreChecker extends WolfirdListener {
         }
         renderBlockBorder(block.getLocation());
 
-        Bukkit.getPluginManager().callEvent(new WheatBlockSellEvent(player,block,wheatValue));
+        Bukkit.getPluginManager().callEvent(new WheatBlockSellEvent(player, block, wheatValue));
     }
 
     private void renderBlockBorder(Location center) {

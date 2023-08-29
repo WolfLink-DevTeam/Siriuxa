@@ -21,7 +21,7 @@ public class EnderBackpackIcon extends Icon {
 
     @Override
     protected @NonNull ItemStack createIcon() {
-        return fastCreateItemStack(Material.BUNDLE,1,"§8[ §a行李托运 §8]",
+        return fastCreateItemStack(Material.BUNDLE, 1, "§8[ §a行李托运 §8]",
                 " ",
                 "  §7任务区域与主城之间有着非常遥远的距离，",
                 "  §7冒险家们需要乘坐空降仓空降到地面进行任务。",
@@ -36,11 +36,11 @@ public class EnderBackpackIcon extends Icon {
     @Override
     public void leftClick(Player player) {
         Task task = IOC.getBean(TaskRepository.class).findByGlobalTeamPlayer(player);
-        if(task != null && !(task.getStageHolder().getThisStage() instanceof WaitStage)) {
-            Notifier.chat("你的队伍还在任务中，请等待任务结束后查看安全背包。",player);
+        if (task != null && !(task.getStageHolder().getThisStage() instanceof WaitStage)) {
+            Notifier.chat("你的队伍还在任务中，请等待任务结束后查看安全背包。", player);
             return;
         }
-        IOC.getBean(MenuService.class).display(EnderBackpackMenu.class,player);
+        IOC.getBean(MenuService.class).display(EnderBackpackMenu.class, player);
     }
 
     @Override

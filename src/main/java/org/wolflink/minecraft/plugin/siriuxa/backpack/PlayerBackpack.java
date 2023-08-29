@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.PlayerAPI;
-import org.wolflink.minecraft.wolfird.framework.config.Json;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,13 +39,11 @@ public final class PlayerBackpack implements ConfigurationSerializable {
 
     public PlayerBackpack(Player player) {
         EntityEquipment equipment = player.getEquipment();
-        if (equipment != null) {
-            helmet = equipment.getHelmet() == null ? null : equipment.getHelmet().clone();
-            chestplate = equipment.getChestplate() == null ? null : equipment.getChestplate().clone();
-            leggings = equipment.getLeggings() == null ? null : equipment.getLeggings().clone();
-            boots = equipment.getBoots() == null ? null : equipment.getBoots().clone();
-            offhand = equipment.getItemInOffHand().clone();
-        } else Notifier.error("玩家" + player.getName() + "装备栏为空！");
+        helmet = equipment.getHelmet() == null ? null : equipment.getHelmet().clone();
+        chestplate = equipment.getChestplate() == null ? null : equipment.getChestplate().clone();
+        leggings = equipment.getLeggings() == null ? null : equipment.getLeggings().clone();
+        boots = equipment.getBoots() == null ? null : equipment.getBoots().clone();
+        offhand = equipment.getItemInOffHand().clone();
         totalExp = IOC.getBean(PlayerAPI.class).getRealExp(player);
         items = new ArrayList<>();
         // 拷贝背包
@@ -73,16 +70,12 @@ public final class PlayerBackpack implements ConfigurationSerializable {
 
     void apply(Player player) {
         EntityEquipment equipment = player.getEquipment();
-        if (equipment == null) {
-            Notifier.error("玩家" + player.getName() + "装备栏为空！");
-            return;
-        }
         equipment.setHelmet(helmet);
         equipment.setChestplate(chestplate);
         equipment.setLeggings(leggings);
         equipment.setBoots(boots);
         equipment.setItemInOffHand(offhand);
-        IOC.getBean(PlayerAPI.class).setExp(player,totalExp);
+        IOC.getBean(PlayerAPI.class).setExp(player, totalExp);
         Inventory inventory = player.getInventory();
         if (items != null) for (int i = 0; i < 36; i++) {
             inventory.setItem(i, i < items.size() ? items.get(i) : null);

@@ -20,10 +20,10 @@ public class ClaimTaskReward extends Icon {
         int moreSlots = explorationBackpackMenu.getBringSlotAmount() - explorationBackpackMenu.getSelectedSlotAmount();
         return fastCreateItemStack(Material.END_CRYSTAL, 1, "§a§l带回物品",
                 " ",
-                    "  §f还可以选择额外 §e" + moreSlots + " §f格物品",
-                    "  ",
-                    "  §e点击立刻领取选中的物品 §8(§7不要遗漏贵重物资哦§8)",
-                    " ");
+                "  §f还可以选择额外 §e" + moreSlots + " §f格物品",
+                "  ",
+                "  §e点击立刻领取选中的物品 §8(§7不要遗漏贵重物资哦§8)",
+                " ");
     }
 
     @Override

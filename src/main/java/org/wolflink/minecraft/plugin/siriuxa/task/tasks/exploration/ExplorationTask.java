@@ -1,16 +1,16 @@
 package org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration;
 
 import lombok.Getter;
-import org.antlr.v4.runtime.atn.SemanticContext;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.BlockAPI;
-import org.wolflink.minecraft.plugin.siriuxa.backpack.InvBackupService;
-import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.loot.ChestLoot;
@@ -18,7 +18,6 @@ import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskEndEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskStartEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
 import org.wolflink.minecraft.plugin.siriuxa.task.regions.EvacuationZone;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskProperties;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen.LumenTask;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 
@@ -31,22 +30,25 @@ import java.util.Set;
  * 玩家需要乘坐飞艇撤离才算任务完成
  * 可携带物资离开
  */
+@Getter
 public class ExplorationTask extends LumenTask {
-    @Getter
     private final ExplorationDifficulty explorationDifficulty;
     /**
      * 当前可用的撤离点
      */
     @Getter
     private EvacuationZone availableEvacuationZone = null;
+
     public ExplorationTask(GlobalTeam globalTeam, ExplorationDifficulty explorationDifficulty) {
         super(globalTeam, explorationDifficulty);
         this.explorationDifficulty = explorationDifficulty;
     }
+
     public Set<Player> waitForEvacuatePlayers() {
         if (availableEvacuationZone == null) return new HashSet<>();
         else return availableEvacuationZone.getPlayerInZone();
     }
+
     private void startEvacuateTask(int minutes) {
         subScheduler.runTaskLater(() -> {
             if (getTaskArea() == null) return;
@@ -70,6 +72,7 @@ public class ExplorationTask extends LumenTask {
             }
         }, 20L * 60 * minutes);
     }
+
     /**
      * 撤离玩家
      * (适用于只有部分玩家乘坐撤离飞艇的情况)
@@ -86,16 +89,20 @@ public class ExplorationTask extends LumenTask {
             player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1f, 1f);
         }, 20 * 3L);
     }
+
     private static final Set<OrnamentType> ornamentTypes = new HashSet<>();
+
     static {
         ornamentTypes.add(OrnamentType.SCULK_INFECTION);
         ornamentTypes.add(OrnamentType.SAFE_WORKING);
         ornamentTypes.add(OrnamentType.SUPPLIES_COLLECTION);
     }
+
     @Override
     public Set<OrnamentType> getOrnamentTypes() {
         return ornamentTypes;
     }
+
     @Override
     protected void finishedCheck() {
         subScheduler.runTaskTimer(() -> {
@@ -104,6 +111,7 @@ public class ExplorationTask extends LumenTask {
             }
         }, 20, 20);
     }
+
     @Override
     protected void implPreLoad() {
         if (getTaskArea() == null) {
@@ -131,6 +139,7 @@ public class ExplorationTask extends LumenTask {
         }
         finishPreLoad = true;
     }
+
     @Override
     public void start() {
         super.lumenTip.setEnabled(true);
@@ -153,17 +162,19 @@ public class ExplorationTask extends LumenTask {
                 startEvacuateTask(random.nextInt(12, 20));
                 getTaskArea().startCheck();
             });
-            Bukkit.getScheduler().runTask(Siriuxa.getInstance(),()->Bukkit.getPluginManager().callEvent(new TaskStartEvent(this)));
+            Bukkit.getScheduler().runTask(Siriuxa.getInstance(), () -> Bukkit.getPluginManager().callEvent(new TaskStartEvent(this)));
         });
     }
+
     @Override
     protected void finish() {
         super.lumenTip.setEnabled(false);
-        Bukkit.getPluginManager().callEvent(new TaskEndEvent(this,true));
+        Bukkit.getPluginManager().callEvent(new TaskEndEvent(this, true));
     }
+
     @Override
     public void failed() {
         super.lumenTip.setEnabled(false);
-        Bukkit.getPluginManager().callEvent(new TaskEndEvent(this,false));
+        Bukkit.getPluginManager().callEvent(new TaskEndEvent(this, false));
     }
 }

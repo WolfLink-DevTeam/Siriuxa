@@ -14,17 +14,17 @@ public class ChallengeTag extends Icon {
 
     @Override
     protected @NonNull ItemStack createIcon() {
-        return fastCreateItemStack(Material.ENDER_CHEST,1,"§8[ §d潘多拉魔盒 §8]",
+        return fastCreateItemStack(Material.ENDER_CHEST, 1, "§8[ §d潘多拉魔盒 §8]",
                 " ",
                 "  §c灾祸§7与§a希望§7。",
                 "  §7这将会是一场试炼，准备好了吗？",
                 "  "
-                );
+        );
     }
 
     @Override
     public void leftClick(Player player) {
-        new Result(false,"开发中，敬请期待！").show(player);
+        new Result(false, "开发中，敬请期待！").show(player);
     }
 
     @Override

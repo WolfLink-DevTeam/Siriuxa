@@ -36,7 +36,7 @@ public class FarmChecker extends WolfirdListener {
     @Inject
     private Lang lang;
 
-    private final Set<Material> availableAgeable = Stream.of(Material.WHEAT,Material.CARROTS,Material.POTATOES,Material.BEETROOTS).collect(Collectors.toSet());
+    private final Set<Material> availableAgeable = Stream.of(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.BEETROOTS).collect(Collectors.toSet());
 
     /**
      * 此处只监听 小麦/马铃薯/胡萝卜/甜菜根 四种作物
@@ -50,15 +50,17 @@ public class FarmChecker extends WolfirdListener {
         if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 任务没在游戏阶段
         if (task.getTaskArea() == null) return; // 任务区域未设定
         if (player.getWorld() != task.getTaskArea().getCenter().getWorld()) return; // 不在任务世界
-        if(e.getBlockState().getBlockData() instanceof Ageable ageable) { // 是可成长的
-            if(availableAgeable.contains(ageable.getMaterial())) {
+        if (e.getBlockState().getBlockData() instanceof Ageable ageable) { // 是可成长的
+            if (availableAgeable.contains(ageable.getMaterial())) {
                 if (ageable.getAge() == ageable.getMaximumAge()) { // 达到最大年龄
-                    recordAndAddLumen(lumenTask,ageable.getMaterial());
+                    recordAndAddLumen(lumenTask, ageable.getMaterial());
                 }
             }
         }
     }
-    private final Set<Material> availableHarvestBlocks = Stream.of(Material.PUMPKIN,Material.MELON).collect(Collectors.toSet());
+
+    private final Set<Material> availableHarvestBlocks = Stream.of(Material.PUMPKIN, Material.MELON).collect(Collectors.toSet());
+
     @EventHandler
     public void onHarvestBlockPlace(BlockPlaceEvent e) {
         Player player = e.getPlayer();
@@ -68,10 +70,11 @@ public class FarmChecker extends WolfirdListener {
         if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 任务没在游戏阶段
         if (task.getTaskArea() == null) return; // 任务区域未设定
         if (player.getWorld() != task.getTaskArea().getCenter().getWorld()) return; // 不在任务世界
-        if(availableHarvestBlocks.contains(e.getBlock().getType())) {
-            e.getBlock().setMetadata(MetadataKey.HARVEST_BLOCK_PLACER.getKey(),new FixedMetadataValue(Siriuxa.getInstance(),e.getPlayer().getName()));
+        if (availableHarvestBlocks.contains(e.getBlock().getType())) {
+            e.getBlock().setMetadata(MetadataKey.HARVEST_BLOCK_PLACER.getKey(), new FixedMetadataValue(Siriuxa.getInstance(), e.getPlayer().getName()));
         }
     }
+
     @EventHandler
     public void onBlockHarvest(BlockBreakEvent e) {
         Player player = e.getPlayer();
@@ -81,12 +84,13 @@ public class FarmChecker extends WolfirdListener {
         if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 任务没在游戏阶段
         if (task.getTaskArea() == null) return; // 任务区域未设定
         if (player.getWorld() != task.getTaskArea().getCenter().getWorld()) return; // 不在任务世界
-        if(availableHarvestBlocks.contains(e.getBlock().getType())) {
-            if(e.getBlock().hasMetadata(MetadataKey.HARVEST_BLOCK_PLACER.getKey())) return;
-            recordAndAddLumen(lumenTask,e.getBlock().getType());
+        if (availableHarvestBlocks.contains(e.getBlock().getType())) {
+            if (e.getBlock().hasMetadata(MetadataKey.HARVEST_BLOCK_PLACER.getKey())) return;
+            recordAndAddLumen(lumenTask, e.getBlock().getType());
         }
     }
-    private void recordAndAddLumen(LumenTask lumenTask,Material material) {
+
+    private void recordAndAddLumen(LumenTask lumenTask, Material material) {
         farmValues.doRecord(material);
         double cropValue = farmValues.getCropValue(material);
         lumenTask.addLumen(cropValue);

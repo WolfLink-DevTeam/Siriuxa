@@ -19,6 +19,7 @@ public class OfflinePlayerRecord implements ConfigurationSerializable {
     private final String name;
     private final PlayerBackpack playerBackpack;
     private boolean taskEscape;
+
     public OfflinePlayerRecord(Player player) {
         uuid = player.getUniqueId();
         name = player.getName();

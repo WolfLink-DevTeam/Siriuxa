@@ -9,8 +9,8 @@ import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen.LumenTask;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.GameStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen.LumenTask;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
 @Singleton
@@ -35,7 +35,7 @@ public class HurtChecker extends WolfirdListener {
         // 下调大额伤害
         if (event.getDamage() > 12) event.setDamage(12);
         // 上调小额伤害
-        if(player.getHealth() >= 3 && event.getDamage() < 2) event.setDamage(2);
+        if (player.getHealth() >= 3 && event.getDamage() < 2) event.setDamage(2);
         // 扣除麦穗
         double cost = lumenTask.getHurtLumenCost() * event.getFinalDamage();
         lumenTask.takeLumen(cost);

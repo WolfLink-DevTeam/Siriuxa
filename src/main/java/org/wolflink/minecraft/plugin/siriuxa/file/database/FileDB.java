@@ -52,22 +52,23 @@ public abstract class FileDB {
      */
     protected void save(File file) {
         FileConfiguration fileConfiguration = getFileConfiguration(file);
-        if(fileConfiguration == null) {
-            Notifier.warn("在尝试保存 "+file.getName()+" 时未找到其 FileConfiguration 对象");
+        if (fileConfiguration == null) {
+            Notifier.warn("在尝试保存 " + file.getName() + " 时未找到其 FileConfiguration 对象");
             return;
         }
         try {
             fileConfiguration.save(file);
         } catch (Exception e) {
             e.printStackTrace();
-            Notifier.error("在尝试保存文件 "+file.getName()+" 时出现问题");
+            Notifier.error("在尝试保存文件 " + file.getName() + " 时出现问题");
         }
     }
+
     public FileConfiguration createAndLoad(File file) {
         File parent = file.getParentFile();
         if (!parent.exists()) parent.mkdirs();
         try {
-            file.createNewFile();
+            boolean ignore = file.createNewFile();
         } catch (Exception e) {
             e.printStackTrace();
             Notifier.error("在创建文件时出现异常。");
@@ -76,9 +77,10 @@ public abstract class FileDB {
         fileConfigurations.put(file.getAbsolutePath(), fileConfiguration);
         return fileConfiguration;
     }
+
     public void delete(File file) {
         fileConfigurations.remove(file.getAbsolutePath());
-        file.delete();
+        boolean ignore = file.delete();
     }
 
     public void load() {

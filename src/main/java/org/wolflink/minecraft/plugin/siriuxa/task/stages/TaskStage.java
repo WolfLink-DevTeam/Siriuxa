@@ -4,9 +4,9 @@ import lombok.Getter;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 
+@Getter
 public abstract class TaskStage extends Stage {
 
-    @Getter
     private final TaskLinearStageHolder stageHolder;
 
     protected TaskStage(String displayName, TaskLinearStageHolder stageHolder) {

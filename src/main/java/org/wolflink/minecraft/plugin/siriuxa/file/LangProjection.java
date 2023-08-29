@@ -5,6 +5,7 @@ import lombok.Getter;
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
 public enum LangProjection {
     COPPER_BLOCK("material.copper_block", "铜块"),
     COAL_BLOCK("material.coal_block", "煤炭块"),
@@ -17,7 +18,6 @@ public enum LangProjection {
 
 
     ;
-    @Getter
     private final String path;
     @Getter
     private final Object defaultValue;

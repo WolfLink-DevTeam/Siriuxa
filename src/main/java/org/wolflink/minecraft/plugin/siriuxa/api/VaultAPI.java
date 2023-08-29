@@ -8,9 +8,9 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 
+@Getter
 @Singleton
 public class VaultAPI {
-    @Getter
     private Economy economy;
 
     public VaultAPI() {

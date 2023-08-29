@@ -20,10 +20,12 @@ public interface IRecordable {
     default PlayerTaskRecord getPlayerTaskRecord(UUID uuid) {
         return getPlayerRecordMap().get(uuid);
     }
+
     @NonNull
     default Collection<PlayerTaskRecord> getPlayerTaskRecords() {
         return getPlayerRecordMap().values();
     }
+
     /**
      * 初始化任务快照
      */
@@ -33,6 +35,7 @@ public interface IRecordable {
      * 填充任务快照
      */
     void fillRecord(OfflinePlayer offlinePlayer, boolean taskResult);
+
     /**
      * 完成任务快照
      */

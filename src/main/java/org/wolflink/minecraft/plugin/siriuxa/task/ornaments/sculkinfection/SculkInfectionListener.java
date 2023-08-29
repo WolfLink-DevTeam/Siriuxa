@@ -15,11 +15,11 @@ import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.bukkit.wolfblockspread.SpreadType;
 import org.wolflink.minecraft.bukkit.wolfblockspread.WolfBlockSpreadAPI;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
+import org.wolflink.minecraft.plugin.siriuxa.api.MetadataKey;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.api.RandomAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.LocationAPI;
 import org.wolflink.minecraft.plugin.siriuxa.api.world.SculkSpawnBox;
-import org.wolflink.minecraft.plugin.siriuxa.api.MetadataKey;
 import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskEndEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskStartEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
@@ -36,12 +36,13 @@ class SculkInfectionListener extends WolfirdListener {
     SculkInfectionManager manager;
     final Set<UUID> milkPlayers = new HashSet<>();
     private final Set<UUID> milkCDSet = new HashSet<>();
+
     @EventHandler
     void taskStart(TaskStartEvent event) {
         if (event.getTask().getOrnamentTypes().contains(OrnamentType.SCULK_INFECTION)) {
             manager.availableTasks.add(event.getTask());
             TaskArea taskArea = event.getTask().getTaskArea();
-            if(taskArea != null) {
+            if (taskArea != null) {
                 manager.availableWorlds.add(Objects.requireNonNull(taskArea.getCenter().getWorld()).getName());
             }
         }
@@ -74,11 +75,11 @@ class SculkInfectionListener extends WolfirdListener {
         if (manager.getInfectionValue(player.getUniqueId()) >= 300) {
             milkCDSet.add(player.getUniqueId());
             milkPlayers.add(player.getUniqueId());
-            player.setCooldown(Material.MILK_BUCKET,20 * 480);
+            player.setCooldown(Material.MILK_BUCKET, 20 * 480);
             // 5分钟有效期，期间感染值不会增高
             getSubScheduler().runTaskLater(() -> {
                 milkPlayers.remove(player.getUniqueId());
-                Notifier.chat("牛奶的效果减退了。",player);
+                Notifier.chat("牛奶的效果减退了。", player);
             }, 20 * 300L);
             // 8分钟冷却
             getSubScheduler().runTaskLater(() -> {
@@ -89,14 +90,16 @@ class SculkInfectionListener extends WolfirdListener {
             Notifier.chat("喝了牛奶之后你感觉好多了。", player);
         }
     }
-    private static final int SPREAD_BLUEPRINT_ID = WolfBlockSpreadAPI.create(Material.SCULK, SpreadType.SINGLE_SPREAD,20,40);
+
+    private static final int SPREAD_BLUEPRINT_ID = WolfBlockSpreadAPI.create(Material.SCULK, SpreadType.SINGLE_SPREAD, 20, 40);
+
     @EventHandler
     void sculkSpread(EntityDeathEvent event) {
         Bukkit.getScheduler().runTaskAsynchronously(Siriuxa.getInstance(), () -> {
             List<MetadataValue> metadataValueList = event.getEntity().getMetadata(MetadataKey.MONSTER_BELONG_TASK_UUID.getKey());
             if (metadataValueList.isEmpty()) return;
             Task task = IOC.getBean(TaskRepository.class).find((UUID) metadataValueList.get(0).value());
-            if(task == null || !task.getOrnamentTypes().contains(OrnamentType.SCULK_INFECTION)) return;
+            if (task == null || !task.getOrnamentTypes().contains(OrnamentType.SCULK_INFECTION)) return;
             ThreadLocalRandom random = ThreadLocalRandom.current();
             double rand = random.nextDouble();
             // 15%几率生成地基
@@ -108,30 +111,33 @@ class SculkInfectionListener extends WolfirdListener {
             }
         });
     }
+
     private final Random r = new Random();
+
     @Override
     public void onEnable() {
-        getSubScheduler().runTaskTimerAsync(()->{
+        getSubScheduler().runTaskTimerAsync(() -> {
             int secs = r.nextInt(180);
             for (Task task : manager.availableTasks) {
-                getSubScheduler().runTaskLater(()-> autoSculkSpread(task),20 * secs);
+                getSubScheduler().runTaskLater(() -> autoSculkSpread(task), 20 * secs);
             }
-        },20 * 60 * 4,20 * 60 * 6);
+        }, 20 * 60 * 4, 20 * 60 * 6);
     }
+
     private void autoSculkSpread(Task task) {
-        getSubScheduler().runTaskAsync(()->{
+        getSubScheduler().runTaskAsync(() -> {
             Player player = IOC.getBean(RandomAPI.class).selectRandom(task.getTaskPlayers());
-            if(player == null || !player.isOnline()) return;
+            if (player == null || !player.isOnline()) return;
             LocationAPI locationAPI = IOC.getBean(LocationAPI.class);
             for (int i = 0; i < 3; i++) {
-                Location solidLoc = locationAPI.getLocationByAngle(player.getLocation(),r.nextInt(360) - 180,10);
-                if(!solidLoc.getBlock().getType().isSolid()) {
-                    solidLoc = locationAPI.getNearestSolid(solidLoc,7);
+                Location solidLoc = locationAPI.getLocationByAngle(player.getLocation(), r.nextInt(360) - 180, 10);
+                if (!solidLoc.getBlock().getType().isSolid()) {
+                    solidLoc = locationAPI.getNearestSolid(solidLoc, 7);
                 }
-                if(solidLoc == null) continue;
+                if (solidLoc == null) continue;
                 Location finalSolidLoc = solidLoc;
                 Bukkit.getScheduler().runTask(Siriuxa.getInstance(),
-                        ()->WolfBlockSpreadAPI.start(SPREAD_BLUEPRINT_ID, finalSolidLoc));
+                        () -> WolfBlockSpreadAPI.start(SPREAD_BLUEPRINT_ID, finalSolidLoc));
                 break;
             }
         });

@@ -14,8 +14,7 @@ public enum TaskProperties {
     EXPLORATION("§f", "自由勘探",
             Stream.of(OrnamentType.SAFE_WORKING,
                     OrnamentType.SCULK_INFECTION,
-                    OrnamentType.SUPPLIES_COLLECTION).collect(Collectors.toSet()))
-    ;
+                    OrnamentType.SUPPLIES_COLLECTION).collect(Collectors.toSet()));
     private final String color;
     private final String taskName;
     private final Set<OrnamentType> ornamentTypes;

@@ -63,8 +63,8 @@ public class LocationAPI {
     public Location getNearestSolid(Location location, int deltaY) {
         Block center = location.getBlock();
         for (int i = 1; i <= deltaY; i++) {
-            if(center.getRelative(0,i,0).getType().isSolid()) return location.clone().add(0,i,0);
-            if(center.getRelative(0,-i,0).getType().isSolid()) return location.clone().add(0,-i,0);
+            if (center.getRelative(0, i, 0).getType().isSolid()) return location.clone().add(0, i, 0);
+            if (center.getRelative(0, -i, 0).getType().isSolid()) return location.clone().add(0, -i, 0);
         }
         return null;
     }
