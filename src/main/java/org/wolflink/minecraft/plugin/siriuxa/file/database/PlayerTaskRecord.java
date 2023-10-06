@@ -5,11 +5,11 @@ import lombok.NonNull;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
+import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 可以被序列化的麦穗任务记录
@@ -30,6 +30,10 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
      * 任务类型
      */
     private final String taskType;
+    /**
+     * 任务装饰
+     */
+    private final Set<OrnamentType> ornamentTypes;
     /**
      * 任务奖励是否已被领取
      */
@@ -69,6 +73,7 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
         isSuccess = false;
         teamSize = task.getTaskTeamSize();
         taskType = task.getName();
+        ornamentTypes = task.getOrnamentTypes();
         taskDifficulty = task.getTaskDifficulty().getName();
         isEscape = false;
         isClaimed = false;
@@ -86,6 +91,12 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
         teamSize = (int) map.get("teamSize");
         taskDifficulty = (String) map.get("taskDifficulty");
         taskType = (String) map.get("taskType");
+        String ornamentTypesString = (String) map.get("ornamentTypes");
+        ornamentTypes = new HashSet<>();
+        for (String ornamentType : ornamentTypesString.split("\\|")) {
+            OrnamentType type = OrnamentType.valueOf(ornamentType);
+            ornamentTypes.add(type);
+        }
         isClaimed = (boolean) map.get("isClaimed");
         isEscape = (boolean) map.get("isEscape");
         rewardWheat = (double) map.get("rewardWheat");
@@ -109,6 +120,8 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
         map.put("teamSize", teamSize);
         map.put("taskDifficulty", taskDifficulty);
         map.put("taskType", taskType);
+        String ornamentTypesString = ornamentTypes.stream().map(Enum::name).collect(Collectors.joining("\\|"));
+        map.put("ornamentTypes",ornamentTypesString);
         map.put("isEscape", isEscape);
         map.put("isClaimed", isClaimed);
         map.put("rewardWheat", rewardWheat);
