@@ -26,9 +26,11 @@ import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.ITaskTeam;
 import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
 import org.wolflink.minecraft.plugin.siriuxa.task.regions.SquareArea;
 import org.wolflink.minecraft.plugin.siriuxa.task.regions.TaskArea;
+import org.wolflink.minecraft.plugin.siriuxa.task.stages.TaskLinearStageHolder;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 import org.wolflink.minecraft.plugin.siriuxa.team.TaskTeam;
 import org.wolflink.minecraft.wolfird.framework.bukkit.scheduler.SubScheduler;
+import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.LinearStageHolder;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 
 import java.util.*;
@@ -65,7 +67,7 @@ public abstract class Task implements IGlobalTeam, ITaskTeam, IRecordable, IName
     protected final UUID taskUuid = UUID.randomUUID();
     private final TaskDifficulty taskDifficulty;
     protected final Random random = new Random();
-    private final StageHolder stageHolder;
+    private final TaskLinearStageHolder stageHolder;
     private final StrategyDecider strategyDecider;
 
     @Nullable
@@ -83,7 +85,7 @@ public abstract class Task implements IGlobalTeam, ITaskTeam, IRecordable, IName
         strategyDecider = new StrategyDecider(this);
     }
 
-    protected abstract StageHolder initStageHolder();
+    protected abstract TaskLinearStageHolder initStageHolder();
 
     protected void triggerFailed() {
         getTaskPlayers().forEach(player -> fillRecord(player, false));

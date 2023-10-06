@@ -12,7 +12,6 @@ import org.wolflink.minecraft.plugin.siriuxa.task.tasks.infinite.stage.InfiniteR
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.infinite.stage.InfiniteWaitStage;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
-import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 
 /**
  * 无尽任务
@@ -58,7 +57,7 @@ public class InfiniteTask extends Task {
     }
 
     @Override
-    protected StageHolder initStageHolder() {
+    protected TaskLinearStageHolder initStageHolder() {
         TaskLinearStageHolder linearStageHolder = new TaskLinearStageHolder(this);
         linearStageHolder.bindStages(new Stage[]{new InfiniteWaitStage(linearStageHolder), new InfiniteReadyStage(linearStageHolder), new InfiniteGameStage(linearStageHolder), new InfiniteEndStage(linearStageHolder)});
         // 进入等待阶段

@@ -26,7 +26,6 @@ import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.stage.Explor
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen.LumenTask;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
-import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 
 import java.util.HashSet;
 import java.util.List;
@@ -179,7 +178,7 @@ public class ExplorationTask extends LumenTask {
         Bukkit.getPluginManager().callEvent(new TaskEndEvent(this, true));
     }
     @Override
-    protected StageHolder initStageHolder() {
+    protected TaskLinearStageHolder initStageHolder() {
         TaskLinearStageHolder linearStageHolder = new TaskLinearStageHolder(this);
         linearStageHolder.bindStages(new Stage[]{new ExplorationWaitStage(linearStageHolder), new ExplorationReadyStage(linearStageHolder), new ExplorationGameStage(linearStageHolder), new ExplorationEndStage(linearStageHolder)});
         // 进入等待阶段

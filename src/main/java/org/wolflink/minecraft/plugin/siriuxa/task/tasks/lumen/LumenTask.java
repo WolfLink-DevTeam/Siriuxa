@@ -12,7 +12,6 @@ import org.wolflink.minecraft.plugin.siriuxa.file.database.*;
 import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskLumenLeftNotifyEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
-import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.LinearStageHolder;
 
 import java.util.UUID;
 
@@ -38,8 +37,6 @@ public abstract class LumenTask extends Task {
         lumenLossMultiple += value;
     }
 
-    @Getter
-    private final LinearStageHolder stageHolder = (LinearStageHolder) super.getStageHolder();
     @Getter
     private final LumenTaskDifficulty difficulty = (LumenTaskDifficulty) super.getTaskDifficulty();
 
