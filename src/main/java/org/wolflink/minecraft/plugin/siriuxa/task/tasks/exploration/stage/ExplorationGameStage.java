@@ -1,17 +1,18 @@
-package org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage;
+package org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.stage;
 
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
+import org.wolflink.minecraft.plugin.siriuxa.task.stages.GameStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.stages.TaskLinearStageHolder;
 import org.wolflink.minecraft.plugin.siriuxa.task.stages.TaskStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 
-public class GameStage extends TaskStage {
+public class ExplorationGameStage extends GameStage {
     private final Config config;
     private final Task task;
 
-    public GameStage(TaskLinearStageHolder stageHolder) {
-        super("正在进行", stageHolder);
+    public ExplorationGameStage(TaskLinearStageHolder stageHolder) {
+        super(stageHolder);
         task = stageHolder.getTask();
         config = IOC.getBean(Config.class);
     }

@@ -1,4 +1,4 @@
-package org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage;
+package org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.stage;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -6,14 +6,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
+import org.wolflink.minecraft.plugin.siriuxa.task.stages.ReadyStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.stages.TaskLinearStageHolder;
 import org.wolflink.minecraft.plugin.siriuxa.task.stages.TaskStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 
-public class ReadyStage extends TaskStage {
+public class ExplorationReadyStage extends ReadyStage {
 
-    public ReadyStage(TaskLinearStageHolder stageHolder) {
-        super("即将开始", stageHolder);
+    public ExplorationReadyStage(TaskLinearStageHolder stageHolder) {
+        super(stageHolder);
     }
 
     @Override

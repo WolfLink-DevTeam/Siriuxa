@@ -7,9 +7,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
+import org.wolflink.minecraft.plugin.siriuxa.task.stages.GameStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
 @Singleton

@@ -1,11 +1,12 @@
-package org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage;
+package org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.stage;
 
+import org.wolflink.minecraft.plugin.siriuxa.task.stages.EndStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.stages.TaskLinearStageHolder;
 import org.wolflink.minecraft.plugin.siriuxa.task.stages.TaskStage;
 
-public class EndStage extends TaskStage {
-    public EndStage(TaskLinearStageHolder stageHolder) {
-        super("已结束", stageHolder);
+public class ExplorationEndStage extends EndStage {
+    public ExplorationEndStage(TaskLinearStageHolder stageHolder) {
+        super(stageHolder);
     }
 
     @Override

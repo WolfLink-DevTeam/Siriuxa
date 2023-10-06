@@ -11,10 +11,10 @@ import org.wolflink.minecraft.plugin.siriuxa.api.Result;
 import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.ITaskService;
+import org.wolflink.minecraft.plugin.siriuxa.task.stages.WaitStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRelationProxy;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskService;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.WaitStage;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 
 @Singleton

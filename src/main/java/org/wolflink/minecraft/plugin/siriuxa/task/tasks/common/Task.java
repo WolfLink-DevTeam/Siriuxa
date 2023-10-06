@@ -166,15 +166,7 @@ public abstract class Task implements IGlobalTeam, ITaskTeam, IRecordable, IName
             taskArea = null;
         }
     }
-
-    /**
-     * 任务玩家全部撤离时任务完成
-     */
     protected abstract void finish();
-
-    /**
-     * 麦穗为0，或玩家全部逃跑时，任务失败
-     */
     public abstract void failed();
 
     /**

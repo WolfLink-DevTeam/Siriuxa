@@ -18,8 +18,15 @@ import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskEndEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskStartEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
 import org.wolflink.minecraft.plugin.siriuxa.task.regions.EvacuationZone;
+import org.wolflink.minecraft.plugin.siriuxa.task.stages.TaskLinearStageHolder;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.stage.ExplorationEndStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.stage.ExplorationGameStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.stage.ExplorationReadyStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.stage.ExplorationWaitStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen.LumenTask;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
+import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
+import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 
 import java.util.HashSet;
 import java.util.List;
@@ -171,7 +178,14 @@ public class ExplorationTask extends LumenTask {
         super.lumenTip.setEnabled(false);
         Bukkit.getPluginManager().callEvent(new TaskEndEvent(this, true));
     }
-
+    @Override
+    protected StageHolder initStageHolder() {
+        TaskLinearStageHolder linearStageHolder = new TaskLinearStageHolder(this);
+        linearStageHolder.bindStages(new Stage[]{new ExplorationWaitStage(linearStageHolder), new ExplorationReadyStage(linearStageHolder), new ExplorationGameStage(linearStageHolder), new ExplorationEndStage(linearStageHolder)});
+        // 进入等待阶段
+        linearStageHolder.next();
+        return linearStageHolder;
+    }
     @Override
     public void failed() {
         super.lumenTip.setEnabled(false);

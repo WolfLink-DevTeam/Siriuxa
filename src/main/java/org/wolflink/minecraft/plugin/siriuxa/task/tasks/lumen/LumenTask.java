@@ -10,16 +10,9 @@ import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.LumenTaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.*;
 import org.wolflink.minecraft.plugin.siriuxa.task.events.TaskLumenLeftNotifyEvent;
-import org.wolflink.minecraft.plugin.siriuxa.task.stages.TaskLinearStageHolder;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.EndStage;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.GameStage;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.ReadyStage;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.WaitStage;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
-import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.LinearStageHolder;
-import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.StageHolder;
 
 import java.util.UUID;
 
@@ -116,15 +109,6 @@ public abstract class LumenTask extends Task {
             PlayerTaskRecord record = new PlayerTaskRecord(uuid, this);
             getPlayerRecordMap().put(uuid, record);
         }
-    }
-
-    @Override
-    protected StageHolder initStageHolder() {
-        TaskLinearStageHolder linearStageHolder = new TaskLinearStageHolder(this);
-        linearStageHolder.bindStages(new Stage[]{new WaitStage(linearStageHolder), new ReadyStage(linearStageHolder), new GameStage(linearStageHolder), new EndStage(linearStageHolder)});
-        // 进入等待阶段
-        linearStageHolder.next();
-        return linearStageHolder;
     }
 
     public void addLumen(double lumen) {

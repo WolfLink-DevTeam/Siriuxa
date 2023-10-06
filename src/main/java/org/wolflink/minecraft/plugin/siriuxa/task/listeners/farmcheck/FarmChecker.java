@@ -17,9 +17,9 @@ import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.MetadataKey;
 import org.wolflink.minecraft.plugin.siriuxa.file.Lang;
+import org.wolflink.minecraft.plugin.siriuxa.task.stages.GameStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen.LumenTask;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 

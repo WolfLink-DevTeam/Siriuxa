@@ -2,6 +2,7 @@ package org.wolflink.minecraft.plugin.siriuxa.task.stages;
 
 import lombok.Getter;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
+import org.wolflink.minecraft.wolfird.framework.gamestage.stage.Stage;
 import org.wolflink.minecraft.wolfird.framework.gamestage.stageholder.LinearStageHolder;
 
 @Getter
