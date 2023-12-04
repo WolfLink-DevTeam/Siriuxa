@@ -15,13 +15,14 @@ import org.wolflink.minecraft.plugin.siriuxa.api.view.DynamicMenu;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.EmptyIcon;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.DifficultyRepository;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.ComposableTaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
-import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.ClaimTaskReward;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.ExplorationBackpackItem;
-import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRelationProxy;
+import org.wolflink.minecraft.plugin.siriuxa.task.abstracts.TaskAttributeType;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.composable.impl.ComposableTaskRecord;
 
 import java.util.HashSet;
 import java.util.List;
@@ -34,6 +35,14 @@ public class ExplorationBackpackMenu extends DynamicMenu {
     private final Set<Integer> selectedSlots = new HashSet<>();
     @Setter
     private PlayerTaskRecord playerTaskRecord = null;
+    private ComposableTaskRecord composableTaskRecord = null;
+    public void setPlayerTaskRecord(PlayerTaskRecord playerTaskRecord) {
+        this.playerTaskRecord = playerTaskRecord;
+        if(playerTaskRecord == null) return;
+        ComposableTaskRecordDB db = IOC.getBean(ComposableTaskRecordDB.class);
+        composableTaskRecord = db.loadRecord(playerTaskRecord.getTaskUuid().toString());
+    }
+
 
     /**
      * 刷新周期设置小于0则为静态菜单
@@ -60,18 +69,10 @@ public class ExplorationBackpackMenu extends DynamicMenu {
      * 允许的可带回物品最大数量
      */
     public int getBringSlotAmount() {
-        if (playerTaskRecord == null) return 0;
-        boolean taskSuccess = playerTaskRecord.isSuccess();
-        if (taskSuccess) {
-            ExplorationDifficulty difficulty = IOC.getBean(DifficultyRepository.class)
-                    .findByName(ExplorationDifficulty.class, playerTaskRecord.getTaskDifficulty());
-            assert difficulty != null;
-            return difficulty.getBringSlotAmount();
-        } else {
-            boolean safeWorking = IOC.getBean(TaskRelationProxy.class).getTaskProperties(playerTaskRecord.getTaskType())
-                    .getOrnamentTypes().contains(OrnamentType.SAFE_WORKING);
-            return safeWorking ? playerTaskRecord.getSafeSlotAmount() : 0;
-        }
+        if (composableTaskRecord == null) return 0;
+        boolean taskSuccess = composableTaskRecord.isSuccess();
+        if(!taskSuccess) return 0;
+        return (int) composableTaskRecord.getAttributeMap().getOrDefault(TaskAttributeType.BRING_SLOT_AMOUNT,0);
     }
 
     public int getSelectedSlotAmount() {
@@ -96,14 +97,15 @@ public class ExplorationBackpackMenu extends DynamicMenu {
         player.playSound(player.getLocation(), Sound.ENTITY_PIGLIN_CELEBRATE, 1f, 1f);
         player.sendTitle("领取成功", "任务中的物资已发放至背包", 8, 24, 8);
         playerTaskRecord.setClaimed(true);
-        IOC.getBean(TaskRecordDB.class).saveRecord(playerTaskRecord);
+        IOC.getBean(PlayerTaskRecordDB.class).saveRecord(playerTaskRecord);
         PlayerBackpack playerBackpack = playerTaskRecord.getPlayerBackpack();
-        ExplorationDifficulty difficulty = IOC.getBean(DifficultyRepository.class)
-                .findByName(ExplorationDifficulty.class, playerTaskRecord.getTaskDifficulty());
+        TaskDifficulty difficulty = IOC.getBean(DifficultyRepository.class)
+                .findByName(composableTaskRecord.getTaskDifficulty());
         assert difficulty != null;
-        double wheatMultiple = difficulty.getRewardMultiple();
+        double wheatMultiple = (double) composableTaskRecord.getAttributeMap().get(TaskAttributeType.REWARD_MULTIPLE);
         double expMultiple = (1 + wheatMultiple) / 2.0;
-        double wheat = playerTaskRecord.getRewardWheat();
+        double wheat = scoreToWheat(playerTaskRecord.getPlayerScore(),
+                (double) composableTaskRecord.getAttributeMap().getOrDefault(TaskAttributeType.REWARD_MULTIPLE,1.0));
         int exp = (int) (playerBackpack.getTotalExp() * expMultiple);
         IOC.getBean(PlayerAPI.class).addExp(player, exp);
         String wheatMultipleStr = "§8(§7x" + String.format("%.0f", wheatMultiple * 100) + "%§8)";
@@ -128,6 +130,15 @@ public class ExplorationBackpackMenu extends DynamicMenu {
         selectedSlots.clear();
         playerTaskRecord = null;
     }
+
+    /**
+     * 将玩家得分折算为麦穗奖励
+     */
+    private double scoreToWheat(double score,double rewardMultiple) {
+        double wheat = Math.pow(score,0.7);
+        return (wheat + Math.random() * 25) * rewardMultiple;
+    }
+
 
     @Override
     protected void overrideIcons() {

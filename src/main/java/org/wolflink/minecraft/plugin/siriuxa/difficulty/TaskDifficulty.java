@@ -1,6 +1,9 @@
 package org.wolflink.minecraft.plugin.siriuxa.difficulty;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Data
-public abstract class TaskDifficulty implements ConfigurationSerializable, INameable {
+@Builder
+public class TaskDifficulty implements ConfigurationSerializable, INameable {
     /**
      * 难度图标
      */

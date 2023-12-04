@@ -69,6 +69,12 @@ public class Notifier {
             notifier.chat(msg, p);
         });
     }
+    public static void broadcastChat(String msg) {
+        Bukkit.getOnlinePlayers().forEach(player -> notifier.chat(msg, player));
+    }
+    public static void broadcastSound(Sound sound, float v, float v1) {
+        Bukkit.getOnlinePlayers().forEach(p -> p.playSound(p.getLocation(), sound, v, v1));
+    }
 
     public static void broadcastSound(List<Player> players, Sound sound, float v, float v1) {
         players.forEach(p -> {

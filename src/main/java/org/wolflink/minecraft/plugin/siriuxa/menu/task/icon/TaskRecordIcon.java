@@ -6,55 +6,54 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.ComposableTaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.ExplorationBackpackMenu;
-import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRelationProxy;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.composable.impl.ComposableTaskRecord;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.composable.components.ornaments.OrnamentType;
 
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Set;
 
 public class TaskRecordIcon extends Icon {
     private final PlayerTaskRecord playerTaskRecord;
-    private final boolean safeWorking;
-    private final boolean suppliesCollection;
+    private final ComposableTaskRecord composableTaskRecord;
 
     public TaskRecordIcon(@NonNull PlayerTaskRecord playerTaskRecord) {
         super(0);
         this.playerTaskRecord = playerTaskRecord;
-        Set<OrnamentType> ornamentTypes = IOC.getBean(TaskRelationProxy.class).getTaskProperties(playerTaskRecord.getTaskType()).getOrnamentTypes();
-        safeWorking = ornamentTypes.contains(OrnamentType.SAFE_WORKING);
-        suppliesCollection = ornamentTypes.contains(OrnamentType.SUPPLIES_COLLECTION);
+        ComposableTaskRecordDB db = IOC.getBean(ComposableTaskRecordDB.class);
+        composableTaskRecord = db.loadRecord(playerTaskRecord.getTaskUuid().toString());
     }
 
     @Override
     protected @NonNull ItemStack createIcon() {
-        Date taskFinishedDate = new Date(playerTaskRecord.getFinishedTimeInMills());
+        Date taskFinishedDate = new Date(composableTaskRecord.getFinishedTimeInMills());
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.CHINA);
         DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.MEDIUM, Locale.CHINA);
         String date = dateFormat.format(taskFinishedDate);
         String iconName = "§8[ §f任务记录 §8] §7%s";
         iconName = String.format(iconName, date);
-        String taskResult = playerTaskRecord.isSuccess() ? "§a完成" : "§c失败";
+        String taskResult = composableTaskRecord.isSuccess() ? "§a完成" : "§c失败";
         int minutes = (int) (playerTaskRecord.getUsingTimeInMills() / 60000);
         String claimStatus;
-        if (!playerTaskRecord.isSuccess()) {
-            if (safeWorking) {
+        if (!composableTaskRecord.isSuccess()) {
+            if(composableTaskRecord.getOrnamentTypes().contains(OrnamentType.SAFE_WORKING)) {
                 claimStatus = playerTaskRecord.isClaimed() ? "§7补偿已领取" : "§a可领取补偿";
             } else claimStatus = "";
         } else {
-            if (suppliesCollection) claimStatus = playerTaskRecord.isClaimed() ? "§7物资已领取" : "§a可领取物资";
-            else claimStatus = "";
+            if (composableTaskRecord.getOrnamentTypes().contains(OrnamentType.SUPPLIES_COLLECTION)) {
+                claimStatus = playerTaskRecord.isClaimed() ? "§7物资已领取" : "§a可领取物资";
+            } else claimStatus = "";
         }
         return fastCreateItemStack(Material.PAPER, 1, iconName,
                 " ",
                 "  §7完成时间 §f" + timeFormat.format(taskFinishedDate),
                 " ",
-                "  §7任务类型 §f" + playerTaskRecord.getTaskType(),
-                "  §7任务难度 §f" + playerTaskRecord.getTaskDifficulty(),
+                "  §7任务类型 §f" + composableTaskRecord.getTaskName(),
+                "  §7任务难度 §f" + composableTaskRecord.getTaskDifficulty(),
                 "  §7任务结果 §r" + taskResult,
                 "  §7任务用时 §f" + minutes + "分钟",
                 " ",
@@ -65,7 +64,7 @@ public class TaskRecordIcon extends Icon {
 
     @Override
     public void leftClick(Player player) {
-        if (suppliesCollection && !playerTaskRecord.isClaimed()) {
+        if (composableTaskRecord.getOrnamentTypes().contains(OrnamentType.SUPPLIES_COLLECTION) && !playerTaskRecord.isClaimed()) {
             MenuService menuService = IOC.getBean(MenuService.class);
             ExplorationBackpackMenu menu = menuService.findMenu(player, ExplorationBackpackMenu.class);
             menu.setPlayerTaskRecord(playerTaskRecord);

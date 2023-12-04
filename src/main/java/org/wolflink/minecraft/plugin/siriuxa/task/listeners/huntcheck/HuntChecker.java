@@ -12,10 +12,12 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.file.Lang;
-import org.wolflink.minecraft.plugin.siriuxa.task.stages.GameStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.abstracts.TaskAttributeType;
+import org.wolflink.minecraft.plugin.siriuxa.task.stages.BaseGameStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen.LumenTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.composable.ComposableTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.composable.components.ornaments.OrnamentType;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
 @Singleton
@@ -35,15 +37,17 @@ public class HuntChecker extends WolfirdListener {
         if (e.getEntity().hasMetadata("bySpawner")) return; // 来自刷怪笼
         Task task = taskRepository.findByTaskTeamPlayer(player);
         if (task == null) return; // 没有任务
-        if (!(task instanceof LumenTask lumenTask)) return; // 不是麦穗任务，无法应用
-        if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 任务没在游戏阶段
-        if (task.getTaskArea() == null) return; // 任务区域未设定
-        if (player.getWorld() != task.getTaskArea().getCenter().getWorld()) return; // 不在任务世界
+        if (!(task instanceof ComposableTask lumenTask)) return; // 不是组合任务，无法应用
+        if(!(((ComposableTask) task).getOrnamentTypes().contains(OrnamentType.TIME_TRAP))) return;// 不是时间陷阱，无法应用
+        if (!(task.getStageHolder().getThisStage() instanceof BaseGameStage)) return; // 任务没在游戏阶段
+        if (task.getTaskRegion().getTaskArea() == null) return; // 任务区域未设定
+        if (player.getWorld() != task.getTaskRegion().getTaskArea().getCenter().getWorld()) return; // 不在任务世界
         EntityType entityType = e.getEntityType();
         if (!huntValues.getMonsterTypes().contains(entityType)) return;
         huntValues.doRecord(entityType);
         double wheatValue = huntValues.getHuntValue(entityType);
-        lumenTask.addLumen(wheatValue);
+        double lumen = lumenTask.getTaskAttribute().getAttribute(TaskAttributeType.LUMEN_LEFT,0.0);
+        lumenTask.getTaskAttribute().setAttribute(TaskAttributeType.LUMEN_LEFT,lumen + wheatValue);
         for (Player taskPlayer : task.getTaskPlayers()) {
             taskPlayer.playSound(taskPlayer.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_FALL, 1, 2f);
             //TODO 改为 Hologram 提示

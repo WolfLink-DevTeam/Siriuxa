@@ -17,7 +17,8 @@ public enum ConfigProjection {
     EXPLORATION_REGION_INDEX("Task.Exploration.Region.Index", 1),
     EXPLORATION_REGION_SPACING_RADIUS("Task.Exploration.Region.SpacingRadius", 50),
     EXPLORATION_REGION_RADIUS("Task.Exploration.Region.Radius", 500.0),
-    EXPLORATION_TASK_QUEUE_SIZE("Task.Exploration.QueueSize", 8);
+    TASK_QUEUE_SIZE("Task.QueueSize", 12)
+    ;
     private final String path;
     @Getter
     private final Object defaultValue;

@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.DynamicMenu;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecord;
-import org.wolflink.minecraft.plugin.siriuxa.file.database.TaskRecordDB;
+import org.wolflink.minecraft.plugin.siriuxa.file.database.PlayerTaskRecordDB;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.NextPage;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.PreviousPage;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.TaskRecordIcon;
@@ -35,8 +35,8 @@ public class TaskRecordMenu extends DynamicMenu {
         setIcon(45, new PreviousPage(this));
         setIcon(53, new NextPage(this));
         int startIndex = 10;
-        totalRecordList = IOC.getBean(TaskRecordDB.class).loadRecords(getOfflineOwner().getName());
-        totalRecordList.sort((r1, r2) -> ((int) (r2.getFinishedTimeInMills() - r1.getFinishedTimeInMills()) / 1000));
+        totalRecordList = IOC.getBean(PlayerTaskRecordDB.class).loadRecords(getOfflineOwner().getName());
+        totalRecordList.sort((r1, r2) -> ((int) (r2.getCreateTime() - r1.getCreateTime()) / 1000));
         int recordSize = totalRecordList.size();
 
         // 闭区间 [pageFirstRecord,pageLastRecord]

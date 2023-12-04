@@ -10,10 +10,9 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
-import org.wolflink.minecraft.plugin.siriuxa.task.events.WheatBlockSellEvent;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskStat;
+import org.wolflink.minecraft.plugin.siriuxa.task.abstracts.TaskStat;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
 import java.util.*;
@@ -23,7 +22,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * 统计监听器
  * 行走距离
  * 击杀怪物数
- * 出售矿物数
  * 造成伤害数
  */
 @Singleton
@@ -117,14 +115,14 @@ public class StatListener extends WolfirdListener {
         taskStat.getMobKillMap().computeIfPresent(uuid, (ignore, value) -> value + 1);
     }
 
-    @EventHandler
-    void countOreSell(WheatBlockSellEvent event) {
-        Player player = event.getPlayer();
-        TaskStat taskStat = getTaskStat(player);
-        if (taskStat == null) return;
-        if (statNotAvailable(taskStat)) return; // 不可用统计
-        UUID uuid = player.getUniqueId();
-        taskStat.getOreSellMap().putIfAbsent(uuid, 0);
-        taskStat.getOreSellMap().computeIfPresent(uuid, (ignore, value) -> value + 1);
-    }
+//    @EventHandler
+//    void countOreSell(WheatBlockSellEvent event) {
+//        Player player = event.getPlayer();
+//        TaskStat taskStat = getTaskStat(player);
+//        if (taskStat == null) return;
+//        if (statNotAvailable(taskStat)) return; // 不可用统计
+//        UUID uuid = player.getUniqueId();
+//        taskStat.getOreSellMap().putIfAbsent(uuid, 0);
+//        taskStat.getOreSellMap().computeIfPresent(uuid, (ignore, value) -> value + 1);
+//    }
 }

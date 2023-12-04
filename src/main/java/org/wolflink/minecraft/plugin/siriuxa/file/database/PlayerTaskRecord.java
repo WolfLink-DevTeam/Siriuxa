@@ -5,35 +5,19 @@ import lombok.NonNull;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.wolflink.minecraft.plugin.siriuxa.backpack.PlayerBackpack;
-import org.wolflink.minecraft.plugin.siriuxa.task.ornaments.OrnamentType;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.composable.components.ornaments.OrnamentType;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 可以被序列化的麦穗任务记录
+ * 可以被序列化的通用玩家任务记录
  */
 @Data
 public class PlayerTaskRecord implements ConfigurationSerializable {
     private final UUID playerUuid;
     private final UUID taskUuid;
-    /**
-     * 团队规模
-     */
-    private final int teamSize;
-    /**
-     * 任务难度
-     */
-    private final String taskDifficulty;
-    /**
-     * 任务类型
-     */
-    private final String taskType;
-    /**
-     * 任务装饰
-     */
-    private final Set<OrnamentType> ornamentTypes;
     /**
      * 任务奖励是否已被领取
      */
@@ -42,8 +26,10 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
      * 玩家是否逃跑
      */
     private boolean isEscape;
+
     /**
-     * 任务是否成功
+     * 该玩家是否完成任务
+     * (如果玩家在任务过程中淘汰，即使任务成功，玩家也不能够领取到全部奖励)
      */
     private boolean isSuccess;
     /**
@@ -55,52 +41,32 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
      */
     private long usingTimeInMills;
     /**
-     * 任务完成时间
+     * 记录时间
      */
-    private long finishedTimeInMills;
+    private long createTime;
     /**
-     * 奖励麦穗
+     * 玩家得分
      */
-    private double rewardWheat;
-    /**
-     * 保险格数
-     */
-    private int safeSlotAmount;
+    private double playerScore;
 
     public PlayerTaskRecord(@NonNull UUID playerUuid, @NonNull Task task) {
         this.playerUuid = playerUuid;
         taskUuid = task.getTaskUuid();
-        isSuccess = false;
-        teamSize = task.getTaskTeamSize();
-        taskType = task.getName();
-        ornamentTypes = task.getOrnamentTypes();
-        taskDifficulty = task.getTaskDifficulty().getName();
         isEscape = false;
         isClaimed = false;
-        rewardWheat = 0;
-        safeSlotAmount = 0;
+        playerScore = 0;
+        createTime = Calendar.getInstance().getTimeInMillis();
     }
 
     public PlayerTaskRecord(Map<String, Object> map) {
         playerUuid = UUID.fromString((String) map.get("playerUuid"));
         taskUuid = UUID.fromString((String) map.get("taskUuid"));
-        isSuccess = (boolean) map.get("isSuccess");
         playerBackpack = (PlayerBackpack) map.get("playerBackpack");
         usingTimeInMills = Long.parseLong((String) map.get("usingTimeInMills"));
-        finishedTimeInMills = Long.parseLong((String) map.get("finishedTimeInMills"));
-        teamSize = (int) map.get("teamSize");
-        taskDifficulty = (String) map.get("taskDifficulty");
-        taskType = (String) map.get("taskType");
-        String ornamentTypesString = (String) map.get("ornamentTypes");
-        ornamentTypes = new HashSet<>();
-        for (String ornamentType : ornamentTypesString.split("\\|")) {
-            OrnamentType type = OrnamentType.valueOf(ornamentType);
-            ornamentTypes.add(type);
-        }
         isClaimed = (boolean) map.get("isClaimed");
         isEscape = (boolean) map.get("isEscape");
-        rewardWheat = (double) map.get("rewardWheat");
-        safeSlotAmount = (int) map.getOrDefault("safeSlotAmount", 0);
+        playerScore = (double) map.get("playerScore");
+        createTime = (long) map.get("createTime");
     }
 
     public static PlayerTaskRecord deserialize(Map<String, Object> map) {
@@ -113,19 +79,12 @@ public class PlayerTaskRecord implements ConfigurationSerializable {
         Map<String, Object> map = new HashMap<>();
         map.put("playerUuid", playerUuid.toString());
         map.put("taskUuid", taskUuid.toString());
-        map.put("isSuccess", isSuccess);
         map.put("playerBackpack", playerBackpack);
         map.put("usingTimeInMills", Long.toString(usingTimeInMills));
-        map.put("finishedTimeInMills", Long.toString(finishedTimeInMills));
-        map.put("teamSize", teamSize);
-        map.put("taskDifficulty", taskDifficulty);
-        map.put("taskType", taskType);
-        String ornamentTypesString = ornamentTypes.stream().map(Enum::name).collect(Collectors.joining("\\|"));
-        map.put("ornamentTypes",ornamentTypesString);
         map.put("isEscape", isEscape);
         map.put("isClaimed", isClaimed);
-        map.put("rewardWheat", rewardWheat);
-        map.put("safeSlotAmount", safeSlotAmount);
+        map.put("playerScore", playerScore);
+        map.put("createTime", createTime);
         return map;
     }
 }

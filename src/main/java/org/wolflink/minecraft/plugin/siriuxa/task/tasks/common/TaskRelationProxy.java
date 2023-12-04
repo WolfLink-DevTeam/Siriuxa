@@ -5,13 +5,13 @@ import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
+
 import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.ITaskService;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.ExplorationTask;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.ExplorationTaskService;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.composable.ComposableTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.composable.impl.ComposableTaskService;
 
 @Singleton
 public class TaskRelationProxy {
@@ -21,7 +21,7 @@ public class TaskRelationProxy {
 
     @NonNull
     public ITaskService getTaskService(Class<? extends Task> taskClass) {
-        if (ExplorationTask.class.isAssignableFrom(taskClass)) return IOC.getBean(ExplorationTaskService.class);
+        if(ComposableTask.class.isAssignableFrom(taskClass)) return IOC.getBean(ComposableTaskService.class);
         throw new IllegalArgumentException("暂不支持的任务类型：" + taskClass.getName());
     }
 
@@ -32,35 +32,18 @@ public class TaskRelationProxy {
 
     @Nullable
     public ITaskService getTaskService(String worldName) {
-        if (worldName.equalsIgnoreCase(config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME)))
-            return getTaskService(ExplorationTask.class);
+        if(worldName.equalsIgnoreCase(config.get(ConfigProjection.EXPLORATION_TASK_WORLD_NAME))) {
+            return getTaskService(ComposableTask.class);
+        }
         return null;
     }
 
     public Class<? extends TaskDifficulty> getTaskDifficultyClass(Class<? extends Task> taskClass) {
-        if (ExplorationTask.class.isAssignableFrom(taskClass)) return ExplorationDifficulty.class;
+        if(ComposableTask.class.isAssignableFrom(taskClass)) return TaskDifficulty.class;
         throw new IllegalArgumentException("暂不支持的任务类型：" + taskClass.getName());
     }
 
     public Class<? extends TaskDifficulty> getTaskDifficultyClass(Task task) {
         return getTaskDifficultyClass(task.getClass());
-    }
-
-    public TaskProperties getTaskProperties(Task task) {
-        return getTaskProperties(task.getClass());
-    }
-
-    @NonNull
-    public TaskProperties getTaskProperties(String taskType) {
-        for (TaskProperties taskProperties : TaskProperties.values()) {
-            if (taskProperties.getTaskName().equals(taskType)) return taskProperties;
-        }
-        throw new IllegalArgumentException("未找到任务类型：" + taskType);
-    }
-
-    @NonNull
-    public TaskProperties getTaskProperties(Class<? extends Task> taskClass) {
-        if (taskClass.isAssignableFrom(ExplorationTask.class)) return TaskProperties.EXPLORATION;
-        throw new IllegalArgumentException("未知的任务类：" + taskClass.getName());
     }
 }

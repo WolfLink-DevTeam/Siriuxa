@@ -18,7 +18,7 @@ public class SetTaskQueueSize extends WolfirdCommand {
     public void execute(CommandSender commandSender, String[] strings) {
         try {
             int size = Integer.parseInt(strings[0]);
-            IOC.getBean(Config.class).update(ConfigProjection.EXPLORATION_TASK_QUEUE_SIZE.getPath(), size);
+            IOC.getBean(Config.class).update(ConfigProjection.TASK_QUEUE_SIZE.getPath(), size);
             Notifier.msg(commandSender, "设置成功");
         } catch (Exception ignore) {
             Notifier.msg(commandSender, "设置失败，请检查指令！");

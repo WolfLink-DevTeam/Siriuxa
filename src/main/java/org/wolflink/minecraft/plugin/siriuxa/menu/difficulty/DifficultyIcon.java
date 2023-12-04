@@ -8,19 +8,18 @@ import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
 import org.wolflink.minecraft.plugin.siriuxa.difficulty.DifficultyRepository;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.LumenTaskDifficulty;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskMenu;
 
-public class DifficultyIcon<T extends LumenTaskDifficulty> extends Icon {
+public class DifficultyIcon extends Icon {
 
-    private final T taskDifficulty;
+    private final TaskDifficulty taskDifficulty;
     private final DifficultyRepository difficultyRepository;
     private final MenuService menuService;
-    private final DifficultyMenu<T> difficultyMenu;
+    private final DifficultyMenu difficultyMenu;
 
-    public DifficultyIcon(DifficultyMenu<T> difficultyMenu, T taskDifficulty) {
+    public DifficultyIcon(DifficultyMenu difficultyMenu, TaskDifficulty taskDifficulty) {
         super(0);
         this.taskDifficulty = taskDifficulty;
         this.menuService = IOC.getBean(MenuService.class);
@@ -45,24 +44,19 @@ public class DifficultyIcon<T extends LumenTaskDifficulty> extends Icon {
     @Override
     protected @NonNull ItemStack createIcon() {
         String levelStr = "✦".repeat(taskDifficulty.getLevel()) +
-                "✧".repeat(difficultyRepository.findByType(ExplorationDifficulty.class).size() - taskDifficulty.getLevel());
-        if (taskDifficulty instanceof ExplorationDifficulty explorationDifficulty) {
-            return fastCreateItemStack(taskDifficulty.getIcon(), 1, "§f难度 " + taskDifficulty.getColor() + taskDifficulty.getName(),
-                    " ",
-                    "§7风险指标 " + taskDifficulty.getColor() + levelStr,
-                    "§7任务成本 §f" + explorationDifficulty.getLumenCost() + " §6麦穗",
-                    "§7初始光体 §f" + explorationDifficulty.getLumenSupply() + " §d幽匿光体",
-                    "§7流速加快 §f+" + String.format("%.2f", explorationDifficulty.getLumenLostAcceleratedSpeed() * 100) + "% §8/ §7每5分钟",
-                    "§7受伤惩罚 §f-" + String.format("%.2f", explorationDifficulty.getHurtLumenCost()) + " §d幽匿光体 §8/ §71点伤害",
-                    "§7受伤倍率 §fx" + String.format("%.2f", explorationDifficulty.getHurtDamageMultiple() * 100) + "§7%",
-                    "§7带回物资 §f" + explorationDifficulty.getBringSlotAmount() + "§7格",
-                    "§7奖励倍率 §f" + String.format("%.0f", explorationDifficulty.getRewardMultiple() * 100) + "§7%",
-                    " "
-            );
-        }
+                "✧".repeat(difficultyRepository.findAll().size() - taskDifficulty.getLevel());
+        // TODO 补充任务与难度相关的额外信息
         return fastCreateItemStack(taskDifficulty.getIcon(), 1, "§f难度 " + taskDifficulty.getColor() + taskDifficulty.getName(),
                 " ",
                 "§7风险指标 " + taskDifficulty.getColor() + levelStr,
+                "§e§l暂无难度额外信息，开发中",
+//                "§7任务成本 §f" + explorationDifficulty.getLumenCost() + " §6麦穗",
+//                "§7初始光体 §f" + explorationDifficulty.getLumenSupply() + " §d幽匿光体",
+//                "§7流速加快 §f+" + String.format("%.2f", explorationDifficulty.getLumenLostAcceleratedSpeed() * 100) + "% §8/ §7每5分钟",
+//                "§7受伤惩罚 §f-" + String.format("%.2f", explorationDifficulty.getHurtLumenCost()) + " §d幽匿光体 §8/ §71点伤害",
+//                "§7受伤倍率 §fx" + String.format("%.2f", explorationDifficulty.getHurtDamageMultiple() * 100) + "§7%",
+//                "§7带回物资 §f" + explorationDifficulty.getBringSlotAmount() + "§7格",
+//                "§7奖励倍率 §f" + String.format("%.0f", explorationDifficulty.getRewardMultiple() * 100) + "§7%",
                 " "
         );
     }

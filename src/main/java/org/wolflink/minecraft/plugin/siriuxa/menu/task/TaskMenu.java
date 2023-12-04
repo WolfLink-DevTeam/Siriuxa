@@ -4,7 +4,7 @@ import org.jetbrains.annotations.Nullable;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.BorderIcon;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.StaticMenu;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
 import org.wolflink.minecraft.plugin.siriuxa.menu.difficulty.ExplorationDifficultyMenu;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.icon.ChallengeTag;
@@ -36,7 +36,7 @@ public class TaskMenu extends StaticMenu {
     }
 
     @Nullable
-    public ExplorationDifficulty getSelectedDifficulty() {
+    public TaskDifficulty getSelectedDifficulty() {
         if (getOwner() == null || !getOwner().isOnline()) return null;
         ExplorationDifficultyMenu explorationDifficultyMenu = menuService.findMenu(getOwner(), ExplorationDifficultyMenu.class);
         return explorationDifficultyMenu.getSelectedDifficulty();

@@ -17,10 +17,12 @@ import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.api.MetadataKey;
 import org.wolflink.minecraft.plugin.siriuxa.file.Lang;
-import org.wolflink.minecraft.plugin.siriuxa.task.stages.GameStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.abstracts.TaskAttributeType;
+import org.wolflink.minecraft.plugin.siriuxa.task.stages.BaseGameStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen.LumenTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.composable.ComposableTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.composable.components.ornaments.OrnamentType;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
 import java.util.Set;
@@ -46,10 +48,11 @@ public class FarmChecker extends WolfirdListener {
         Player player = e.getPlayer();
         Task task = taskRepository.findByTaskTeamPlayer(player);
         if (task == null) return; // 没有任务
-        if (!(task instanceof LumenTask lumenTask)) return; // 不是麦穗任务，无法应用
-        if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 任务没在游戏阶段
-        if (task.getTaskArea() == null) return; // 任务区域未设定
-        if (player.getWorld() != task.getTaskArea().getCenter().getWorld()) return; // 不在任务世界
+        if (!(task instanceof ComposableTask lumenTask)) return; // 不是组合任务，无法应用
+        if(!(((ComposableTask) task).getOrnamentTypes().contains(OrnamentType.TIME_TRAP))) return; // 不是时间陷阱任务，无法应用
+        if (!(task.getStageHolder().getThisStage() instanceof BaseGameStage)) return; // 任务没在游戏阶段
+        if (task.getTaskRegion().getTaskArea() == null) return; // 任务区域未设定
+        if (player.getWorld() != task.getTaskRegion().getTaskArea().getCenter().getWorld()) return; // 不在任务世界
         if (e.getBlockState().getBlockData() instanceof Ageable ageable) { // 是可成长的
             if (availableAgeable.contains(ageable.getMaterial())) {
                 if (ageable.getAge() == ageable.getMaximumAge()) { // 达到最大年龄
@@ -66,10 +69,10 @@ public class FarmChecker extends WolfirdListener {
         Player player = e.getPlayer();
         Task task = taskRepository.findByTaskTeamPlayer(player);
         if (task == null) return; // 没有任务
-        if (!(task instanceof LumenTask lumenTask)) return; // 不是麦穗任务，无法应用
-        if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 任务没在游戏阶段
-        if (task.getTaskArea() == null) return; // 任务区域未设定
-        if (player.getWorld() != task.getTaskArea().getCenter().getWorld()) return; // 不在任务世界
+        if (!(task instanceof ComposableTask lumenTask)) return; // 不是麦穗任务，无法应用
+        if (!(task.getStageHolder().getThisStage() instanceof BaseGameStage)) return; // 任务没在游戏阶段
+        if (task.getTaskRegion().getTaskArea() == null) return; // 任务区域未设定
+        if (player.getWorld() != task.getTaskRegion().getTaskArea().getCenter().getWorld()) return; // 不在任务世界
         if (availableHarvestBlocks.contains(e.getBlock().getType())) {
             e.getBlock().setMetadata(MetadataKey.HARVEST_BLOCK_PLACER.getKey(), new FixedMetadataValue(Siriuxa.getInstance(), e.getPlayer().getName()));
         }
@@ -80,20 +83,21 @@ public class FarmChecker extends WolfirdListener {
         Player player = e.getPlayer();
         Task task = taskRepository.findByTaskTeamPlayer(player);
         if (task == null) return; // 没有任务
-        if (!(task instanceof LumenTask lumenTask)) return; // 不是麦穗任务，无法应用
-        if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 任务没在游戏阶段
-        if (task.getTaskArea() == null) return; // 任务区域未设定
-        if (player.getWorld() != task.getTaskArea().getCenter().getWorld()) return; // 不在任务世界
+        if (!(task instanceof ComposableTask lumenTask)) return; // 不是麦穗任务，无法应用
+        if (!(task.getStageHolder().getThisStage() instanceof BaseGameStage)) return; // 任务没在游戏阶段
+        if (task.getTaskRegion().getTaskArea() == null) return; // 任务区域未设定
+        if (player.getWorld() != task.getTaskRegion().getTaskArea().getCenter().getWorld()) return; // 不在任务世界
         if (availableHarvestBlocks.contains(e.getBlock().getType())) {
             if (e.getBlock().hasMetadata(MetadataKey.HARVEST_BLOCK_PLACER.getKey())) return;
             recordAndAddLumen(lumenTask, e.getBlock().getType());
         }
     }
 
-    private void recordAndAddLumen(LumenTask lumenTask, Material material) {
+    private void recordAndAddLumen(ComposableTask lumenTask, Material material) {
         farmValues.doRecord(material);
         double cropValue = farmValues.getCropValue(material);
-        lumenTask.addLumen(cropValue);
+        double lumen = lumenTask.getTaskAttribute().getAttribute(TaskAttributeType.LUMEN_LEFT,0.0);
+        lumenTask.getTaskAttribute().setAttribute(TaskAttributeType.LUMEN_LEFT,lumen+cropValue);
         for (Player taskPlayer : lumenTask.getTaskPlayers()) {
             taskPlayer.playSound(taskPlayer.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_FALL, 1, 2f);
             //TODO 改为 Hologram 提示

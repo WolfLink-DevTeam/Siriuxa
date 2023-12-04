@@ -118,10 +118,10 @@ public abstract class TaskArea {
     }
 
     /**
-     * 获得合理的撤离点坐标
+     * 寻找合理的撤离点坐标
      * 尽量离所有玩家都远
      */
-    public Location getEvacuateLocation(int distance) {
+    public Location findEvacuateLocation(int distance) {
         if (task.getTaskPlayers().isEmpty()) return null;
         Location averangeLocation = getPlayerAverangeLocation();
         List<Location> availableLocations = new ArrayList<>();

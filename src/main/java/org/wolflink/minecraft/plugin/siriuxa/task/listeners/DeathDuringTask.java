@@ -7,7 +7,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
-import org.wolflink.minecraft.plugin.siriuxa.task.stages.GameStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.stages.BaseGameStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
@@ -27,8 +27,8 @@ public class DeathDuringTask extends WolfirdListener {
         // 没有开始任务
         if (task == null) return;
         // 任务不处在游戏阶段
-        if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return;
+        if (!(task.getStageHolder().getThisStage() instanceof BaseGameStage)) return;
         event.setCancelled(true);
-        task.death(player);
+        task.getTaskListener().onPlayerDeath(player);
     }
 }

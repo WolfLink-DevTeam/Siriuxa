@@ -11,7 +11,7 @@ import org.wolflink.minecraft.plugin.siriuxa.api.Result;
 import org.wolflink.minecraft.plugin.siriuxa.api.VaultAPI;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.ITaskService;
-import org.wolflink.minecraft.plugin.siriuxa.task.stages.WaitStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.stages.BaseWaitStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRelationProxy;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskService;
@@ -54,7 +54,7 @@ public class GlobalTeamService {
         Task task = globalTeam.getSelectedTask();
         if (task != null) {
             Stage stage = task.getStageHolder().getThisStage();
-            if (!(stage instanceof WaitStage)) {
+            if (!(stage instanceof BaseWaitStage)) {
                 return new Result(false, "当前队伍的任务状态为：" + stage.getDisplayName() + "，不允许加入。");
             }
             ITaskService taskService = taskRelationProxy.getTaskService(task);
@@ -124,7 +124,7 @@ public class GlobalTeamService {
         Task task = globalTeam.getSelectedTask();
         // 当前已经选择了任务
         if (task != null) {
-            if (task.getStageHolder().getThisStage() instanceof WaitStage) {
+            if (task.getStageHolder().getThisStage() instanceof BaseWaitStage) {
                 // 尝试放弃
                 Result giveupResult = giveUpTask(globalTeam.getOfflineOwner());
                 // 放弃失败
