@@ -22,13 +22,13 @@ import java.util.Random;
 /**
  * 任务活动区域
  */
+@Getter
 public abstract class TaskArea {
 
 
     /**
      * 边界半径
      */
-    @Getter
     protected final double radius;
     protected final Task task;
     @Getter
@@ -60,7 +60,7 @@ public abstract class TaskArea {
     private String getBorderBar(Player player) {
         double percent = distanceToBorderPercent(player);
         int temp = (int) Math.round(percent * 50);
-        if(temp < 0) temp = 0;
+        if (temp < 0) temp = 0;
         String lineColor = "§a";
         if (temp <= 15) lineColor = "§e";
         if (temp <= 5) lineColor = "§c";
@@ -118,10 +118,10 @@ public abstract class TaskArea {
     }
 
     /**
-     * 获得合理的撤离点坐标
+     * 寻找合理的撤离点坐标
      * 尽量离所有玩家都远
      */
-    public Location getEvacuateLocation(int distance) {
+    public Location findEvacuateLocation(int distance) {
         if (task.getTaskPlayers().isEmpty()) return null;
         Location averangeLocation = getPlayerAverangeLocation();
         List<Location> availableLocations = new ArrayList<>();

@@ -17,6 +17,7 @@ public class ForceFailedTask extends WolfirdCommand {
     private TaskRepository taskRepository;
     @Inject
     private TaskService taskService;
+
     public ForceFailedTask() {
         super(true, true, true, "sx task failed {player}", "将指定玩家的任务强制结束，结果为任务失败。");
     }
@@ -25,12 +26,12 @@ public class ForceFailedTask extends WolfirdCommand {
     public void execute(CommandSender commandSender, String[] strings) {
         Player player = Bukkit.getPlayer(strings[0]);
         String result = "";
-        if(player == null) {
-            result = "未找到玩家 "+strings[0];
+        if (player == null) {
+            result = "未找到玩家 " + strings[0];
         } else {
             result = taskService.forceFailedTask(player).msg();
         }
-        if(commandSender instanceof Player sender) Notifier.chat(result,sender);
-        if(commandSender instanceof ConsoleCommandSender) Notifier.info(result);
+        if (commandSender instanceof Player sender) Notifier.chat(result, sender);
+        if (commandSender instanceof ConsoleCommandSender) Notifier.info(result);
     }
 }

@@ -16,9 +16,9 @@ import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.OfflinePlayerDB;
 import org.wolflink.minecraft.plugin.siriuxa.file.database.OfflinePlayerRecord;
 import org.wolflink.minecraft.plugin.siriuxa.task.interfaces.ITaskService;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.EndStage;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.GameStage;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.WaitStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.stages.BaseEndStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.stages.BaseGameStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.stages.BaseWaitStage;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeam;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeamRepository;
 import org.wolflink.minecraft.plugin.siriuxa.team.GlobalTeamService;
@@ -113,6 +113,7 @@ public class TaskService implements ITaskService {
 
     }
 
+    @SuppressWarnings("仅供准备指令调用")
     @Override
     public Result ready(Task task) {
         if (task == null) return new Result(false, "不存在的任务。");
@@ -120,7 +121,7 @@ public class TaskService implements ITaskService {
             taskRepository.deleteByKey(task.getTaskUuid());
             return new Result(false, "该任务所属队伍没有任何在线玩家。");
         }
-        if (task.getStageHolder().getThisStage() instanceof WaitStage) {
+        if (task.getStageHolder().getThisStage() instanceof BaseWaitStage) {
             Result isBlocking = taskQueue.isBlocking();
             if (isBlocking.result()) return isBlocking;
             taskQueue.taskStarted();
@@ -143,14 +144,14 @@ public class TaskService implements ITaskService {
         offlinePlayerDB.save(offlinePlayerRecord);
         // 如果玩家还在进行中的任务中，3分钟后都没再次登录，并且任务还在进行中或者已结束，则标记其为逃跑状态，在下次上线时触发相关方法
         Stage nowStage = task.getStageHolder().getThisStage();
-        if (nowStage instanceof GameStage) {
+        if (nowStage instanceof BaseGameStage) {
             int taskId = Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance(), () -> {
                 Notifier.debug("正在判断玩家" + player.getName() + "是否从任务中逃跑。");
                 Stage futureStage = task.getStageHolder().getThisStage();
-                if (futureStage instanceof GameStage || futureStage instanceof EndStage) {
+                if (futureStage instanceof BaseGameStage || futureStage instanceof BaseEndStage) {
                     offlinePlayerRecord.setTaskEscape(true);
                     offlinePlayerDB.save(offlinePlayerRecord);
-                    task.escape(player);
+                    task.getTaskListener().onPlayerEscape(player);
                     Notifier.debug("玩家" + player.getName() + "从任务中逃跑了。");
                 }
             }, 20 * 60 * 3L).getTaskId();
@@ -202,12 +203,12 @@ public class TaskService implements ITaskService {
     }
 
     public Result giveUp(Task task) {
-        if (task.getStageHolder().getThisStage() instanceof WaitStage) {
+        if (task.getStageHolder().getThisStage() instanceof BaseWaitStage) {
             task.deleteTask();
             return new Result(true, "任务已成功删除。");
         }
-        if (task.getStageHolder().getThisStage() instanceof GameStage) {
-            task.triggerFailed();
+        if (task.getStageHolder().getThisStage() instanceof BaseGameStage) {
+            task.getTaskLifeCycle().triggerFailed();
             return new Result(true, "在任务进行的过程中放弃了，任务失败。");
         }
         return new Result(false, "暂不支持的任务阶段：" + task.getStageHolder().getThisStage().getDisplayName());
@@ -218,25 +219,27 @@ public class TaskService implements ITaskService {
      */
     public void finishAllTask() {
         for (Task task : taskRepository.findAll()) {
-            if(task.getStageHolder().getThisStage() instanceof GameStage) task.triggerFinish(true);
+            if (task.getStageHolder().getThisStage() instanceof BaseGameStage) {
+                task.getTaskLifeCycle().triggerFinish(true);
+            }
         }
     }
 
     public Result forceFinishTask(Player player) {
         Task task = taskRepository.findByTaskTeamPlayer(player);
         if (task == null) return new Result(false, "玩家当前没有正在进行的任务。");
-        if (!(task.getStageHolder().getThisStage() instanceof GameStage))
+        if (!(task.getStageHolder().getThisStage() instanceof BaseGameStage))
             return new Result(false, "玩家任务不处于游戏阶段，无法结束。");
-        task.triggerFinish();
+        task.getTaskLifeCycle().triggerFinish(false);
         return new Result(true, "任务已被强制触发为完成。");
     }
 
     public Result forceFailedTask(Player player) {
         Task task = taskRepository.findByTaskTeamPlayer(player);
         if (task == null) return new Result(false, "玩家当前没有正在进行的任务。");
-        if (!(task.getStageHolder().getThisStage() instanceof GameStage))
+        if (!(task.getStageHolder().getThisStage() instanceof BaseGameStage))
             return new Result(false, "玩家任务不处于游戏阶段，无法结束。");
-        task.triggerFailed();
+        task.getTaskLifeCycle().triggerFailed();
         return new Result(true, "任务已被强制触发为失败。");
     }
 }

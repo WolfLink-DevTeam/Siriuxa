@@ -13,14 +13,18 @@ public interface ITaskService {
     void goTask(Player player, Task task);
 
     Result create(Player player, Class<? extends Task> taskClass, TaskDifficulty taskDifficulty);
+
     Result create(GlobalTeam globalTeam, Class<? extends Task> taskClass, TaskDifficulty taskDifficulty);
+
     Result ready(Task task);
+
     /**
      * 玩家能否接受该类型任务
      */
-    boolean canAccept(Class<? extends Task> taskClass,TaskDifficulty taskDifficulty,OfflinePlayer offlinePlayer);
+    boolean canAccept(Class<? extends Task> taskClass, TaskDifficulty taskDifficulty, OfflinePlayer offlinePlayer);
+
     /**
      * 接受任务，上交道具/麦穗等
      */
-    void accept(Class<? extends Task> taskClass,TaskDifficulty taskDifficulty,OfflinePlayer offlinePlayer);
+    void accept(Class<? extends Task> taskClass, TaskDifficulty taskDifficulty, OfflinePlayer offlinePlayer);
 }

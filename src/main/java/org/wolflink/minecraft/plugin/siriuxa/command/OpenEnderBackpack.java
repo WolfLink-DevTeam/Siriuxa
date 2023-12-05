@@ -8,9 +8,9 @@ import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.enderbackpack.EnderBackpackMenu;
+import org.wolflink.minecraft.plugin.siriuxa.task.stages.BaseWaitStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.WaitStage;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdCommand;
 
 @Singleton
@@ -26,10 +26,10 @@ public class OpenEnderBackpack extends WolfirdCommand {
     public void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
         Task task = taskRepository.findByGlobalTeamPlayer(player);
-        if(task != null && !(task.getStageHolder().getThisStage() instanceof WaitStage)) {
-            Notifier.chat("你的队伍还在任务中，请等待任务结束后查看安全背包。",player);
+        if (task != null && !(task.getStageHolder().getThisStage() instanceof BaseWaitStage)) {
+            Notifier.chat("你的队伍还在任务中，请等待任务结束后查看安全背包。", player);
             return;
         }
-        IOC.getBean(MenuService.class).display(EnderBackpackMenu.class,player);
+        IOC.getBean(MenuService.class).display(EnderBackpackMenu.class, player);
     }
 }

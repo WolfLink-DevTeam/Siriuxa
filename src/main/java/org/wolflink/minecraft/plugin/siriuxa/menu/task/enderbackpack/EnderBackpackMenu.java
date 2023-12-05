@@ -21,31 +21,32 @@ import java.util.stream.Stream;
 public class EnderBackpackMenu extends DynamicMenu {
 
     public EnderBackpackMenu(UUID ownerUuid) {
-        super(ownerUuid, "§0§l行李托运", 27,0, Stream.of(19,20,21,22,23,24,25).collect(Collectors.toSet()));
+        super(ownerUuid, "§0§l行李托运", 27, 0, Stream.of(19, 20, 21, 22, 23, 24, 25).collect(Collectors.toSet()));
     }
 
     public EnderBackpack getEnderBackpack() {
         return IOC.getBean(InventoryDB.class).loadEnderBackpack(getOfflineOwner());
     }
+
     public void saveEnderBackpack(EnderBackpack enderBackpack) {
         Player player = getOwner();
-        if(player == null || !player.isOnline())return;
+        if (player == null || !player.isOnline()) return;
         IOC.getBean(InvBackupService.class).saveEnderBackpack(getOwner(), enderBackpack);
     }
 
     @Override
     protected void overrideIcons() {
         BorderIcon borderIcon = IOC.getBean(BorderIcon.class);
-        Stream.of(9,10,11,12,13,14,15,16,17).forEach(i -> setIcon(i,borderIcon));
+        Stream.of(9, 10, 11, 12, 13, 14, 15, 16, 17).forEach(i -> setIcon(i, borderIcon));
         Player player = getOwner();
-        if(player == null || !player.isOnline())return;
-        setIcon(1,IOC.getBean(HelmetIcon.class));
-        setIcon(2,IOC.getBean(ChestplateIcon.class));
-        setIcon(3,IOC.getBean(LeggingsIcon.class));
-        setIcon(4,IOC.getBean(BootsIcon.class));
-        setIcon(5,IOC.getBean(WeaponIcon.class));
-        setIcon(6,IOC.getBean(ToolIcon.class));
-        setIcon(7,IOC.getBean(AnythingIcon.class));
+        if (player == null || !player.isOnline()) return;
+        setIcon(1, IOC.getBean(HelmetIcon.class));
+        setIcon(2, IOC.getBean(ChestplateIcon.class));
+        setIcon(3, IOC.getBean(LeggingsIcon.class));
+        setIcon(4, IOC.getBean(BootsIcon.class));
+        setIcon(5, IOC.getBean(WeaponIcon.class));
+        setIcon(6, IOC.getBean(ToolIcon.class));
+        setIcon(7, IOC.getBean(AnythingIcon.class));
 
         EnderBackpack enderBackpack = getEnderBackpack();
         setIcon(19, new ItemIcon(enderBackpack.getHelmet()));
@@ -56,122 +57,125 @@ public class EnderBackpackMenu extends DynamicMenu {
         setIcon(24, new ItemIcon(enderBackpack.getTool()));
         setIcon(25, new ItemIcon(enderBackpack.getItem()));
     }
+
     private static final Set<String> containerSuffix = new HashSet<>();
+
     static {
         containerSuffix.add("SHULKER_BOX");
         containerSuffix.add("SHULKER_SHELL");
         containerSuffix.add("BUNDLE");
     }
+
     @Override
     public void onClose(Player player) {
         EnderBackpack enderBackpack = getEnderBackpack();
         // 头盔
         {
             ItemStack helmet = inventory.getItem(19);
-            if(helmet != null && helmet.getType() != Material.AIR) {
-                if(helmet.getType().name().endsWith("_HELMET")) enderBackpack.setHelmet(helmet);
+            if (helmet != null && helmet.getType() != Material.AIR) {
+                if (helmet.getType().name().endsWith("_HELMET")) enderBackpack.setHelmet(helmet);
                 else {
-                    Notifier.chat("你在应该放置头盔的地方错误的放入了物品："+helmet.getType().name().toLowerCase()+"！物品已退回至背包。",player);
+                    Notifier.chat("你在应该放置头盔的地方错误的放入了物品：" + helmet.getType().name().toLowerCase() + "！物品已退回至背包。", player);
                     enderBackpack.setHelmet(null);
                     player.getInventory().addItem(helmet);
-                    setIcon(19,null);
-                    inventory.setItem(19,null);
+                    setIcon(19, null);
+                    inventory.setItem(19, null);
                 }
             } else enderBackpack.setHelmet(null);
         }
         // 胸甲
         {
             ItemStack chestplate = inventory.getItem(20);
-            if(chestplate != null && chestplate.getType() != Material.AIR) {
-                if(chestplate.getType().name().endsWith("_CHESTPLATE")) enderBackpack.setChestplate(chestplate);
+            if (chestplate != null && chestplate.getType() != Material.AIR) {
+                if (chestplate.getType().name().endsWith("_CHESTPLATE")) enderBackpack.setChestplate(chestplate);
                 else {
-                    Notifier.chat("你在应该放置胸甲的地方错误的放入了物品："+chestplate.getType().name().toLowerCase()+"！物品已退回至背包。",player);
+                    Notifier.chat("你在应该放置胸甲的地方错误的放入了物品：" + chestplate.getType().name().toLowerCase() + "！物品已退回至背包。", player);
                     player.getInventory().addItem(chestplate);
                     enderBackpack.setChestplate(null);
-                    setIcon(20,null);
-                    inventory.setItem(20,null);
+                    setIcon(20, null);
+                    inventory.setItem(20, null);
                 }
             } else enderBackpack.setChestplate(null);
         }
         // 护腿
         {
             ItemStack leggings = inventory.getItem(21);
-            if(leggings != null && leggings.getType() != Material.AIR) {
-                if(leggings.getType().name().endsWith("_LEGGINGS")) enderBackpack.setLeggings(leggings);
+            if (leggings != null && leggings.getType() != Material.AIR) {
+                if (leggings.getType().name().endsWith("_LEGGINGS")) enderBackpack.setLeggings(leggings);
                 else {
-                    Notifier.chat("你在应该放置护腿的地方错误的放入了物品："+leggings.getType().name().toLowerCase()+"！物品已退回至背包。",player);
+                    Notifier.chat("你在应该放置护腿的地方错误的放入了物品：" + leggings.getType().name().toLowerCase() + "！物品已退回至背包。", player);
                     player.getInventory().addItem(leggings);
                     enderBackpack.setLeggings(null);
-                    setIcon(21,null);
-                    inventory.setItem(21,null);
+                    setIcon(21, null);
+                    inventory.setItem(21, null);
                 }
             } else enderBackpack.setLeggings(null);
         }
         // 鞋子
         {
             ItemStack boots = inventory.getItem(22);
-            if(boots != null && boots.getType() != Material.AIR) {
-                if(boots.getType().name().endsWith("_BOOTS")) enderBackpack.setBoots(boots);
+            if (boots != null && boots.getType() != Material.AIR) {
+                if (boots.getType().name().endsWith("_BOOTS")) enderBackpack.setBoots(boots);
                 else {
-                    Notifier.chat("你在应该放置鞋子的地方错误的放入了物品："+boots.getType().name().toLowerCase()+"！物品已退回至背包。",player);
+                    Notifier.chat("你在应该放置鞋子的地方错误的放入了物品：" + boots.getType().name().toLowerCase() + "！物品已退回至背包。", player);
                     player.getInventory().addItem(boots);
                     enderBackpack.setBoots(null);
-                    setIcon(22,null);
-                    inventory.setItem(22,null);
+                    setIcon(22, null);
+                    inventory.setItem(22, null);
                 }
             } else enderBackpack.setBoots(null);
         }
         // 武器
         {
             ItemStack weapon = inventory.getItem(23);
-            if(weapon != null && weapon.getType() != Material.AIR) {
+            if (weapon != null && weapon.getType() != Material.AIR) {
                 String weaponName = weapon.getType().name();
-                if(weaponName.endsWith("_SWORD") || weaponName.endsWith("_AXE") || weaponName.equals("BOW") || weaponName.equals("CROSSBOW") || weaponName.equals("TRIDENT")) enderBackpack.setWeapon(weapon);
+                if (weaponName.endsWith("_SWORD") || weaponName.endsWith("_AXE") || weaponName.equals("BOW") || weaponName.equals("CROSSBOW") || weaponName.equals("TRIDENT"))
+                    enderBackpack.setWeapon(weapon);
                 else {
-                    Notifier.chat("你在应该放置武器的地方错误的放入了物品："+weaponName.toLowerCase()+"！物品已退回至背包。",player);
+                    Notifier.chat("你在应该放置武器的地方错误的放入了物品：" + weaponName.toLowerCase() + "！物品已退回至背包。", player);
                     player.getInventory().addItem(weapon);
                     enderBackpack.setWeapon(null);
-                    setIcon(23,null);
-                    inventory.setItem(23,null);
+                    setIcon(23, null);
+                    inventory.setItem(23, null);
                 }
             } else enderBackpack.setWeapon(null);
         }
         // 工具
         {
             ItemStack tool = inventory.getItem(24);
-            if(tool != null && tool.getType() != Material.AIR) {
+            if (tool != null && tool.getType() != Material.AIR) {
                 String toolName = tool.getType().name();
-                if(toolName.endsWith("_PICKAXE") || toolName.endsWith("_AXE") || toolName.endsWith("_HOE") || toolName.endsWith("_SHOVEL") || toolName.endsWith("FISHING_ROD")) enderBackpack.setTool(tool);
+                if (toolName.endsWith("_PICKAXE") || toolName.endsWith("_AXE") || toolName.endsWith("_HOE") || toolName.endsWith("_SHOVEL") || toolName.endsWith("FISHING_ROD"))
+                    enderBackpack.setTool(tool);
                 else {
-                    Notifier.chat("你在应该放置工具的地方错误的放入了物品："+toolName.toLowerCase()+"！物品已退回至背包。",player);
+                    Notifier.chat("你在应该放置工具的地方错误的放入了物品：" + toolName.toLowerCase() + "！物品已退回至背包。", player);
                     player.getInventory().addItem(tool);
                     enderBackpack.setTool(null);
-                    setIcon(24,null);
-                    inventory.setItem(24,null);
+                    setIcon(24, null);
+                    inventory.setItem(24, null);
                 }
             } else enderBackpack.setTool(null);
         }
         // 通用
         {
             ItemStack item = inventory.getItem(25);
-            if(item != null && item.getType() != Material.AIR) {
+            if (item != null && item.getType() != Material.AIR) {
                 boolean isContainer = false;
                 for (String containerName : containerSuffix) {
-                    if(item.getType().name().endsWith(containerName)){
+                    if (item.getType().name().endsWith(containerName)) {
                         isContainer = true;
                         break;
                     }
                 }
-                if(isContainer) {
-                    Notifier.chat("你不可以携带容器进入任务！",player);
+                if (isContainer) {
+                    Notifier.chat("你不可以携带容器进入任务！", player);
                     player.getInventory().addItem(item);
                     enderBackpack.setItem(null);
-                    setIcon(25,null);
-                    inventory.setItem(25,null);
-                }
-                else enderBackpack.setItem(item);
-            }
-            else enderBackpack.setItem(null);
+                    setIcon(25, null);
+                    inventory.setItem(25, null);
+                } else enderBackpack.setItem(item);
+            } else enderBackpack.setItem(null);
             saveEnderBackpack(enderBackpack);
         }
     }

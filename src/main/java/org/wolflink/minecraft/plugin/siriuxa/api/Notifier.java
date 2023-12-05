@@ -43,10 +43,11 @@ public class Notifier {
     }
 
     public static void msg(CommandSender sender, String msg) {
-        if(sender instanceof Player player) chat(msg,player);
-        if(sender instanceof ConsoleCommandSender) info(msg);
-        else warn("未知的 Sender 类型："+sender.getClass().getName()+"消息："+msg);
+        if (sender instanceof Player player) chat(msg, player);
+        if (sender instanceof ConsoleCommandSender) info(msg);
+        else warn("未知的 Sender 类型：" + sender.getClass().getName() + "消息：" + msg);
     }
+
     public static void chat(String msg, Player player) {
         notifier.chat(msg, player);
     }
@@ -68,10 +69,17 @@ public class Notifier {
             notifier.chat(msg, p);
         });
     }
-    public static void broadcastSound(List<Player> players, Sound sound,float v,float v1) {
+    public static void broadcastChat(String msg) {
+        Bukkit.getOnlinePlayers().forEach(player -> notifier.chat(msg, player));
+    }
+    public static void broadcastSound(Sound sound, float v, float v1) {
+        Bukkit.getOnlinePlayers().forEach(p -> p.playSound(p.getLocation(), sound, v, v1));
+    }
+
+    public static void broadcastSound(List<Player> players, Sound sound, float v, float v1) {
         players.forEach(p -> {
-            if(!p.isOnline())return;
-            p.playSound(p.getLocation(),sound,v,v1);
+            if (!p.isOnline()) return;
+            p.playSound(p.getLocation(), sound, v, v1);
         });
     }
 
@@ -93,6 +101,6 @@ public class Notifier {
         }
         barTaskMap.put(player.getUniqueId(),
                 Bukkit.getScheduler().runTaskLater(Siriuxa.getInstance(),
-                        () -> bossBar.removePlayer(player), 20 * 3).getTaskId());
+                        () -> bossBar.removePlayer(player), 20L * 3).getTaskId());
     }
 }

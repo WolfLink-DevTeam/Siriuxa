@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.wolflink.common.ioc.IOC;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
-import org.wolflink.minecraft.plugin.siriuxa.difficulty.ExplorationDifficulty;
+import org.wolflink.minecraft.plugin.siriuxa.difficulty.TaskDifficulty;
 import org.wolflink.minecraft.plugin.siriuxa.menu.MenuService;
 import org.wolflink.minecraft.plugin.siriuxa.menu.difficulty.ExplorationDifficultyMenu;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskMenu;
@@ -40,7 +40,7 @@ public class SelectDifficulty extends Icon {
         Player player = taskMenu.getOwner();
         if (player == null || !player.isOnline())
             return fastCreateItemStack(material, 1, "§8[ §f当前难度 §8] §r玩家未在线");
-        ExplorationDifficulty difficulty = taskMenu.getSelectedDifficulty();
+        TaskDifficulty difficulty = taskMenu.getSelectedDifficulty();
         if (difficulty != null) {
             difficultyName = difficulty.getColor() + difficulty.getName();
             material = difficulty.getIcon();

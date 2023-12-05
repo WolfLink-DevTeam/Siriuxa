@@ -15,9 +15,9 @@ import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import org.wolflink.minecraft.plugin.siriuxa.file.Config;
 import org.wolflink.minecraft.plugin.siriuxa.file.ConfigProjection;
+import org.wolflink.minecraft.plugin.siriuxa.task.stages.BaseGameStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.GameStage;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
 import java.util.HashSet;
@@ -56,7 +56,7 @@ public class FunctionBan extends WolfirdListener {
         if (!(humanEntity instanceof Player)) return; // 不是玩家
         Task task = taskRepository.findByTaskTeamPlayer((Player) humanEntity);
         if (task == null) return; // 没在任务中
-        if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 没在游戏阶段
+        if (!(task.getStageHolder().getThisStage() instanceof BaseGameStage)) return; // 没在游戏阶段
         if (event.getInventory().getType().equals(InventoryType.ENDER_CHEST)) {
             Notifier.chat("末影箱空间已经受到了严重感染，千万不要打开它！", (Player) humanEntity);
             event.setCancelled(true);
@@ -71,7 +71,7 @@ public class FunctionBan extends WolfirdListener {
         Player player = event.getPlayer();
         Task task = taskRepository.findByTaskTeamPlayer(player);
         if (task == null) return; // 没在任务中
-        if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 没在游戏阶段
+        if (!(task.getStageHolder().getThisStage() instanceof BaseGameStage)) return; // 没在游戏阶段
         if (event.getRightClicked().getType().equals(EntityType.VILLAGER)) event.setCancelled(true);
     }
 

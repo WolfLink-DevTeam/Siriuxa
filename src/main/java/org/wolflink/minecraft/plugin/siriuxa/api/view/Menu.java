@@ -30,10 +30,12 @@ public abstract class Menu {
     protected final UUID ownerUuid;
     protected final Set<Integer> containerSlots;
     protected Icon[] icons;
-    protected Menu(UUID ownerUuid,String title,int size) {
-        this(ownerUuid,title,size,new HashSet<>());
+
+    protected Menu(UUID ownerUuid, String title, int size) {
+        this(ownerUuid, title, size, new HashSet<>());
     }
-    protected Menu(UUID ownerUuid, String title, int size,Set<Integer> containerSlots) {
+
+    protected Menu(UUID ownerUuid, String title, int size, Set<Integer> containerSlots) {
         this.ownerUuid = ownerUuid;
         this.title = title;
         this.size = size;
@@ -41,17 +43,21 @@ public abstract class Menu {
         icons = null;
         this.containerSlots = containerSlots;
     }
+
     @Nullable
     public Player getOwner() {
         Player player = Bukkit.getPlayer(ownerUuid);
         if (player == null || !player.isOnline()) return null;
         return player;
     }
+
     @NonNull
     public OfflinePlayer getOfflineOwner() {
         return Bukkit.getOfflinePlayer(ownerUuid);
     }
+
     protected abstract void refreshLayout();
+
     /**
      * 将菜单展示给玩家
      */
@@ -60,6 +66,7 @@ public abstract class Menu {
         player.closeInventory();
         player.openInventory(inventory);
     }
+
     /**
      * 子类实现 ItemIcon
      */
@@ -74,6 +81,7 @@ public abstract class Menu {
         if (index >= icons.length || index < 0) return null;
         return icons[index];
     }
+
     /**
      * 格式化背包菜单，填充边界，空气等
      */
@@ -103,11 +111,13 @@ public abstract class Menu {
             Icon icon = getIcon(i);
             inventory.setItem(i, icon.getIcon());
             long refreshTick = icon.getRefreshTick();
-            if(refreshTick > 0) {
+            if (refreshTick > 0) {
                 final int finalI = i;
-                subScheduler.runTaskTimerAsync(()->inventory.setItem(finalI,icon.getIcon()),refreshTick,refreshTick);
+                subScheduler.runTaskTimerAsync(() -> inventory.setItem(finalI, icon.getIcon()), refreshTick, refreshTick);
             }
         }
     }
-    public void onClose(Player player) { }
+
+    public void onClose(Player player) {
+    }
 }

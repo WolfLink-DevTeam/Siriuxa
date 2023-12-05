@@ -1,6 +1,5 @@
 package org.wolflink.minecraft.plugin.siriuxa.command;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.wolflink.common.ioc.Inject;

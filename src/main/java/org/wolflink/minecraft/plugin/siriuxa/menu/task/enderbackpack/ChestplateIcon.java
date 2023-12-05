@@ -11,14 +11,16 @@ import java.util.stream.Stream;
 @Singleton
 public class ChestplateIcon extends ItemIcon {
     private static final ItemStack itemStack = EnderBackpack.getDefaultBackpack().getChestplate().clone();
+
     static {
         ItemMeta itemMeta = itemStack.getItemMeta();
-        if(itemMeta != null) {
+        if (itemMeta != null) {
             itemMeta.setDisplayName("§8[ §a可放入护甲 §8]");
-            itemMeta.setLore(Stream.of(" ","  §7可以放入 §f胸甲 §7类型的护甲"," ").toList());
+            itemMeta.setLore(Stream.of(" ", "  §7可以放入 §f胸甲 §7类型的护甲", " ").toList());
             itemStack.setItemMeta(itemMeta);
         }
     }
+
     public ChestplateIcon() {
         super(itemStack);
     }

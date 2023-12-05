@@ -2,15 +2,12 @@ package org.wolflink.minecraft.plugin.siriuxa.menu.task.icon;
 
 import lombok.NonNull;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.wolflink.common.ioc.IOC;
-import org.wolflink.minecraft.plugin.siriuxa.api.Result;
 import org.wolflink.minecraft.plugin.siriuxa.api.view.Icon;
 import org.wolflink.minecraft.plugin.siriuxa.menu.task.TaskMenu;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskService;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.ExplorationTask;
 
 public class CreateTask extends Icon {
 
@@ -55,15 +52,16 @@ public class CreateTask extends Icon {
     @Override
     public void leftClick(Player player) {
         if (!canCreate()) return;
-        Result result = taskService.create(player, ExplorationTask.class, taskMenu.getSelectedDifficulty());
-        result.show(player);
-        player.closeInventory();
-        if (result.result()) {
-            player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1f);
-            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f);
-        } else {
-            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 0.8f);
-        }
+        // TODO 创建任务
+//        Result result = taskService.create(player, ExplorationTask.class, taskMenu.getSelectedDifficulty());
+//        result.show(player);
+//        player.closeInventory();
+//        if (result.result()) {
+//            player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1f);
+//            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f);
+//        } else {
+//            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 0.8f);
+//        }
     }
 
     @Override

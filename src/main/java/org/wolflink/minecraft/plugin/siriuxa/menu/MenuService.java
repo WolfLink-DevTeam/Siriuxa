@@ -26,14 +26,14 @@ public class MenuService {
         return PlayerMenuContainer.findMenu(player, title);
     }
 
-    public void display(Class<? extends Menu> menuClass,@NonNull Player player) {
-        if(!player.isOnline()) return;
+    public void display(Class<? extends Menu> menuClass, @NonNull Player player) {
+        if (!player.isOnline()) return;
         Menu menu = findMenu(player, menuClass);
         display(menu, player);
     }
 
-    public void display(Menu menu,@NonNull Player player) {
-        if(!player.isOnline()) return;
+    public void display(Menu menu, @NonNull Player player) {
+        if (!player.isOnline()) return;
         menu.display(player);
     }
 }

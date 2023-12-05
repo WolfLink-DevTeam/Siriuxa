@@ -12,11 +12,13 @@ import org.wolflink.common.ioc.Inject;
 import org.wolflink.common.ioc.Singleton;
 import org.wolflink.minecraft.plugin.siriuxa.Siriuxa;
 import org.wolflink.minecraft.plugin.siriuxa.file.Lang;
+import org.wolflink.minecraft.plugin.siriuxa.task.abstracts.TaskAttributeType;
+import org.wolflink.minecraft.plugin.siriuxa.task.events.WheatBlockSellEvent;
+import org.wolflink.minecraft.plugin.siriuxa.task.stages.BaseGameStage;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.Task;
 import org.wolflink.minecraft.plugin.siriuxa.task.tasks.common.TaskRepository;
-import org.wolflink.minecraft.plugin.siriuxa.task.events.WheatBlockSellEvent;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.lumen.LumenTask;
-import org.wolflink.minecraft.plugin.siriuxa.task.tasks.exploration.taskstage.GameStage;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.composable.ComposableTask;
+import org.wolflink.minecraft.plugin.siriuxa.task.tasks.composable.components.ornaments.OrnamentType;
 import org.wolflink.minecraft.wolfird.framework.bukkit.WolfirdListener;
 
 @Singleton
@@ -34,17 +36,19 @@ public class OreChecker extends WolfirdListener {
         Location checkLoc = player.getLocation().add(0, -1, 0);
         Task task = taskRepository.findByTaskTeamPlayer(player);
         if (task == null) return; // 没有任务
-        if (!(task instanceof LumenTask lumenTask)) return; // 任务模式不可用该检测
-        if (!(task.getStageHolder().getThisStage() instanceof GameStage)) return; // 任务没在游戏阶段
-        if (task.getTaskArea() == null) return; // 任务区域未设定
-        if (checkLoc.getWorld() != task.getTaskArea().getCenter().getWorld()) return; // 不在任务世界
+        if(!(task instanceof ComposableTask composableTask)) return; // 不是组合型任务
+        if(!((ComposableTask) task).getOrnamentTypes().contains(OrnamentType.TIME_TRAP)) return; // 没有启用时间陷阱
+        if (!(task.getStageHolder().getThisStage() instanceof BaseGameStage)) return; // 任务没在游戏阶段
+        if (task.getTaskRegion().getTaskArea() == null) return; // 任务区域未设定
+        if (checkLoc.getWorld() != task.getTaskRegion().getTaskArea().getCenter().getWorld()) return; // 不在任务世界
         Block block = checkLoc.getBlock();
         Material material = block.getType();
         if (!oreValues.getOreMaterials().contains(material)) return;
         oreValues.doRecord(material);
         block.setType(Material.AIR);
         double wheatValue = oreValues.getOreValue(material);
-        lumenTask.addLumen(wheatValue);
+        double lumen = task.getTaskAttribute().getAttribute(TaskAttributeType.LUMEN_LEFT,0.0);
+        task.getTaskAttribute().setAttribute(TaskAttributeType.LUMEN_LEFT,lumen + wheatValue);
         for (Player taskPlayer : task.getTaskPlayers()) {
             taskPlayer.playSound(taskPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1.5f);
             //TODO 改为 Hologram 提示
@@ -53,7 +57,7 @@ public class OreChecker extends WolfirdListener {
         }
         renderBlockBorder(block.getLocation());
 
-        Bukkit.getPluginManager().callEvent(new WheatBlockSellEvent(player,block,wheatValue));
+        Bukkit.getPluginManager().callEvent(new WheatBlockSellEvent(player, block, wheatValue));
     }
 
     private void renderBlockBorder(Location center) {

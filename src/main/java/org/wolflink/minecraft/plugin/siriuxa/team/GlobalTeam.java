@@ -20,6 +20,6 @@ public final class GlobalTeam extends Team {
     private Task selectedTask = null;
 
     public GlobalTeam(UUID ownerUuid) {
-        super(ownerUuid,new HashSet<>());
+        super(ownerUuid, new HashSet<>());
     }
 }

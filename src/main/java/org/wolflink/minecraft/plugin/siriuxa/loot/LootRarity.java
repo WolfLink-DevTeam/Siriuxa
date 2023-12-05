@@ -6,6 +6,7 @@ import org.wolflink.minecraft.plugin.siriuxa.api.Notifier;
 import java.util.Arrays;
 import java.util.Random;
 
+@Getter
 public enum LootRarity {
     MISFORTUNE("§0不幸", 50, -5), // 5%
     COMMON("§a常见", 500, 0), // 50%
@@ -14,7 +15,6 @@ public enum LootRarity {
     LEGENDARY("§6§l传说", 15, 15); // 1.5%
 
     private static final Random random = new Random();
-    @Getter
     private final String displayName;
     @Getter
     private final int weight;

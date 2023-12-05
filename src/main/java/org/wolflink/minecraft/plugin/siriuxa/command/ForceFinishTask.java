@@ -17,6 +17,7 @@ public class ForceFinishTask extends WolfirdCommand {
     private TaskRepository taskRepository;
     @Inject
     private TaskService taskService;
+
     public ForceFinishTask() {
         super(true, true, true, "sx task finish {player}", "将指定玩家的任务强制结束，结果为任务完成。");
     }
@@ -25,12 +26,12 @@ public class ForceFinishTask extends WolfirdCommand {
     public void execute(CommandSender commandSender, String[] strings) {
         Player player = Bukkit.getPlayer(strings[0]);
         String result = "";
-        if(player == null) {
-            result = "未找到玩家 "+strings[0];
+        if (player == null) {
+            result = "未找到玩家 " + strings[0];
         } else {
             result = taskService.forceFinishTask(player).msg();
         }
-        if(commandSender instanceof Player sender) Notifier.chat(result,sender);
-        if(commandSender instanceof ConsoleCommandSender) Notifier.info(result);
+        if (commandSender instanceof Player sender) Notifier.chat(result, sender);
+        if (commandSender instanceof ConsoleCommandSender) Notifier.info(result);
     }
 }

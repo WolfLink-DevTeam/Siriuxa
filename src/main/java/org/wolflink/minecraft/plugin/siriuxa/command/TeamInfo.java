@@ -44,7 +44,7 @@ public class TeamInfo extends WolfirdCommand {
                     + " §f" + task.getStageHolder().getThisStage().getDisplayName()
                     + "\n§r\n";
         }
-        String ownerInfo = "队长：§6"+globalTeam.getOfflineOwner().getName()+"\n§r\n";
+        String ownerInfo = "队长：§6" + globalTeam.getOfflineOwner().getName() + "\n§r\n";
         StringBuilder msg = new StringBuilder("成员列表：\n§r\n");
         for (OfflinePlayer offlinePlayer : globalTeam.getOfflinePlayers()) {
             String color;

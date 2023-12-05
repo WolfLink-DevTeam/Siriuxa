@@ -14,6 +14,7 @@ import java.util.Calendar;
 public class TaskQueueInfo extends WolfirdCommand {
     @Inject
     private TaskQueue taskQueue;
+
     public TaskQueueInfo() {
         super(false, false, true, "sx task queue", "查看当前任务队列状态");
     }
@@ -22,12 +23,12 @@ public class TaskQueueInfo extends WolfirdCommand {
     public void execute(CommandSender commandSender, String[] strings) {
         Player player = (Player) commandSender;
         int secs = (int) ((Calendar.getInstance().getTimeInMillis() - taskQueue.getLastStarted().getTimeInMillis()) / 1000);
-        Notifier.chat("§f服务器队列信息",player);
+        Notifier.chat("§f服务器队列信息", player);
         player.sendMessage(" ");
-        player.sendMessage("§f最近一组任务开始于 §a"+secs+" §f秒之前");
+        player.sendMessage("§f最近一组任务开始于 §a" + secs + " §f秒之前");
         player.sendMessage(" ");
-        player.sendMessage("§f当前进行 §a"+ taskQueue.getNowSize()+"组");
-        player.sendMessage("§f最大容量 §a"+ taskQueue.getMaxSize()+"组");
+        player.sendMessage("§f当前进行 §a" + taskQueue.getNowSize() + "组");
+        player.sendMessage("§f最大容量 §a" + taskQueue.getMaxSize() + "组");
         player.sendMessage(" ");
     }
 }

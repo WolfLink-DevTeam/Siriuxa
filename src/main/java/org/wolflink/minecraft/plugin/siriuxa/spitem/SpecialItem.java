@@ -28,6 +28,7 @@ public abstract class SpecialItem {
     public String getUniqueName() {
         return getClass().getSimpleName();
     }
+
     protected boolean enabled = false;
 
     public void enable() {
@@ -37,52 +38,58 @@ public abstract class SpecialItem {
         refreshItemAbility();
         onEnable();
     }
+
     protected abstract boolean isThisSpecialItem(ItemStack itemStack);
 
     protected boolean compareUniqueLore(ItemStack itemStack) {
         ItemMeta itemMeta = itemStack.getItemMeta();
-        if(itemMeta == null) return false;
+        if (itemMeta == null) return false;
         List<String> lores = itemMeta.getLore();
-        if(lores == null || lores.size() < 1) return false;
+        if (lores == null || lores.size() < 1) return false;
         String uniqueLine = lores.get(0);
         return uniqueLine.endsWith(getUniqueName());
     }
 
     private void refreshItemAbility() {
-        subScheduler.runTaskTimerAsync(()->{
+        subScheduler.runTaskTimerAsync(() -> {
             for (UUID holderUuid : itemHolders) {
                 Player player = Bukkit.getPlayer(holderUuid);
-                if(player == null || !player.isOnline())continue;
+                if (player == null || !player.isOnline()) continue;
                 applyItemAbility(player);
             }
-        },60,60);
+        }, 60, 60);
     }
+
     /**
      * 扫描玩家背包里是否含有该特殊物品
      * 如果有，则添加到 itemHolders
      */
     private void inventoryScan() {
-        subScheduler.runTaskTimerAsync(()->{
+        subScheduler.runTaskTimerAsync(() -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if(!availableWorlds.contains(player.getWorld().getName())) continue;
+                if (!availableWorlds.contains(player.getWorld().getName())) continue;
                 boolean hasItem = false;
                 for (ItemStack itemStack : player.getInventory()) {
-                    if(isThisSpecialItem(itemStack)) {
+                    if (isThisSpecialItem(itemStack)) {
                         hasItem = true;
                         break;
                     }
                 }
                 UUID uuid = player.getUniqueId();
-                if(hasItem) itemHolders.add(uuid);
+                if (hasItem) itemHolders.add(uuid);
                 else itemHolders.remove(uuid);
             }
-        },60,60);
+        }, 60, 60);
     }
+
     public abstract void applyItemAbility(Player holder);
+
     public abstract void onEnable();
+
     public abstract void onDisable();
+
     public void disable() {
-        if(!enabled) return;
+        if (!enabled) return;
         enabled = false;
         subScheduler.cancelAllTasks();
         onDisable();

@@ -27,6 +27,7 @@ public class GlobalTeamRepository extends MapRepository<UUID, GlobalTeam> {
     public GlobalTeam findByPlayer(Player player) {
         return findByPlayerUuid(player.getUniqueId());
     }
+
     @Nullable
     public GlobalTeam findByPlayer(OfflinePlayer offlinePlayer) {
         return findByPlayerUuid(offlinePlayer.getUniqueId());

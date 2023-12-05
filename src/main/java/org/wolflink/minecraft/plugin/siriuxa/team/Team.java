@@ -7,7 +7,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -22,14 +21,16 @@ public abstract class Team {
     public OfflinePlayer getOfflineOwner() {
         return Bukkit.getOfflinePlayer(ownerUuid);
     }
+
     @Nullable
     public OfflinePlayer getOfflinePlayer(String name) {
         for (OfflinePlayer offlinePlayer : getOfflinePlayers()) {
-            if(offlinePlayer.getName() == null) continue;
-            if(offlinePlayer.getName().equalsIgnoreCase(name)) return offlinePlayer;
+            if (offlinePlayer.getName() == null) continue;
+            if (offlinePlayer.getName().equalsIgnoreCase(name)) return offlinePlayer;
         }
         return null;
     }
+
     public List<Player> getPlayers() {
         return memberUuids.stream()
                 .map(Bukkit::getPlayer)
@@ -63,7 +64,10 @@ public abstract class Team {
         memberUuids.clear();
     }
 
-    void leave(OfflinePlayer offlinePlayer) { leave(offlinePlayer.getUniqueId()); }
+    void leave(OfflinePlayer offlinePlayer) {
+        leave(offlinePlayer.getUniqueId());
+    }
+
     void leave(Player player) {
         leave(player.getUniqueId());
     }

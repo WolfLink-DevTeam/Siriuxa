@@ -46,6 +46,7 @@ public class ExplorationBackpackItem extends Icon {
     }
 
     private static final Set<String> containerSuffix = new HashSet<>();
+
     static {
         containerSuffix.add("SHULKER_BOX");
         containerSuffix.add("SHULKER_SHELL");
@@ -58,12 +59,12 @@ public class ExplorationBackpackItem extends Icon {
         if (itemStack.getType() == Material.AIR) return;
         boolean isContainer = false;
         for (String containerName : containerSuffix) {
-            if(itemStack.getType().name().endsWith(containerName)){
+            if (itemStack.getType().name().endsWith(containerName)) {
                 isContainer = true;
                 break;
             }
         }
-        if(isContainer) return;
+        if (isContainer) return;
         player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1f, 1f);
         explorationBackpackMenu.selectSlot(index);
     }

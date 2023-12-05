@@ -11,14 +11,16 @@ import java.util.stream.Stream;
 @Singleton
 public class WeaponIcon extends ItemIcon {
     private static final ItemStack itemStack = EnderBackpack.getDefaultBackpack().getWeapon().clone();
+
     static {
         ItemMeta itemMeta = itemStack.getItemMeta();
-        if(itemMeta != null) {
+        if (itemMeta != null) {
             itemMeta.setDisplayName("§8[ §a可放入武器 §8]");
-            itemMeta.setLore(Stream.of(" ","  §7可以放入 §f剑,斧,弓,弩,三叉戟 §7类型的武器"," ").toList());
+            itemMeta.setLore(Stream.of(" ", "  §7可以放入 §f剑,斧,弓,弩,三叉戟 §7类型的武器", " ").toList());
             itemStack.setItemMeta(itemMeta);
         }
     }
+
     public WeaponIcon() {
         super(itemStack);
     }

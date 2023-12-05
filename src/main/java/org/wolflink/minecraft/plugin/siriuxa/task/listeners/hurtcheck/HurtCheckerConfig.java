@@ -7,12 +7,12 @@ import org.wolflink.common.ioc.Singleton;
 import java.util.EnumSet;
 import java.util.Set;
 
+@Getter
 @Singleton
 public class HurtCheckerConfig {
     /**
      * 排除的伤害类型(不会触发无敌)
      */
-    @Getter
     private final Set<EntityDamageEvent.DamageCause> excludeDamageCause = EnumSet.of(
             EntityDamageEvent.DamageCause.VOID,
             EntityDamageEvent.DamageCause.LAVA,

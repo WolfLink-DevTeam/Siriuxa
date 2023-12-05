@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Getter
 public abstract class Icon {
-    @Getter
     private final long refreshTick;
     private ItemStack itemStackCache;
 
