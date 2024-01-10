@@ -22,7 +22,7 @@ public class MonsterSpawnBox {
         availableTypes.add(Material.AIR);
         availableTypes.add(Material.CAVE_AIR);
         availableTypes.add(Material.SNOW);
-        availableTypes.add(Material.GRASS);
+        availableTypes.add(Material.SHORT_GRASS);
         availableTypes.add(Material.TALL_GRASS);
         availableTypes.add(Material.TALL_SEAGRASS);
         availableTypes.add(Material.SEAGRASS);
